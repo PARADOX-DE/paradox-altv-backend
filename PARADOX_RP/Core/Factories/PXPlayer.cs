@@ -1,5 +1,6 @@
 ﻿using AltV.Net;
 using AltV.Net.Elements.Entities;
+using PARADOX_RP.Game.Administration.Models;
 using PARADOX_RP.Game.Login;
 using System;
 using System.Collections.Generic;
@@ -22,6 +23,7 @@ namespace PARADOX_RP.Core.Factories
         public int SqlId { get; set; }
         public bool LoggedIn { get; set; }
         public string Username { get; set; }
+        public SupportRankModel SupportRank { get; set; }
         public DimensionTypes DimensionType { get; set; }
 
         internal PXPlayer(IntPtr nativePointer, ushort id) : base(nativePointer, id)
@@ -29,6 +31,7 @@ namespace PARADOX_RP.Core.Factories
             SqlId = -1;
             LoggedIn = false;
             Username = "";
+            SupportRank = new SupportRankModel();
             DimensionType = DimensionTypes.WORLD;
         }
 

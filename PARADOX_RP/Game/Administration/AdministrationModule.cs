@@ -22,5 +22,10 @@ namespace PARADOX_RP.Game.Administration
 
             return Task.FromResult(false);
         }
+
+        public void EnterAduty(PXPlayer player)
+        {
+            
+        }
     }
 }

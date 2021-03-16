@@ -4,7 +4,7 @@ using System.Text;
 
 namespace PARADOX_RP.Game.Administration.Models
 {
-    class SupportRankModel
+    public class SupportRankModel
     {
         public int Id { get; set; }
         public string Name { get; set; }

@@ -14,9 +14,11 @@ namespace PARADOX_RP.Game.Administration
 
         public override Task<bool> OnKeyPress(PXPlayer player, KeyEnumeration key)
         {
-            if(key == KeyEnumeration.F9)
+            if (key == KeyEnumeration.F9)
             {
-                EnterAduty(player);
+                if (player.DutyType != DutyTypes.ADMINDUTY) EnterAduty(player);
+                else LeaveAduty(player);
+
                 return Task.FromResult(true);
             }
 
@@ -28,6 +30,16 @@ namespace PARADOX_RP.Game.Administration
             if (PermissionsModule.Instance.HasPermissions(player))
             {
                 player.DutyType = DutyTypes.ADMINDUTY;
+            }
+        }
+
+        public void LeaveAduty(PXPlayer player)
+        {
+            if (PermissionsModule.Instance.HasPermissions(player))
+            {
+                if (player.DutyType != DutyTypes.ADMINDUTY) return;
+
+                player.DutyType = DutyTypes.OFFDUTY;
             }
         }
     }

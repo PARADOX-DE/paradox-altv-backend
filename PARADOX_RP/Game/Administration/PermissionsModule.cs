@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
 using System.Runtime.CompilerServices;
+using AltV.Net.Async;
 
 namespace PARADOX_RP.Game.Administration
 {
@@ -21,7 +22,9 @@ namespace PARADOX_RP.Game.Administration
 
         public bool HasPermissions(PXPlayer player, [CallerMemberName] string callerName = null)
         {
-            return player.SupportRank.Permissions.FirstOrDefault(i => i.Permission.CallerName == callerName) != null;
+            bool result = player.SupportRank.Permissions.FirstOrDefault(i => i.Permission.CallerName == callerName) != null;
+            AltAsync.Log($"Result: {result} | CallerName: {callerName}");
+            return result;
         }
     }
 }

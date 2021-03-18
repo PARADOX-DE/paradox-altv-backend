@@ -16,7 +16,7 @@ namespace PARADOX_RP.Game.Administration
         {
             if(key == KeyEnumeration.F9)
             {
-
+                EnterAduty(player);
                 return Task.FromResult(true);
             }
 

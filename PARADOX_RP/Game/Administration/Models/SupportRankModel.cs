@@ -1,10 +1,12 @@
 ﻿using PARADOX_RP.Core.Database.Models;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Text;
 
 namespace PARADOX_RP.Game.Administration.Models
 {
+    [Table("support_ranks")]
     public class SupportRankModel
     {
 

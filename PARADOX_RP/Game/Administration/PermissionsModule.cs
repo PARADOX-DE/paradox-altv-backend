@@ -19,7 +19,7 @@ namespace PARADOX_RP.Game.Administration
 
         public void HasPermissions(PXPlayer player)
         {
-            player.SupportRank.Permissions
+            //player.SupportRank.Permissions
         }
     }
 }

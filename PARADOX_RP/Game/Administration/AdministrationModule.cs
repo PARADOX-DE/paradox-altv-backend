@@ -16,7 +16,7 @@ namespace PARADOX_RP.Game.Administration
         {
             if(key == KeyEnumeration.F9)
             {
-                //if(PermissionsModule.Instance.)
+               
 
                 return Task.FromResult(true);
             }
@@ -26,7 +26,10 @@ namespace PARADOX_RP.Game.Administration
 
         public void EnterAduty(PXPlayer player)
         {
-            
+            if (PermissionsModule.Instance.HasPermissions(player))
+            {
+                player.DutyType = DutyTypes.ADMINDUTY;
+            }
         }
     }
 }

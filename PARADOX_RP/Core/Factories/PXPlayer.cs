@@ -18,6 +18,13 @@ namespace PARADOX_RP.Core.Factories
         SUCCESS
     }
 
+    public enum DutyTypes
+    {
+        OFFDUTY,
+        ONDUTY,
+        ADMINDUTY
+    }
+
     public class PXPlayer : Player
     {
         public int SqlId { get; set; }
@@ -25,6 +32,7 @@ namespace PARADOX_RP.Core.Factories
         public string Username { get; set; }
         public SupportRankModel SupportRank { get; set; }
         public DimensionTypes DimensionType { get; set; }
+        public DutyTypes DutyType { get; set; }
 
         internal PXPlayer(IntPtr nativePointer, ushort id) : base(nativePointer, id)
         {
@@ -33,6 +41,7 @@ namespace PARADOX_RP.Core.Factories
             Username = "";
             SupportRank = new SupportRankModel();
             DimensionType = DimensionTypes.WORLD;
+            DutyType = DutyTypes.OFFDUTY;
         }
 
         public void SendNotification(string Title, string Message, NotificationTypes notificationType)

@@ -1,9 +1,11 @@
 ﻿using AltV.Net.Elements.Entities;
 using PARADOX_RP.Core.Factories;
 using PARADOX_RP.Core.Module;
-using System;
+using System.Linq;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading.Tasks;
+using System.Runtime.CompilerServices;
 
 namespace PARADOX_RP.Game.Administration
 {
@@ -17,9 +19,9 @@ namespace PARADOX_RP.Game.Administration
             HasPermissions(pxPlayer);
         }
 
-        public void HasPermissions(PXPlayer player)
+        public bool HasPermissions(PXPlayer player, [CallerMemberName] string callerName = null)
         {
-            //player.SupportRank.Permissions
+            return player.SupportRank.Permissions.FirstOrDefault(i => i.Permission.CallerName == callerName) != null;
         }
     }
 }

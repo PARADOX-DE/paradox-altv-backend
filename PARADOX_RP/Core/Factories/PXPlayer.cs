@@ -48,6 +48,11 @@ namespace PARADOX_RP.Core.Factories
         {
             Emit("sendNotification", Title, Message, Enum.GetName(typeof(NotificationTypes), notificationType));
         }
+
+        public void SetClothes(int component, int drawable, int texture)
+        {
+            Emit("SetClothes", component, drawable, texture);
+        }
     }
 
     internal class PXPlayerFactory : IEntityFactory<IPlayer>

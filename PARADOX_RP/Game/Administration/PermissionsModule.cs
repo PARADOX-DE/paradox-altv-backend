@@ -22,9 +22,7 @@ namespace PARADOX_RP.Game.Administration
 
         public bool HasPermissions(PXPlayer player, [CallerMemberName] string callerName = null)
         {
-            bool result = player.SupportRank.PermissionAssignments.FirstOrDefault(i => i.Permission.CallerName == callerName) != null;
-            AltAsync.Log($"Result: {result} | CallerName: {callerName}");
-            return result;
+            return player.SupportRank.PermissionAssignments.FirstOrDefault(i => i.Permission.CallerName == callerName) != null;
         }
     }
 }

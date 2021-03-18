@@ -8,6 +8,6 @@ namespace PARADOX_RP.Handlers.Login.Interface
 {
     interface ILoginHandler
     {
-        Task<bool> LoadPlayer(PXPlayer player);
+        Task<bool> LoadPlayer(PXPlayer player, string userName);
     }
 }

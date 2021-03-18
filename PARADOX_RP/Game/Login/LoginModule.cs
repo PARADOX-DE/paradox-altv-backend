@@ -7,6 +7,7 @@ using PARADOX_RP.Core.Database;
 using PARADOX_RP.Core.Database.Models;
 using PARADOX_RP.Core.Factories;
 using PARADOX_RP.Core.Module;
+using PARADOX_RP.Handlers.Login.Interface;
 using PARADOX_RP.UI;
 using PARADOX_RP.UI.Windows;
 using PARADOX_RP.Utils;
@@ -23,7 +24,12 @@ namespace PARADOX_RP.Game.Login
 {
     class LoginModule : ModuleBase<LoginModule>
     {
-        public LoginModule() : base("Login") { }
+        private readonly ILoginHandler _loginHandler;
+
+        public LoginModule(ILoginHandler loginHandler) : base("Login")
+        {
+            _loginHandler = loginHandler;
+        }
 
         public override void OnModuleLoad()
         {
@@ -38,10 +44,7 @@ namespace PARADOX_RP.Game.Login
 
             if (Configuration.Instance.DevMode)
             {
-
-
-                
-
+                await _loginHandler.LoadPlayer(player, "Walid");
                 return;
             }
 

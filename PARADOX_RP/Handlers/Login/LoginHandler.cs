@@ -12,13 +12,13 @@ namespace PARADOX_RP.Handlers.Login
 {
     class LoginHandler : ILoginHandler
     {
-        public async Task<bool> LoadPlayer(PXPlayer player)
+        public async Task<bool> LoadPlayer(PXPlayer player, string userName)
         {
             await using (var px = new PXContext())
             {
 
                 Players dbPlayer = await px.Players.Include(p => p.SupportRank).ThenInclude(p => p.PermissionAssignments).ThenInclude(p => p.Permission).
-                                                    FirstOrDefaultAsync(p => p.Username == player.Name);
+                                                    FirstOrDefaultAsync(p => p.Username == userName);
 
                 if(dbPlayer == null) return await Task.FromResult(false);
                 player.LoggedIn = true;

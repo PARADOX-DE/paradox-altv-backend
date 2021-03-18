@@ -34,6 +34,8 @@ namespace PARADOX_RP.Handlers
 
         private async void PressedE(PXPlayer player)
         {
+            if (!player.LoggedIn) return;
+
             await _modules.ForEach(async e =>
             {
                 if (e.Enabled)

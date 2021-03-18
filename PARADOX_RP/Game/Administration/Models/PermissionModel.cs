@@ -4,9 +4,11 @@ using System.Text;
 
 namespace PARADOX_RP.Game.Administration.Models
 {
-    class PermissionModel
+    public class PermissionModel
     {
         public int Id { get; set; }
         public string Description { get; set; }
+
+        public virtual ICollection<PermissionAssignmentModel> PermissionSupportRankAssignment { get; set; }
     }
 }

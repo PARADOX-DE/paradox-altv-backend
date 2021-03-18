@@ -16,7 +16,6 @@ namespace PARADOX_RP.Game.Administration.Models
         public int Color_G { get; set; }
         public int Color_B { get; set; }
 
-        public virtual ICollection<Players> Player { get; set; }
-        public virtual ICollection<PermissionAssignmentModel> Permissions { get; set; }
+        public virtual ICollection<PermissionAssignmentModel> PermissionAssignments { get; set; }
     }
 }

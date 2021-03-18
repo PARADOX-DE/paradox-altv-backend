@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Storage;
+using Microsoft.Extensions.Logging;
 using PARADOX_RP.Core.Database.Models;
 using PARADOX_RP.Game.Administration.Models;
 using Pomelo.EntityFrameworkCore.MySql.Storage;
@@ -18,6 +19,14 @@ namespace PARADOX_RP.Core.Database
         public DbSet<SupportRankModel> SupportRanks { get; set; }
         public DbSet<PermissionModel> Permissions { get; set; }
         public DbSet<PermissionAssignmentModel> PermissionAssignments { get; set; }
+
+        public static readonly ILoggerFactory loggerFactory =
+           LoggerFactory.Create(
+                builder =>
+                {
+                    builder.AddConsole();
+                }
+         );
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {

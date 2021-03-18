@@ -10,6 +10,6 @@ namespace PARADOX_RP.Game.Administration.Models
         public string CallerName { get; set; }
         public string Description { get; set; }
 
-        public virtual ICollection<PermissionAssignmentModel> PermissionSupportRankAssignment { get; set; }
+        public virtual ICollection<PermissionAssignmentModel> SupportRankPermissionAssignment { get; set; }
     }
 }

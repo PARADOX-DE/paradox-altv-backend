@@ -18,6 +18,7 @@ namespace PARADOX_RP.Handlers
             _modules = modules;
 
             AltAsync.OnClient<PXPlayer>("Pressed_E", PressedE);
+            AltAsync.OnClient<PXPlayer>("Pressed_F9", PressedF9);
             AltAsync.OnPlayerConnect += OnPlayerConnect;
             AltAsync.OnPlayerDisconnect += OnPlayerConnect;
         }
@@ -40,6 +41,17 @@ namespace PARADOX_RP.Handlers
             {
                 if (e.Enabled)
                     if (await e.OnKeyPress(player, Utils.Enums.KeyEnumeration.E)) return;
+            });
+        }
+
+        private async void PressedF9(PXPlayer player)
+        {
+            if (!player.LoggedIn) return;
+
+            await _modules.ForEach(async e =>
+            {
+                if (e.Enabled)
+                    if (await e.OnKeyPress(player, Utils.Enums.KeyEnumeration.F9)) return;
             });
         }
 

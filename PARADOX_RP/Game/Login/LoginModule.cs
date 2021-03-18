@@ -9,11 +9,14 @@ using PARADOX_RP.Core.Factories;
 using PARADOX_RP.Core.Module;
 using PARADOX_RP.UI;
 using PARADOX_RP.UI.Windows;
+using PARADOX_RP.Utils;
 using PARADOX_RP.Utils.Enums;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace PARADOX_RP.Game.Login
@@ -29,10 +32,20 @@ namespace PARADOX_RP.Game.Login
 
         public override async void OnPlayerConnect(PXPlayer player)
         {
-            WindowManager.Instance.Get<LoginWindow>().Show(player, JsonConvert.SerializeObject(new LoginWindowObject() { name = player.Name }));
 
             player.Model = (uint)PedModel.FreemodeMale01;
             await player.SpawnAsync(new Position(0, 0, 72));
+
+            if (Configuration.Instance.DevMode)
+            {
+
+
+                
+
+                return;
+            }
+
+            WindowManager.Instance.Get<LoginWindow>().Show(player, JsonConvert.SerializeObject(new LoginWindowObject() { name = player.Name }));
         }
 
         public async void RequestLoginResponse(PXPlayer player, string hashedPassword)
@@ -41,10 +54,10 @@ namespace PARADOX_RP.Game.Login
 
             await using (var px = new PXContext())
             {
-                Players dbPlayer = await px.Players.Include(p => p.SupportRank).ThenInclude(p => p.Permissions).
+                Players dbPlayer = await px.Players.Include(p => p.SupportRank).ThenInclude(p => p.PermissionAssignments).
                                                     FirstOrDefaultAsync(p => p.Username == player.Name);
 
-                if(dbPlayer.Password == hashedPassword)
+                if (dbPlayer.Password == hashedPassword)
                 {
                     //dbPlayer.
                 }

@@ -16,6 +16,7 @@ namespace PARADOX_RP.Game.Administration
         {
             if(key == KeyEnumeration.F9)
             {
+
                 return Task.FromResult(true);
             }
 

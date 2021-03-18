@@ -39,10 +39,10 @@ namespace PARADOX_RP.Game.Login
         {
             await using (var px = new PXContext())
             {
-                Players dbPlayer = await px.Players.FirstOrDefaultAsync(p => p.Username == player.Name);
+                Players dbPlayer = await px.Players.Include(p => p.SupportRank).FirstOrDefaultAsync(p => p.Username == player.Name);
                 if(dbPlayer.Password == hashedPassword)
                 {
-                    //LOGIN TRUE
+                    //dbPlayer.
                 }
             }
 

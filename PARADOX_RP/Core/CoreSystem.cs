@@ -1,4 +1,7 @@
 ﻿using AltV.Net.Async;
+using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Storage;
+using PARADOX_RP.Core.Database;
 using PARADOX_RP.Core.Interface;
 using PARADOX_RP.Handlers;
 using PARADOX_RP.UI;
@@ -19,6 +22,14 @@ namespace PARADOX_RP.Core
 
         public void Start()
         {
+            using (var px = new PXContext())
+            {
+                var databaseCreator = (px.Database.GetService<IDatabaseCreator>() as RelationalDatabaseCreator);
+                databaseCreator.CreateTables();
+
+                AltAsync.Log("Initialized Database.");
+            }
+
             AltAsync.Log("Server started.");
             _eventHandler.Load();
         }

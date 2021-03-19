@@ -1,4 +1,5 @@
-﻿using AltV.Net.Async;
+﻿using AltV.Net;
+using AltV.Net.Async;
 using AltV.Net.Data;
 using AltV.Net.Enums;
 using Microsoft.EntityFrameworkCore;
@@ -7,6 +8,8 @@ using PARADOX_RP.Core.Database;
 using PARADOX_RP.Core.Database.Models;
 using PARADOX_RP.Core.Factories;
 using PARADOX_RP.Core.Module;
+using PARADOX_RP.Game.Misc.Progressbar;
+using PARADOX_RP.Game.Misc.Progressbar.Extensions;
 using PARADOX_RP.Handlers.Login.Interface;
 using PARADOX_RP.UI;
 using PARADOX_RP.UI.Windows;
@@ -38,24 +41,30 @@ namespace PARADOX_RP.Game.Login
 
         public override async void OnPlayerConnect(PXPlayer player)
         {
-
             player.Model = (uint)PedModel.FreemodeMale01;
             await player.SpawnAsync(new Position(0, 0, 72));
 
             if (Configuration.Instance.DevMode)
             {
                 await _loginHandler.LoadPlayer(player, "Walid");
+                player.RunProgressBar(() =>
+                {
+                    AltAsync.Log("[ASYNC] ProgressBar finished.");
+                }, 5000);
+
+                AltAsync.Log("Should be triggered before progressbar finish");
                 return;
             }
 
             WindowManager.Instance.Get<LoginWindow>().Show(player, JsonConvert.SerializeObject(new LoginWindowObject() { name = player.Name }));
         }
 
-        public async void RequestLoginResponse(PXPlayer player, string hashedPassword)
+        public async Task RequestLoginResponse(PXPlayer player, string hashedPassword)
         {
             if (player.LoggedIn) return;
 
             await _loginHandler.LoadPlayer(player, player.Name);
+
             // Check Password
             // SEND RESPONSE TO PLAYER
         }

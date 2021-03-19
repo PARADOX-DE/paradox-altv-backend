@@ -20,7 +20,7 @@ namespace PARADOX_RP.Game.Moderation
         {
             await using (var px = new PXContext())
             {
-                BanList existingBanEntry = await px.BanList.FirstOrDefaultAsync(e => e.PlayerId == player.Id);
+                BanList existingBanEntry = await px.BanList.FirstOrDefaultAsync(e => e.PlayerId == player.SqlId);
                 if (existingBanEntry != null) return await Task.FromResult(true);
             }
 
@@ -31,7 +31,7 @@ namespace PARADOX_RP.Game.Moderation
         {
             await using (var px = new PXContext())
             {
-                BanList existingBanEntry = await px.BanList.FirstOrDefaultAsync(e => e.PlayerId == player.Id);
+                BanList existingBanEntry = await px.BanList.FirstOrDefaultAsync(e => e.PlayerId == player.SqlId);
                 if (existingBanEntry != null) existingBanEntry.Active = true;
                 else
                 {

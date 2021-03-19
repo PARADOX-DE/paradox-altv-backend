@@ -68,11 +68,15 @@ namespace PARADOX_RP.Handlers
         private async Task OnPlayerDisconnect(IPlayer player, string reason)
         {
             PXPlayer pxPlayer = (PXPlayer)player;
+
             await _modules.ForEach(e =>
             {
                 if (e.Enabled)
                     e.OnPlayerDisconnect(pxPlayer);
             });
+
+            pxPlayer.LoggedIn = false;
+            pxPlayer.Exists = false;
         }
     }
 }

@@ -19,7 +19,10 @@ namespace PARADOX_RP.Game.Misc.Progressbar
             WindowManager.Instance.Get<ProgressBarWindow>().Show(player, JsonConvert.SerializeObject(new ProgressBarWindowObject(duration)));
             await Task.Delay(duration);
 
-            action();
+            player.CheckIfEntityExists();
+            if (!player.Exists || !player.LoggedIn) return;
+
+                action();
         }
     }
 }

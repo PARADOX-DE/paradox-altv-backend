@@ -16,12 +16,23 @@ namespace PARADOX_RP.Game.Moderation
     {
         public ModerationModule() : base("Moderation") { }
 
+        public async Task<bool> IsBanned(PXPlayer player)
+        {
+            await using (var px = new PXContext())
+            {
+                BanList existingBanEntry = await px.BanList.FirstOrDefaultAsync(e => e.PlayerId == player.Id);
+                if (existingBanEntry != null) return await Task.FromResult(true);
+            }
+
+            return await Task.FromResult(false);
+        }
+
         public async Task BanPlayer(PXPlayer player, PXPlayer moderator)
         {
             await using (var px = new PXContext())
             {
-                BanList existingBanEntry = await px.BanList.FirstOrDefaultAsync(e => e.Player.Id == player.Id);
-                if (existingBanEntry != null) existingBanEntry.Active = true; 
+                BanList existingBanEntry = await px.BanList.FirstOrDefaultAsync(e => e.PlayerId == player.Id);
+                if (existingBanEntry != null) existingBanEntry.Active = true;
                 else
                 {
                     BanList banEntry = new BanList(player.SqlId, moderator.SqlId, true, DateTime.Now);

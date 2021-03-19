@@ -20,7 +20,7 @@ namespace PARADOX_RP.Handlers
             AltAsync.OnClient<PXPlayer>("Pressed_E", PressedE);
             AltAsync.OnClient<PXPlayer>("Pressed_F9", PressedF9);
             AltAsync.OnPlayerConnect += OnPlayerConnect;
-            AltAsync.OnPlayerDisconnect += OnPlayerConnect;
+            AltAsync.OnPlayerDisconnect += OnPlayerDisconnect;
         }
 
 
@@ -62,6 +62,16 @@ namespace PARADOX_RP.Handlers
             {
                 if (e.Enabled)
                     e.OnPlayerConnect(pxPlayer);
+            });
+        }
+
+        private async Task OnPlayerDisconnect(IPlayer player, string reason)
+        {
+            PXPlayer pxPlayer = (PXPlayer)player;
+            await _modules.ForEach(e =>
+            {
+                if (e.Enabled)
+                    e.OnPlayerDisconnect(pxPlayer);
             });
         }
     }

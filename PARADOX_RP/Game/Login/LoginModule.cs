@@ -55,18 +55,9 @@ namespace PARADOX_RP.Game.Login
         {
             if (player.LoggedIn) return;
 
-            await using (var px = new PXContext())
-            {
-                Players dbPlayer = await px.Players.Include(p => p.SupportRank).ThenInclude(p => p.PermissionAssignments).
-                                                    FirstOrDefaultAsync(p => p.Username == player.Name);
-
-                if (dbPlayer.Password == hashedPassword)
-                {
-                    //dbPlayer.
-                }
-            }
-
-            //SEND RESPONSE TO PLAYER
+            await _loginHandler.LoadPlayer(player, player.Name);
+            // Check Password
+            // SEND RESPONSE TO PLAYER
         }
     }
 }

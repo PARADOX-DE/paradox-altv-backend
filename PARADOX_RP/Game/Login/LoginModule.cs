@@ -48,6 +48,7 @@ namespace PARADOX_RP.Game.Login
             if (Configuration.Instance.DevMode)
             {
                 if (!await _loginHandler.LoadPlayer(player, "System")) AltAsync.Log("System-User not found.");
+
                 player.RunProgressBar(async () =>
                 {
                     await ModerationModule.Instance.BanPlayer(player, player);

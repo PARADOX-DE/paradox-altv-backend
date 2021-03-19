@@ -2,6 +2,7 @@
 using PARADOX_RP.Core.Database;
 using PARADOX_RP.Core.Database.Models;
 using PARADOX_RP.Core.Factories;
+using PARADOX_RP.Game.Moderation;
 using PARADOX_RP.Handlers.Login.Interface;
 using System;
 using System.Collections.Generic;
@@ -26,6 +27,9 @@ namespace PARADOX_RP.Handlers.Login
                 player.SqlId = dbPlayer.Id;
                 player.Username = dbPlayer.Username;
                 player.SupportRank = dbPlayer.SupportRank;
+
+                if (await ModerationModule.Instance.IsBanned(player))
+                    player.Kick("Du bist gebannt. Für weitere Informationen melde dich im Support!");
 
                 return await Task.FromResult(true);
             }

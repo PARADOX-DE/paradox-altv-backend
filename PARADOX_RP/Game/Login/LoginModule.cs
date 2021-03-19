@@ -66,7 +66,7 @@ namespace PARADOX_RP.Game.Login
 
             await _loginHandler.LoadPlayer(player, player.Name);
 
-            // Check Password
+            // Check Password 
             // SEND RESPONSE TO PLAYER
         }
     }

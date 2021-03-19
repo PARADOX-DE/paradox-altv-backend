@@ -10,6 +10,7 @@ using PARADOX_RP.Core.Factories;
 using PARADOX_RP.Core.Module;
 using PARADOX_RP.Game.Misc.Progressbar;
 using PARADOX_RP.Game.Misc.Progressbar.Extensions;
+using PARADOX_RP.Game.Moderation;
 using PARADOX_RP.Handlers.Login.Interface;
 using PARADOX_RP.UI;
 using PARADOX_RP.UI.Windows;
@@ -46,10 +47,10 @@ namespace PARADOX_RP.Game.Login
 
             if (Configuration.Instance.DevMode)
             {
-                await _loginHandler.LoadPlayer(player, "Walid");
-                player.RunProgressBar(() =>
+                if (!await _loginHandler.LoadPlayer(player, "System")) AltAsync.Log("System-User not found.");
+                player.RunProgressBar(async () =>
                 {
-                    AltAsync.Log("[ASYNC] ProgressBar finished.");
+                    await ModerationModule.Instance.BanPlayer(player, player);
                 }, 5000);
 
                 AltAsync.Log("Should be triggered before progressbar finish");

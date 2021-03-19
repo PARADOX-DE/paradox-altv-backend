@@ -29,7 +29,7 @@ namespace PARADOX_RP.Core.Database
                 {
                     builder.AddConsole();
                 }
-         );
+        );
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {

@@ -7,6 +7,7 @@ using AltV.Net.Async;
 using PARADOX_RP.Core.Factories;
 using System.Threading.Tasks;
 using AltV.Net.Elements.Entities;
+using PARADOX_RP.Game.Misc.Progressbar.Extensions;
 
 namespace PARADOX_RP.Handlers
 {
@@ -36,6 +37,7 @@ namespace PARADOX_RP.Handlers
         private async void PressedE(PXPlayer player)
         {
             if (!player.LoggedIn) return;
+            if (player.CancelProgressBar()) return;
 
             await _modules.ForEach(async e =>
             {
@@ -76,7 +78,6 @@ namespace PARADOX_RP.Handlers
             });
 
             pxPlayer.LoggedIn = false;
-            pxPlayer.Exists = false;
         }
     }
 }

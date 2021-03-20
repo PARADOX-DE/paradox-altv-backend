@@ -8,6 +8,7 @@ namespace PARADOX_RP.Game.Misc.Progressbar.Extensions
 {
     static class ProgressBarClientExtensions
     {
-        public static void RunProgressBar(this PXPlayer player, Action action, int duration) => ProgressBarModule.Instance.RunProgressBar(player, action, duration);
+        public static async Task<bool> RunProgressBar(this PXPlayer player, Func<Task> action, int duration) => await ProgressBarModule.Instance.RunProgressBar(player, action, duration);
+        public static bool CancelProgressBar(this PXPlayer player) => ProgressBarModule.Instance.CancelProgressBar(player);
     }
 }

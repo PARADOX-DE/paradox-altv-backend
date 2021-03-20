@@ -47,14 +47,17 @@ namespace PARADOX_RP.Game.Login
 
             if (Configuration.Instance.DevMode)
             {
-                if (!await _loginHandler.LoadPlayer(player, "System")) AltAsync.Log("System-User not found.");
+                if (!await _loginHandler.LoadPlayer(player, "System"))
+                {
+                    await player.KickAsync("System-User not found.");
+                    return;
+                }
 
-                player.RunProgressBar(async () =>
+                await player.RunProgressBar(async () =>
                 {
                     await ModerationModule.Instance.BanPlayer(player, player);
                 }, 5000);
 
-                AltAsync.Log("Should be triggered before progressbar finish");
                 return;
             }
 

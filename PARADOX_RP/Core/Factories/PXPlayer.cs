@@ -5,6 +5,8 @@ using PARADOX_RP.Game.Login;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace PARADOX_RP.Core.Factories
 {
@@ -33,6 +35,7 @@ namespace PARADOX_RP.Core.Factories
         public SupportRankModel SupportRank { get; set; }
         public DimensionTypes DimensionType { get; set; }
         public DutyTypes DutyType { get; set; }
+        public CancellationTokenSource? CancellationToken { get; set; }
 
         internal PXPlayer(IntPtr nativePointer, ushort id) : base(nativePointer, id)
         {
@@ -42,6 +45,8 @@ namespace PARADOX_RP.Core.Factories
             SupportRank = new SupportRankModel();
             DimensionType = DimensionTypes.WORLD;
             DutyType = DutyTypes.OFFDUTY;
+
+            CancellationToken = null;
         }
 
         public void SendNotification(string Title, string Message, NotificationTypes notificationType)

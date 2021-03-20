@@ -18,6 +18,8 @@ namespace PARADOX_RP.Game.Moderation
 
         public async Task<bool> IsBanned(PXPlayer player)
         {
+            if (player == null) return await Task.FromResult(true);
+
             await using (var px = new PXContext())
             {
                 BanList existingBanEntry = await px.BanList.FirstOrDefaultAsync(e => e.PlayerId == player.SqlId);
@@ -29,6 +31,8 @@ namespace PARADOX_RP.Game.Moderation
 
         public async Task BanPlayer(PXPlayer player, PXPlayer moderator)
         {
+            if (player == null || moderator == null) return;
+
             await using (var px = new PXContext())
             {
                 BanList existingBanEntry = await px.BanList.FirstOrDefaultAsync(e => e.PlayerId == player.SqlId);

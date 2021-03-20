@@ -6,6 +6,7 @@ using PARADOX_RP.UI.Windows;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace PARADOX_RP.Game.Misc.Progressbar
@@ -14,15 +15,27 @@ namespace PARADOX_RP.Game.Misc.Progressbar
     {
         public ProgressBarModule() : base("ProgressBarModule") { }
 
-        public async void RunProgressBar(PXPlayer player, Action action, int duration)
+        public async Task<bool> RunProgressBar(PXPlayer player, Func<Task> action, int duration)
         {
             WindowManager.Instance.Get<ProgressBarWindow>().Show(player, JsonConvert.SerializeObject(new ProgressBarWindowObject(duration)));
-            await Task.Delay(duration);
 
-            player.CheckIfEntityExists();
-            if (!player.Exists || !player.LoggedIn) return;
+            player.CancellationToken = new CancellationTokenSource();
+            bool result = await Task.Delay(duration, player.CancellationToken.Token).ContinueWith(task => !task.IsCanceled);
+            if (result && player != null) await action();
 
-                action();
+            return result;
+        }
+
+        public bool CancelProgressBar(PXPlayer player)
+        {
+            if (player.CancellationToken != null)
+            {
+                player.CancellationToken.Cancel();
+                player.CancellationToken = null;
+                return true;
+            }
+
+            return false;
         }
     }
 }

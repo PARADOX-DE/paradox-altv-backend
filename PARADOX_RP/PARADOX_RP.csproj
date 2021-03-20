@@ -28,6 +28,6 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <Folder Include="Game\GameModes\" />
+	  <Folder Include="Game\MiniGames\" />
 	</ItemGroup>
 </Project>

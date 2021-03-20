@@ -21,7 +21,7 @@ namespace PARADOX_RP.Handlers.Login
                 Players dbPlayer = await px.Players.Include(p => p.SupportRank).ThenInclude(p => p.PermissionAssignments).ThenInclude(p => p.Permission).
                                                     FirstOrDefaultAsync(p => p.Username == userName);
 
-                if(dbPlayer == null) return await Task.FromResult(false);
+                if (dbPlayer == null) return await Task.FromResult(false);
                 player.LoggedIn = true;
 
                 player.SqlId = dbPlayer.Id;
@@ -29,7 +29,10 @@ namespace PARADOX_RP.Handlers.Login
                 player.SupportRank = dbPlayer.SupportRank;
 
                 if (await ModerationModule.Instance.IsBanned(player))
+                {
                     player.Kick("Du bist gebannt. Für weitere Informationen melde dich im Support!");
+                    return await Task.FromResult(false);
+                }
 
                 return await Task.FromResult(true);
             }

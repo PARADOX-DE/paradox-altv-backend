@@ -16,6 +16,7 @@ namespace PARADOX_RP.Core.Database.Models
         public string SocialClubHash { get; set; }
 
         public virtual SupportRankModel SupportRank { get; set; }
+        public virtual PlayerClothes PlayerClothes { get; set; }
 
         public DateTime LastLogin { get; set; }
         public DateTime CreatedAt { get; set; }

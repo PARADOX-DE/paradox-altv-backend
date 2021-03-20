@@ -18,8 +18,9 @@ namespace PARADOX_RP.Handlers.Login
             await using (var px = new PXContext())
             {
 
-                Players dbPlayer = await px.Players.Include(p => p.SupportRank).ThenInclude(p => p.PermissionAssignments).ThenInclude(p => p.Permission).
-                                                    FirstOrDefaultAsync(p => p.Username == userName);
+                Players dbPlayer = await px.Players.Include(p => p.SupportRank).ThenInclude(p => p.PermissionAssignments).ThenInclude(p => p.Permission)
+                                                    .Include(p => p.PlayerClothes)
+                                                    .FirstOrDefaultAsync(p => p.Username == userName);
 
                 if (dbPlayer == null) return await Task.FromResult(false);
                 player.LoggedIn = true;
@@ -27,6 +28,20 @@ namespace PARADOX_RP.Handlers.Login
                 player.SqlId = dbPlayer.Id;
                 player.Username = dbPlayer.Username;
                 player.SupportRank = dbPlayer.SupportRank;
+
+                Dictionary<int, Clothes> _clothingDictionary = new Dictionary<int, Clothes>();
+                _clothingDictionary.Add(1, dbPlayer.PlayerClothes.Mask);
+                _clothingDictionary.Add(3, dbPlayer.PlayerClothes.Torso);
+                _clothingDictionary.Add(4, dbPlayer.PlayerClothes.Legs);
+                _clothingDictionary.Add(5, dbPlayer.PlayerClothes.Bag);
+                _clothingDictionary.Add(6, dbPlayer.PlayerClothes.Shoe);
+                _clothingDictionary.Add(7, dbPlayer.PlayerClothes.Accessoire);
+                _clothingDictionary.Add(8, dbPlayer.PlayerClothes.Undershirt);
+                _clothingDictionary.Add(9, dbPlayer.PlayerClothes.Armor);
+                _clothingDictionary.Add(10, dbPlayer.PlayerClothes.Decal);
+                _clothingDictionary.Add(11, dbPlayer.PlayerClothes.Top);
+
+                player.Clothes = _clothingDictionary;
 
                 if (await ModerationModule.Instance.IsBanned(player))
                 {

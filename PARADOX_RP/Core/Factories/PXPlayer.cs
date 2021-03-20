@@ -1,5 +1,6 @@
 ﻿using AltV.Net;
 using AltV.Net.Elements.Entities;
+using PARADOX_RP.Core.Database.Models;
 using PARADOX_RP.Game.Administration.Models;
 using PARADOX_RP.Game.Login;
 using System;
@@ -36,6 +37,7 @@ namespace PARADOX_RP.Core.Factories
         public DimensionTypes DimensionType { get; set; }
         public DutyTypes DutyType { get; set; }
         public CancellationTokenSource? CancellationToken { get; set; }
+        public Dictionary<int, Clothes> Clothes { get; set; }
 
         internal PXPlayer(IntPtr nativePointer, ushort id) : base(nativePointer, id)
         {
@@ -47,6 +49,7 @@ namespace PARADOX_RP.Core.Factories
             DutyType = DutyTypes.OFFDUTY;
 
             CancellationToken = null;
+            Clothes = new Dictionary<int, Clothes>();
         }
 
         public void SendNotification(string Title, string Message, NotificationTypes notificationType)

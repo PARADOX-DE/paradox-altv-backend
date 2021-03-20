@@ -4,9 +4,10 @@ using System.Text;
 
 namespace PARADOX_RP.Core.Database.Models
 {
-    class Clothes
+    public class Clothes
     {
         public int Id { get; set; }
+        public string Name { get; set; }
         public int Component { get; set; }
         public int Drawable { get; set; }
         public int Texture { get; set; }

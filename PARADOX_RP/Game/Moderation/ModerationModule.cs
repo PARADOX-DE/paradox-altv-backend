@@ -46,7 +46,7 @@ namespace PARADOX_RP.Game.Moderation
                 await px.SaveChangesAsync();
             }
 
-            await player.KickAsync("Du wurdest gebannt. Für weitere Informationen melde dich im Support!");
+            await player.KickAsync("Du wurdest gebannt. Für weitere Informationen melde dich im Support!"); 
         }
     }
 }

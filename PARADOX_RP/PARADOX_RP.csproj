@@ -16,6 +16,7 @@
 
 	<ItemGroup>
 		<PackageReference Include="AltV.Net.Async" Version="2.0.0" />
+		<PackageReference Include="AltV.Net.Resources.Chat.Api" Version="1.48.0" />
 		<PackageReference Include="Autofac" Version="6.1.0" />
 		<PackageReference Include="Microsoft.Extensions.Logging.Console" Version="5.0.0" />
 		<PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
@@ -25,9 +26,5 @@
 			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 		</PackageReference>
 		<PackageReference Include="Pomelo.EntityFrameworkCore.MySql" Version="5.0.0-alpha.2" />
-	</ItemGroup>
-
-	<ItemGroup>
-	  <Folder Include="Game\MiniGames\" />
 	</ItemGroup>
 </Project>

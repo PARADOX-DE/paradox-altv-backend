@@ -5,6 +5,8 @@ using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
 using PARADOX_RP.Utils.Enums;
+using AltV.Net.Async;
+using AltV.Net.Resources.Chat.Api;
 
 namespace PARADOX_RP.Game.Administration
 {
@@ -12,20 +14,20 @@ namespace PARADOX_RP.Game.Administration
     {
         public AdministrationModule() : base("Administration") { }
 
-        public override Task<bool> OnKeyPress(PXPlayer player, KeyEnumeration key)
+        public override async Task<bool> OnKeyPress(PXPlayer player, KeyEnumeration key)
         {
             if (key == KeyEnumeration.F9)
             {
                 if (player.DutyType != DutyTypes.ADMINDUTY) EnterAduty(player);
                 else LeaveAduty(player);
 
-                return Task.FromResult(true);
+                return await Task.FromResult(true);
             }
 
-            return Task.FromResult(false);
+            return await Task.FromResult(false);
         }
 
-        public void EnterAduty(PXPlayer player)
+        public async Task EnterAduty(PXPlayer player)
         {
             if (PermissionsModule.Instance.HasPermissions(player))
             {
@@ -33,7 +35,7 @@ namespace PARADOX_RP.Game.Administration
             }
         }
 
-        public void LeaveAduty(PXPlayer player)
+        public async Task LeaveAduty(PXPlayer player)
         {
             if (PermissionsModule.Instance.HasPermissions(player))
             {
@@ -41,6 +43,12 @@ namespace PARADOX_RP.Game.Administration
 
                 player.DutyType = DutyTypes.OFFDUTY;
             }
+        }
+
+        [Command("aduty")]
+        public void testCommand(PXPlayer player, string test)
+        {
+            OnKeyPress(player, KeyEnumeration.F9);
         }
     }
 }

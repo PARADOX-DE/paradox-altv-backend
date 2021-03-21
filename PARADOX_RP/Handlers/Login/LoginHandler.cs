@@ -19,7 +19,7 @@ namespace PARADOX_RP.Handlers.Login
             {
 
                 Players dbPlayer = await px.Players.Include(p => p.SupportRank).ThenInclude(p => p.PermissionAssignments).ThenInclude(p => p.Permission)
-                                                    .Include(p => p.PlayerClothes)
+                                                    //.Include(p => p.PlayerClothes)
                                                     .FirstOrDefaultAsync(p => p.Username == userName);
 
                 if (dbPlayer == null) return await Task.FromResult(false);
@@ -29,7 +29,7 @@ namespace PARADOX_RP.Handlers.Login
                 player.Username = dbPlayer.Username;
                 player.SupportRank = dbPlayer.SupportRank;
 
-                Dictionary<int, Clothes> _clothingDictionary = new Dictionary<int, Clothes>();
+                /*Dictionary<int, Clothes> _clothingDictionary = new Dictionary<int, Clothes>();
                 _clothingDictionary.Add(1, dbPlayer.PlayerClothes.Mask);
                 _clothingDictionary.Add(3, dbPlayer.PlayerClothes.Torso);
                 _clothingDictionary.Add(4, dbPlayer.PlayerClothes.Legs);
@@ -39,9 +39,9 @@ namespace PARADOX_RP.Handlers.Login
                 _clothingDictionary.Add(8, dbPlayer.PlayerClothes.Undershirt);
                 _clothingDictionary.Add(9, dbPlayer.PlayerClothes.Armor);
                 _clothingDictionary.Add(10, dbPlayer.PlayerClothes.Decal);
-                _clothingDictionary.Add(11, dbPlayer.PlayerClothes.Top);
+                _clothingDictionary.Add(11, dbPlayer.PlayerClothes.Top);*/
 
-                player.Clothes = _clothingDictionary;
+                //player.Clothes = _clothingDictionary;
 
                 if (await ModerationModule.Instance.IsBanned(player))
                 {

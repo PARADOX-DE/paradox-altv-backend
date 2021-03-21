@@ -36,7 +36,7 @@ namespace PARADOX_RP.Core.Factories
         public SupportRankModel SupportRank { get; set; }
         public DimensionTypes DimensionType { get; set; }
         public DutyTypes DutyType { get; set; }
-        public CancellationTokenSource? CancellationToken { get; set; }
+        public CancellationTokenSource CancellationToken { get; set; }
         public Dictionary<int, Clothes> Clothes { get; set; }
 
         internal PXPlayer(IntPtr nativePointer, ushort id) : base(nativePointer, id)

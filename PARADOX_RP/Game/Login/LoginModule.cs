@@ -55,7 +55,8 @@ namespace PARADOX_RP.Game.Login
 
                 await player.RunProgressBar(async () =>
                 {
-                    await ModerationModule.Instance.BanPlayer(player, player);
+                    Alt.LogFast("test");
+                    //await ModerationModule.Instance.BanPlayer(player, player);
                 }, 5000);
 
                 return;

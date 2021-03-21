@@ -3,7 +3,6 @@ using AltV.Net.Async;
 using AltV.Net.Data;
 using AltV.Net.Elements.Entities;
 using DasNiels.AltV.Streamers;
-using PARADOX_RP.Game.MiniGames.Content.SuperMario.Models;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -27,22 +26,17 @@ namespace PARADOX_RP.Game.MiniGames.Content.SuperMario
         public Position Position { get; set; }
         public DateTime LastUsed { get; set; }
 
-        public SuperMarioPickup(Position Position, SuperMarioPickupTypes pickupType)
-        {
-            ///DynamicObject obj = ObjectStreamer.CreateDynamicObject("OBJ", position, position, visible: true, streamRange: 100, frozen: true);
-            this.Position = Position;
-            this.Position = Position;
-
-        }
-
         public SuperMarioPickup(SuperMarioPickupTypes pickupType, Position position)
         {
-            IColShape colShape = Alt.CreateColShapeCylinder(position, 2, 2);
-
             Id = SuperMarioMinigameModule.Instance._pickupId;
             PickupType = pickupType;
             Position = position;
             LastUsed = DateTime.Now;
+
+            IColShape colShape = Alt.CreateColShapeCylinder(position, 2, 2);
+            colShape.SetData("superMarioPickupId", Id);
+
+            Alt.CreateCheckpoint(CheckpointType.Cyclinder, position, 2, 2, new Rgba(255, 0, 0, 255));
 
             SuperMarioMinigameModule.Instance._pickups.Add(Id, this);
             SuperMarioMinigameModule.Instance._pickupId++;

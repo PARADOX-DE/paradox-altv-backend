@@ -33,7 +33,7 @@ namespace PARADOX_RP.Game.MiniGames.Content.SuperMario
         {
             if(key == KeyEnumeration.E)
             {
-
+                new SuperMarioPickup(SuperMarioPickupTypes.BOMB, player.Position);
             }
 
             return await Task.FromResult(false);

@@ -450,7 +450,7 @@ namespace DasNiels.AltV.Streamers
         /// <returns>The dynamic object or null if not found.</returns>
         public static DynamicObject GetDynamicObject( ulong dynamicObjectId )
         {
-            if( !AltEntitySync.TryGetEntity( dynamicObjectId, out IEntity entity ) )
+            if( !AltEntitySync.TryGetEntity( dynamicObjectId, 2, out IEntity entity ) )
             {
                 Console.WriteLine( $"[OBJECT-STREAMER] [GetDynamicObject] ERROR: Entity with ID { dynamicObjectId } couldn't be found." );
                 return default;

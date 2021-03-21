@@ -29,6 +29,6 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <Folder Include="Game\Lobby\" />
+	  <Folder Include="Game\Commands\" />
 	</ItemGroup>
 </Project>

@@ -18,8 +18,8 @@ namespace PARADOX_RP.Game.Administration
         {
             if (key == KeyEnumeration.F9)
             {
-                if (player.DutyType != DutyTypes.ADMINDUTY) EnterAduty(player);
-                else LeaveAduty(player);
+                if (player.DutyType != DutyTypes.ADMINDUTY) await EnterAduty(player);
+                else await LeaveAduty(player);
 
                 return await Task.FromResult(true);
             }
@@ -46,9 +46,9 @@ namespace PARADOX_RP.Game.Administration
         }
 
         [Command("aduty")]
-        public void testCommand(PXPlayer player, string test)
+        public async void testCommand(PXPlayer player, string test)
         {
-            OnKeyPress(player, KeyEnumeration.F9);
+            await OnKeyPress(player, KeyEnumeration.F9);
         }
     }
 }

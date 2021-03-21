@@ -1,5 +1,6 @@
 ﻿using PARADOX_RP.Core.Factories;
 using PARADOX_RP.Core.Module;
+using PARADOX_RP.Game.Lobby;
 using PARADOX_RP.Game.MiniGames.Interfaces;
 using PARADOX_RP.Game.MiniGames.Models;
 using PARADOX_RP.Utils.Enums;
@@ -23,9 +24,17 @@ namespace PARADOX_RP.Game.MiniGames
             {
                 player.SendNotification("Minigame", "Du bist bereits in einem Minigame.", NotificationTypes.ERROR);
                 return;
-            } 
+            }
 
-            player.Minigame
+            LobbyModel lobby = new LobbyModel()
+            {
+                Id = 0,
+                Owner = player.Username,
+                MaxCounts = 12
+            };
+
+            player.Minigame = minigame;
+            player.Dimension = LobbyModule.Instance.GetDimensionByLobby(lobby);
         }
     }
 }

@@ -14,7 +14,13 @@ namespace PARADOX_RP.Game.MiniGames.Content.SuperMario
     class SuperMarioMinigameModule : ModuleBase<SuperMarioMinigameModule>, IMinigame
     {
         private Position _spawnPoint = new Position(0, 0, 0);
-        public SuperMarioMinigameModule() : base("SuperMarioMinigame") {}
+        public Dictionary<int, SuperMarioPickup> _pickups;
+        public int _pickupId;
+
+        public SuperMarioMinigameModule() : base("SuperMarioMinigame") {
+            _pickupId = 1;
+            _pickups = new Dictionary<int, SuperMarioPickup>();
+        }
 
         public MinigameTypes MinigameType { get => MinigameTypes.SUPERMARIO; }
 

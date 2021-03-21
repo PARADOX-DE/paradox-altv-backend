@@ -1,4 +1,7 @@
 ﻿using AltV.Net.Async;
+using AltV.Net.EntitySync;
+using AltV.Net.EntitySync.ServerEvent;
+using AltV.Net.EntitySync.SpatialPartitions;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Storage;
 using PARADOX_RP.Core.Database;
@@ -30,6 +33,14 @@ namespace PARADOX_RP.Core
 
                 AltAsync.Log("Initialized Database.");
             }
+
+            AltEntitySync.Init(1, 100,
+                (threadCount, repository) => new ServerEventNetworkLayer(threadCount, repository),
+                (entity, threadCount) => entity.Type,
+                (entityId, entityType, threadCount) => entityType,
+                (threadId) => new LimitedGrid3(50_000, 50_000, 100, 10_000, 10_000, 600),
+                new IdProvider()
+            );
 
             AltAsync.Log("Server started.");
             _eventHandler.Load();

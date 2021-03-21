@@ -27,4 +27,8 @@
 		</PackageReference>
 		<PackageReference Include="Pomelo.EntityFrameworkCore.MySql" Version="5.0.0-alpha.2" />
 	</ItemGroup>
+
+	<ItemGroup>
+	  <Folder Include="Game\Lobby\" />
+	</ItemGroup>
 </Project>

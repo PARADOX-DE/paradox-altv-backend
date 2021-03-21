@@ -1,14 +1,15 @@
 ﻿using PARADOX_RP.Core.Factories;
 using PARADOX_RP.Core.Module;
+using PARADOX_RP.Game.MiniGames.Interfaces;
 using PARADOX_RP.Utils.Enums;
 using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PARADOX_RP.Game.MiniGames.SuperMario
+namespace PARADOX_RP.Game.MiniGames.Content.SuperMario
 {
-    class SuperMarioMinigameModule : ModuleBase<SuperMarioMinigameModule>
+    class SuperMarioMinigameModule : ModuleBase<SuperMarioMinigameModule>, IMinigame
     {
         public SuperMarioMinigameModule() : base("SuperMarioMinigame") { }
 

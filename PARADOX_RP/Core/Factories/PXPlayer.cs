@@ -3,6 +3,7 @@ using AltV.Net.Elements.Entities;
 using PARADOX_RP.Core.Database.Models;
 using PARADOX_RP.Game.Administration.Models;
 using PARADOX_RP.Game.Login;
+using PARADOX_RP.Game.MiniGames.Models;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -18,7 +19,8 @@ namespace PARADOX_RP.Core.Factories
 
     public enum NotificationTypes
     {
-        SUCCESS
+        SUCCESS,
+        ERROR
     }
 
     public enum DutyTypes
@@ -38,7 +40,7 @@ namespace PARADOX_RP.Core.Factories
         public DutyTypes DutyType { get; set; }
         public CancellationTokenSource CancellationToken { get; set; }
         public Dictionary<int, Clothes> Clothes { get; set; }
-
+        public MinigameTypes Minigame { get; set; }
         internal PXPlayer(IntPtr nativePointer, ushort id) : base(nativePointer, id)
         {
             SqlId = -1;

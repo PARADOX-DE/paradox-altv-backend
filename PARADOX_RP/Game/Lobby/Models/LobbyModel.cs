@@ -6,7 +6,7 @@ namespace PARADOX_RP.Game.Lobby
 {
     class LobbyModel
     {
-        public int Id { get; set; }
+        public int OwnerId { get; set; }
         public string Owner { get; set; }
         public int MaxCounts { get; set; }
     }

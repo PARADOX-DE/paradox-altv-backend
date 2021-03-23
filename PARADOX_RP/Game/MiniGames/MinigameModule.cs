@@ -30,22 +30,20 @@ namespace PARADOX_RP.Game.MiniGames
                 return;
             }
 
-            LobbyModel lobby = new LobbyModel()
-            {
-                Id = 0,
-                Owner = player.Username,
-                MaxCounts = 12
-            };
+            IMinigame minigameInterface = _minigames.FirstOrDefault(i => i.MinigameType == minigame);
+            if (minigameInterface == null) return;
+
+            LobbyModel lobby = LobbyModule.Instance.RegisterLobby(player, 12);
 
             player.Minigame = minigame;
             player.Dimension = LobbyModule.Instance.GetDimensionByLobby(lobby);
+            minigameInterface.EnteredMinigame(player);
         }
 
         [Command("minigame")]
         public void enterMinigameCommand(PXPlayer player, string minigameModule)
         {
             MinigameTypes _minigameType = Enum.Parse<MinigameTypes>(minigameModule);
-            IMinigame minigame = _minigames.FirstOrDefault(i => i.MinigameType == _minigameType);
 
             player.Minigame = _minigameType;
             minigame.EnteredMinigame(player);

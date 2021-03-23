@@ -37,6 +37,7 @@ namespace PARADOX_RP.Game.MiniGames
 
             player.Minigame = minigame;
             player.Dimension = LobbyModule.Instance.GetDimensionByLobby(lobby);
+
             minigameInterface.EnteredMinigame(player);
         }
 

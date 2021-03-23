@@ -17,7 +17,8 @@ namespace PARADOX_RP.Game.MiniGames.Content.SuperMario
         public Dictionary<int, SuperMarioPickup> _pickups;
         public int _pickupId;
 
-        public SuperMarioMinigameModule() : base("SuperMarioMinigame") {
+        public SuperMarioMinigameModule() : base("SuperMarioMinigame")
+        {
             _pickupId = 1;
             _pickups = new Dictionary<int, SuperMarioPickup>();
         }
@@ -31,9 +32,13 @@ namespace PARADOX_RP.Game.MiniGames.Content.SuperMario
 
         public override async Task<bool> OnKeyPress(PXPlayer player, KeyEnumeration key)
         {
-            if(key == KeyEnumeration.E)
+            if (key == KeyEnumeration.E)
             {
-                new SuperMarioPickup(SuperMarioPickupTypes.BOMB, player.Position);
+                if (player.Minigame == MinigameTypes.SUPERMARIO)
+                {
+                    if (player.DutyType == DutyTypes.ADMINDUTY)
+                        new SuperMarioPickup(SuperMarioPickupTypes.BOMB, player.Position);
+                }
             }
 
             return await Task.FromResult(false);

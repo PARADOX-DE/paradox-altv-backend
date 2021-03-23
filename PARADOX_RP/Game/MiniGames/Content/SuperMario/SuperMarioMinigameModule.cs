@@ -33,8 +33,19 @@ namespace PARADOX_RP.Game.MiniGames.Content.SuperMario
 
         public override async Task<bool> OnColShapeEntered(PXPlayer player, IColShape col)
         {
-            if (col.HasData("superMarioPickupId")){
-                //int _colShapePickupId = col.GetData("superMarioPickupId", )
+            if (col.HasData("superMarioPickupId"))
+            {
+                col.GetData("superMarioPickupId", out int _colShapePickupId);
+                if (_colShapePickupId < 0) return await Task.FromResult(false);
+
+                if (_pickups.TryGetValue(_colShapePickupId, out SuperMarioPickup pickup))
+                {
+                    if (pickup.LastUsed.Subtract(DateTime.Now).TotalMinutes > 5)
+                    {
+                        //TODO handling
+                        pickup.LastUsed = DateTime.Now;
+                    }
+                }
 
                 return await Task.FromResult(true);
             }

@@ -45,8 +45,7 @@ namespace PARADOX_RP.Game.MiniGames
         {
             MinigameTypes _minigameType = Enum.Parse<MinigameTypes>(minigameModule);
 
-            player.Minigame = _minigameType;
-            minigame.EnteredMinigame(player);
+            ChooseMinigame(player, _minigameType);
         }
     }
 }

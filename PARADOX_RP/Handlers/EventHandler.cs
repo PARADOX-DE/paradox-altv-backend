@@ -22,8 +22,10 @@ namespace PARADOX_RP.Handlers
             AltAsync.OnClient<PXPlayer>("Pressed_F9", PressedF9);
             AltAsync.OnPlayerConnect += OnPlayerConnect;
             AltAsync.OnPlayerDisconnect += OnPlayerDisconnect;
+            AltAsync.OnColShape += OnColShape;
         }
 
+        
 
         public void Load()
         {
@@ -78,6 +80,18 @@ namespace PARADOX_RP.Handlers
             });
 
             pxPlayer.LoggedIn = false;
+        }
+
+        private async Task OnColShape(IColShape colShape, IEntity targetEntity, bool state)
+        {
+            if (targetEntity is IPlayer) return;
+
+            PXPlayer pxPlayer = (PXPlayer)targetEntity;
+            await _modules.ForEach(e =>
+            {
+                if (e.Enabled)
+                    e.OnColShapeEntered(pxPlayer, colShape);
+            });
         }
     }
 }

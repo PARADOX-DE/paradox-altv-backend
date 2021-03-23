@@ -1,4 +1,5 @@
-﻿using PARADOX_RP.Core.Factories;
+﻿using AltV.Net.Elements.Entities;
+using PARADOX_RP.Core.Factories;
 using PARADOX_RP.Utils.Enums;
 using System;
 using System.Collections.Generic;
@@ -18,5 +19,6 @@ namespace PARADOX_RP.Core.Module
         void OnPlayerConnect(PXPlayer player);
         void OnPlayerDisconnect(PXPlayer player);
         void OnPlayerLogin(PXPlayer player);
+        Task<bool> OnColShapeEntered(PXPlayer player, IColShape col);
     }
 }

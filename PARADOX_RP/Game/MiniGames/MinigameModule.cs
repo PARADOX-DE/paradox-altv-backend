@@ -34,7 +34,13 @@ namespace PARADOX_RP.Game.MiniGames
             IMinigame minigameInterface = _minigames.FirstOrDefault(i => i.MinigameType == minigame);
             if (minigameInterface == null) return;
 
-            LobbyModel lobby = LobbyModule.Instance.RegisterLobby(player, 12); 
+            LobbyModel lobby = LobbyModule.Instance.RegisterLobby(player, 12);
+            if (lobby == null)
+            {
+                player.SendNotification("Minigame", "Du hast bereits eine Lobby offen.", NotificationTypes.ERROR);
+                return;
+            }
+
             minigameInterface.PrepareLobby(lobby);
 
             player.Minigame = minigame;

@@ -21,6 +21,7 @@ namespace PARADOX_RP.Game.MiniGames.Content.SuperMario
     class SuperMarioPickup
     {
         public int Id { get; set; }
+        public ICheckpoint Checkpoint { get; set; }
         public IColShape ColShape { get; set; }
         public SuperMarioPickupTypes PickupType { get; set; }
         public Position Position { get; set; }
@@ -37,8 +38,8 @@ namespace PARADOX_RP.Game.MiniGames.Content.SuperMario
             ColShape.SetData("superMarioPickupId", Id);
             ColShape.Dimension = dimension;
 
-            Alt.CreateCheckpoint(CheckpointType.Cyclinder, position, 2, 2, new Rgba(255, 0, 0, 255));
-
+            Checkpoint = Alt.CreateCheckpoint(CheckpointType.Ring, position, 1f, 1f, new Rgba(255, 255, 0, 255));
+            
             SuperMarioMinigameModule.Instance._pickups.Add(Id, this);
             SuperMarioMinigameModule.Instance._pickupId++;
         }

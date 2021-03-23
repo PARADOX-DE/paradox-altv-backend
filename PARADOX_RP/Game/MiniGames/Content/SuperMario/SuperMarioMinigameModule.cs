@@ -44,9 +44,11 @@ namespace PARADOX_RP.Game.MiniGames.Content.SuperMario
         {
             foreach(Position tmpPosition in _vehicleSpawns)
             {
-                IVehicle vehicle = await AltAsync.CreateVehicle(Alt.Hash(vehicleHash), tmpPosition, new Rotation(0, 0, 0));
+                IVehicle vehicle = await AltAsync.CreateVehicle(Alt.Hash(vehicleHash), tmpPosition, new Rotation(0, 0, 1.6f));
                 await vehicle.SetDimensionAsync(model.OwnerId);
                 await vehicle.SetPrimaryColorAsync((byte)new Random().Next(0, 70));
+
+                await vehicle.SetEngineOnAsync(false);
             }
         }
 
@@ -73,7 +75,12 @@ namespace PARADOX_RP.Game.MiniGames.Content.SuperMario
                             new SuperMarioMinigameItemScripts().pickupSpeed(player);
                             break;
                     };
+                    Alt.Log("Checkpoint");
                     pickup.LastUsed = DateTime.Now;
+                    await pickup.Checkpoint.RemoveAsync();
+                    await Task.Delay(4500);
+                    pickup.Checkpoint = await AltAsync.CreateCheckpoint(CheckpointType.Ring, pickup.Position, 1, 1, new Rgba(255, 255, 0, 255));
+
                     // }
                 }
 
@@ -89,7 +96,10 @@ namespace PARADOX_RP.Game.MiniGames.Content.SuperMario
             {
                 if (player.Minigame == MinigameTypes.SUPERMARIO)
                 {
-                    new SuperMarioPickup(SuperMarioPickupTypes.BOMB, player.Position, player.Dimension);
+                    Position save = player.Position;
+
+                    await Task.Delay(1500);
+                    new SuperMarioPickup(SuperMarioPickupTypes.BOMB, save, player.Dimension);
                     return await Task.FromResult(true);
                 }
             }

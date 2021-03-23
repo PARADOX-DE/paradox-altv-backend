@@ -24,9 +24,7 @@ namespace PARADOX_RP.Game.Commands
         public void OnChatMessage(IPlayer player, string msg)
         {
             if (msg.Length == 0 || msg[0] == '/') return;
-            Alt.Log(msg);
             player.SendChatMessage(msg);
-
         }
 
         [CommandEvent(CommandEventType.CommandNotFound)]
@@ -34,7 +32,6 @@ namespace PARADOX_RP.Game.Commands
         {
             player.SendChatMessage("{FF0000}[Server] {FFFFFF}Befehl nicht gefunden.");
         }
-
 
         [Command("minigame")]
         public void enterMinigameCommand(PXPlayer player, string minigameModule)
@@ -61,6 +58,12 @@ namespace PARADOX_RP.Game.Commands
         public void pos(PXPlayer player, string positionName)
         {
             AltAsync.Log($"{positionName} | {player.Position.X.ToString().Replace(",", ".")}, {player.Position.Y.ToString().Replace(",", ".")}, {player.Position.Z.ToString().Replace(",", ".")}");
+        }
+
+        [Command("rot")]
+        public void rot(PXPlayer player, string positionName)
+        {
+            AltAsync.Log($"{positionName} | {player.Rotation.Pitch.ToString().Replace(",", ".")}, {player.Rotation.Roll.ToString().Replace(",", ".")}, {player.Rotation.Yaw.ToString().Replace(",", ".")}");
         }
 
         [Command("aduty")]

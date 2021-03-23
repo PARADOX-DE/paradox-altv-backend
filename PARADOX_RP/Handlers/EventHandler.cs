@@ -25,7 +25,7 @@ namespace PARADOX_RP.Handlers
             AltAsync.OnColShape += OnColShape;
         }
 
-        
+
 
         public void Load()
         {
@@ -84,14 +84,15 @@ namespace PARADOX_RP.Handlers
 
         private async Task OnColShape(IColShape colShape, IEntity targetEntity, bool state)
         {
-            if (targetEntity is IPlayer) return;
+            if (!(targetEntity is IPlayer)) return;
 
             PXPlayer pxPlayer = (PXPlayer)targetEntity;
             await _modules.ForEach(e =>
             {
-                if (e.Enabled)
+                if (e.Enabled && state)
                     e.OnColShapeEntered(pxPlayer, colShape);
             });
+
         }
     }
 }

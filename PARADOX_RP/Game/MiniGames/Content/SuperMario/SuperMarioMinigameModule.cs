@@ -1,7 +1,10 @@
-﻿using AltV.Net.Data;
+﻿using AltV.Net;
+using AltV.Net.Async;
+using AltV.Net.Data;
 using AltV.Net.Elements.Entities;
 using PARADOX_RP.Core.Factories;
 using PARADOX_RP.Core.Module;
+using PARADOX_RP.Game.Lobby;
 using PARADOX_RP.Game.MiniGames.Interfaces;
 using PARADOX_RP.Game.MiniGames.Models;
 using PARADOX_RP.Utils.Enums;
@@ -14,7 +17,18 @@ namespace PARADOX_RP.Game.MiniGames.Content.SuperMario
 {
     class SuperMarioMinigameModule : ModuleBase<SuperMarioMinigameModule>, IMinigame
     {
-        private Position _spawnPoint = new Position(0, 0, 0);
+        private Position _spawnPoint = new Position(3755.6572f, -798.4879f, 47.696655f);
+
+        private string vehicleHash = "blazer5";
+        private List<Position> _vehicleSpawns = new List<Position>()
+        {
+            new Position(3718.576f, -802.37805f, 47.460815f),
+            new Position(3715.754f, -794.0044f, 47.44397f),
+            new Position(3726.3691f, -793.9121f, 47.47766f),
+            new Position(3728.268f, -802.87915f, 47.47766f),
+        };
+
+
         public Dictionary<int, SuperMarioPickup> _pickups;
         public int _pickupId;
 
@@ -25,6 +39,16 @@ namespace PARADOX_RP.Game.MiniGames.Content.SuperMario
         }
 
         public MinigameTypes MinigameType { get => MinigameTypes.SUPERMARIO; }
+
+        public async void PrepareLobby(LobbyModel model)
+        {
+            foreach(Position tmpPosition in _vehicleSpawns)
+            {
+                IVehicle vehicle = await AltAsync.CreateVehicle(Alt.Hash(vehicleHash), tmpPosition, new Rotation(0, 0, 0));
+                await vehicle.SetDimensionAsync(model.OwnerId);
+                await vehicle.SetPrimaryColorAsync((byte)new Random().Next(0, 70));
+            }
+        }
 
         public void EnteredMinigame(PXPlayer player)
         {
@@ -40,11 +64,17 @@ namespace PARADOX_RP.Game.MiniGames.Content.SuperMario
 
                 if (_pickups.TryGetValue(_colShapePickupId, out SuperMarioPickup pickup))
                 {
-                    if (pickup.LastUsed.Subtract(DateTime.Now).TotalMinutes > 5)
+                    // if (pickup.LastUsed.Subtract(DateTime.Now).TotalMinutes > 5)
+                    //{
+
+                    switch (pickup.PickupType)
                     {
-                        //TODO handling
-                        pickup.LastUsed = DateTime.Now;
-                    }
+                        case SuperMarioPickupTypes.BOMB:
+                            new SuperMarioMinigameItemScripts().pickupSpeed(player);
+                            break;
+                    };
+                    pickup.LastUsed = DateTime.Now;
+                    // }
                 }
 
                 return await Task.FromResult(true);
@@ -59,12 +89,14 @@ namespace PARADOX_RP.Game.MiniGames.Content.SuperMario
             {
                 if (player.Minigame == MinigameTypes.SUPERMARIO)
                 {
-                    if (player.DutyType == DutyTypes.ADMINDUTY)
-                        new SuperMarioPickup(SuperMarioPickupTypes.BOMB, player.Position);
+                    new SuperMarioPickup(SuperMarioPickupTypes.BOMB, player.Position, player.Dimension);
+                    return await Task.FromResult(true);
                 }
             }
 
             return await Task.FromResult(false);
         }
+
+
     }
 }

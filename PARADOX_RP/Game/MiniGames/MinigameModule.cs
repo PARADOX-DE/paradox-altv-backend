@@ -11,6 +11,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
 using System.Linq;
+using AltV.Net;
 
 namespace PARADOX_RP.Game.MiniGames
 {
@@ -34,19 +35,12 @@ namespace PARADOX_RP.Game.MiniGames
             if (minigameInterface == null) return;
 
             LobbyModel lobby = LobbyModule.Instance.RegisterLobby(player, 12);
+            minigameInterface.PrepareLobby(lobby);
 
             player.Minigame = minigame;
             player.Dimension = LobbyModule.Instance.GetDimensionByLobby(lobby);
 
             minigameInterface.EnteredMinigame(player);
-        }
-
-        [Command("minigame")]
-        public void enterMinigameCommand(PXPlayer player, string minigameModule)
-        {
-            MinigameTypes _minigameType = Enum.Parse<MinigameTypes>(minigameModule);
-
-            ChooseMinigame(player, _minigameType);
         }
     }
 }

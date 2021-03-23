@@ -26,15 +26,16 @@ namespace PARADOX_RP.Game.MiniGames.Content.SuperMario
         public Position Position { get; set; }
         public DateTime LastUsed { get; set; }
 
-        public SuperMarioPickup(SuperMarioPickupTypes pickupType, Position position)
+        public SuperMarioPickup(SuperMarioPickupTypes pickupType, Position position, int dimension)
         {
             Id = SuperMarioMinigameModule.Instance._pickupId;
             PickupType = pickupType;
             Position = position;
             LastUsed = DateTime.Now;
 
-            IColShape colShape = Alt.CreateColShapeCylinder(position, 2, 2);
-            colShape.SetData("superMarioPickupId", Id);
+            ColShape = Alt.CreateColShapeCylinder(position, 3, 3);
+            ColShape.SetData("superMarioPickupId", Id);
+            ColShape.Dimension = dimension;
 
             Alt.CreateCheckpoint(CheckpointType.Cyclinder, position, 2, 2, new Rgba(255, 0, 0, 255));
 

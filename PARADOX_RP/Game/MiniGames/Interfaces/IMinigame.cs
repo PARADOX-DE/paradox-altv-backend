@@ -8,7 +8,7 @@ using System.Text;
 namespace PARADOX_RP.Game.MiniGames.Interfaces
 {
     interface IMinigame
-    {
+    { 
         MinigameTypes MinigameType { get; }
         void PrepareLobby(LobbyModel model);
         void EnteredMinigame(PXPlayer player);

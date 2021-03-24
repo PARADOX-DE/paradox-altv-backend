@@ -77,9 +77,9 @@ namespace PARADOX_RP.Game.MiniGames.Content.SuperMario
                     };
                     Alt.Log("Checkpoint");
                     pickup.LastUsed = DateTime.Now;
-                    await pickup.Checkpoint.RemoveAsync();
+                    pickup.Object.Visible = false;
                     await Task.Delay(4500);
-                    pickup.Checkpoint = await AltAsync.CreateCheckpoint(CheckpointType.Ring, pickup.Position, 1, 1, new Rgba(255, 255, 0, 255));
+                    pickup.Object.Visible = true;
 
                     // }
                 }

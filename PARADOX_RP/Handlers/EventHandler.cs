@@ -84,7 +84,6 @@ namespace PARADOX_RP.Handlers
 
         private async Task OnColShape(IColShape colShape, IEntity targetEntity, bool state)
         {
-            if (!(targetEntity is IPlayer)) return;
 
             PXPlayer pxPlayer = (PXPlayer)targetEntity;
             await _modules.ForEach(e =>

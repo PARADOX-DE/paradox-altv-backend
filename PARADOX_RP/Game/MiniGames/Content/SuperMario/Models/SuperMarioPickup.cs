@@ -2,9 +2,10 @@
 using AltV.Net.Async;
 using AltV.Net.Data;
 using AltV.Net.Elements.Entities;
-using DasNiels.AltV.Streamers;
+using EntityStreamer;
 using System;
 using System.Collections.Generic;
+using System.Numerics;
 using System.Text;
 
 namespace PARADOX_RP.Game.MiniGames.Content.SuperMario
@@ -21,7 +22,7 @@ namespace PARADOX_RP.Game.MiniGames.Content.SuperMario
     class SuperMarioPickup
     {
         public int Id { get; set; }
-        public ICheckpoint Checkpoint { get; set; }
+        public Prop Object { get; set; }
         public IColShape ColShape { get; set; }
         public SuperMarioPickupTypes PickupType { get; set; }
         public Position Position { get; set; }
@@ -38,8 +39,9 @@ namespace PARADOX_RP.Game.MiniGames.Content.SuperMario
             ColShape.SetData("superMarioPickupId", Id);
             ColShape.Dimension = dimension;
 
-            Checkpoint = Alt.CreateCheckpoint(CheckpointType.Ring, position, 1f, 1f, new Rgba(255, 255, 0, 255));
-            
+            Object = PropStreamer.Create("prop_mk_warp", position, new Vector3(0,0,0), dimension);
+
+
             SuperMarioMinigameModule.Instance._pickups.Add(Id, this);
             SuperMarioMinigameModule.Instance._pickupId++;
         }

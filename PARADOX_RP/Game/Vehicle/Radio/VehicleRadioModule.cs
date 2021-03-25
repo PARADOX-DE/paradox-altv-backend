@@ -13,19 +13,36 @@ namespace PARADOX_RP.Game.Vehicle.Radio
 {
     class VehicleRadioModule : ModuleBase<VehicleRadioModule>
     {
-        public VehicleRadioModule() : base("VehicleRadio") {
+        public VehicleRadioModule() : base("VehicleRadio")
+        {
             AltAsync.OnClient<PXPlayer>("EnableVehicleRadio", EnableVehicleRadio);
             AltAsync.OnClient<PXPlayer>("DisableVehicleRadio", DisableVehicleRadio);
         }
 
-        private async void DisableVehicleRadio(PXPlayer obj)
+        private async void DisableVehicleRadio(PXPlayer player)
         {
-            throw new NotImplementedException();
+            if (player.Seat != Convert.ToByte(VehicleSeats.DRIVER) && player.Seat != Convert.ToByte(VehicleSeats.CODRIVER)) return;
+
+            PXVehicle vehicle = (PXVehicle)player.Vehicle;
+            if (!vehicle.IsValid()) return;
+
+            if (vehicle.HasRadio)
+            {
+                await player.EmitAsync("DisableVehicleRadio");
+            }
         }
 
         private async void EnableVehicleRadio(PXPlayer player)
         {
+            if (player.Seat != Convert.ToByte(VehicleSeats.DRIVER) && player.Seat != Convert.ToByte(VehicleSeats.CODRIVER)) return;
 
+            PXVehicle vehicle = (PXVehicle)player.Vehicle;
+            if (!vehicle.IsValid()) return;
+
+            if (vehicle.HasRadio)
+            {
+                await player.EmitAsync("EnableVehicleRadio", Configuration.Instance.VehicleRadioURL);
+            }
         }
 
         public override async Task OnPlayerEnterVehicle(IVehicle v, IPlayer p, byte seat)

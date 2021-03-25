@@ -10,9 +10,17 @@ namespace PARADOX_RP.Core.Factories
     {
         public int SqlId { get; set; }
 
+        public bool HasRadio { get; set; }
+
         internal PXVehicle(IntPtr nativePointer, ushort id) : base(nativePointer, id)
         {
             SqlId = -1;
+            HasRadio = false;
+        }
+
+        public bool IsValid()
+        {
+            return SqlId > 0;
         }
     }
 

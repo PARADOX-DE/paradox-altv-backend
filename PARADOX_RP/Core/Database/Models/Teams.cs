@@ -11,7 +11,7 @@ namespace PARADOX_RP.Core.Database.Models
         BAD
     }
 
-    class Teams
+    public class Teams
     {
         public int Id { get; set; }
         public string TeamName { get; set; }

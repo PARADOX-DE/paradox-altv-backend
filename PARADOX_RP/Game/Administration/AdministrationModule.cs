@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using PARADOX_RP.Utils.Enums;
 using AltV.Net.Async;
 using AltV.Net.Resources.Chat.Api;
+using AltV.Net;
 
 namespace PARADOX_RP.Game.Administration
 {
@@ -43,12 +44,6 @@ namespace PARADOX_RP.Game.Administration
 
                 player.DutyType = DutyTypes.OFFDUTY;
             }
-        }
-
-        [Command("aduty")]
-        public async void testCommand(PXPlayer player, string test)
-        {
-            await OnKeyPress(player, KeyEnumeration.F9);
         }
     }
 }

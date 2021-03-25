@@ -4,7 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Numerics;
 
-namespace DasNiels.AltV.Streamers
+namespace EntityStreamer
 {
     public enum TextureVariation
     {
@@ -32,18 +32,19 @@ namespace DasNiels.AltV.Streamers
         public float Y { get; set; }
         public float Z { get; set; }
         public float Speed { get; set; }
-        public void OnWrite( IMValueWriter writer )
+
+        public void OnWrite(IMValueWriter writer)
         {
-            writer.BeginObject( );
-            writer.Name( "X" );
-            writer.Value( X );
-            writer.Name( "Y" );
-            writer.Value( "Y" );
-            writer.Name( "Z" );
-            writer.Value( Z );
-            writer.Name( "Speed" );
-            writer.Value( Speed );
-            writer.EndObject( );
+            writer.BeginObject();
+            writer.Name("X");
+            writer.Value(X);
+            writer.Name("Y");
+            writer.Value("Y");
+            writer.Name("Z");
+            writer.Value(Z);
+            writer.Name("Speed");
+            writer.Value(Speed);
+            writer.EndObject();
         }
     }
 
@@ -53,49 +54,49 @@ namespace DasNiels.AltV.Streamers
         public int Green { get; set; }
         public int Blue { get; set; }
 
-        public Rgb( int red, int green, int blue )
+        public Rgb(int red, int green, int blue)
         {
             Red = red;
             Green = green;
             Blue = blue;
         }
 
-        public void OnWrite( IMValueWriter writer )
+        public void OnWrite(IMValueWriter writer)
         {
-            writer.BeginObject( );
-            writer.Name( "Red" );
-            writer.Value( Red );
-            writer.Name( "Green" );
-            writer.Value( Green );
-            writer.Name( "Blue" );
-            writer.Value( Blue );
-            writer.EndObject( );
+            writer.BeginObject();
+            writer.Name("Red");
+            writer.Value(Red);
+            writer.Name("Green");
+            writer.Value(Green);
+            writer.Name("Blue");
+            writer.Value(Blue);
+            writer.EndObject();
         }
     }
 
     /// <summary>
     /// DynamicObject class that stores all data related to a single object
     /// </summary>
-    public class DynamicObject : Entity, IEntity
+    public class Prop : Entity, IEntity
     {
-        public string EntityType
+        private static List<Prop> propList = new List<Prop>();
+
+        public static List<Prop> PropList
         {
             get
             {
-                if( !TryGetData( "entityType", out string type ) )
-                    return null;
-
-                return type;
+                lock (propList)
+                {
+                    return propList;
+                }
             }
             set
             {
-                // No data changed
-                if( EntityType == value )
-                    return;
-
-                SetData( "entityType", value );
+                propList = value;
             }
         }
+
+        public AltV.Net.Elements.Entities.IColShape colshape { get; set; }
 
         /// <summary>
         /// Set or get the current object's rotation (in degrees).
@@ -104,29 +105,88 @@ namespace DasNiels.AltV.Streamers
         {
             get
             {
-                if( !TryGetData( "rotation", out Dictionary<string, object> data ) )
+                if (!TryGetData("rotation", out Dictionary<string, object> data))
                     return default;
 
-                return new Vector3( )
+                return new Vector3()
                 {
-                    X = Convert.ToSingle( data[ "x" ] ),
-                    Y = Convert.ToSingle( data[ "y" ] ),
-                    Z = Convert.ToSingle( data[ "z" ] ),
+                    X = Convert.ToSingle(data["x"]),
+                    Y = Convert.ToSingle(data["y"]),
+                    Z = Convert.ToSingle(data["z"]),
                 };
             }
             set
             {
                 // No data changed
-                if( Rotation != null && Rotation.X == value.X && Rotation.Y == value.Y && Rotation.Z == value.Z && value != new Vector3( 0, 0, 0 ) )
+                if (Rotation != null && Rotation.X == value.X && Rotation.Y == value.Y && Rotation.Z == value.Z && value != new Vector3(0, 0, 0))
                     return;
 
-                Dictionary<string, object> dict = new Dictionary<string, object>( )
+                Dictionary<string, object> dict = new Dictionary<string, object>()
                 {
-                    [ "x" ] = value.X,
-                    [ "y" ] = value.Y,
-                    [ "z" ] = value.Z,
+                    ["x"] = value.X,
+                    ["y"] = value.Y,
+                    ["z"] = value.Z,
                 };
-                SetData( "rotation", dict );
+                SetData("rotation", dict);
+            }
+        }
+
+        public Vector3 Velocity
+        {
+            get
+            {
+                if (!TryGetData("velocity", out Dictionary<string, object> data))
+                    return default;
+
+                return new Vector3()
+                {
+                    X = Convert.ToSingle(data["x"]),
+                    Y = Convert.ToSingle(data["y"]),
+                    Z = Convert.ToSingle(data["z"]),
+                };
+            }
+            set
+            {
+                // No data changed
+                if (Velocity != null && Velocity.X == value.X && Velocity.Y == value.Y && Velocity.Z == value.Z && value != new Vector3(0, 0, 0))
+                    return;
+
+                Dictionary<string, object> dict = new Dictionary<string, object>()
+                {
+                    ["x"] = value.X,
+                    ["y"] = value.Y,
+                    ["z"] = value.Z,
+                };
+                SetData("velocity", dict);
+            }
+        }
+
+        public Vector3 SlideToPosition
+        {
+            get
+            {
+                if (!TryGetData("SlideToPosition", out Dictionary<string, object> data))
+                    return default;
+
+                return new Vector3()
+                {
+                    X = Convert.ToSingle(data["x"]),
+                    Y = Convert.ToSingle(data["y"]),
+                    Z = Convert.ToSingle(data["z"]),
+                };
+            }
+            set
+            {
+                // No data changed
+
+                Dictionary<string, object> dict = new Dictionary<string, object>()
+                {
+                    ["x"] = value.X,
+                    ["y"] = value.Y,
+                    ["z"] = value.Z,
+                };
+                //Log.Important("SetData SlideToPosition ");
+                SetData("SlideToPosition", dict);
             }
         }
 
@@ -137,7 +197,7 @@ namespace DasNiels.AltV.Streamers
         {
             get
             {
-                if( !TryGetData( "model", out string model ) )
+                if (!TryGetData("model", out string model))
                     return null;
 
                 return model;
@@ -145,10 +205,10 @@ namespace DasNiels.AltV.Streamers
             set
             {
                 // No data changed
-                if( Model == value )
+                if (Model == value)
                     return;
 
-                SetData( "model", value );
+                SetData("model", value);
             }
         }
 
@@ -159,7 +219,7 @@ namespace DasNiels.AltV.Streamers
         {
             get
             {
-                if( !TryGetData( "lodDistance", out uint lodDist ) )
+                if (!TryGetData("lodDistance", out uint lodDist))
                     return null;
 
                 return lodDist;
@@ -167,17 +227,17 @@ namespace DasNiels.AltV.Streamers
             set
             {
                 // if value is set to null, reset the data
-                if( value == null )
+                if (value == null)
                 {
-                    SetData( "lodDistance", null );
+                    SetData("lodDistance", null);
                     return;
                 }
 
                 // No data changed
-                if( LodDistance == value )
+                if (LodDistance == value)
                     return;
 
-                SetData( "lodDistance", value );
+                SetData("lodDistance", value);
             }
         }
 
@@ -188,25 +248,25 @@ namespace DasNiels.AltV.Streamers
         {
             get
             {
-                if( !TryGetData( "textureVariation", out int variation ) )
+                if (!TryGetData("textureVariation", out int variation))
                     return null;
 
-                return ( TextureVariation ) variation;
+                return (TextureVariation)variation;
             }
             set
             {
                 // if value is set to null, reset the data
-                if( value == null )
+                if (value == null)
                 {
-                    SetData( "textureVariation", null );
+                    SetData("textureVariation", null);
                     return;
                 }
 
                 // No data changed
-                if( TextureVariation == value )
+                if (TextureVariation == value)
                     return;
 
-                SetData( "textureVariation", ( int ) value );
+                SetData("textureVariation", (int)value);
             }
         }
 
@@ -217,7 +277,7 @@ namespace DasNiels.AltV.Streamers
         {
             get
             {
-                if( !TryGetData( "dynamic", out bool isDynamic ) )
+                if (!TryGetData("dynamic", out bool isDynamic))
                     return false;
 
                 return isDynamic;
@@ -225,17 +285,17 @@ namespace DasNiels.AltV.Streamers
             set
             {
                 // if value is set to null, reset the data
-                if( value == null )
+                if (value == null)
                 {
-                    SetData( "dynamic", null );
+                    SetData("dynamic", null);
                     return;
                 }
 
                 // No data changed
-                if( Dynamic == value )
+                if (Dynamic == value)
                     return;
 
-                SetData( "dynamic", value );
+                SetData("dynamic", value);
             }
         }
 
@@ -246,7 +306,7 @@ namespace DasNiels.AltV.Streamers
         {
             get
             {
-                if( !TryGetData( "visible", out bool visible ) )
+                if (!TryGetData("visible", out bool visible))
                     return false;
 
                 return visible;
@@ -254,17 +314,17 @@ namespace DasNiels.AltV.Streamers
             set
             {
                 // if value is set to null, reset the data
-                if( value == null )
+                if (value == null)
                 {
-                    SetData( "visible", null );
+                    SetData("visible", null);
                     return;
                 }
 
                 // No data changed
-                if( Visible == value )
+                if (Visible == value)
                     return;
 
-                SetData( "visible", value );
+                SetData("visible", value);
             }
         }
 
@@ -275,7 +335,7 @@ namespace DasNiels.AltV.Streamers
         {
             get
             {
-                if( !TryGetData( "onFire", out bool onFire ) )
+                if (!TryGetData("onFire", out bool onFire))
                     return false;
 
                 return onFire;
@@ -283,28 +343,28 @@ namespace DasNiels.AltV.Streamers
             set
             {
                 // if value is set to null, reset the data
-                if( value == null )
+                if (value == null)
                 {
-                    SetData( "onFire", null );
+                    SetData("onFire", null);
                     return;
                 }
 
                 // No data changed
-                if( OnFire == value )
+                if (OnFire == value)
                     return;
 
-                SetData( "onFire", value );
+                SetData("onFire", value);
             }
         }
 
         /// <summary>
         /// Freeze an object into it's current position. or get it's status
         /// </summary>
-        public bool? Frozen
+        public bool? Freeze
         {
             get
             {
-                if( !TryGetData( "frozen", out bool frozen ) )
+                if (!TryGetData("freeze", out bool frozen))
                     return false;
 
                 return frozen;
@@ -312,17 +372,17 @@ namespace DasNiels.AltV.Streamers
             set
             {
                 // if value is set to null, reset the data
-                if( value == null )
+                if (value == null)
                 {
-                    SetData( "frozen", null );
+                    SetData("freeze", null);
                     return;
                 }
 
                 // No data changed
-                if( Frozen == value )
+                if (Freeze == value)
                     return;
 
-                SetData( "frozen", value );
+                SetData("freeze", value);
             }
         }
 
@@ -333,26 +393,26 @@ namespace DasNiels.AltV.Streamers
         {
             get
             {
-                if( !TryGetData( "lightColor", out Dictionary<string, object> data ) )
+                if (!TryGetData("lightColor", out Dictionary<string, object> data))
                     return null;
 
                 return new Rgb(
-                    Convert.ToInt32( data[ "r" ] ),
-                    Convert.ToInt32( data[ "g" ] ),
-                    Convert.ToInt32( data[ "b" ] )
+                    Convert.ToInt32(data["r"]),
+                    Convert.ToInt32(data["g"]),
+                    Convert.ToInt32(data["b"])
                 );
             }
             set
             {
                 // if value is set to null, reset the data
-                if( value == null )
+                if (value == null)
                 {
-                    SetData( "lightColor", null );
+                    SetData("lightColor", null);
                     return;
                 }
 
                 // No data changed
-                if( LightColor != null && LightColor.Red == value.Red && LightColor.Green == value.Green && LightColor.Blue == value.Blue )
+                if (LightColor != null && LightColor.Red == value.Red && LightColor.Green == value.Green && LightColor.Blue == value.Blue)
                     return;
 
                 Dictionary<string, object> dict = new Dictionary<string, object>
@@ -361,23 +421,40 @@ namespace DasNiels.AltV.Streamers
                     { "g", value.Green },
                     { "b", value.Blue }
                 };
-                SetData( "lightColor", dict );
+                SetData("lightColor", dict);
             }
         }
 
-        public DynamicObject( Vector3 position, int dimension, uint range, string entityType ) : base( 0, position, dimension, range )
+        public Vector3 PositionInitial { get; internal set; }
+
+        public Prop(Vector3 position, int dimension, uint range, ulong entityType) : base(entityType, position, dimension, range)
         {
-            EntityType = entityType;
         }
 
-        public void Destroy( )
+        public void SetRotation(Vector3 rot)
         {
-            AltEntitySync.RemoveEntity( this );
+            Rotation = rot;
+        }
+
+        public void SetPosition(Vector3 pos)
+        {
+            Position = pos;
+        }
+
+        public void Delete()
+        {
+            Prop.PropList.Remove(this);
+            AltEntitySync.RemoveEntity(this);
+        }
+
+        public void Destroy()
+        {
+            Prop.PropList.Remove(this);
+            AltEntitySync.RemoveEntity(this);
         }
     }
 
-
-    public static class ObjectStreamer
+    public static class PropStreamer
     {
         /// <summary>
         /// Create a new dynamic object.
@@ -395,98 +472,86 @@ namespace DasNiels.AltV.Streamers
         /// <param name="visible">(Optional): Set object visibility.</param>
         /// <param name="streamRange">(Optional): The range that a player has to be in before the object spawns, default value is 400.</param>
         /// <returns>The newly created dynamic object.</returns>
-        public static DynamicObject CreateDynamicObject(
-            string model, Vector3 position, Vector3 rotation, int dimension = 0, bool? isDynamic = null, bool? frozen = null, uint? lodDistance = null,
-            Rgb lightColor = null, bool? onFire = null, TextureVariation? textureVariation = null, bool? visible = null, uint streamRange = 400
+        public static Prop Create(
+            string model, Vector3 position, Vector3 rotation, int dimension = 0, bool? isDynamic = null, bool? placeObjectOnGroundProperly = false, bool? frozen = null, uint? lodDistance = null,
+            Rgb lightColor = null, bool? onFire = null, TextureVariation? textureVariation = null, bool? visible = null, uint streamRange = 520
         )
         {
-            DynamicObject obj = new DynamicObject( position, dimension, streamRange, "object" )
+            Prop obj = new Prop(position, dimension, streamRange, 2)
             {
                 Rotation = rotation,
                 Model = model,
                 Dynamic = isDynamic ?? null,
-                Frozen = frozen ?? null,
+                Freeze = frozen ?? null,
                 LodDistance = lodDistance ?? null,
                 LightColor = lightColor ?? null,
                 OnFire = onFire ?? null,
                 TextureVariation = textureVariation ?? null,
-                Visible = visible ?? null
+                Visible = visible ?? null,
+                PositionInitial = position,
             };
-
-            AltEntitySync.AddEntity( obj );
+            Prop.PropList.Add(obj);
+            AltEntitySync.AddEntity(obj);
             return obj;
         }
 
-        /// <summary>
-        /// Destroy a dynamic object by it's ID.
-        /// </summary>
-        /// <param name="dynamicObjectId">The ID of the object.</param>
-        /// <returns>True if successful, false otherwise.</returns>
-        public static bool DestroyDynamicObject( ulong dynamicObjectId )
+        public static bool Delete(ulong dynamicObjectId)
         {
-            DynamicObject obj = GetDynamicObject( dynamicObjectId );
+            Prop obj = GetProp(dynamicObjectId);
 
-            if( obj == null )
+            if (obj == null)
                 return false;
-
-            AltEntitySync.RemoveEntity( obj );
+            Prop.PropList.Remove(obj);
+            AltEntitySync.RemoveEntity(obj);
             return true;
         }
 
-        /// <summary>
-        /// Destroy a dynamic object.
-        /// </summary>
-        /// <param name="obj">The object instance to destroy</param>
-        /// <returns></returns>
-        public static void DestroyDynamicObject( DynamicObject obj )
+        public static void Delete(Prop obj)
         {
-            AltEntitySync.RemoveEntity( obj );
+            Prop.PropList.Remove(obj);
+            AltEntitySync.RemoveEntity(obj);
         }
 
-        /// <summary>
-        /// Get a dynamic object by it's ID.
-        /// </summary>
-        /// <param name="dynamicObjectId">The ID of the object.</param>
-        /// <returns>The dynamic object or null if not found.</returns>
-        public static DynamicObject GetDynamicObject( ulong dynamicObjectId )
+        public static Prop GetProp(ulong dynamicObjectId)
         {
-            if( !AltEntitySync.TryGetEntity( dynamicObjectId, 2, out IEntity entity ) )
+            if (!AltEntitySync.TryGetEntity(dynamicObjectId, 2, out IEntity entity))
             {
-                Console.WriteLine( $"[OBJECT-STREAMER] [GetDynamicObject] ERROR: Entity with ID { dynamicObjectId } couldn't be found." );
+                Console.WriteLine($"[Prop-Stream] [GetProp] ERROR: Entity with ID { dynamicObjectId } couldn't be found.");
                 return default;
             }
 
-            if( !( entity is DynamicObject ) )
+            if (!(entity is Prop))
                 return default;
 
-            return ( DynamicObject ) entity;
+            return (Prop)entity;
         }
 
         /// <summary>
         /// Destroy all created dynamic objects.
         /// </summary>
-        public static void DestroyAllDynamicObjects( )
+        public static void DestroyAllDynamicObjects()
         {
-            foreach( DynamicObject obj in GetAllDynamicObjects( ) )
+            foreach (Prop obj in GetAllProp())
             {
-                AltEntitySync.RemoveEntity( obj );
+                AltEntitySync.RemoveEntity(obj);
             }
+            Prop.PropList.Clear();
         }
 
         /// <summary>
         /// Get all created dynamic objects.
         /// </summary>
         /// <returns>A list of dynamic objects.</returns>
-        public static List<DynamicObject> GetAllDynamicObjects( )
+        public static List<Prop> GetAllProp()
         {
-            List<DynamicObject> objects = new List<DynamicObject>( );
+            List<Prop> objects = new List<Prop>();
 
-            foreach( IEntity entity in AltEntitySync.GetAllEntities( ) )
+            foreach (IEntity entity in Prop.PropList)
             {
-                DynamicObject obj = GetDynamicObject( entity.Id );
+                Prop obj = GetProp(entity.Id);
 
-                if( obj != null )
-                    objects.Add( obj );
+                if (obj != null)
+                    objects.Add(obj);
             }
 
             return objects;
@@ -497,18 +562,18 @@ namespace DasNiels.AltV.Streamers
         /// </summary>
         /// <param name="pos">The position from which to check.</param>
         /// <returns>The closest dynamic object to the specified position, or null if none found.</returns>
-        public static (DynamicObject obj, float distance) GetClosestDynamicObject( Vector3 pos )
+        public static (Prop obj, float distance) GetClosestDynamicObject(Vector3 pos)
         {
-            if( GetAllDynamicObjects( ).Count == 0 )
+            if (GetAllProp().Count == 0)
                 return (null, 5000);
 
-            DynamicObject obj = null;
+            Prop obj = null;
             float distance = 5000;
 
-            foreach( DynamicObject o in GetAllDynamicObjects( ) )
+            foreach (Prop o in GetAllProp())
             {
-                float dist = Vector3.Distance( o.Position, pos );
-                if( dist < distance )
+                float dist = Vector3.Distance(o.Position, pos);
+                if (dist < distance)
                 {
                     obj = o;
                     distance = dist;

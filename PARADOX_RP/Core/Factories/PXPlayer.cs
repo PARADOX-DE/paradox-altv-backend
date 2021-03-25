@@ -1,5 +1,6 @@
 ﻿using AltV.Net;
 using AltV.Net.Elements.Entities;
+using AltV.Net.Resources.Chat.Api;
 using PARADOX_RP.Core.Database.Models;
 using PARADOX_RP.Game.Administration.Models;
 using PARADOX_RP.Game.Login;
@@ -56,6 +57,7 @@ namespace PARADOX_RP.Core.Factories
 
         public void SendNotification(string Title, string Message, NotificationTypes notificationType)
         {
+            this.SendChatMessage(Message);
             Emit("sendNotification", Title, Message, Enum.GetName(typeof(NotificationTypes), notificationType));
         }
 

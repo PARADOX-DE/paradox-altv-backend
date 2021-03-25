@@ -7,6 +7,8 @@ namespace PARADOX_RP.Game.MiniGames.Content.SuperMario
 {
     class SuperMarioMinigameItemScripts
     {
+        public static SuperMarioMinigameItemScripts Instance { get; } = new SuperMarioMinigameItemScripts();
+
         public void pickupSpeed(PXPlayer player)
         {
             player.Armor = player.MaxArmor;

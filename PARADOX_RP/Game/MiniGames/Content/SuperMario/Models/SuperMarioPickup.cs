@@ -36,11 +36,10 @@ namespace PARADOX_RP.Game.MiniGames.Content.SuperMario
             LastUsed = DateTime.Now;
 
             ColShape = Alt.CreateColShapeCylinder(position, 3, 3);
-            ColShape.SetData("superMarioPickupId", Id);
             ColShape.Dimension = dimension;
+            ColShape.SetData("superMarioPickupId", Id);
 
-            Object = PropStreamer.Create("prop_mk_warp", position, new Vector3(0,0,0), dimension);
-
+            Object = PropStreamer.Create("prop_mk_warp", position, new Vector3(0,0, 1.6f), dimension);
 
             SuperMarioMinigameModule.Instance._pickups.Add(Id, this);
             SuperMarioMinigameModule.Instance._pickupId++;

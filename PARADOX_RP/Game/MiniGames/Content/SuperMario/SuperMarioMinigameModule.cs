@@ -2,6 +2,7 @@
 using AltV.Net.Async;
 using AltV.Net.Data;
 using AltV.Net.Elements.Entities;
+using EntityStreamer;
 using PARADOX_RP.Core.Factories;
 using PARADOX_RP.Core.Module;
 using PARADOX_RP.Game.Lobby;
@@ -42,7 +43,7 @@ namespace PARADOX_RP.Game.MiniGames.Content.SuperMario
 
         public async void PrepareLobby(LobbyModel model)
         {
-            foreach(Position tmpPosition in _vehicleSpawns)
+            foreach (Position tmpPosition in _vehicleSpawns)
             {
                 IVehicle vehicle = await AltAsync.CreateVehicle(Alt.Hash(vehicleHash), tmpPosition, new Rotation(0, 0, 1.6f));
                 await vehicle.SetDimensionAsync(model.OwnerId);
@@ -72,14 +73,15 @@ namespace PARADOX_RP.Game.MiniGames.Content.SuperMario
                     switch (pickup.PickupType)
                     {
                         case SuperMarioPickupTypes.BOMB:
-                            new SuperMarioMinigameItemScripts().pickupSpeed(player);
+                            SuperMarioMinigameItemScripts.Instance.pickupSpeed(player);
                             break;
                     };
+
                     Alt.Log("Checkpoint");
                     pickup.LastUsed = DateTime.Now;
-                    pickup.Object.Visible = false;
+                    pickup.Object.LightColor = new Rgb(0, 0, 0);
                     await Task.Delay(4500);
-                    pickup.Object.Visible = true;
+                    pickup.Object.LightColor = new Rgb(255, 255, 0);
 
                     // }
                 }

@@ -15,6 +15,7 @@ using System.Text;
 using AltV.Net.Data;
 using PARADOX_RP.Core.Extensions;
 using System.Linq;
+using PARADOX_RP.Utils;
 
 namespace PARADOX_RP.Game.Commands
 {
@@ -82,6 +83,21 @@ namespace PARADOX_RP.Game.Commands
         public void SetModuleState(PXPlayer player, string moduleName, bool state)
         {
             _modules.FirstOrDefault(m => m.ModuleName.ToLower() == moduleName.ToLower()).Enabled = state;
+        }
+
+        [Command("config")]
+        public void ChangeConfigEntry(PXPlayer player, string entry, string value)
+        {
+            switch (entry)
+            {
+                case "devmode":
+                    Configuration.Instance.DevMode = Convert.ToBoolean(value);
+                    break;
+
+                case "radio_url":
+                    Configuration.Instance.VehicleRadioURL = value;
+                    break;
+            }
         }
     }
 }

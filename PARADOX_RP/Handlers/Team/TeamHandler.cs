@@ -11,9 +11,10 @@ namespace PARADOX_RP.Handlers.Team
     class TeamHandler
     {
 
-        public void RespawnPlayer(PXPlayer player)
+        public void SpawnPlayer(PXPlayer player)
         {
-            if(player.Supp)
+            if (player.Team == null) return;
+            player.Position = player.Team.SpawnPosition;
         }
 
         public void SendNotificationToDepartments(string Title, string Message, NotificationTypes notificationType)

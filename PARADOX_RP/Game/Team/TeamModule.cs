@@ -12,10 +12,12 @@ namespace PARADOX_RP.Game.Team
 
     class TeamModule : ModuleBase<TeamModule>
     {
-        public readonly Dictionary<int, Teams> TeamList;
+        public readonly Dictionary<int, Teams> TeamList = null;
         private readonly TeamHandler _teamHandler;
 
         public TeamModule(TeamHandler teamHandler) : base("Team") {
+            TeamList = new Dictionary<int, Teams>();
+
             _teamHandler = teamHandler;
         }
 

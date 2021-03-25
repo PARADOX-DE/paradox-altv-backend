@@ -18,7 +18,11 @@ namespace PARADOX_RP.Game.Commands
 {
     class ChatModule : ModuleBase<ChatModule>, IScript
     {
-        public ChatModule() : base("Chat") { }
+        private readonly IEnumerable<ModuleBase> _modules;
+
+        public ChatModule(IEnumerable<ModuleBase> modules) : base("Chat") {
+            _modules = modules;
+        }
 
         [ClientEvent("chat:message")]
         public void OnChatMessage(IPlayer player, string msg)
@@ -70,6 +74,12 @@ namespace PARADOX_RP.Game.Commands
         public async void aduty(PXPlayer player)
         {
             await AdministrationModule.Instance.OnKeyPress(player, KeyEnumeration.F9);
+        }
+
+        [Command("module")]
+        public async void SetModuleState(PXPlayer player, string moduleName, bool state)
+        {
+            
         }
     }
 }

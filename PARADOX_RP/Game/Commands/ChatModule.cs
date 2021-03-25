@@ -13,6 +13,8 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using AltV.Net.Data;
+using PARADOX_RP.Core.Extensions;
+using System.Linq;
 
 namespace PARADOX_RP.Game.Commands
 {
@@ -77,9 +79,9 @@ namespace PARADOX_RP.Game.Commands
         }
 
         [Command("module")]
-        public async void SetModuleState(PXPlayer player, string moduleName, bool state)
+        public void SetModuleState(PXPlayer player, string moduleName, bool state)
         {
-            
+            _modules.FirstOrDefault(m => m.ModuleName.ToLower() == moduleName.ToLower()).Enabled = false;
         }
     }
 }

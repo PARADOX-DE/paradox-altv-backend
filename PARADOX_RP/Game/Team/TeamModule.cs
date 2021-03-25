@@ -1,5 +1,6 @@
 ﻿using PARADOX_RP.Core.Database;
 using PARADOX_RP.Core.Database.Models;
+using PARADOX_RP.Core.Extensions;
 using PARADOX_RP.Core.Module;
 using PARADOX_RP.Handlers.Team;
 using System;
@@ -22,7 +23,10 @@ namespace PARADOX_RP.Game.Team
         {
             using(var px = new PXContext())
             {
-                px.Tea
+                px.Teams.ForEach((team) =>
+                {
+                    TeamList.Add(team.Id, team);
+                });
             }
         }
     }

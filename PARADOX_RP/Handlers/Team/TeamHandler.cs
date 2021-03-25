@@ -10,6 +10,12 @@ namespace PARADOX_RP.Handlers.Team
 {
     class TeamHandler
     {
+
+        public void RespawnPlayer(PXPlayer player)
+        {
+            if(player.Supp)
+        }
+
         public void SendNotificationToDepartments(string Title, string Message, NotificationTypes notificationType)
         {
             TeamModule.Instance.TeamList.Values.ForEach((team) =>

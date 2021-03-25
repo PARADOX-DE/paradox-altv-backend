@@ -33,5 +33,10 @@ namespace PARADOX_RP
         {
             return new PXPlayerFactory();
         }
+
+        public override IEntityFactory<IVehicle> GetVehicleFactory()
+        {
+            return new PXVehicleFactory();
+        }
     }
 }

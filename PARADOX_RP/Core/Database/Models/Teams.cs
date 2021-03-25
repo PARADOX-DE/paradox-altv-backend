@@ -1,4 +1,8 @@
-﻿using System;
+﻿using AltV.Net;
+using AltV.Net.Async;
+using PARADOX_RP.Core.Factories;
+using PARADOX_RP.Utils;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
@@ -7,7 +11,7 @@ namespace PARADOX_RP.Core.Database.Models
     public enum TeamTypes
     {
         NEUTRAL,
-        STATE,
+        DEPARTMENT,
         BAD
     }
 
@@ -16,5 +20,13 @@ namespace PARADOX_RP.Core.Database.Models
         public int Id { get; set; }
         public string TeamName { get; set; }
         public TeamTypes TeamType { get; set; }
+
+        public void SendNotification(string Title, string Message, NotificationTypes notificationType)
+        {
+            foreach(PXPlayer player in Pools.Instance.Get(PoolType.PLAYER))
+            {
+                player.SendNotification(Title, Message, notificationType);
+            }
+        }
     }
 }

@@ -35,31 +35,29 @@ namespace PARADOX_RP.Core
             }
 
             AltEntitySync.Init(3, 250,
-     (threadCount, repository) => new ServerEventNetworkLayer(threadCount, repository),
-     (entity, threadCount) => entity.Type,
-     (entityId, entityType, threadCount) => entityType,
-     (threadId) =>
-     {
+                (threadCount, repository) => new ServerEventNetworkLayer(threadCount, repository),
+                (entity, threadCount) => entity.Type,
+                (entityId, entityType, threadCount) => entityType,
+                (threadId) =>
+                {
                     //THREAD TEXT/MARKER
                     if (threadId == 1 || threadId == 0)
-         {
-             return new LimitedGrid3(50_000, 50_000, 75, 10_000, 10_000, 350);
-         }
+                    {
+                        return new LimitedGrid3(50_000, 50_000, 75, 10_000, 10_000, 350);
+                    }
+
                     //THREAD OBJECT
                     else if (threadId == 2)
-         {
-             return new LimitedGrid3(50_000, 50_000, 125, 10_000, 10_000, 1000);
-         }
-                    /*//THREAD PED
-                    else if (threadId == 3){
-                         return new LimitedGrid3(50_000, 50_000, 175, 10_000, 10_000, 64);
-                    }*/
-         else
-         {
-             return new LimitedGrid3(50_000, 50_000, 175, 10_000, 10_000, 300);
-         }
-     },
-     new IdProvider());
+                    {
+                        return new LimitedGrid3(50_000, 50_000, 125, 10_000, 10_000, 1000);
+                    }
+
+                    else
+                    {
+                        return new LimitedGrid3(50_000, 50_000, 175, 10_000, 10_000, 300);
+                    }
+                },
+            new IdProvider());
 
             AltAsync.Log("Server started.");
             _eventHandler.Load();

@@ -23,8 +23,9 @@ namespace PARADOX_RP.Handlers
             AltAsync.OnPlayerConnect += OnPlayerConnect;
             AltAsync.OnPlayerDisconnect += OnPlayerDisconnect;
             AltAsync.OnColShape += OnColShape;
+            AltAsync.OnPlayerEnterVehicle += OnPlayerEnterVehicle;
+            AltAsync.OnPlayerLeaveVehicle += OnPlayerLeaveVehicle;
         }
-
 
 
         public void Load()
@@ -91,7 +92,29 @@ namespace PARADOX_RP.Handlers
                 if (e.Enabled && state)
                     e.OnColShapeEntered(pxPlayer, colShape);
             });
+        }
 
+
+        private async Task OnPlayerLeaveVehicle(IVehicle vehicle, IPlayer player, byte seat)
+        {
+            await player.EmitAsync("playerLeaveVehicle", vehicle, seat);
+
+            await _modules.ForEach(async e =>
+            {
+                if (e.Enabled)
+                    await e.OnPlayerLeaveVehicle(vehicle, player, seat);
+            });
+        }
+
+        private async Task OnPlayerEnterVehicle(IVehicle vehicle, IPlayer player, byte seat)
+        {
+            await player.EmitAsync("playerEnterVehicle", vehicle, seat);
+
+            await _modules.ForEach(async e =>
+            {
+                if (e.Enabled)
+                    await e.OnPlayerEnterVehicle(vehicle, player, seat);
+            });
         }
     }
 }

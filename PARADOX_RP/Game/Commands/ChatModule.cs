@@ -13,12 +13,19 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using AltV.Net.Data;
+using PARADOX_RP.Core.Extensions;
+using System.Linq;
+using PARADOX_RP.Utils;
 
 namespace PARADOX_RP.Game.Commands
 {
     class ChatModule : ModuleBase<ChatModule>, IScript
     {
-        public ChatModule() : base("Chat") { }
+        private readonly IEnumerable<ModuleBase> _modules;
+
+        public ChatModule(IEnumerable<ModuleBase> modules) : base("Chat") {
+            _modules = modules;
+        }
 
         [ClientEvent("chat:message")]
         public void OnChatMessage(IPlayer player, string msg)
@@ -70,6 +77,27 @@ namespace PARADOX_RP.Game.Commands
         public async void aduty(PXPlayer player)
         {
             await AdministrationModule.Instance.OnKeyPress(player, KeyEnumeration.F9);
+        }
+
+        [Command("module")]
+        public void SetModuleState(PXPlayer player, string moduleName, bool state)
+        {
+            _modules.FirstOrDefault(m => m.ModuleName.ToLower() == moduleName.ToLower()).Enabled = state;
+        }
+
+        [Command("config")]
+        public void ChangeConfigEntry(PXPlayer player, string entry, string value)
+        {
+            switch (entry)
+            {
+                case "devmode":
+                    Configuration.Instance.DevMode = Convert.ToBoolean(value);
+                    break;
+
+                case "radio_url":
+                    Configuration.Instance.VehicleRadioURL = value;
+                    break;
+            }
         }
     }
 }

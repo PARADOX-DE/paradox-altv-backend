@@ -5,6 +5,7 @@ using PARADOX_RP.Core.Database.Models;
 using PARADOX_RP.Game.Administration.Models;
 using PARADOX_RP.Game.Login;
 using PARADOX_RP.Game.MiniGames.Models;
+using PARADOX_RP.Game.Team;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -37,6 +38,7 @@ namespace PARADOX_RP.Core.Factories
         public bool LoggedIn { get; set; }
         public string Username { get; set; }
         public SupportRankModel SupportRank { get; set; }
+        public Teams Team { get; set; }
         public DimensionTypes DimensionType { get; set; }
         public DutyTypes DutyType { get; set; }
         public CancellationTokenSource CancellationToken { get; set; }
@@ -48,6 +50,7 @@ namespace PARADOX_RP.Core.Factories
             LoggedIn = false;
             Username = "";
             SupportRank = new SupportRankModel();
+            Team = null;
             DimensionType = DimensionTypes.WORLD;
             DutyType = DutyTypes.OFFDUTY;
 

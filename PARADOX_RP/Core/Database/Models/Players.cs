@@ -14,8 +14,10 @@ namespace PARADOX_RP.Core.Database.Models
         public string DiscordId { get; set; }
         public string SocialClubName { get; set; }
         public string SocialClubHash { get; set; }
+        public int TeamsId { get; set; }
 
         public virtual SupportRankModel SupportRank { get; set; }
+        public virtual Teams Team { get; set; }
         //public virtual PlayerClothes PlayerClothes { get; set; }
 
         public DateTime LastLogin { get; set; }

@@ -20,5 +20,8 @@ namespace PARADOX_RP.Core.Module
         void OnPlayerDisconnect(PXPlayer player);
         void OnPlayerLogin(PXPlayer player);
         Task<bool> OnColShapeEntered(PXPlayer player, IColShape col);
+        Task<bool> OnPlayerEnterVehicle(IVehicle vehicle, IPlayer player, byte seat);
+        Task<bool> OnPlayerLeaveVehicle(IVehicle vehicle, IPlayer player, byte seat);
+
     }
 }

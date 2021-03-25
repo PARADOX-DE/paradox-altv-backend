@@ -19,8 +19,9 @@ namespace PARADOX_RP.Core.Module
         public virtual void OnPlayerConnect(PXPlayer player) { }
         public virtual void OnPlayerDisconnect(PXPlayer player) { }
         public virtual void OnPlayerLogin(PXPlayer player) { }
-
         public virtual Task<bool> OnColShapeEntered(PXPlayer player, IColShape col) { return Task.FromResult(false); }
+        public virtual Task<bool> OnPlayerEnterVehicle(IVehicle vehicle, IPlayer player, byte seat) { return Task.FromResult(false); }
+        public virtual Task<bool> OnPlayerLeaveVehicle(IVehicle vehicle, IPlayer player, byte seat) { return Task.FromResult(false); }
     }
 
     public abstract class ModuleBase<T> : ModuleBase where T : ModuleBase<T>

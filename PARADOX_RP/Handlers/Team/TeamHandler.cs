@@ -1,15 +1,33 @@
-﻿using PARADOX_RP.Core.Database.Models;
+﻿using Microsoft.EntityFrameworkCore;
+using PARADOX_RP.Core.Database;
+using PARADOX_RP.Core.Database.Models;
 using PARADOX_RP.Core.Extensions;
 using PARADOX_RP.Core.Factories;
 using PARADOX_RP.Game.Team;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace PARADOX_RP.Handlers.Team
 {
     class TeamHandler
     {
+        public async Task SetPlayerTeam(PXPlayer player, int teamId)
+        {
+            if (TeamModule.Instance.TeamList.TryGetValue(teamId, out Teams team))
+            {
+                player.Team = team;
+
+                using (var px = new PXContext())
+                {
+                    Players dbPlayer = await px.Players.FirstOrDefaultAsync(p => p.Id == player.SqlId);
+                    dbPlayer.TeamsId = teamId;
+
+                    await px.SaveChangesAsync();
+                }
+            }
+        }
 
         public void SpawnPlayer(PXPlayer player)
         {

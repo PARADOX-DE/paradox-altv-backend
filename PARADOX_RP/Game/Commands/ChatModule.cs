@@ -81,7 +81,7 @@ namespace PARADOX_RP.Game.Commands
         [Command("module")]
         public void SetModuleState(PXPlayer player, string moduleName, bool state)
         {
-            _modules.FirstOrDefault(m => m.ModuleName.ToLower() == moduleName.ToLower()).Enabled = false;
+            _modules.FirstOrDefault(m => m.ModuleName.ToLower() == moduleName.ToLower()).Enabled = state;
         }
     }
 }

@@ -24,6 +24,7 @@ namespace PARADOX_RP.Core.Database
         public DbSet<Vehicles> Vehicles { get; set; }
         public DbSet<Teams> Teams { get; set; }
         public DbSet<BanList> BanList { get; set; }
+        public DbSet<ServerConfig> ServerConfig { get; set; }
 
         public static readonly ILoggerFactory loggerFactory =
            LoggerFactory.Create(

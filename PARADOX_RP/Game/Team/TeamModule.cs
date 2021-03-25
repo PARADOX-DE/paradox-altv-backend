@@ -1,4 +1,5 @@
-﻿using PARADOX_RP.Core.Database.Models;
+﻿using PARADOX_RP.Core.Database;
+using PARADOX_RP.Core.Database.Models;
 using PARADOX_RP.Core.Module;
 using PARADOX_RP.Handlers.Team;
 using System;
@@ -17,6 +18,12 @@ namespace PARADOX_RP.Game.Team
             _teamHandler = teamHandler;
         }
 
-        
+        public override void OnModuleLoad()
+        {
+            using(var px = new PXContext())
+            {
+                px.Tea
+            }
+        }
     }
 }

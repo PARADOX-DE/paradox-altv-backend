@@ -22,6 +22,7 @@ namespace PARADOX_RP.Core.Database
         public DbSet<PermissionAssignmentModel> PermissionAssignments { get; set; }
         public DbSet<Clothes> Clothes { get; set; }
         public DbSet<Vehicles> Vehicles { get; set; }
+        public DbSet<Teams> Teams { get; set; }
         public DbSet<BanList> BanList { get; set; }
 
         public static readonly ILoggerFactory loggerFactory =

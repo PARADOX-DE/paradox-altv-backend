@@ -13,6 +13,5 @@ namespace PARADOX_RP.Core.Factories
         {
             SqlId = -1;
         }
-
     }
 }

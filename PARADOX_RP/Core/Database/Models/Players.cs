@@ -18,7 +18,7 @@ namespace PARADOX_RP.Core.Database.Models
 
         public virtual SupportRankModel SupportRank { get; set; }
         public virtual Teams Team { get; set; }
-        //public virtual PlayerClothes PlayerClothes { get; set; }
+        public virtual PlayerClothes PlayerClothes { get; set; }
 
         public DateTime LastLogin { get; set; }
         public DateTime CreatedAt { get; set; }

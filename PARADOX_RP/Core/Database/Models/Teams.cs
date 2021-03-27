@@ -21,7 +21,7 @@ namespace PARADOX_RP.Core.Database.Models
         public int Id { get; set; }
         public string TeamName { get; set; }
         public TeamTypes TeamType { get; set; }
-        public Position SpawnPosition { get; set; }
+        public string SpawnPosition { get; set; }
 
         public void SendNotification(string Title, string Message, NotificationTypes notificationType)
         {

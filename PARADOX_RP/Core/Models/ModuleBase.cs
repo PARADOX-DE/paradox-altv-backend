@@ -3,6 +3,7 @@ using PARADOX_RP.Core.Factories;
 using PARADOX_RP.Utils.Enums;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -22,6 +23,19 @@ namespace PARADOX_RP.Core.Module
         public virtual Task<bool> OnColShapeEntered(PXPlayer player, IColShape col) { return Task.FromResult(false); }
         public virtual Task OnPlayerEnterVehicle(IVehicle vehicle, IPlayer player, byte seat) { return Task.CompletedTask; }
         public virtual Task OnPlayerLeaveVehicle(IVehicle vehicle, IPlayer player, byte seat) { return Task.CompletedTask; }
+
+        public IEnumerable<T> LoadDatabaseTable<T>(IQueryable queryable, Action<T>? action = null) where T : class
+        {
+            List<T> items = new List<T>();
+            foreach (T item in queryable)
+            {
+                if (item == null) continue;
+                action?.Invoke(item);
+                items.Add(item);
+            }
+
+            return items;
+        }
     }
 
     public abstract class ModuleBase<T> : ModuleBase where T : ModuleBase<T>

@@ -8,8 +8,13 @@ namespace PARADOX_RP.Core.Database.Models
     [Table("player_clothes")]
     public class PlayerClothes
     {
+        public PlayerClothes()
+        {
+            Player = new HashSet<Players>();
+        }
+
         public int Id { get; set; }
-        public virtual Players Player { get; set; }
+        public virtual ICollection<Players> Player { get; set; }
 
         public virtual Clothes Mask { get; set; }
         public virtual Clothes Torso { get; set; }

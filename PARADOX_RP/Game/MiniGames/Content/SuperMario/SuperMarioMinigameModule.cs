@@ -77,7 +77,6 @@ namespace PARADOX_RP.Game.MiniGames.Content.SuperMario
                             break;
                     };
 
-                    Alt.Log("Checkpoint");
                     pickup.LastUsed = DateTime.Now;
                     pickup.Object.LightColor = new Rgb(0, 0, 0);
                     await Task.Delay(4500);

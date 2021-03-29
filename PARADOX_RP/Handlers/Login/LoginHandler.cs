@@ -69,7 +69,7 @@ namespace PARADOX_RP.Handlers.Login
 
                 //player.Clothes = _clothingDictionary;
 
-                InventoryModule.Instance.OpenInventory();
+                InventoryModule.Instance.OpenInventory(player);
 
                 if (await ModerationModule.Instance.IsBanned(player))
                 {

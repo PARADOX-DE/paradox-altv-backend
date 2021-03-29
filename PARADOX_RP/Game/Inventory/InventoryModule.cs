@@ -23,28 +23,31 @@ namespace PARADOX_RP.Game.Inventory
     class InventoryModule : ModuleBase<InventoryModule>
     {
         public readonly IInventoryHandler _inventoryHandler;
-        public InventoryModule(IInventoryHandler inventoryHandler) : base("Inventory") {
+        public InventoryModule(IInventoryHandler inventoryHandler) : base("Inventory")
+        {
             _inventoryHandler = inventoryHandler;
         }
 
         public InventoryTypes GetInventoryType(Position position, DimensionTypes dimensionType)
         {
-            if(dimensionType == DimensionTypes.WORLD)
+            if (dimensionType == DimensionTypes.WORLD)
             {
                 IVehicle vehicle = Alt.GetAllVehicles().FirstOrDefault(v => v.Position.Distance(position) < 2.5);
                 if (vehicle != null) return InventoryTypes.VEHICLE;
 
                 return InventoryTypes.PLAYER;
             }
-
-
+            else if (dimensionType == DimensionTypes.TEAMHOUSE)
+            {
+                return InventoryTypes.TEAMHOUSE;
+            }
 
             return InventoryTypes.PLAYER;
         }
 
-        public async void OpenInventory()
+        public async void OpenInventory(PXPlayer player)
         {
-            await _inventoryHandler.LoadInventory(InventoryTypes.VEHICLE, 1);
+            await _inventoryHandler.LoadInventory(GetInventoryType(player.Position, player.DimensionType), 1);
         }
     }
 }

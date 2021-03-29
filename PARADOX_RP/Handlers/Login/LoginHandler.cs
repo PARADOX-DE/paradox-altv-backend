@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using PARADOX_RP.Core.Database;
 using PARADOX_RP.Core.Database.Models;
 using PARADOX_RP.Core.Factories;
+using PARADOX_RP.Game.Inventory;
 using PARADOX_RP.Game.Moderation;
 using PARADOX_RP.Handlers.Login.Interface;
 using System;
@@ -67,6 +68,8 @@ namespace PARADOX_RP.Handlers.Login
                 /**/
 
                 //player.Clothes = _clothingDictionary;
+
+                InventoryModule.Instance.OpenInventory();
 
                 if (await ModerationModule.Instance.IsBanned(player))
                 {

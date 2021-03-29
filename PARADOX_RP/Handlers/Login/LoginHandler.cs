@@ -62,7 +62,6 @@ namespace PARADOX_RP.Handlers.Login
                 else
                 {
                     Alt.Log("FraktionsData-Objekt existiert bereits.");
-
                 }
 
                 /**/

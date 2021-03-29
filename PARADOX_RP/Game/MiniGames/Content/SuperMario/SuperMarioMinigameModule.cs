@@ -79,7 +79,7 @@ namespace PARADOX_RP.Game.MiniGames.Content.SuperMario
                     };
 
                     pickup.LastUsed = DateTime.Now;
-                    pickup.Object.LightColor = new Rgb(0, 0, 0);
+                    pickup.Object.TextureVariation = TextureVariation.Pacific;
                     await Task.Delay(4500);
                     pickup.Object.LightColor = new Rgb(255, 255, 0);
 

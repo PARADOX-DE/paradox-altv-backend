@@ -11,7 +11,7 @@ namespace PARADOX_RP.Core.Database.Models
         public int Id { get; set; }
         public string PluginIdentifier { get; set; }
         public string Version { get; set; }
-        public bool DevMode { get; set; }
+        public bool DevMode { get; set; } = true;
 
         /* MODULE CONFIGURATIONS */
         // VehicleRadioModule

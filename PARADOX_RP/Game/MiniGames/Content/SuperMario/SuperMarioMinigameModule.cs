@@ -56,6 +56,7 @@ namespace PARADOX_RP.Game.MiniGames.Content.SuperMario
         public void EnteredMinigame(PXPlayer player)
         {
             player.Position = _spawnPoint;
+            player.GiveWeapon(AltV.Net.Enums.WeaponModel.AssaultSMG, 9999, true);
         }
 
         public override async Task<bool> OnColShapeEntered(PXPlayer player, IColShape col)
@@ -99,7 +100,7 @@ namespace PARADOX_RP.Game.MiniGames.Content.SuperMario
                 {
                     Position save = player.Position;
 
-                    await Task.Delay(1500);
+                    await Task.Delay(500);
                     new SuperMarioPickup(SuperMarioPickupTypes.BOMB, save, player.Dimension);
                     return await Task.FromResult(true);
                 }

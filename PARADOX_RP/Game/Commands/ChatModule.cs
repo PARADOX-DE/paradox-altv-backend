@@ -23,8 +23,7 @@ namespace PARADOX_RP.Game.Commands
     {
         private readonly IEnumerable<ModuleBase> _modules;
 
-        public ChatModule(IEnumerable<ModuleBase> modules) : base("Chat") {
-            _modules = modules;
+        public ChatModule() : base("Chat") {
         }
 
         [ClientEvent("chat:message")]

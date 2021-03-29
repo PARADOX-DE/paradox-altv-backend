@@ -11,7 +11,7 @@ namespace PARADOX_RP.Utils
 {
     class Configuration
     {
-        public static ServerConfig Instance { get; set; }
+        public static ServerConfig Instance { get; set; } = new ServerConfig();
 
         public void LoadConfiguration()
         {

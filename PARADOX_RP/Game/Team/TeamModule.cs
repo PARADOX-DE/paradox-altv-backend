@@ -20,8 +20,18 @@ namespace PARADOX_RP.Game.Team
         public Dictionary<int, Teams> TeamList;
         private readonly ITeamHandler _teamHandler;
 
-        public TeamModule(ITeamHandler teamHandler) : base("Team") {
+        public TeamModule(ITeamHandler teamHandler) : base("Team")
+        {
             TeamList = new Dictionary<int, Teams>();
+
+            using (var px = new PXContext())
+            {
+                foreach (Teams team in px.Teams)
+                {
+                    TeamList.Add(team.Id, team);
+                    _teamHandler.LoadTeam(team);
+                }
+            }
 
             _teamHandler = teamHandler;
         }

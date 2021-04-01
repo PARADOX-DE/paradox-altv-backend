@@ -52,13 +52,6 @@ namespace PARADOX_RP.Game.Login
                     await player.KickAsync("System-User not found.");
                     return;
                 }
-
-                await player.RunProgressBar(async () =>
-                {
-                    Alt.LogFast("test");
-                    //await ModerationModule.Instance.BanPlayer(player, player);
-                }, 5000);
-
                 return;
             }
 

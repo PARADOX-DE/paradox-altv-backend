@@ -16,12 +16,14 @@ namespace PARADOX_RP.Core.Database.Models
         BAD
     }
 
-    public class Teams
+    public partial class Teams
     {
         public int Id { get; set; }
         public string TeamName { get; set; }
         public TeamTypes TeamType { get; set; }
-        public string SpawnPosition { get; set; }
+        public float SpawnPosition_X { get; set; }
+        public float SpawnPosition_Y { get; set; }
+        public float SpawnPosition_Z { get; set; }
 
         public void SendNotification(string Title, string Message, NotificationTypes notificationType)
         {
@@ -30,5 +32,10 @@ namespace PARADOX_RP.Core.Database.Models
                 player.SendNotification(Title, Message, notificationType);
             }
         }
+    }
+   
+    public partial class Teams
+    {
+        public Position SpawnPosition => new Position(SpawnPosition_X, SpawnPosition_Y, SpawnPosition_Z);
     }
 }

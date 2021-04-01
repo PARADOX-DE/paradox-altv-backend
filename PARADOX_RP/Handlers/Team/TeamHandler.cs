@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using AltV.Net.Async;
+using Microsoft.EntityFrameworkCore;
 using PARADOX_RP.Core.Database;
 using PARADOX_RP.Core.Database.Models;
 using PARADOX_RP.Core.Extensions;
@@ -12,8 +13,14 @@ using System.Threading.Tasks;
 
 namespace PARADOX_RP.Handlers.Team
 {
-    class TeamHandler : ITeamHandler 
+    class TeamHandler : ITeamHandler
     {
+
+        public void LoadTeam(Teams team)
+        {
+            AltAsync.CreateCheckpoint(AltV.Net.Elements.Entities.CheckpointType.CycleArrow, team.SpawnPosition, 2, 2, new AltV.Net.Data.Rgba(255, 0, 0, 255));
+        }
+
         public async Task SetPlayerTeam(PXPlayer player, int teamId)
         {
             if (TeamModule.Instance.TeamList.TryGetValue(teamId, out Teams team))

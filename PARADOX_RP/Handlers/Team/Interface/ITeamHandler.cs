@@ -1,4 +1,5 @@
-﻿using PARADOX_RP.Core.Factories;
+﻿using PARADOX_RP.Core.Database.Models;
+using PARADOX_RP.Core.Factories;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -8,6 +9,8 @@ namespace PARADOX_RP.Handlers.Team.Interface
 {
     interface ITeamHandler
     {
+        void LoadTeam(Teams team);
+
         public Task SetPlayerTeam(PXPlayer player, int teamId);
         public void SpawnPlayer(PXPlayer player);
         public void SendNotificationToDepartments(string Title, string Message, NotificationTypes notificationType);

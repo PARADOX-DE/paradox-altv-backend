@@ -15,9 +15,9 @@ namespace PARADOX_RP.Core
 {
     class CoreSystem : ICoreSystem
     {
-        private readonly IEventHandler _eventHandler;
+        private readonly IModuleHandler _eventHandler;
         private readonly IWindowManager _componentManager;
-        public CoreSystem(IEventHandler eventHandler, IWindowManager componentManager)
+        public CoreSystem(IModuleHandler eventHandler, IWindowManager componentManager)
         {
             _eventHandler = eventHandler;
             _componentManager = componentManager;

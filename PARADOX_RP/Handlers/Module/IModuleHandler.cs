@@ -4,7 +4,7 @@ using System.Text;
 
 namespace PARADOX_RP.Handlers
 {
-    interface IEventHandler
+    interface IModuleHandler
     {
         void Load();
     }

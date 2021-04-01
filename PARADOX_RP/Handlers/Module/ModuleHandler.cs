@@ -11,10 +11,10 @@ using PARADOX_RP.Game.Misc.Progressbar.Extensions;
 
 namespace PARADOX_RP.Handlers
 {
-    class EventHandler : IEventHandler
+    class ModuleHandler : IModuleHandler
     {
         private readonly IEnumerable<IModuleBase> _modules;
-        public EventHandler(IEnumerable<IModuleBase> modules)
+        public ModuleHandler(IEnumerable<IModuleBase> modules)
         {
             _modules = modules;
 

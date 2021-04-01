@@ -1,4 +1,5 @@
 ﻿using AltV.Net;
+using AltV.Net.Async;
 using Microsoft.EntityFrameworkCore;
 using PARADOX_RP.Core.Database;
 using PARADOX_RP.Core.Database.Models;
@@ -16,6 +17,22 @@ namespace PARADOX_RP.Handlers.Login
 {
     class LoginHandler : ILoginHandler
     {
+        public async Task<bool> CheckLogin(PXPlayer player, string hashedPassword)
+        {
+            await using (var px = new PXContext())
+            {
+                string userName = await player.GetNameAsync();
+                Players dbPlayer = await px.Players
+                                       .FirstOrDefaultAsync(p => p.Username == userName);
+
+                if (dbPlayer == null) return await Task.FromResult(false);
+
+                if (dbPlayer.Password == hashedPassword) return await Task.FromResult(true);
+            }
+
+            return await Task.FromResult(false);
+        }
+
         public async Task<bool> LoadPlayer(PXPlayer player, string userName)
         {
             await using (var px = new PXContext())
@@ -69,11 +86,11 @@ namespace PARADOX_RP.Handlers.Login
 
                 //player.Clothes = _clothingDictionary;
 
-                InventoryModule.Instance.OpenInventory(player);
+               // InventoryModule.Instance.OpenInventory(player);
 
                 if (await ModerationModule.Instance.IsBanned(player))
                 {
-                    player.Kick("Du bist gebannt. Für weitere Informationen melde dich im Support!");
+                    await player.KickAsync("Du bist gebannt. Für weitere Informationen melde dich im Support!");
                     return await Task.FromResult(false);
                 }
 

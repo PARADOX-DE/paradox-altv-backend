@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Text;
 using AltV.Net.Async;
 using Newtonsoft.Json;
+using PARADOX_RP.Core.Factories;
 
 namespace PARADOX_RP.UI
 {
@@ -22,6 +23,13 @@ namespace PARADOX_RP.UI
                 _windows[window.GetType()] = window;
                 AltAsync.Log($"[{window.WindowName}] Window loaded.");
             });
+
+            AltAsync.OnClient<PXPlayer, object[]>("ViewCallback", ViewCallback);
+        }
+
+        private void ViewCallback(PXPlayer obj, params object[] args)
+        {
+            // not imlemented yet
         }
 
         public T Get<T>() where T : Window

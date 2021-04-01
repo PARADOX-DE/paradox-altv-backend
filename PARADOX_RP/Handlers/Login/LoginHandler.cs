@@ -27,7 +27,7 @@ namespace PARADOX_RP.Handlers.Login
 
                 if (dbPlayer == null) return await Task.FromResult(false);
 
-                if (dbPlayer.Password == hashedPassword) return await Task.FromResult(true);
+                if (BCrypt.Net.BCrypt.Verify(dbPlayer.Password, hashedPassword)) return await Task.FromResult(true);
             }
 
             return await Task.FromResult(false);

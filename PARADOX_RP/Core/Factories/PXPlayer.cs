@@ -69,6 +69,14 @@ namespace PARADOX_RP.Core.Factories
         {
             Emit("SetClothes", component, drawable, texture);
         }
+
+        public bool CanInteract()
+        {
+            if (LoggedIn) return false;
+            if (CancellationToken != null) return false;
+
+            return true;
+        }
     }
 
     internal class PXPlayerFactory : IEntityFactory<IPlayer>

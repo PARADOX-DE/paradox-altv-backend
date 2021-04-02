@@ -36,12 +36,17 @@ namespace PARADOX_RP.Game.Team
             _teamHandler = teamHandler;
         }
 
+        public void InviteTeamMember(PXPlayer player, string inviteString)
+        {
+            if (!player.LoggedIn) return;
+
+        }
+
         public void RequestTeamMembers(PXPlayer player, bool onlineState)
         {
             IEnumerable<PXPlayer> _factionMembers = null;
             if (onlineState) _factionMembers = ((IEnumerable<PXPlayer>)Pools.Instance.Get(PoolType.PLAYER)).Where(p => p.Team.Id == player.Team.Id);
 
-            
         }
     }
 }

@@ -39,6 +39,18 @@ namespace PARADOX_RP.Core.Factories
         public int SqlId { get; set; }
         public bool LoggedIn { get; set; }
         public string Username { get; set; }
+
+        private bool _cuffed;
+        public bool Cuffed
+        {
+            get => _cuffed;
+            set
+            {
+                Emit("UpdateCuff", value);
+                _cuffed = value;
+            }
+        }
+
         public SupportRankModel SupportRank { get; set; }
         public Teams Team { get; set; }
         public PlayerTeamData PlayerTeamData { get; set; }
@@ -74,10 +86,24 @@ namespace PARADOX_RP.Core.Factories
             Emit("SetClothes", component, drawable, texture);
         }
 
+        public void Freeze(bool state)
+        {
+            Emit("Freeze", state);
+        }
+
+        public bool IsValid()
+        {
+            if (!LoggedIn) return false;
+            if (SqlId < 1) return false;
+
+            return true;
+        }
+
         public bool CanInteract()
         {
-            if (LoggedIn) return false;
+            if (!LoggedIn) return false;
             if (CancellationToken != null) return false;
+            if (Cuffed) return false;
 
             return true;
         }

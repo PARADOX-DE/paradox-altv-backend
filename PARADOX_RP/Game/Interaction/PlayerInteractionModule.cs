@@ -1,4 +1,5 @@
-﻿using PARADOX_RP.Core.Module;
+﻿using PARADOX_RP.Core.Factories;
+using PARADOX_RP.Core.Module;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -11,5 +12,15 @@ namespace PARADOX_RP.Game.Interaction
         {
 
         }
+
+        public void CuffPlayer(PXPlayer player, PXPlayer victim)
+        {
+            if (!player.CanInteract() || !player.IsValid()) return;
+            if (!victim.IsValid()) return;
+
+            if (player.Position.Distance(victim.Position) > 3.5f) return;
+
+            victim.Cuffed = true;
+        } 
     }
 }

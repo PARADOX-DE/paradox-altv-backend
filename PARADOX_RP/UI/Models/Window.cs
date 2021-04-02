@@ -19,7 +19,7 @@ namespace PARADOX_RP.UI.Models
 
         public void Show(PXPlayer player, params object[] windowObject)
         {
-            player.Emit("openWindow", WindowName, windowObject);
+            player.Emit("showWindow", WindowName, windowObject);
         }
     }
 }

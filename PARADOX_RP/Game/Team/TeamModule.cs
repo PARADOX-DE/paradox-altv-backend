@@ -24,14 +24,14 @@ namespace PARADOX_RP.Game.Team
         {
             TeamList = new Dictionary<int, Teams>();
 
-            using (var px = new PXContext())
-            {
-                foreach (Teams team in px.Teams)
-                {
-                    TeamList.Add(team.Id, team);
-                    _teamHandler.LoadTeam(team);
-                }
-            }
+            //using (var px = new PXContext())
+            //{
+            //    foreach (Teams team in px.Teams)
+            //    {
+            //        TeamList.Add(team.Id, team);
+            //        _teamHandler.LoadTeam(team);
+            //    }
+            //}
 
             _teamHandler = teamHandler;
         }

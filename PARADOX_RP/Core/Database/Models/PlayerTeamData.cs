@@ -12,6 +12,7 @@ namespace PARADOX_RP.Core.Database.Models
         public int PlayerId { get; set; }
         public int Rank { get; set; }
         public int Payday { get; set; }
+        public DateTime Joined { get; set; }
 
         public virtual Players Player { get; set; }
     }

@@ -40,6 +40,17 @@ namespace PARADOX_RP.Core.Factories
         public bool LoggedIn { get; set; }
         public string Username { get; set; }
 
+        private bool _injured;
+        public bool Injured
+        {
+            get => _injured;
+            set
+            {
+                Emit("UpdateInjured", value);
+                _injured = value;
+            }
+        }
+
         private bool _cuffed;
         public bool Cuffed
         {

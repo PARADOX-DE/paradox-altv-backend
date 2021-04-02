@@ -114,7 +114,7 @@ namespace PARADOX_RP.Core.Factories
         {
             if (!LoggedIn) return false;
             if (CancellationToken != null) return false;
-            if (Cuffed) return false;
+            if (Cuffed || Injured) return false;
 
             return true;
         }

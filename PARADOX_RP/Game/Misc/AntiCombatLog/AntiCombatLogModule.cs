@@ -17,7 +17,7 @@ namespace PARADOX_RP.Game.Misc.AntiCombatLog
         {
             if (!player.LoggedIn) return;
 
-            foreach (PXPlayer pxPlayer in Pools.Instance.Get(PoolType.PLAYER))
+            foreach (PXPlayer pxPlayer in Pools.Instance.Get<PXPlayer>(PoolType.PLAYER))
             {
                 if (pxPlayer.DimensionType == DimensionTypes.WORLD)
                     pxPlayer.SendNotification("Offlineflucht", $"Der Spieler {player.Name} hat die Verbindung getrennt", NotificationTypes.SUCCESS);

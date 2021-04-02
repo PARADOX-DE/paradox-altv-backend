@@ -27,7 +27,7 @@ namespace PARADOX_RP.Core.Database.Models
 
         public void SendNotification(string Message, NotificationTypes notificationType)
         {
-            foreach (PXPlayer player in Pools.Instance.Get<PXPlayer>(PoolType.PLAYER))
+            foreach (PXPlayer player in Pools.Instance.Get<PXPlayer>(PoolType.TEAM_PLAYER, Id))
             {
                 player.SendNotification(TeamName, Message, notificationType);
             }

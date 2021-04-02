@@ -6,6 +6,7 @@ using PARADOX_RP.Game.Administration.Models;
 using PARADOX_RP.Game.Login;
 using PARADOX_RP.Game.MiniGames.Models;
 using PARADOX_RP.Game.Team;
+using PARADOX_RP.Models;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -41,6 +42,7 @@ namespace PARADOX_RP.Core.Factories
         public SupportRankModel SupportRank { get; set; }
         public Teams Team { get; set; }
         public PlayerTeamData PlayerTeamData { get; set; }
+        public Invitation Invitation { get; set; }
         public DimensionTypes DimensionType { get; set; }
         public DutyTypes DutyType { get; set; }
         public CancellationTokenSource CancellationToken { get; set; }
@@ -54,6 +56,7 @@ namespace PARADOX_RP.Core.Factories
             SupportRank = new SupportRankModel();
             Team = null;
             PlayerTeamData = null;
+            Invitation = null;
             DimensionType = DimensionTypes.WORLD;
             DutyType = DutyTypes.OFFDUTY;
             CancellationToken = null;

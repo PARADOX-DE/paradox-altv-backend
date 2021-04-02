@@ -6,6 +6,7 @@ using PARADOX_RP.Core.Factories;
 using PARADOX_RP.Core.Module;
 using PARADOX_RP.Handlers.Team;
 using PARADOX_RP.Handlers.Team.Interface;
+using PARADOX_RP.Models;
 using PARADOX_RP.UI;
 using PARADOX_RP.UI.Windows;
 using PARADOX_RP.Utils;
@@ -57,7 +58,25 @@ namespace PARADOX_RP.Game.Team
                 return;
             }
 
-            WindowManager.Instance.Get<ConfirmationWindow>().Show(player, new ConfirmationWindowObject(player.Team.TeamName, $"{player.Username} hat dich eingeladen, um der Fraktion {player.Team.TeamName} beizutreten.", "TeamInviteAccept", "TeamInviteDecline"));
+            invitePlayer.Invitation = new Invitation()
+            {
+                InviterId = player.Id,
+                Team = player.Team
+            };
+
+            WindowManager.Instance.Get<ConfirmationWindow>().Show(player, new ConfirmationWindowObject(player.Team.TeamName, $"{player.Username} hat dich eingeladen, um der Fraktion {player.Team.TeamName} beizutreten.", nameof(TeamInviteAccept), "TeamInviteDecline"));
+        }
+
+        public async void TeamInviteAccept(PXPlayer player)
+        {
+            if (!player.CanInteract()) return;
+            if (player.Invitation == null) return;
+
+            Invitation invitation = player.Invitation;
+            await _teamHandler.SetPlayerTeam(player, invitation.Team.Id);
+            player.Invitation = null;
+
+            player.Team.SendNotification($"{player.Username} ist nun Mitglied der Fraktion.", NotificationTypes.SUCCESS);
         }
 
         public void RequestTeamMembers(PXPlayer player, bool onlineState)

@@ -11,7 +11,8 @@ namespace PARADOX_RP.Utils
 {
     enum PoolType
     {
-        PLAYER
+        PLAYER,
+        TEAM_PLAYER
     }
 
     class Pools
@@ -20,6 +21,7 @@ namespace PARADOX_RP.Utils
         public static Pools Instance { get; } = new Pools();
 
         private readonly Dictionary<int, PXPlayer> playerPool = new Dictionary<int, PXPlayer>();
+        private readonly Dictionary<int, List<PXPlayer>> teamPlayerPool = new Dictionary<int, List<PXPlayer>>();
 
         public Pools()
         {
@@ -32,16 +34,22 @@ namespace PARADOX_RP.Utils
             {
                 case BaseObjectType.Player:
                     if (entity is IPlayer || entity is PXPlayer)
-                        playerPool.Add(Id, (PXPlayer)entity);
+                    {
+                        PXPlayer player = (PXPlayer)entity;
+
+                        teamPlayerPool[player.Team.Id].Add(player);
+                        playerPool.Add(Id, player);
+                    }
                     break;
             }
         }
 
-        public HashSet<T> Get<T>(PoolType poolType) where T : IEntity
+        public HashSet<T> Get<T>(PoolType poolType, int poolId = 0) where T : IEntity
         {
             return poolType switch
             {
                 PoolType.PLAYER => playerPool.Values.ToHashSet() as HashSet<T>,
+                PoolType.TEAM_PLAYER => teamPlayerPool[poolId].ToHashSet() as HashSet<T>,
                 _ => playerPool.Values.ToHashSet() as HashSet<T>,
             };
         }

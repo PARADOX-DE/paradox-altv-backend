@@ -8,6 +8,7 @@ using PARADOX_RP.Game.Team;
 using PARADOX_RP.Handlers.Team.Interface;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -30,6 +31,15 @@ namespace PARADOX_RP.Handlers.Team
                 using (var px = new PXContext())
                 {
                     Players dbPlayer = await px.Players.FirstOrDefaultAsync(p => p.Id == player.SqlId);
+                    if (dbPlayer == null) return;
+
+                    PlayerTeamData playerTeamData = dbPlayer.PlayerTeamData.FirstOrDefault();
+                    if (playerTeamData == null) return;
+
+                    playerTeamData.Joined = DateTime.Now;
+                    playerTeamData.Payday = 0;
+                    playerTeamData.Rank = 0;
+
                     dbPlayer.TeamsId = teamId;
 
                     await px.SaveChangesAsync();
@@ -48,7 +58,7 @@ namespace PARADOX_RP.Handlers.Team
             TeamModule.Instance.TeamList.Values.ForEach((team) =>
             {
                 if (team.TeamType == TeamTypes.NEUTRAL)
-                    team.SendNotification(Title, Message, notificationType);
+                    team.SendNotification(Message, notificationType);
             });
         }
 
@@ -57,7 +67,7 @@ namespace PARADOX_RP.Handlers.Team
             TeamModule.Instance.TeamList.Values.ForEach((team) =>
             {
                 if (team.TeamType == TeamTypes.BAD)
-                    team.SendNotification(Title, Message, notificationType);
+                    team.SendNotification(Message, notificationType);
             });
         }
     }

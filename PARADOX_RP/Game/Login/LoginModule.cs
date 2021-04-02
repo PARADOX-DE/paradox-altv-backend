@@ -47,7 +47,7 @@ namespace PARADOX_RP.Game.Login
             player.Model = (uint)PedModel.FreemodeMale01;
             await player.SpawnAsync(new Position(0, 0, 72));
 
-            if (Configuration.Instance.DevMode)
+            /*if (Configuration.Instance.DevMode)
             {
                 if (!await _loginHandler.LoadPlayer(player, "System"))
                 {
@@ -55,7 +55,7 @@ namespace PARADOX_RP.Game.Login
                     return;
                 }
                 return;
-            }
+            }*/
 
             WindowManager.Instance.Get<LoginWindow>().Show(player, JsonConvert.SerializeObject(new LoginWindowObject() { name = player.Name }));
         }

@@ -25,15 +25,20 @@ namespace PARADOX_RP.Core.Database.Models
         public float SpawnPosition_Y { get; set; }
         public float SpawnPosition_Z { get; set; }
 
-        public void SendNotification(string Title, string Message, NotificationTypes notificationType)
+        public void SendNotification(string Message, NotificationTypes notificationType)
         {
-            foreach(PXPlayer player in Pools.Instance.Get(PoolType.PLAYER))
+            foreach (PXPlayer player in Pools.Instance.Get<PXPlayer>(PoolType.PLAYER))
             {
-                player.SendNotification(Title, Message, notificationType);
+                player.SendNotification(TeamName, Message, notificationType);
             }
         }
+
+        public void SendNotification(PXPlayer player, string Message, NotificationTypes notificationType)
+        {
+            player.SendNotification(TeamName, Message, notificationType);
+        }
     }
-   
+
     public partial class Teams
     {
         public Position SpawnPosition => new Position(SpawnPosition_X, SpawnPosition_Y, SpawnPosition_Z);

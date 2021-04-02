@@ -12,6 +12,16 @@ namespace PARADOX_RP.UI.Windows
 
     class ConfirmationWindowObject
     {
+        public ConfirmationWindowObject(string title, string message, string acceptCallback, string declineCallback)
+        {
+            Title = title;
+            Message = message;
+            AcceptCallback = acceptCallback;
+            DeclineCallback = declineCallback;
+        }
+
+        public string Title { get; set; }
+        public string Message { get; set; }
         public string AcceptCallback { get; set; }
         public string DeclineCallback { get; set; }
     }

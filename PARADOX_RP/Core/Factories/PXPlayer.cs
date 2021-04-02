@@ -40,6 +40,7 @@ namespace PARADOX_RP.Core.Factories
         public string Username { get; set; }
         public SupportRankModel SupportRank { get; set; }
         public Teams Team { get; set; }
+        public PlayerTeamData PlayerTeamData { get; set; }
         public DimensionTypes DimensionType { get; set; }
         public DutyTypes DutyType { get; set; }
         public CancellationTokenSource CancellationToken { get; set; }
@@ -52,9 +53,9 @@ namespace PARADOX_RP.Core.Factories
             Username = "";
             SupportRank = new SupportRankModel();
             Team = null;
+            PlayerTeamData = null;
             DimensionType = DimensionTypes.WORLD;
             DutyType = DutyTypes.OFFDUTY;
-
             CancellationToken = null;
             Clothes = new Dictionary<int, Clothes>();
         }

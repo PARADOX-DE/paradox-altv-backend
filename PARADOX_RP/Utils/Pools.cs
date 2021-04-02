@@ -16,14 +16,14 @@ namespace PARADOX_RP.Utils
 
     class Pools
     {
-        
+
         public static Pools Instance { get; } = new Pools();
 
-        private readonly Dictionary<int, Entity> playerPool = new Dictionary<int, Entity>();
+        private readonly Dictionary<int, PXPlayer> playerPool = new Dictionary<int, PXPlayer>();
 
         public Pools()
         {
-            
+
         }
 
         public void Register(int Id, Entity entity)
@@ -31,17 +31,18 @@ namespace PARADOX_RP.Utils
             switch (entity.Type)
             {
                 case BaseObjectType.Player:
-                    playerPool.Add(Id, entity);
+                    if (entity is IPlayer || entity is PXPlayer)
+                        playerPool.Add(Id, (PXPlayer)entity);
                     break;
             }
         }
 
-        public HashSet<Entity> Get(PoolType poolType)
+        public HashSet<T> Get<T>(PoolType poolType) where T : IEntity
         {
             return poolType switch
             {
-                PoolType.PLAYER => playerPool.Values.ToHashSet(),
-                _ => playerPool.Values.ToHashSet(),
+                PoolType.PLAYER => playerPool.Values.ToHashSet() as HashSet<T>,
+                _ => playerPool.Values.ToHashSet() as HashSet<T>,
             };
         }
     }

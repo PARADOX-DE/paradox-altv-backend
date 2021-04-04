@@ -7,6 +7,7 @@ using PARADOX_RP.Core.Factories;
 using PARADOX_RP.Game.Inventory;
 using PARADOX_RP.Game.Moderation;
 using PARADOX_RP.Handlers.Login.Interface;
+using PARADOX_RP.Utils;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -27,7 +28,15 @@ namespace PARADOX_RP.Handlers.Login
 
                 if (dbPlayer == null) return await Task.FromResult(false);
 
-                if (BCrypt.Net.BCrypt.Verify(dbPlayer.Password, hashedPassword)) return await Task.FromResult(true);
+                try
+                {
+                    if (BCrypt.Net.BCrypt.Verify(hashedPassword, dbPlayer.Password))
+                    {
+                        if (Configuration.Instance.DevMode) Alt.Log($"[DEVMODE] {dbPlayer.Username} requested Login.");
+                        return await Task.FromResult(true);
+                    }
+                }
+                catch (BCrypt.Net.SaltParseException) { return await Task.FromResult(false); }
             }
 
             return await Task.FromResult(false);
@@ -87,7 +96,7 @@ namespace PARADOX_RP.Handlers.Login
 
                 //player.Clothes = _clothingDictionary;
 
-               // InventoryModule.Instance.OpenInventory(player);
+                // InventoryModule.Instance.OpenInventory(player);
 
                 if (await ModerationModule.Instance.IsBanned(player))
                 {

@@ -62,7 +62,6 @@ namespace PARADOX_RP.Game.Login
 
         public async void RequestLoginResponse(PXPlayer player, string username, string hashedPassword)
         {
-            Alt.Log("Login requested");
             if (player.LoggedIn) return;
 
             if (await _loginHandler.CheckLogin(player, hashedPassword))

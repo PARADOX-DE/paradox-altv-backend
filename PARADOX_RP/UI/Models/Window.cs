@@ -23,5 +23,6 @@ namespace PARADOX_RP.UI.Models
         {
             player.Emit("Webview::ShowWindow", WindowName, windowObject);
         }
+
     }
 }

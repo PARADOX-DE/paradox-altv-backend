@@ -16,7 +16,7 @@ namespace PARADOX_RP.Game.Interaction
         public void CuffPlayer(PXPlayer player, PXPlayer victim)
         {
             if (!player.CanInteract() || !player.IsValid()) return;
-            if (!victim.IsValid()) return;
+            if (!victim.IsValid() || victim.Injured) return;
 
             if (player.Position.Distance(victim.Position) > 3.5f) return;
 

@@ -34,7 +34,7 @@ namespace PARADOX_RP.Game.Login
         {
             _loginHandler = loginHandler;
 
-            AltAsync.OnClient<PXPlayer, string>("RequestLoginResponse", RequestLoginResponse);
+            AltAsync.OnClient<PXPlayer, string, string>("RequestLoginResponse", RequestLoginResponse);
         }
 
         public override void OnModuleLoad()
@@ -60,8 +60,9 @@ namespace PARADOX_RP.Game.Login
             WindowManager.Instance.Get<LoginWindow>().Show(player, JsonConvert.SerializeObject(new LoginWindowObject() { name = player.Name }));
         }
 
-        public async void RequestLoginResponse(PXPlayer player, string hashedPassword)
+        public async void RequestLoginResponse(PXPlayer player, string username, string hashedPassword)
         {
+            Alt.Log("Login requested");
             if (player.LoggedIn) return;
 
             if (await _loginHandler.CheckLogin(player, hashedPassword))

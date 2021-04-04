@@ -21,7 +21,7 @@ namespace PARADOX_RP.UI.Models
 
         public void Show(PXPlayer player, params object[] windowObject)
         {
-            player.Emit("showWindow", WindowName, windowObject);
+            player.Emit("Webview::ShowWindow", WindowName, windowObject);
         }
     }
 }

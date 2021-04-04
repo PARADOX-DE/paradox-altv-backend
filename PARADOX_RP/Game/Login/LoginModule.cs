@@ -8,6 +8,7 @@ using PARADOX_RP.Core.Database;
 using PARADOX_RP.Core.Database.Models;
 using PARADOX_RP.Core.Factories;
 using PARADOX_RP.Core.Module;
+using PARADOX_RP.Game.Char;
 using PARADOX_RP.Game.Misc.Progressbar;
 using PARADOX_RP.Game.Misc.Progressbar.Extensions;
 using PARADOX_RP.Game.Moderation;
@@ -76,7 +77,7 @@ namespace PARADOX_RP.Game.Login
                     // HANDLE EVERYTHING AFTER LOAD PLAYER
                     if(loadPlayerResponse == LoadPlayerResponse.NEW_PLAYER)
                     {
-
+                        CharModule.Instance.CreatePlayerCharacter(player, CharCreationType.NEW);
                     }
                 }
             }

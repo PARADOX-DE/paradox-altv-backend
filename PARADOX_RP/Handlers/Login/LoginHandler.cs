@@ -72,14 +72,10 @@ namespace PARADOX_RP.Handlers.Login
 
                     await px.PlayerClothes.AddAsync(playerClothesInsert);
                     await px.SaveChangesAsync();
-
-                    playerIsNew = true;
                 }
                 else
                 {
                     Alt.Log("Kleidungs-Objekt existiert bereits.");
-
-                    playerIsNew = false;
                 }
 
                 if (dbPlayer.PlayerTeamData.FirstOrDefault() == null)
@@ -91,14 +87,10 @@ namespace PARADOX_RP.Handlers.Login
 
                     await px.PlayerTeamData.AddAsync(playerTeamDataInsert);
                     await px.SaveChangesAsync();
-
-                    playerIsNew = true;
                 }
                 else
                 {
                     Alt.Log("FraktionsData-Objekt existiert bereits.");
-
-                    playerIsNew = false;
                 }
 
                 /**/
@@ -111,11 +103,6 @@ namespace PARADOX_RP.Handlers.Login
                 {
                     await player.KickAsync("Du bist gebannt. Für weitere Informationen melde dich im Support!");
                     return await Task.FromResult(false);
-                }
-
-                if (playerIsNew)
-                {
-
                 }
 
                 return await Task.FromResult(true);

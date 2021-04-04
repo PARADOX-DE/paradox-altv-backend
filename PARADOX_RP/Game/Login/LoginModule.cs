@@ -11,6 +11,7 @@ using PARADOX_RP.Core.Module;
 using PARADOX_RP.Game.Misc.Progressbar;
 using PARADOX_RP.Game.Misc.Progressbar.Extensions;
 using PARADOX_RP.Game.Moderation;
+using PARADOX_RP.Handlers.Login;
 using PARADOX_RP.Handlers.Login.Interface;
 using PARADOX_RP.UI;
 using PARADOX_RP.UI.Windows;
@@ -66,12 +67,17 @@ namespace PARADOX_RP.Game.Login
 
             if (await _loginHandler.CheckLogin(player, hashedPassword))
             {
-                if(await _loginHandler.LoadPlayer(player, player.Name))
+                LoadPlayerResponse loadPlayerResponse = await _loginHandler.LoadPlayer(player, player.Name);
+                if (loadPlayerResponse == LoadPlayerResponse.ABORT) return;
+                else
                 {
                     WindowManager.Instance.Get<LoginWindow>().Hide(player);
 
                     // HANDLE EVERYTHING AFTER LOAD PLAYER
-                    
+                    if(loadPlayerResponse == LoadPlayerResponse.NEW_PLAYER)
+                    {
+
+                    }
                 }
             }
         }

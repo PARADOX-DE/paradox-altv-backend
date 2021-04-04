@@ -16,6 +16,13 @@ using System.Threading.Tasks;
 
 namespace PARADOX_RP.Handlers.Login
 {
+    public enum LoadPlayerResponse
+    {
+        ABORT,
+        NEW_PLAYER,
+        SUCCESS
+    }
+
     class LoginHandler : ILoginHandler
     {
         public async Task<bool> CheckLogin(PXPlayer player, string hashedPassword)
@@ -42,7 +49,7 @@ namespace PARADOX_RP.Handlers.Login
             return await Task.FromResult(false);
         }
 
-        public async Task<bool> LoadPlayer(PXPlayer player, string userName)
+        public async Task<LoadPlayerResponse> LoadPlayer(PXPlayer player, string userName)
         {
             await using (var px = new PXContext())
             {

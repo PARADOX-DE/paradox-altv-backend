@@ -9,6 +9,6 @@ namespace PARADOX_RP.Handlers.Login.Interface
     interface ILoginHandler
     {
         Task<bool> CheckLogin(PXPlayer player, string password);
-        Task<bool> LoadPlayer(PXPlayer player, string userName);
+        Task<LoadPlayerResponse> LoadPlayer(PXPlayer player, string userName);
     }
 }

@@ -60,7 +60,7 @@ namespace PARADOX_RP.Handlers.Login
                                                     .Include(p => p.Team)
                                                     .FirstOrDefaultAsync(p => p.Username == userName);
 
-                if (dbPlayer == null) return await Task.FromResult(false);
+                if (dbPlayer == null) return await Task.FromResult(LoadPlayerResponse.ABORT);
                 player.LoggedIn = true;
 
                 player.SqlId = dbPlayer.Id;
@@ -107,10 +107,16 @@ namespace PARADOX_RP.Handlers.Login
                 if (await ModerationModule.Instance.IsBanned(player))
                 {
                     await player.KickAsync("Du bist gebannt. Für weitere Informationen melde dich im Support!");
-                    return await Task.FromResult(false);
+                    return await Task.FromResult(LoadPlayerResponse.ABORT);
                 }
 
-                return await Task.FromResult(true);
+                if (dbPlayer.PlayerCustomization.FirstOrDefault() == null)
+                {
+                    return await Task.FromResult(LoadPlayerResponse.NEW_PLAYER);
+
+                }
+
+                return await Task.FromResult(LoadPlayerResponse.SUCCESS);
             }
         }
     }

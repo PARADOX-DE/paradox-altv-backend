@@ -26,7 +26,7 @@ namespace PARADOX_RP.Game.Char
 
         public void CreatePlayerCharacter(PXPlayer player, CharCreationType charCreationType)
         {
-            WindowManager.Instance.Get<CharCreationWindow>().Show(player));
+            WindowManager.Instance.Get<CharCreationWindow>().Show(player);
         }
     }
 }

@@ -9,9 +9,11 @@ namespace PARADOX_RP.Core.Database.Models
     {
         public Players()
         {
+            PlayerCustomization = new HashSet<PlayerCustomization>();
             PlayerClothes = new HashSet<PlayerClothes>();
             PlayerTeamData = new HashSet<PlayerTeamData>();
         }
+
         public int Id { get; set; }
         public string Username { get; set; }
         public string Password { get; set; }
@@ -23,6 +25,7 @@ namespace PARADOX_RP.Core.Database.Models
 
         public virtual SupportRankModel SupportRank { get; set; }
         public virtual Teams Team { get; set; }
+        public virtual ICollection<PlayerCustomization> PlayerCustomization { get; set; }
         public virtual ICollection<PlayerClothes> PlayerClothes { get; set; }
         public virtual ICollection<PlayerTeamData> PlayerTeamData { get; set; }
         public DateTime LastLogin { get; set; }

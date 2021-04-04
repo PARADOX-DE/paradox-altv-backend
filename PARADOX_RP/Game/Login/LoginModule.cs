@@ -69,10 +69,11 @@ namespace PARADOX_RP.Game.Login
                 if(await _loginHandler.LoadPlayer(player, player.Name))
                 {
                     WindowManager.Instance.Get<LoginWindow>().Hide(player);
+
+                    // HANDLE EVERYTHING AFTER LOAD PLAYER
+                    
                 }
             }
-            // Check Password  
-            // SEND RESPONSE TO PLAYER
         }
     }
 }

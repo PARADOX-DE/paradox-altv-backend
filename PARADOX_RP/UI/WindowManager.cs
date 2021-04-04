@@ -29,7 +29,7 @@ namespace PARADOX_RP.UI
 
         private void ViewCallback(PXPlayer obj, params object[] args)
         {
-            // not imlemented yet
+            // not implemented yet
         }
 
         public T Get<T>() where T : Window

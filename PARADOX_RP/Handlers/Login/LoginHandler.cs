@@ -46,8 +46,6 @@ namespace PARADOX_RP.Handlers.Login
         {
             await using (var px = new PXContext())
             {
-                bool playerIsNew = false;
-
                 Players dbPlayer = await px.Players
                                                     .Include(p => p.SupportRank).ThenInclude(p => p.PermissionAssignments).ThenInclude(p => p.Permission)
                                                     .Include(p => p.PlayerClothes)

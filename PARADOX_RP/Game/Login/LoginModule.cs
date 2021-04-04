@@ -66,7 +66,10 @@ namespace PARADOX_RP.Game.Login
 
             if (await _loginHandler.CheckLogin(player, hashedPassword))
             {
-                await _loginHandler.LoadPlayer(player, player.Name);
+                if(await _loginHandler.LoadPlayer(player, player.Name))
+                {
+                    WindowManager.Instance.Get<LoginWindow>().Hide(player);
+                }
             }
             // Check Password  
             // SEND RESPONSE TO PLAYER

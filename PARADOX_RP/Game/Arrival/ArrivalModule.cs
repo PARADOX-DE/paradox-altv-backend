@@ -7,10 +7,10 @@ using System.Text;
 
 namespace PARADOX_RP.Game.Arrival
 {
-    class ArrivalModule : ModuleBase<ArrivalModule>
+    class Arrival : ModuleBase<Arrival>
     {
 
-        public ArrivalModule() : base("Arrival")
+        public Arrival() : base("Arrival")
         {
 
         }

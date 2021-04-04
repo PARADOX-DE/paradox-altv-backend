@@ -24,5 +24,9 @@ namespace PARADOX_RP.UI.Models
             player.Emit("Webview::ShowWindow", WindowName, windowObject);
         }
 
+        public void Hide(PXPlayer player)
+        {
+            player.Emit("Webview::CloseWindow", WindowName);
+        }
     }
 }

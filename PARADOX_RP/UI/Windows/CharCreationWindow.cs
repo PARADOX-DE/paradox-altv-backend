@@ -7,6 +7,6 @@ namespace PARADOX_RP.UI.Windows
 {
     class CharCreationWindow : Window
     {
-        public CharCreationWindow() : base("CharCreator") { }
+        public CharCreationWindow() : base("Charcreator") { }
     }
 }

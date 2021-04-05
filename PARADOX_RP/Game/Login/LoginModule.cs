@@ -49,7 +49,7 @@ namespace PARADOX_RP.Game.Login
             player.Model = (uint)PedModel.FreemodeMale01;
             await player.SpawnAsync(new Position(0, 0, 72));
 
-            if (Configuration.Instance.DevMode)
+            if (Configuration.Instance.DevMode) 
             {
                 LoadPlayerResponse loadPlayerResponse = await _loginHandler.LoadPlayer(player, player.Name);
                 if (loadPlayerResponse == LoadPlayerResponse.ABORT) return;

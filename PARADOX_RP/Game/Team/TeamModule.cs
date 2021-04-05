@@ -26,9 +26,9 @@ namespace PARADOX_RP.Game.Team
     class TeamModule : ModuleBase<TeamModule>, ICommand
     {
         public Dictionary<int, Teams> TeamList;
-        private readonly ITeamHandler _teamHandler;
+        private readonly ITeamController _teamHandler;
 
-        public TeamModule(ITeamHandler teamHandler) : base("Team")
+        public TeamModule(ITeamController teamHandler) : base("Team")
         {
             TeamList = new Dictionary<int, Teams>();
 

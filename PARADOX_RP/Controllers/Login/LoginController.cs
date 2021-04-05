@@ -23,7 +23,7 @@ namespace PARADOX_RP.Handlers.Login
         SUCCESS
     }
 
-    class LoginHandler : ILoginHandler
+    class LoginController : ILoginController
     {
         public async Task<bool> CheckLogin(PXPlayer player, string hashedPassword)
         {

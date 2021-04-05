@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace PARADOX_RP.Handlers.Inventory
 {
-    interface IInventoryHandler
+    interface IInventoryController
     {
         Task LoadInventory(InventoryTypes type, int Id);
     }

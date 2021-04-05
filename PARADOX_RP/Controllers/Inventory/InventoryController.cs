@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace PARADOX_RP.Handlers.Inventory
 {
-    class InventoryHandler : IInventoryHandler
+    class InventoryController : IInventoryController
     {
         public async Task LoadInventory(InventoryTypes type, int Id)
         {

@@ -30,9 +30,9 @@ namespace PARADOX_RP.Game.Login
 {
     class LoginModule : ModuleBase<LoginModule>
     {
-        private readonly ILoginHandler _loginHandler;
+        private readonly ILoginController _loginHandler;
 
-        public LoginModule(ILoginHandler loginHandler) : base("Login")
+        public LoginModule(ILoginController loginHandler) : base("Login")
         {
             _loginHandler = loginHandler;
 

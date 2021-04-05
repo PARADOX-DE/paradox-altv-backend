@@ -22,8 +22,8 @@ namespace PARADOX_RP.Game.Inventory
 
     class InventoryModule : ModuleBase<InventoryModule>
     {
-        public readonly IInventoryHandler _inventoryHandler;
-        public InventoryModule(IInventoryHandler inventoryHandler) : base("Inventory")
+        public readonly IInventoryController _inventoryHandler;
+        public InventoryModule(IInventoryController inventoryHandler) : base("Inventory")
         {
             _inventoryHandler = inventoryHandler;
         }

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace PARADOX_RP.Handlers.Login.Interface
 {
-    interface ILoginHandler
+    interface ILoginController
     {
         Task<bool> CheckLogin(PXPlayer player, string password);
         Task<LoadPlayerResponse> LoadPlayer(PXPlayer player, string userName);

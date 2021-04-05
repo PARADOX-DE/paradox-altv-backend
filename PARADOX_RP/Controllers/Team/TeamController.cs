@@ -14,7 +14,7 @@ using System.Threading.Tasks;
 
 namespace PARADOX_RP.Handlers.Team
 {
-    class TeamHandler : ITeamHandler
+    class TeamController : ITeamController
     {
 
         public void LoadTeam(Teams team)

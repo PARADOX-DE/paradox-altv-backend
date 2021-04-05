@@ -7,6 +7,8 @@ using PARADOX_RP.Core.Database.Models;
 using PARADOX_RP.Core.Extensions;
 using PARADOX_RP.Core.Factories;
 using PARADOX_RP.Core.Module;
+using PARADOX_RP.Game.Commands;
+using PARADOX_RP.Game.Commands.Attributes;
 using PARADOX_RP.Handlers.Team;
 using PARADOX_RP.Handlers.Team.Interface;
 using PARADOX_RP.Models;
@@ -21,7 +23,7 @@ using System.Text;
 namespace PARADOX_RP.Game.Team
 {
 
-    class TeamModule : ModuleBase<TeamModule>
+    class TeamModule : ModuleBase<TeamModule>, ICommand
     {
         public Dictionary<int, Teams> TeamList;
         private readonly ITeamHandler _teamHandler;
@@ -51,10 +53,7 @@ namespace PARADOX_RP.Game.Team
             PXPlayer invitePlayer = Pools.Instance.Get<PXPlayer>(PoolType.PLAYER).FirstOrDefault(p => p.Name.ToLower().Contains(inviteString.ToLower()));
             if (invitePlayer == null)
             {
-                foreach(var x in Pools.Instance.Get<PXPlayer>(PoolType.PLAYER))
-                {
-                    Alt.Log(x.Username);
-                }
+                player.Team.SendNotification(player, "Person nicht gefunden!", NotificationTypes.ERROR);
                 return;
             }
 
@@ -101,6 +100,13 @@ namespace PARADOX_RP.Game.Team
             if (onlineState) _factionMembers = Pools.Instance.Get<PXPlayer>(PoolType.PLAYER).Where(p => p.Team.Id == player.Team.Id);
 
             //response to client
+        }
+
+        [Command("set_team")]
+        public void SetTeam(PXPlayer player)
+        {
+            Console.WriteLine("SetTeam");
+            InviteTeamMember(player, player.Username);
         }
     }
 }

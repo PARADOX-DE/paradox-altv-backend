@@ -6,7 +6,6 @@ using System.Text;
 using System.Threading.Tasks;
 using PARADOX_RP.Utils.Enums;
 using AltV.Net.Async;
-using AltV.Net.Resources.Chat.Api;
 using AltV.Net;
 
 namespace PARADOX_RP.Game.Administration

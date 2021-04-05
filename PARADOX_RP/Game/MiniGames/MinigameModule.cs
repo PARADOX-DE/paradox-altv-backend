@@ -1,5 +1,4 @@
-﻿using AltV.Net.Resources.Chat.Api;
-using PARADOX_RP.Core.Factories;
+﻿using PARADOX_RP.Core.Factories;
 using PARADOX_RP.Core.Extensions;
 using PARADOX_RP.Core.Module;
 using PARADOX_RP.Game.Lobby;

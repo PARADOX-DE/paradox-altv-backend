@@ -16,7 +16,6 @@
 
 	<ItemGroup>
 		<PackageReference Include="AltV.Net.Async" Version="2.0.0" />
-		<PackageReference Include="AltV.Net.Resources.Chat.Api" Version="1.48.0" />
 		<PackageReference Include="AltV.Net.EntitySync" Version="1.6.2-dev-preview" />
 		<PackageReference Include="AltV.Net.EntitySync.ServerEvent" Version="1.3.0-dev-preview" />
 		<PackageReference Include="Autofac" Version="6.1.0" />

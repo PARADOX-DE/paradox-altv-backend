@@ -64,6 +64,7 @@ namespace PARADOX_RP.Core.Factories
 
         public SupportRankModel SupportRank { get; set; }
         public Teams Team { get; set; }
+        public PlayerCustomization PlayerCustomization { get; set; }
         public PlayerTeamData PlayerTeamData { get; set; }
         public Invitation Invitation { get; set; }
         public DimensionTypes DimensionType { get; set; }
@@ -78,6 +79,7 @@ namespace PARADOX_RP.Core.Factories
             Username = "";
             SupportRank = new SupportRankModel();
             Team = null;
+            PlayerCustomization = null;
             PlayerTeamData = null;
             Invitation = null;
             DimensionType = DimensionTypes.WORLD;

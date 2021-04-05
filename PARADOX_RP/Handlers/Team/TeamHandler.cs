@@ -50,7 +50,7 @@ namespace PARADOX_RP.Handlers.Team
         public void SpawnPlayer(PXPlayer player)
         {
             if (player.Team == null) return;
-            //player.Position = player.Team.SpawnPosition;
+            player.Position = player.Team.SpawnPosition;
         }
 
         public void SendNotificationToDepartments(string Title, string Message, NotificationTypes notificationType)

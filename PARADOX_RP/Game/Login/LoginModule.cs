@@ -79,7 +79,10 @@ namespace PARADOX_RP.Game.Login
                     if(loadPlayerResponse == LoadPlayerResponse.NEW_PLAYER)
                     {
                         //CharModule.Instance.CreatePlayerCharacter(player, CharCreationType.NEW);
+                        return;
                     }
+
+
                 }
             }
         }

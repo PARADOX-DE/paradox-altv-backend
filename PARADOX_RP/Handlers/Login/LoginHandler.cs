@@ -121,6 +121,8 @@ namespace PARADOX_RP.Handlers.Login
                     return await Task.FromResult(LoadPlayerResponse.NEW_PLAYER);
                 }
 
+                await player.SpawnAsync(dbPlayer.Position);
+
                 return await Task.FromResult(LoadPlayerResponse.SUCCESS);
             }
         }

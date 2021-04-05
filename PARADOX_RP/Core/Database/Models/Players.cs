@@ -1,11 +1,12 @@
-﻿using PARADOX_RP.Game.Administration.Models;
+﻿using AltV.Net.Data;
+using PARADOX_RP.Game.Administration.Models;
 using System;
 using System.Collections.Generic;
 using System.Text;
 
 namespace PARADOX_RP.Core.Database.Models
 {
-    public class Players
+    public partial class Players
     {
         public Players()
         {
@@ -23,6 +24,12 @@ namespace PARADOX_RP.Core.Database.Models
         public string SocialClubHash { get; set; }
         public int TeamsId { get; set; }
 
+        /* SPAWN POS */
+        public float Position_X { get; private set; }
+        public float Position_Y { get; private set; }
+        public float Position_Z { get; private set; }
+
+
         public virtual SupportRankModel SupportRank { get; set; }
         public virtual Teams Team { get; set; }
         public virtual ICollection<PlayerCustomization> PlayerCustomization { get; set; }
@@ -30,5 +37,11 @@ namespace PARADOX_RP.Core.Database.Models
         public virtual ICollection<PlayerTeamData> PlayerTeamData { get; set; }
         public DateTime LastLogin { get; set; }
         public DateTime CreatedAt { get; set; }
+    }
+
+    public partial class Players
+    {
+        public Position Position => new Position(Position_X, Position_Y, Position_Z);
+
     }
 }

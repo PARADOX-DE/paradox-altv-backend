@@ -16,6 +16,7 @@ using AltV.Net.Data;
 using PARADOX_RP.Core.Extensions;
 using System.Linq;
 using PARADOX_RP.Utils;
+using PARADOX_RP.Game.Team;
 
 namespace PARADOX_RP.Game.Commands
 {
@@ -97,6 +98,13 @@ namespace PARADOX_RP.Game.Commands
                     Configuration.Instance.VehicleRadioURL = value;
                     break;
             }
+        }
+
+        [Command("setteam")]
+        public void SetTeam(PXPlayer player)
+        {
+            Console.WriteLine("SetTeam");
+            TeamModule.Instance.InviteTeamMember(player, player.Username);
         }
     }
 }

@@ -37,7 +37,18 @@ namespace PARADOX_RP.Utils
                     {
                         PXPlayer player = (PXPlayer)entity;
 
-                        teamPlayerPool[player.Team.Id].Add(player);
+                        try
+                        {
+                            Instance.teamPlayerPool[player.Team.Id].Add(player);
+                        }
+                        catch (KeyNotFoundException)
+                        {
+                            Instance.teamPlayerPool[player.Team.Id] = new List<PXPlayer>
+                            {
+                                player
+                            };
+                        }
+
                         playerPool.Add(Id, player);
                     }
                     break;

@@ -66,6 +66,7 @@ namespace PARADOX_RP.Handlers.Login
                 player.SqlId = dbPlayer.Id;
                 player.Username = dbPlayer.Username;
                 player.SupportRank = dbPlayer.SupportRank;
+                player.Team = dbPlayer.Team;
 
                 /* New-Player Generation */
                 if (dbPlayer.PlayerClothes.FirstOrDefault() == null)
@@ -92,10 +93,13 @@ namespace PARADOX_RP.Handlers.Login
 
                     await px.PlayerTeamData.AddAsync(playerTeamDataInsert);
                     await px.SaveChangesAsync();
+
+                    player.PlayerTeamData = playerTeamDataInsert;
                 }
                 else
                 {
                     Alt.Log("FraktionsData-Objekt existiert bereits.");
+                    player.PlayerTeamData = dbPlayer.PlayerTeamData.FirstOrDefault();
                 }
 
                 /**/
@@ -110,10 +114,11 @@ namespace PARADOX_RP.Handlers.Login
                     return await Task.FromResult(LoadPlayerResponse.ABORT);
                 }
 
+                Pools.Instance.Register(player.SqlId, player);
+
                 if (dbPlayer.PlayerCustomization.FirstOrDefault() == null)
                 {
                     return await Task.FromResult(LoadPlayerResponse.NEW_PLAYER);
-
                 }
 
                 return await Task.FromResult(LoadPlayerResponse.SUCCESS);

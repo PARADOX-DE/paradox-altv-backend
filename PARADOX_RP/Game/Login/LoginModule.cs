@@ -49,15 +49,16 @@ namespace PARADOX_RP.Game.Login
             player.Model = (uint)PedModel.FreemodeMale01;
             await player.SpawnAsync(new Position(0, 0, 72));
 
-            /*if (Configuration.Instance.DevMode)
+            if (Configuration.Instance.DevMode)
             {
-                if (!await _loginHandler.LoadPlayer(player, "System"))
+                LoadPlayerResponse loadPlayerResponse = await _loginHandler.LoadPlayer(player, player.Name);
+                if (loadPlayerResponse == LoadPlayerResponse.ABORT) return;
+                else
                 {
-                    await player.KickAsync("System-User not found.");
+                    WindowManager.Instance.Get<LoginWindow>().Hide(player);
                     return;
                 }
-                return;
-            }*/
+            }
 
             WindowManager.Instance.Get<LoginWindow>().Show(player, JsonConvert.SerializeObject(new LoginWindowObject() { name = player.Name }));
         }
@@ -77,7 +78,7 @@ namespace PARADOX_RP.Game.Login
                     // HANDLE EVERYTHING AFTER LOAD PLAYER
                     if(loadPlayerResponse == LoadPlayerResponse.NEW_PLAYER)
                     {
-                        CharModule.Instance.CreatePlayerCharacter(player, CharCreationType.NEW);
+                        //CharModule.Instance.CreatePlayerCharacter(player, CharCreationType.NEW);
                     }
                 }
             }

@@ -1,4 +1,7 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using AltV.Net;
+using AltV.Net.Async;
+using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json;
 using PARADOX_RP.Core.Database;
 using PARADOX_RP.Core.Database.Models;
 using PARADOX_RP.Core.Extensions;
@@ -37,24 +40,33 @@ namespace PARADOX_RP.Game.Team
             //}
 
             _teamHandler = teamHandler;
+
+            AltAsync.OnClient<PXPlayer>("TeamInviteAccept", TeamInviteAccept);
         }
 
         public void InviteTeamMember(PXPlayer player, string inviteString)
         {
             if (!player.CanInteract()) return;
 
-            PXPlayer invitePlayer = Pools.Instance.Get<PXPlayer>(PoolType.PLAYER).FirstOrDefault(p => p.Name.ToLower().Contains(inviteString));
-            if (invitePlayer == null) return;
+            PXPlayer invitePlayer = Pools.Instance.Get<PXPlayer>(PoolType.PLAYER).FirstOrDefault(p => p.Name.ToLower().Contains(inviteString.ToLower()));
+            if (invitePlayer == null)
+            {
+                foreach(var x in Pools.Instance.Get<PXPlayer>(PoolType.PLAYER))
+                {
+                    Alt.Log(x.Username);
+                }
+                return;
+            }
 
             if (player.PlayerTeamData.Rank < 10)
             {
-                player.Team.SendNotification("Du verfügst nicht über ausreichende Bereichtigungen...", NotificationTypes.ERROR);
+                player.Team.SendNotification(player, "Du verfügst nicht über ausreichende Bereichtigungen...", NotificationTypes.ERROR);
                 return;
             }
 
             if (invitePlayer.Team.Id != 1)
             {
-                player.Team.SendNotification($"{inviteString} ist bereits Mitglied einer Fraktion.", NotificationTypes.ERROR);
+                player.Team.SendNotification(player, $"{inviteString} ist bereits Mitglied einer Fraktion.", NotificationTypes.ERROR);
                 return;
             }
 
@@ -64,11 +76,13 @@ namespace PARADOX_RP.Game.Team
                 Team = player.Team
             };
 
-            WindowManager.Instance.Get<ConfirmationWindow>().Show(player, new ConfirmationWindowObject(player.Team.TeamName, $"{player.Username} hat dich eingeladen, um der Fraktion {player.Team.TeamName} beizutreten.", nameof(TeamInviteAccept), "TeamInviteDecline"));
+            WindowManager.Instance.Get<ConfirmationWindow>().Show(player, JsonConvert.SerializeObject(new ConfirmationWindowObject(player.Team.TeamName, $"{player.Username} hat dich eingeladen, um der Fraktion {player.Team.TeamName} beizutreten.", nameof(TeamInviteAccept), "TeamInviteDecline")));
         }
 
         public async void TeamInviteAccept(PXPlayer player)
         {
+            WindowManager.Instance.Get<ConfirmationWindow>().Hide(player);
+
             if (!player.CanInteract()) return;
             if (player.Invitation == null) return;
 

@@ -4,8 +4,12 @@ using System.Text;
 
 namespace PARADOX_RP.Core.Interface
 {
-    interface ICoreSystem
+    interface IApplication
     {
+        string Name { get; }
+        string Author { get; }
+
         void Start();
+        void Stop();
     }
 }

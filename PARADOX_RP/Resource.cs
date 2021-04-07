@@ -11,17 +11,15 @@ namespace PARADOX_RP
 {
     public class Resource : AsyncResource
     {
-        private ICoreSystem _coreSystem;
+        private IApplication _application;
         public override void OnStart()
         {
-            using var containerHelper = new PXContainer();
-            containerHelper.RegisterTypes();
-            containerHelper.ResolveTypes();
+            using var autofac = new PXContainer();
+            autofac.RegisterTypes();
+            autofac.ResolveTypes();
 
-            _coreSystem = containerHelper.Resolve<ICoreSystem>();
-            _coreSystem.Start();
-
-            //EventHandler.Instance.Load();
+            _application = autofac.Resolve<IApplication>();
+            _application.Start();
         }
 
         public override void OnStop()

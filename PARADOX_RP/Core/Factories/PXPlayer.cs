@@ -39,6 +39,8 @@ namespace PARADOX_RP.Core.Factories
         public int SqlId { get; set; }
         public bool LoggedIn { get; set; }
         public string Username { get; set; }
+        public int Money { get; set; }
+        public int BankMoney { get; set; }
 
         private bool _injured;
         public bool Injured

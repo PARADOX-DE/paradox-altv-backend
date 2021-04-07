@@ -51,13 +51,13 @@ namespace PARADOX_RP.Game.Login
 
             if (Configuration.Instance.DevMode) 
             {
-                LoadPlayerResponse loadPlayerResponse = await _loginHandler.LoadPlayer(player, player.Name);
-                if (loadPlayerResponse == LoadPlayerResponse.ABORT) return;
-                else
-                {
-                    WindowManager.Instance.Get<LoginWindow>().Hide(player);
-                    return;
-                }
+                //LoadPlayerResponse loadPlayerResponse = await _loginHandler.LoadPlayer(player, player.Name);
+                //if (loadPlayerResponse == LoadPlayerResponse.ABORT) return;
+                //else
+                //{
+                //    WindowManager.Instance.Get<LoginWindow>().Hide(player);
+                //    return;
+                //  }
             }
 
             WindowManager.Instance.Get<LoginWindow>().Show(player, JsonConvert.SerializeObject(new LoginWindowObject() { name = player.Name }));
@@ -78,11 +78,9 @@ namespace PARADOX_RP.Game.Login
                     // HANDLE EVERYTHING AFTER LOAD PLAYER
                     if(loadPlayerResponse == LoadPlayerResponse.NEW_PLAYER)
                     {
-                        //CharModule.Instance.CreatePlayerCharacter(player, CharCreationType.NEW);
+                        CharModule.Instance.CreatePlayerCharacter(player, CharCreationType.NEW);
                         return;
                     }
-
-
                 }
             }
         }

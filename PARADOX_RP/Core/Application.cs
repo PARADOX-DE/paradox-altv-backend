@@ -13,13 +13,16 @@ using System.Text;
 
 namespace PARADOX_RP.Core
 {
-    class CoreSystem : ICoreSystem
+    class Application : IApplication
     {
-        private readonly IModuleController _eventHandler;
+        public string Name { get; } = "PARADOX Roleplay";
+        public string Author { get; } = "PARADOX International";
+
+        private readonly IModuleController _moduleController;
         private readonly IWindowManager _componentManager;
-        public CoreSystem(IModuleController eventHandler, IWindowManager componentManager)
+        public Application(IModuleController moduleController, IWindowManager componentManager)
         {
-            _eventHandler = eventHandler;
+            _moduleController = moduleController;
             _componentManager = componentManager;
         }
 
@@ -28,7 +31,7 @@ namespace PARADOX_RP.Core
             using (var px = new PXContext())
             {
 
-                var databaseCreator = (px.Database.GetService<IDatabaseCreator>() as RelationalDatabaseCreator);
+                var databaseCreator = px.Database.GetService<IDatabaseCreator>() as RelationalDatabaseCreator;
                 databaseCreator.EnsureCreated();
 
                 AltAsync.Log("Initialized Database.");
@@ -40,18 +43,14 @@ namespace PARADOX_RP.Core
                 (entityId, entityType, threadCount) => entityType,
                 (threadId) =>
                 {
-                    //THREAD TEXT/MARKER
                     if (threadId == 1 || threadId == 0)
                     {
                         return new LimitedGrid3(50_000, 50_000, 75, 10_000, 10_000, 350);
                     }
-
-                    //THREAD OBJECT
                     else if (threadId == 2)
                     {
                         return new LimitedGrid3(50_000, 50_000, 125, 10_000, 10_000, 1000);
                     }
-
                     else
                     {
                         return new LimitedGrid3(50_000, 50_000, 175, 10_000, 10_000, 300);
@@ -60,7 +59,12 @@ namespace PARADOX_RP.Core
             new IdProvider());
 
             AltAsync.Log("Server started.");
-            _eventHandler.Load();
+            _moduleController.Load();
+        }
+
+        public void Stop()
+        {
+
         }
     }
 }

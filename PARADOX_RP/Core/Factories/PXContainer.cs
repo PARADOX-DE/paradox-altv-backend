@@ -30,7 +30,7 @@ namespace PARADOX_RP.Core.Factories
             LogStartup("Load types");
             LoadTypes();
 
-            builder.RegisterType<CoreSystem>().As<ICoreSystem>();
+            builder.RegisterType<Application>().As<IApplication>();
             builder.RegisterType<WindowManager>().As<IWindowManager>();
 
             LogStartup("Register handlers");
@@ -128,7 +128,7 @@ namespace PARADOX_RP.Core.Factories
         private bool IsHandlerType(Type type)
         {
             if (type.Namespace == null) return false;
-            return type.Namespace.StartsWith("PARADOX_RP.Handlers") &&
+            return type.Namespace.StartsWith("PARADOX_RP.Controllers") &&
                                             !type.Name.StartsWith("<");
         }
 

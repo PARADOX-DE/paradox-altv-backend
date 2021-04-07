@@ -22,6 +22,8 @@ namespace PARADOX_RP.Core.Database.Models
         public string DiscordId { get; set; }
         public string SocialClubName { get; set; }
         public string SocialClubHash { get; set; }
+        public int Money { get; set; }
+        public int BankMoney { get; set; }
         public int TeamsId { get; set; }
 
         /* SPAWN POS */

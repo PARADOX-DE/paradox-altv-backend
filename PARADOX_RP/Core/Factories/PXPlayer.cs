@@ -1,5 +1,6 @@
 ﻿using AltV.Net;
 using AltV.Net.Elements.Entities;
+using PARADOX_RP.Core.Database;
 using PARADOX_RP.Core.Database.Models;
 using PARADOX_RP.Game.Administration.Models;
 using PARADOX_RP.Game.Commands.Extensions;
@@ -89,6 +90,20 @@ namespace PARADOX_RP.Core.Factories
             CancellationToken = null;
             Clothes = new Dictionary<int, Clothes>();
         }
+
+        public async Task<bool> TakeMoney(int moneyAmount)
+        {
+            if (moneyAmount < 0) return false;
+            if (moneyAmount > Money) return false;
+            Money -= moneyAmount;
+            await using (var px = new PXContext())
+            {
+                (await px.Players.FindAsync(SqlId)).Money = Money;
+                await px.SaveChangesAsync();
+            }
+            return true;
+        }
+
 
         public void SendNotification(string Title, string Message, NotificationTypes notificationType)
         {

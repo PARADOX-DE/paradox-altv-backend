@@ -7,10 +7,11 @@ using System.Threading.Tasks;
 using PARADOX_RP.Utils.Enums;
 using AltV.Net.Async;
 using AltV.Net;
+using PARADOX_RP.Game.Commands;
 
 namespace PARADOX_RP.Game.Administration
 {
-    class AdministrationModule : ModuleBase<AdministrationModule>
+    class AdministrationModule : ModuleBase<AdministrationModule>, ICommand
     {
         public AdministrationModule() : base("Administration") { }
 
@@ -43,6 +44,13 @@ namespace PARADOX_RP.Game.Administration
 
                 player.DutyType = DutyTypes.OFFDUTY;
             }
+        }
+
+
+        [Command("aduty")]
+        public async void aduty(PXPlayer player)
+        {
+            await AdministrationModule.Instance.OnKeyPress(player, KeyEnumeration.F9);
         }
     }
 }

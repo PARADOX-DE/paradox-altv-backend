@@ -35,6 +35,13 @@ namespace PARADOX_RP.Game.Char
             WindowManager.Instance.Get<CharCreationWindow>().Show(player);
         }
 
+        /*
+         * 
+         * ONLY FOR NONE ARRIVED CHARACTERS 
+         * TODO: IMPLEMENT ALREADY ARRIVED CHARACTER-EDITOR
+         * 
+         */
+
         public async void SavePlayerCharacter(PXPlayer player, string firstName, string lastName, string birthDate, string customizationString)
         {
             if (!player.LoggedIn) return;

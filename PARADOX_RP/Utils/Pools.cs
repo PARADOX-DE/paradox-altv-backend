@@ -12,6 +12,7 @@ namespace PARADOX_RP.Utils
     enum PoolType
     {
         PLAYER,
+        VEHICLE,
         TEAM_PLAYER
     }
 
@@ -21,6 +22,7 @@ namespace PARADOX_RP.Utils
         public static Pools Instance { get; } = new Pools();
 
         private readonly Dictionary<int, PXPlayer> playerPool = new Dictionary<int, PXPlayer>();
+        private readonly Dictionary<int, PXVehicle> vehiclePool = new Dictionary<int, PXVehicle>();
         private readonly Dictionary<int, List<PXPlayer>> teamPlayerPool = new Dictionary<int, List<PXPlayer>>();
 
         public Pools()
@@ -52,6 +54,14 @@ namespace PARADOX_RP.Utils
                         playerPool.Add(Id, player);
                     }
                     break;
+
+                case BaseObjectType.Vehicle:
+                    if (entity is IVehicle || entity is PXVehicle)
+                    {
+                        PXVehicle vehicle = (PXVehicle)entity;
+                        vehiclePool.Add(Id, vehicle);
+                    }
+                    break;
             }
         }
 
@@ -60,9 +70,26 @@ namespace PARADOX_RP.Utils
             return poolType switch
             {
                 PoolType.PLAYER => playerPool.Values.ToHashSet() as HashSet<T>,
+                PoolType.VEHICLE => vehiclePool.Values.ToHashSet() as HashSet<T>,
                 PoolType.TEAM_PLAYER => teamPlayerPool[poolId].ToHashSet() as HashSet<T>,
                 _ => playerPool.Values.ToHashSet() as HashSet<T>,
             };
+        }
+
+        public bool Find<T>(PoolType poolType, int objId) where T : IEntity
+        {
+            Dictionary<int, T> targetDictionary = poolType switch
+            {
+                PoolType.PLAYER => playerPool as Dictionary<int, T>,
+                PoolType.VEHICLE => vehiclePool as Dictionary<int, T>,
+                PoolType.TEAM_PLAYER => teamPlayerPool as Dictionary<int, T>,
+                _ => playerPool as Dictionary<int, T>,
+            };
+
+            if (targetDictionary.TryGetValue(objId, out _))
+                return true;
+
+            return false;
         }
     }
 }

@@ -9,7 +9,7 @@ namespace PARADOX_RP.Core.Factories
     public class PXVehicle : Vehicle
     {
         public int SqlId { get; set; }
-
+        public int OwnerId { get; set; }
         public bool HasRadio { get; set; }
 
         internal PXVehicle(IntPtr nativePointer, ushort id) : base(nativePointer, id)

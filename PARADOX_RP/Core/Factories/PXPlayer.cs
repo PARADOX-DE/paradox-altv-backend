@@ -35,6 +35,12 @@ namespace PARADOX_RP.Core.Factories
         ADMINDUTY
     }
 
+    public enum MoneyTypes
+    {
+        MONEY,
+        BANKMONEY
+    }
+
     public class PXPlayer : Player
     {
         public int SqlId { get; set; }

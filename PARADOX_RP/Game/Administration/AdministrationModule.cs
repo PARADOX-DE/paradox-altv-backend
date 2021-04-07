@@ -8,6 +8,7 @@ using PARADOX_RP.Utils.Enums;
 using AltV.Net.Async;
 using AltV.Net;
 using PARADOX_RP.Game.Commands;
+using PARADOX_RP.Game.Commands.Attributes;
 
 namespace PARADOX_RP.Game.Administration
 {
@@ -50,7 +51,7 @@ namespace PARADOX_RP.Game.Administration
         [Command("aduty")]
         public async void aduty(PXPlayer player)
         {
-            await AdministrationModule.Instance.OnKeyPress(player, KeyEnumeration.F9);
+            await Instance.OnKeyPress(player, KeyEnumeration.F9);
         }
     }
 }

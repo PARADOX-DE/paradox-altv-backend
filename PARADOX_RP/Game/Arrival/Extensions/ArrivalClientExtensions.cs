@@ -11,5 +11,10 @@ namespace PARADOX_RP.Game.Arrival.Extensions
         {
             return false;
         }
+
+        public static void PlayArrivalCutscene(this PXPlayer player)
+        {
+            player.Emit("Arrival::PlayCutscene");
+        }
     }
 }

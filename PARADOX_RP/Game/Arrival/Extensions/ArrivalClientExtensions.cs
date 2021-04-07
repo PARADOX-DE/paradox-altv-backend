@@ -1,7 +1,9 @@
-﻿using PARADOX_RP.Core.Factories;
+﻿using AltV.Net.Async;
+using PARADOX_RP.Core.Factories;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace PARADOX_RP.Game.Arrival.Extensions
 {
@@ -12,9 +14,9 @@ namespace PARADOX_RP.Game.Arrival.Extensions
             return false;
         }
 
-        public static void PlayArrivalCutscene(this PXPlayer player)
+        public static Task PlayArrivalCutscene(this PXPlayer player)
         {
-            player.Emit("Arrival::PlayCutscene");
+            return player.EmitAsync("Arrival::PlayCutscene");
         }
     }
 }

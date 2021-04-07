@@ -11,10 +11,10 @@ using System.Threading.Tasks;
 
 namespace PARADOX_RP.Game.Arrival
 {
-    class Arrival : ModuleBase<Arrival>
+    class ArrivalModule : ModuleBase<ArrivalModule>
     {
 
-        public Arrival() : base("Arrival")
+        public ArrivalModule() : base("Arrival")
         {
 
         }

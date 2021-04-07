@@ -5,7 +5,7 @@ using PARADOX_RP.Core.Database;
 using PARADOX_RP.Core.Database.Models;
 using PARADOX_RP.Core.Factories;
 using PARADOX_RP.Core.Module;
-using PARADOX_RP.Game.Arrival.Extensions;
+using PARADOX_RP.Game.Arrival;
 using PARADOX_RP.UI;
 using PARADOX_RP.UI.Windows;
 using System;
@@ -54,6 +54,8 @@ namespace PARADOX_RP.Game.Char
 
                 dbPlayerCustomization.Customization = customizationString;
             }
+
+            await ArrivalModule.Instance.NewPlayerArrival(player);
         }
     }
 }

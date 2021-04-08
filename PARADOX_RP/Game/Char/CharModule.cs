@@ -45,8 +45,9 @@ namespace PARADOX_RP.Game.Char
         public async void SavePlayerCharacter(PXPlayer player, string firstName, string lastName, string birthDate, string customizationString)
         {
             if (!player.LoggedIn) return;
-            if (player.PlayerCustomization != null) return;
-            
+            if (!WindowManager.Instance.Get<CharCreationWindow>().IsVisible(player)) return;
+            WindowManager.Instance.Get<CharCreationWindow>().Hide(player);
+
             await using (var px = new PXContext())
             {
                 PlayerCustomization dbPlayerCustomization = await px.PlayerCustomization.Where(p => p.PlayerId == player.SqlId).FirstOrDefaultAsync();

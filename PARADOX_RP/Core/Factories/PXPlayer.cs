@@ -76,6 +76,7 @@ namespace PARADOX_RP.Core.Factories
         public PlayerCustomization PlayerCustomization { get; set; }
         public PlayerTeamData PlayerTeamData { get; set; }
         public Invitation Invitation { get; set; }
+        public string CurrentWindow { get; set; }
         public DimensionTypes DimensionType { get; set; }
         public DutyTypes DutyType { get; set; }
         public CancellationTokenSource CancellationToken { get; set; }
@@ -109,7 +110,6 @@ namespace PARADOX_RP.Core.Factories
             }
             return true;
         }
-
 
         public void SendNotification(string Title, string Message, NotificationTypes notificationType)
         {

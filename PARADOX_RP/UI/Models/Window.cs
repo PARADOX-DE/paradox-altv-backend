@@ -27,6 +27,7 @@ namespace PARADOX_RP.UI.Models
                 AltAsync.Log($"[{WindowName}] Show {player.Name}");
             }
 
+            player.CurrentWindow = WindowName;
             player.Emit("Webview::ShowWindow", WindowName, windowObject);
         }
 

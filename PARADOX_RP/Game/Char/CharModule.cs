@@ -46,7 +46,7 @@ namespace PARADOX_RP.Game.Char
         {
             if (!player.LoggedIn) return;
             if (player.PlayerCustomization != null) return;
-
+            
             await using (var px = new PXContext())
             {
                 PlayerCustomization dbPlayerCustomization = await px.PlayerCustomization.Where(p => p.PlayerId == player.SqlId).FirstOrDefaultAsync();

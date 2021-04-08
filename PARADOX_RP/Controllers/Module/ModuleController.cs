@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 using AltV.Net.Elements.Entities;
 using PARADOX_RP.Game.Misc.Progressbar.Extensions;
 
-namespace PARADOX_RP.Handlers
+namespace PARADOX_RP.Controllers
 {
     class ModuleController : IModuleController
     {

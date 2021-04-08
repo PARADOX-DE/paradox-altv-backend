@@ -5,14 +5,14 @@ using PARADOX_RP.Core.Database.Models;
 using PARADOX_RP.Core.Extensions;
 using PARADOX_RP.Core.Factories;
 using PARADOX_RP.Game.Team;
-using PARADOX_RP.Handlers.Team.Interface;
+using PARADOX_RP.Controllers.Team.Interface;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PARADOX_RP.Handlers.Team
+namespace PARADOX_RP.Controllers.Team
 {
     class TeamController : ITeamController
     {

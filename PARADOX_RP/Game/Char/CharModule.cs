@@ -47,12 +47,24 @@ namespace PARADOX_RP.Game.Char
             if (!player.LoggedIn) return;
             if (player.PlayerCustomization != null) return;
 
-            await using(var px = new PXContext())
+            await using (var px = new PXContext())
             {
                 PlayerCustomization dbPlayerCustomization = await px.PlayerCustomization.Where(p => p.PlayerId == player.SqlId).FirstOrDefaultAsync();
-                if (dbPlayerCustomization == null) return;
-
-                dbPlayerCustomization.Customization = customizationString;
+                if (dbPlayerCustomization == null)
+                {
+                    dbPlayerCustomization = new PlayerCustomization()
+                    {
+                        PlayerId = player.SqlId,
+                        Customization = customizationString
+                    };
+                    await px.PlayerCustomization.AddAsync(dbPlayerCustomization);
+                    await px.SaveChangesAsync();
+                }
+                else
+                {
+                    dbPlayerCustomization.Customization = customizationString;
+                    await px.SaveChangesAsync();
+                }
             }
 
             await ArrivalModule.Instance.NewPlayerArrival(player);

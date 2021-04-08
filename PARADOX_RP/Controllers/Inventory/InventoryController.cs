@@ -9,7 +9,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PARADOX_RP.Handlers.Inventory
+namespace PARADOX_RP.Controllers.Inventory
 {
     class InventoryController : IInventoryController
     {

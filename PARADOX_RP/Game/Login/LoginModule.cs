@@ -12,8 +12,8 @@ using PARADOX_RP.Game.Char;
 using PARADOX_RP.Game.Misc.Progressbar;
 using PARADOX_RP.Game.Misc.Progressbar.Extensions;
 using PARADOX_RP.Game.Moderation;
-using PARADOX_RP.Handlers.Login;
-using PARADOX_RP.Handlers.Login.Interface;
+using PARADOX_RP.Controllers.Login;
+using PARADOX_RP.Controllers.Login.Interface;
 using PARADOX_RP.UI;
 using PARADOX_RP.UI.Windows;
 using PARADOX_RP.Utils;
@@ -49,18 +49,23 @@ namespace PARADOX_RP.Game.Login
             player.Model = (uint)PedModel.FreemodeMale01;
             await player.SpawnAsync(new Position(0, 0, 72));
 
-            if (Configuration.Instance.DevMode) 
+            if (Configuration.Instance.DevMode)
             {
-                //LoadPlayerResponse loadPlayerResponse = await _loginHandler.LoadPlayer(player, player.Name);
-                //if (loadPlayerResponse == LoadPlayerResponse.ABORT) return;
-                //else
-                //{
-                //    WindowManager.Instance.Get<LoginWindow>().Hide(player);
-                //    return;
-                //  }
+                LoadPlayerResponse loadPlayerResponse = await _loginHandler.LoadPlayer(player, player.Name);
+                if (loadPlayerResponse == LoadPlayerResponse.ABORT) return;
+                else
+                {
+                    if (loadPlayerResponse == LoadPlayerResponse.NEW_PLAYER)
+                    {
+                        CharModule.Instance.CreatePlayerCharacter(player, CharCreationType.NEW);
+                        return;
+                    }
+
+                    return;
+                }
             }
 
-            WindowManager.Instance.Get<LoginWindow>().Show(player, JsonConvert.SerializeObject(new LoginWindowObject() { name = player.Name }));
+            WindowManager.Instance.Get<LoginWindow>().Show(player);
         }
 
         public async void RequestLoginResponse(PXPlayer player, string username, string hashedPassword)
@@ -76,7 +81,7 @@ namespace PARADOX_RP.Game.Login
                     WindowManager.Instance.Get<LoginWindow>().Hide(player);
 
                     // HANDLE EVERYTHING AFTER LOAD PLAYER
-                    if(loadPlayerResponse == LoadPlayerResponse.NEW_PLAYER)
+                    if (loadPlayerResponse == LoadPlayerResponse.NEW_PLAYER)
                     {
                         CharModule.Instance.CreatePlayerCharacter(player, CharCreationType.NEW);
                         return;

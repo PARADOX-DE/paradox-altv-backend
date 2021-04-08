@@ -1,6 +1,7 @@
 ﻿using AltV.Net.Async;
 using Newtonsoft.Json;
 using PARADOX_RP.Core.Factories;
+using PARADOX_RP.Utils;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -21,6 +22,11 @@ namespace PARADOX_RP.UI.Models
 
         public void Show(PXPlayer player, params object[] windowObject)
         {
+            if (Configuration.Instance.DevMode)
+            {
+                AltAsync.Log($"[{WindowName}] Show {player.Name}");
+            }
+
             player.Emit("Webview::ShowWindow", WindowName, windowObject);
         }
 

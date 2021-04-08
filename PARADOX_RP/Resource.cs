@@ -4,7 +4,7 @@ using AltV.Net.Data;
 using AltV.Net.Elements.Entities;
 using PARADOX_RP.Core.Factories;
 using PARADOX_RP.Core.Interface;
-using PARADOX_RP.Handlers;
+using PARADOX_RP.Controllers;
 using System.Threading.Tasks;
 
 namespace PARADOX_RP
@@ -18,8 +18,16 @@ namespace PARADOX_RP
             autofac.RegisterTypes();
             autofac.ResolveTypes();
 
+            /*
+             * 
+             * START APPLICATIONS
+             * 
+             */
+
             _application = autofac.Resolve<IApplication>();
             _application.Start();
+
+            Alt.Log($"Application {_application.Name} made by {_application.Author} started.");
         }
 
         public override void OnStop()

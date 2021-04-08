@@ -6,7 +6,7 @@ using PARADOX_RP.Core.Database.Models;
 using PARADOX_RP.Core.Factories;
 using PARADOX_RP.Game.Inventory;
 using PARADOX_RP.Game.Moderation;
-using PARADOX_RP.Handlers.Login.Interface;
+using PARADOX_RP.Controllers.Login.Interface;
 using PARADOX_RP.Utils;
 using System;
 using System.Collections.Generic;
@@ -14,7 +14,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PARADOX_RP.Handlers.Login
+namespace PARADOX_RP.Controllers.Login
 {
     public enum LoadPlayerResponse
     {

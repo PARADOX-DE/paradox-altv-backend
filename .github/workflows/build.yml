@@ -19,6 +19,9 @@ jobs:
       with:
         dotnet-version: 5.0.x
     
+    - name: Restore dependencies
+      run: dotnet restore
+    
     - name: Clean
       run: dotnet clean ./PARADOX_RP.sln --configuration Release && dotnet nuget locals all --clear
       

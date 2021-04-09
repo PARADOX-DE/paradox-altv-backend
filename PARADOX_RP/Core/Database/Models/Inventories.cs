@@ -5,7 +5,7 @@ using System.Text;
 
 namespace PARADOX_RP.Core.Database.Models
 {
-    class Inventories
+    public partial class Inventories
     {
         public Inventories()
         {

@@ -40,7 +40,7 @@ namespace PARADOX_RP.Game.Char
             if (!player.LoggedIn) return;
             if (!WindowManager.Instance.Get<CharCreationWindow>().IsVisible(player)) return;
             WindowManager.Instance.Get<CharCreationWindow>().Hide(player);
-
+            
             await using (var px = new PXContext())
             {
                 PlayerCustomization dbPlayerCustomization = await px.PlayerCustomization.Where(p => p.PlayerId == player.SqlId).FirstOrDefaultAsync();

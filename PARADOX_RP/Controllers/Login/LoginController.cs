@@ -43,7 +43,10 @@ namespace PARADOX_RP.Controllers.Login
                         return await Task.FromResult(true);
                     }
                 }
-                catch (BCrypt.Net.SaltParseException) { return await Task.FromResult(false); }
+                catch (BCrypt.Net.SaltParseException) {
+                    if (Configuration.Instance.DevMode) Alt.Log($"[DEVMODE] {dbPlayer.Username} threw SaltParseException."); 
+                    return await Task.FromResult(false); 
+                }
             }
 
             return await Task.FromResult(false);

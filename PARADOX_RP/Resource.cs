@@ -32,7 +32,7 @@ namespace PARADOX_RP
 
         public override void OnStop()
         {
-            throw new System.NotImplementedException();
+
         }
 
         public override IEntityFactory<IPlayer> GetPlayerFactory()

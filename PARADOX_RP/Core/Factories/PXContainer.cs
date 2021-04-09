@@ -1,5 +1,7 @@
 ﻿using AltV.Net.Async;
 using Autofac;
+using Microsoft.EntityFrameworkCore;
+using PARADOX_RP.Core.Database;
 using PARADOX_RP.Core.Interface;
 using PARADOX_RP.Core.Module;
 using PARADOX_RP.UI;
@@ -68,17 +70,14 @@ namespace PARADOX_RP.Core.Factories
             //}
 
             //LogStartup("Register database context");
-            //var dbContextOptionsBuilder = new DbContextOptionsBuilder<RPContext>()
-            //    .UseMySql("server=db.sibauirp.de;database=sibauirp;user=Sibaui;password=XPYfMKEUMN9wqXcS!yDtHAw4qc?Nh?Bz3wF7r-SxgnXQ-q8Yy-faDMd8F7C_8BV6;treattinyasboolean=true",
-            //        b => b.ServerVersion("10.4.11-mariadb")
-            //            .EnableRetryOnFailure());
+            var connection = "Server=localhost;Database=altv-paradox_rp;Uid=root;Pwd=divan123;";
+            var dbContextOptionsBuilder = new DbContextOptionsBuilder<PXContext>()
+                .UseMySql(connection, ServerVersion.AutoDetect(connection));
 
 
-            //dotnet ef dbcontext scaffold "server=db.sibauirp.de;database=sibauirp;user=Sibaui;password=XPYfMKEUMN9wqXcS!yDtHAw4qc?Nh?Bz3wF7r-SxgnXQ-q8Yy-faDMd8F7C_8BV6;treattinyasboolean=true" "Pomelo.EntityFrameworkCore.MySql" -o Models -c RPContext -f
-
-            //builder.RegisterType<RPContext>()
-            //   .WithParameter("options", dbContextOptionsBuilder.Options)
-            //   .InstancePerLifetimeScope();
+            builder.RegisterType<PXContext>()
+               .WithParameter("options", dbContextOptionsBuilder.Options)
+               .InstancePerLifetimeScope();
 
             _container = builder.Build();
         }

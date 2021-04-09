@@ -11,6 +11,7 @@ namespace PARADOX_RP.Core.Database.Models
         public int Id { get; set; }
         public int InventoryId { get; set; }
         public virtual Inventories Inventory { get; set; }
+        public virtual InventoryItemSignatures Origin { get; set; }
 
         public string Item { get; set; }
         public string Attribute { get; set; }

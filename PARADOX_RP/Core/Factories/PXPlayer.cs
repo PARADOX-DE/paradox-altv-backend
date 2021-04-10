@@ -101,6 +101,21 @@ namespace PARADOX_RP.Core.Factories
         public async Task<bool> TakeMoney(int moneyAmount)
         {
             if (moneyAmount < 0) return false;
+
+            if (moneyAmount > Money) return false;
+            Money -= moneyAmount;
+            await using (var px = new PXContext())
+            {
+                (await px.Players.FindAsync(SqlId)).Money = Money;
+                await px.SaveChangesAsync();
+            }
+            return true;
+        }
+
+        public async Task<bool> AddMoney(int moneyAmount)
+        {
+            if (moneyAmount < 0) return false;
+
             if (moneyAmount > Money) return false;
             Money -= moneyAmount;
             await using (var px = new PXContext())

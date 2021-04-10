@@ -27,7 +27,8 @@ namespace PARADOX_RP.Game.Arrival
 
             //todo: cutscene length
             await Task.Delay(25 * 1000);
-            await player.SpawnAsync(new Position(0, 0, 72));
+            if(player?.)
+            await player?.SpawnAsync(new Position(0, 0, 72));
         }
     }
 }

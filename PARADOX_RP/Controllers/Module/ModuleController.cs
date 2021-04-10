@@ -8,6 +8,7 @@ using PARADOX_RP.Core.Factories;
 using System.Threading.Tasks;
 using AltV.Net.Elements.Entities;
 using PARADOX_RP.Game.Misc.Progressbar.Extensions;
+using PARADOX_RP.Utils;
 
 namespace PARADOX_RP.Controllers
 {
@@ -73,6 +74,9 @@ namespace PARADOX_RP.Controllers
         private async Task OnPlayerDisconnect(IPlayer player, string reason)
         {
             PXPlayer pxPlayer = (PXPlayer)player;
+
+            if (pxPlayer.LoggedIn)
+                Pools.Instance.Remove(pxPlayer.SqlId, pxPlayer);
 
             await _modules.ForEach(e =>
             {

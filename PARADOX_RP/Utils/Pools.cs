@@ -91,5 +91,37 @@ namespace PARADOX_RP.Utils
 
             return false;
         }
+
+        public void Remove(int Id, Entity entity)
+        {
+            switch (entity.Type)
+            {
+                case BaseObjectType.Player:
+                    if (entity is IPlayer || entity is PXPlayer)
+                    {
+                        PXPlayer player = (PXPlayer)entity;
+
+                        try
+                        {
+                            Instance.teamPlayerPool[player.Team.Id].Remove(player);
+                        }
+                        catch (KeyNotFoundException)
+                        {
+                            Instance.teamPlayerPool[player.Team.Id] = new List<PXPlayer>();
+                        }
+
+                        playerPool.Remove(Id);
+                    }
+                    break;
+
+                case BaseObjectType.Vehicle:
+                    if (entity is IVehicle || entity is PXVehicle)
+                    {
+                        PXVehicle vehicle = (PXVehicle)entity;
+                        vehiclePool.Remove(Id);
+                    }
+                    break;
+            }
+        }
     }
 }

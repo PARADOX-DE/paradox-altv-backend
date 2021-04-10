@@ -49,6 +49,7 @@ namespace PARADOX_RP.Game.Bank
             if (!player.IsValid()) return;
             if (!player.CanInteract()) return;
             if (!WindowManager.Instance.Get<BankWindow>().IsVisible(player)) return;
+            
             if (!await player.TakeMoney(moneyAmount))
             {
                 player.SendNotification("N26 Bank", "Du hast nicht genügend Geld auf deinem Konto.", NotificationTypes.SUCCESS);

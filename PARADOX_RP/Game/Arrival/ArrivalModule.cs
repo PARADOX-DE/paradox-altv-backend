@@ -4,8 +4,10 @@ using PARADOX_RP.Core.Factories;
 using PARADOX_RP.Core.Module;
 using PARADOX_RP.Game.Arrival.Extensions;
 using PARADOX_RP.Game.Login;
+using PARADOX_RP.Game.Login.Extensions;
 using System;
 using System.Collections.Generic;
+using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -19,6 +21,8 @@ namespace PARADOX_RP.Game.Arrival
 
         }
 
+        private Position ArrivalPosition = new Position(0, 0, 72);
+
         public async Task NewPlayerArrival(PXPlayer player)
         {
             if (player.IsPlayerArrived()) return;
@@ -27,8 +31,7 @@ namespace PARADOX_RP.Game.Arrival
 
             //todo: cutscene length
             await Task.Delay(25 * 1000);
-            if(player?.)
-            await player?.SpawnAsync(new Position(0, 0, 72));
+            await player?.PreparePlayer(ArrivalPosition);
         }
     }
 }

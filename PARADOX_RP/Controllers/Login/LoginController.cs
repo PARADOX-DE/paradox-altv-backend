@@ -13,6 +13,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using PARADOX_RP.Game.Login.Extensions;
 
 namespace PARADOX_RP.Controllers.Login
 {
@@ -124,7 +125,7 @@ namespace PARADOX_RP.Controllers.Login
                     return await Task.FromResult(LoadPlayerResponse.NEW_PLAYER);
                 }
 
-                await player.SpawnAsync(dbPlayer.Position);
+                await player?.PreparePlayer(dbPlayer.Position);
 
                 return await Task.FromResult(LoadPlayerResponse.SUCCESS);
             }

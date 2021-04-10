@@ -1,15 +1,24 @@
-﻿using PARADOX_RP.Core.Factories;
+﻿using AltV.Net.Async;
+using AltV.Net.Data;
+using PARADOX_RP.Core.Factories;
+using PARADOX_RP.UI;
+using PARADOX_RP.UI.Windows;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace PARADOX_RP.Game.Login.Extensions
 {
     static class LoginClientExtensions
     {
-        public static void PreparePlayer(this PXPlayer client) {
-            client.Emit("PreparePlayer", null);
-            //TODO: Client-Side Prepare Function
+        public static async Task PreparePlayer(this PXPlayer client, Position pos) {
+            await client.SpawnAsync(pos);
+
+            WindowManager.Instance.Get<HUDWindow>().Show(client, new HUDWindowWriter(
+                client.SqlId,
+                client.Username,
+                client.Money));
         }
     }
 }

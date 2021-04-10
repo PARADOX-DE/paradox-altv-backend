@@ -39,6 +39,8 @@ namespace PARADOX_RP.Game.Login
             AltAsync.OnClient<PXPlayer, string, string>("RequestLoginResponse", RequestLoginResponse);
         }
 
+        private Position _loginPosition = new Position(0, 0, 72);
+
         public override void OnModuleLoad()
         {
 
@@ -47,7 +49,7 @@ namespace PARADOX_RP.Game.Login
         public override async void OnPlayerConnect(PXPlayer player)
         {
             player.Model = (uint)PedModel.FreemodeMale01;
-            await player.SpawnAsync(new Position(0, 0, 72));
+            await player.SpawnAsync(_loginPosition);
 
             if (Configuration.Instance.DevMode)
             {

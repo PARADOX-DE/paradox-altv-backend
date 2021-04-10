@@ -27,12 +27,15 @@ namespace PARADOX_RP.Game.Bank
                 _BankATMs.Add(atm.Id, atm);
             });
 
+            AltAsync.OnClient<PXPlayer, int>("DepositMoney", DepositMoney);
             AltAsync.OnClient<PXPlayer, int>("WithdrawMoney", WithdrawMoney);
         }
 
+        private readonly string _bankName = "N26 Bank";
+
         public override Task<bool> OnKeyPress(PXPlayer player, KeyEnumeration key)
         {
-            if(key == KeyEnumeration.E)
+            if (key == KeyEnumeration.E)
             {
                 BankATMs targetATM = _BankATMs.Values.FirstOrDefault(a => a.Position.Distance(player.Position) < 3);
                 if (targetATM == null) return Task.FromResult(false);
@@ -44,24 +47,47 @@ namespace PARADOX_RP.Game.Bank
             return Task.FromResult(false);
         }
 
-        public async void WithdrawMoney(PXPlayer player, int moneyAmount)
+        public async void DepositMoney(PXPlayer player, int moneyAmount)
         {
             if (!player.IsValid()) return;
             if (!player.CanInteract()) return;
             if (!WindowManager.Instance.Get<BankWindow>().IsVisible(player)) return;
-            
+
             if (!await player.TakeMoney(moneyAmount))
             {
-                player.SendNotification("N26 Bank", "Du hast nicht genügend Geld auf deinem Konto.", NotificationTypes.SUCCESS);
+                player.SendNotification(_bankName, "Du hast nicht genügend Geld dabei.", NotificationTypes.ERROR);
                 return;
             }
 
-            await using(var px = new PXContext())
+            await using (var px = new PXContext())
             {
                 player.BankMoney += moneyAmount;
                 (await px.Players.FindAsync(player.SqlId)).BankMoney = player.BankMoney;
                 await px.SaveChangesAsync();
             }
+        }
+
+        public async void WithdrawMoney(PXPlayer player, int moneyAmount)
+        {
+            if (!player.IsValid()) return;
+            if (!player.CanInteract()) return;
+            if (!WindowManager.Instance.Get<BankWindow>().IsVisible(player)) return;
+
+            if (player.BankMoney < moneyAmount)
+            {
+                player.SendNotification(_bankName, "Du hast nicht genügend Geld auf dem Konto!", NotificationTypes.ERROR);
+                return;
+            }
+
+            await using (var px = new PXContext())
+            {
+
+                player.BankMoney -= moneyAmount;
+                (await px.Players.FindAsync(player.SqlId)).BankMoney = player.BankMoney;
+                await px.SaveChangesAsync();
+            }
+
+            await player.AddMoney(moneyAmount);
         }
     }
 }

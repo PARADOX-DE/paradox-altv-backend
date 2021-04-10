@@ -11,6 +11,7 @@ namespace PARADOX_RP.Game.Interaction
         public PlayerInteractionModule() : base("PlayerInteraction")
         {
 
+            
         }
 
         public void CuffPlayer(PXPlayer player, PXPlayer victim)

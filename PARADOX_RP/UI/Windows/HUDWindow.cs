@@ -8,7 +8,7 @@ namespace PARADOX_RP.UI.Windows
 {
     class HUDWindow : Window
     {
-        public HUDWindow() : base("HUD") { }
+        public HUDWindow() : base("Hud") { }
     }
 
     class HUDWindowWriter : IWritable

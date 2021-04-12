@@ -1,27 +1,102 @@
-﻿using PARADOX_RP.Controllers.Vehicle.Interface;
+﻿using AltV.Net.Async;
+using Microsoft.EntityFrameworkCore;
+using PARADOX_RP.Controllers.Vehicle.Interface;
 using PARADOX_RP.Core.Database;
 using PARADOX_RP.Core.Database.Models;
 using PARADOX_RP.Core.Factories;
 using PARADOX_RP.Core.Module;
+using PARADOX_RP.UI;
+using PARADOX_RP.UI.Windows;
 using PARADOX_RP.Utils;
+using PARADOX_RP.Utils.Enums;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace PARADOX_RP.Game.Garage
 {
     class GarageModule : ModuleBase<GarageModule>
     {
         private readonly IVehicleController _vehicleController;
-        private Dictionary<int, Garages> _garages;
-        public GarageModule(IVehicleController vehicleController) : base("Garage")
+        private Dictionary<int, Garages> _garages = new Dictionary<int, Garages>();
+        public GarageModule(PXContext pxContext, IVehicleController vehicleController) : base("Garage")
         {
             _vehicleController = vehicleController;
-            _garages = new Dictionary<int, Garages>();
+            LoadDatabaseTable(pxContext.Garages.Include(v => v.Vehicles), (Garages garage) =>
+            {
+                _garages.Add(garage.Id, garage);
+            });
+
+            AltAsync.OnClient<PXPlayer, int, int>("GarageParkOut", GarageParkOut);
+        }
+
+
+        public override async Task<bool> OnKeyPress(PXPlayer player, KeyEnumeration key)
+        {
+            if (key != KeyEnumeration.E) return await Task.FromResult(false);
+            if (!player.IsValid()) return await Task.FromResult(false);
+            if (!player.CanInteract()) return await Task.FromResult(false);
+
+            Garages dbGarage = _garages.Values.FirstOrDefault(g => g.Position.Distance(player.Position) < 3);
+            if (dbGarage == null) return await Task.FromResult(false);
+
+            WindowManager.Instance.Get<GarageWindow>().Show(player, new GarageWindowWriter(dbGarage.Id, dbGarage.Name, dbGarage.Vehicles));
+            return await Task.FromResult(true);
+        }
+
+        public async void RequestGarageVehicles(PXPlayer player, int garageId)
+        {
+            if (!player.IsValid()) return;
+            if (!player.CanInteract()) return;
+
+            if (!WindowManager.Instance.Get<GarageWindow>().IsVisible(player))
+            {
+                /*
+                 * ADD LOGGER
+                 */
+                return;
+            }
+
+            if (!_garages.TryGetValue(garageId, out Garages dbGarage))
+            {
+                /*
+                 * ADD LOGGER
+                 */
+                return;
+            }
+
+            if (dbGarage.Position.Distance(player.Position) > 10)
+            {
+                /*
+                * ADD LOGGER
+                */
+                return;
+            }
+
+
+            await using (var px = new PXContext())
+            {
+                IEnumerable<Vehicles> vehicles = px.Vehicles.Where(v => v.GarageId == garageId);
+
+
+            }
         }
 
         public async void GarageParkOut(PXPlayer player, int vehicleId, int garageId)
         {
+            if (!player.IsValid()) return;
+            if (!player.CanInteract()) return;
+
+            if (!WindowManager.Instance.Get<GarageWindow>().IsVisible(player))
+            {
+                /*
+                 * ADD LOGGER
+                 */
+                return;
+            }
+
             if (!_garages.TryGetValue(garageId, out Garages dbGarage))
             {
                 /*
@@ -41,7 +116,7 @@ namespace PARADOX_RP.Game.Garage
                     return;
                 }
 
-                if(Pools.Instance.Find<PXVehicle>(PoolType.VEHICLE, dbVehicle.Id))
+                if (Pools.Instance.Find<PXVehicle>(PoolType.VEHICLE, dbVehicle.Id))
                 {
                     /*
                      * VEHICLE ALREADY PARKED OUT

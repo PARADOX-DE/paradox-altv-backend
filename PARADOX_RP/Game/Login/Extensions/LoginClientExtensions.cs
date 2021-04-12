@@ -14,11 +14,9 @@ namespace PARADOX_RP.Game.Login.Extensions
     {
         public static async Task PreparePlayer(this PXPlayer client, Position pos) {
             await client.SpawnAsync(pos);
+            client.SendNotification("PARADOX RP", "PreparePlayer", NotificationTypes.SUCCESS);
 
-            WindowManager.Instance.Get<HUDWindow>().Show(client, new HUDWindowWriter(
-                client.SqlId,
-                client.Username,
-                client.Money));
+            WindowManager.Instance.Get<HUDWindow>().Show(client);
         }
     }
 }

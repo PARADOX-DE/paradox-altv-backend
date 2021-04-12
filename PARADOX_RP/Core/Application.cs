@@ -28,15 +28,6 @@ namespace PARADOX_RP.Core
 
         public void Start()
         {
-            using (var px = new PXContext())
-            {
-
-                var databaseCreator = px.Database.GetService<IDatabaseCreator>() as RelationalDatabaseCreator;
-                databaseCreator.EnsureCreated();
-
-                AltAsync.Log("Initialized Database.");
-            }
-
             AltEntitySync.Init(3, 250,
                 (threadCount, repository) => new ServerEventNetworkLayer(threadCount, repository),
                 (entity, threadCount) => entity.Type,

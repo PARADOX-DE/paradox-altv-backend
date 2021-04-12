@@ -6,6 +6,9 @@ using PARADOX_RP.Core.Factories;
 using PARADOX_RP.Core.Interface;
 using PARADOX_RP.Controllers;
 using System.Threading.Tasks;
+using PARADOX_RP.Core.Database;
+using Microsoft.EntityFrameworkCore.Storage;
+using Microsoft.EntityFrameworkCore.Infrastructure;
 
 namespace PARADOX_RP
 {
@@ -14,6 +17,14 @@ namespace PARADOX_RP
         private IApplication _application;
         public override void OnStart()
         {
+            using (var px = new PXContext())
+            {
+                var databaseCreator = px.Database.GetService<IDatabaseCreator>() as RelationalDatabaseCreator;
+                databaseCreator.EnsureCreated();
+
+                AltAsync.Log("Initialized Database.");
+            }
+
             using var autofac = new PXContainer();
             autofac.RegisterTypes();
             autofac.ResolveTypes();

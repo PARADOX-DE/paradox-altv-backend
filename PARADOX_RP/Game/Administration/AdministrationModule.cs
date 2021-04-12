@@ -9,12 +9,16 @@ using AltV.Net.Async;
 using AltV.Net;
 using PARADOX_RP.Game.Commands;
 using PARADOX_RP.Game.Commands.Attributes;
+using PARADOX_RP.Controllers.Vehicle.Interface;
 
 namespace PARADOX_RP.Game.Administration
 {
     class AdministrationModule : ModuleBase<AdministrationModule>, ICommand
     {
-        public AdministrationModule() : base("Administration") { }
+        private IVehicleController _vehicleController;
+        public AdministrationModule(IVehicleController vehicleController) : base("Administration") {
+            _vehicleController = vehicleController;
+        }
 
         public override async Task<bool> OnKeyPress(PXPlayer player, KeyEnumeration key)
         {
@@ -52,6 +56,16 @@ namespace PARADOX_RP.Game.Administration
         public async void aduty(PXPlayer player)
         {
             await Instance.OnKeyPress(player, KeyEnumeration.F9);
+        }
+
+        [Command("veh")]
+        public async void veh(PXPlayer player, string vehicleModel)
+        {
+            try
+            {
+                PXVehicle vehicle = (PXVehicle)await AltAsync.CreateVehicle(vehicleModel, player.Position, player.Rotation);
+            }
+            catch { player.SendNotification(ModuleName, $"Fahrzeug nicht gefunden.", NotificationTypes.ERROR); }
         }
     }
 }

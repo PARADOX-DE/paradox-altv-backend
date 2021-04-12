@@ -62,6 +62,7 @@ namespace PARADOX_RP.Controllers.Login
                                                     .Include(p => p.PlayerClothes)
                                                     .Include(p => p.PlayerTeamData)
                                                     .Include(p => p.Team)
+                                                    .Include(p => p.PlayerCustomization)
                                                     .FirstOrDefaultAsync(p => p.Username == userName);
 
                 if (dbPlayer == null) return await Task.FromResult(LoadPlayerResponse.ABORT);

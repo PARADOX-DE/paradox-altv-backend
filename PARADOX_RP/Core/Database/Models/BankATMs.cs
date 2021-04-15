@@ -14,7 +14,7 @@ namespace PARADOX_RP.Core.Database.Models
         public float Position_Y { get; set; }
         public float Position_Z { get; set; }
 
-        public int Dimension { get; set; } = 0;
+        public int Dimension { get; set; }
     }
 
     public partial class BankATMs

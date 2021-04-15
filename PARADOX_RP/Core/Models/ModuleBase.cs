@@ -26,15 +26,21 @@ namespace PARADOX_RP.Core.Module
 
         public IEnumerable<T> LoadDatabaseTable<T>(IQueryable queryable, Action<T>? action = null) where T : class
         {
-            List<T> items = new List<T>();
-            foreach (T item in queryable)
+            try
             {
-                if (item == null) continue;
-                action?.Invoke(item);
-                items.Add(item);
-            }
+                List<T> items = new List<T>();
+                foreach (T item in queryable)
+                {
+                    if (item == null) continue;
+                    action?.Invoke(item);
+                    items.Add(item);
+                }
 
-            return items;
+                return items;
+            }
+            catch (Exception e) { AltV.Net.Alt.Log(e.Message); }
+
+            return null;
         }
     }
 

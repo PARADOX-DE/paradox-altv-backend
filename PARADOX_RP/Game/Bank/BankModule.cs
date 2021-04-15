@@ -18,17 +18,14 @@ namespace PARADOX_RP.Game.Bank
 {
     class BankModule : ModuleBase<BankModule>
     {
-        private readonly Dictionary<int, BankATMs> _BankATMs;
+        private Dictionary<int, BankATMs> _BankATMs = new Dictionary<int, BankATMs>();
 
-        public BankModule(PXContext pxContext) : base("Bank")
+        public BankModule() : base("Bank")
         {
-            LoadDatabaseTable(pxContext.BankATMs, (BankATMs atm) =>
-            {
-                _BankATMs.Add(atm.Id, atm);
-            });
 
             AltAsync.OnClient<PXPlayer, int>("DepositMoney", DepositMoney);
             AltAsync.OnClient<PXPlayer, int>("WithdrawMoney", WithdrawMoney);
+
         }
 
         private readonly string _bankName = "N26 Bank";

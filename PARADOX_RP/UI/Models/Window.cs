@@ -28,13 +28,13 @@ namespace PARADOX_RP.UI.Models
             }
 
             player.CurrentWindow = WindowName;
-            player.Emit("Webview::ShowWindow", WindowName, windowObject);
+            player.EmitLocked("Webview::ShowWindow", WindowName, windowObject);
         }
 
         public void Hide(PXPlayer player)
         {
             player.CurrentWindow = "";
-            player.Emit("Webview::CloseWindow", WindowName);
+            player.EmitLocked("Webview::CloseWindow", WindowName);
         }
 
         public bool IsVisible(PXPlayer player)

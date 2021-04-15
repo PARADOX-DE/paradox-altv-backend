@@ -38,6 +38,7 @@ namespace PARADOX_RP.Game.Administration
             if (PermissionsModule.Instance.HasPermissions(player))
             {
                 player.DutyType = DutyTypes.ADMINDUTY;
+                await player.EmitAsync("UpdateAdminDuty");
             }
         }
 
@@ -48,6 +49,7 @@ namespace PARADOX_RP.Game.Administration
                 if (player.DutyType != DutyTypes.ADMINDUTY) return;
 
                 player.DutyType = DutyTypes.OFFDUTY;
+                await player.EmitAsync("UpdateAdminDuty");
             }
         }
 

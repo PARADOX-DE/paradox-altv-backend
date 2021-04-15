@@ -7,9 +7,9 @@ namespace PARADOX_RP.Game.Commands.Extensions
 {
     public static class ChatClientExtensions
     {
-        public static void SendChatMessage(this IPlayer player, string message)
+        public static void SendChatMessage(this IPlayer player, string title, string message, bool error = false)
         {
-            player.Emit("Chat::Send", null, message);
+            player.Emit("Chat::Receive", title, message, error);
         }
     }
 }

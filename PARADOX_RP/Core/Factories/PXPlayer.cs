@@ -126,8 +126,7 @@ namespace PARADOX_RP.Core.Factories
 
         public void SendNotification(string Title, string Message, NotificationTypes notificationType)
         {
-            this.SendChatMessage(Message);
-            Emit("sendNotification", Title, Message, Enum.GetName(typeof(NotificationTypes), notificationType));
+            Emit("PushNotification", Title, Message, 5000);
         }
 
         public void SetClothes(int component, int drawable, int texture)

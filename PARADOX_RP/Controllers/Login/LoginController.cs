@@ -139,7 +139,7 @@ namespace PARADOX_RP.Controllers.Login
             catch { Alt.Log("Failed to load player"); }
             return await Task.FromResult(LoadPlayerResponse.ABORT);
         }
-
+         
         public async Task SavePlayers()
         {
             foreach(PXPlayer player in Pools.Instance.Get<PXPlayer>(PoolType.PLAYER))

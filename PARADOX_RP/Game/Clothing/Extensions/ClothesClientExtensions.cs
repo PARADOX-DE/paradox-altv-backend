@@ -4,7 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace PARADOX_RP.Game.Clothes.Extensions
+namespace PARADOX_RP.Game.Clothing.Extensions
 {
     public static class ClothesClientExtensions
     {

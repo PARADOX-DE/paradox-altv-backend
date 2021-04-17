@@ -14,6 +14,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using PARADOX_RP.Game.Login.Extensions;
+using PARADOX_RP.Game.Arrival;
+using PARADOX_RP.Utils.Enums;
 
 namespace PARADOX_RP.Controllers.Login
 {
@@ -80,7 +82,8 @@ namespace PARADOX_RP.Controllers.Login
                 {
                     var playerClothesInsert = new PlayerClothes()
                     {
-                        PlayerId = dbPlayer.Id
+                        PlayerId = dbPlayer.Id,
+                        //Top = ArrivalModule.Instance._arrivalClothes.FirstOrDefault(c => c.Key == Gender.MALE && c.Value.Component == )
                     };
 
                     await px.PlayerClothes.AddAsync(playerClothesInsert);

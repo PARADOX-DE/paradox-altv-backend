@@ -1,12 +1,17 @@
 ﻿using AltV.Net.Async;
 using AltV.Net.Data;
+using PARADOX_RP.Core.Database;
+using PARADOX_RP.Core.Database.Models;
+using PARADOX_RP.Core.Extensions;
 using PARADOX_RP.Core.Factories;
 using PARADOX_RP.Core.Module;
 using PARADOX_RP.Game.Arrival.Extensions;
 using PARADOX_RP.Game.Login;
 using PARADOX_RP.Game.Login.Extensions;
+using PARADOX_RP.Utils.Enums;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
@@ -16,9 +21,15 @@ namespace PARADOX_RP.Game.Arrival
     class ArrivalModule : ModuleBase<ArrivalModule>
     {
 
-        public ArrivalModule() : base("Arrival")
+        public Dictionary<Gender, Clothes> _arrivalClothes = null;
+        public ArrivalModule(PXContext pxContext) : base("Arrival")
         {
+            _arrivalClothes = new Dictionary<Gender, Clothes>();
 
+            pxContext.Clothes.Where(c => c.Name.StartsWith("Einreise")).ForEach((arrivalCloth) =>
+            {
+                _arrivalClothes.Add((Gender)arrivalCloth.Gender, arrivalCloth);
+            });
         }
 
         private Position ArrivalPosition = new Position(0, 0, 72);

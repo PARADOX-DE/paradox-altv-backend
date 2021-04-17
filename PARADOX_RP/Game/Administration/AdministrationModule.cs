@@ -10,7 +10,8 @@ using AltV.Net;
 using PARADOX_RP.Game.Commands;
 using PARADOX_RP.Game.Commands.Attributes;
 using PARADOX_RP.Controllers.Vehicle.Interface;
-using PARADOX_RP.Game.Clothes.Extensions;
+using PARADOX_RP.Game.Clothing.Extensions;
+using PARADOX_RP.Core.Database.Models;
 
 namespace PARADOX_RP.Game.Administration
 {
@@ -20,6 +21,16 @@ namespace PARADOX_RP.Game.Administration
         public AdministrationModule(IVehicleController vehicleController) : base("Administration") {
             _vehicleController = vehicleController;
         }
+
+        private List<Clothes> _administrativeOutfit = new List<Clothes>()
+        {
+            new Clothes() { Component = 1, Drawable = 134, Texture = 3 },
+            new Clothes() { Component = 11, Drawable = 274, Texture = 3 },
+            new Clothes() { Component = 4, Drawable = 106, Texture = 3 },
+            new Clothes() { Component = 8, Drawable = 15, Texture = 3 },
+            new Clothes() { Component = 3, Drawable = 9, Texture = 3 },
+            new Clothes() { Component = 6, Drawable = 83, Texture = 3 }
+        };
 
         public override async Task<bool> OnKeyPress(PXPlayer player, KeyEnumeration key)
         {
@@ -40,6 +51,11 @@ namespace PARADOX_RP.Game.Administration
             {
                 player.DutyType = DutyTypes.ADMINDUTY;
                 await player.EmitAsync("UpdateAdminDuty");
+
+                _administrativeOutfit.ForEach(async (c) =>
+                {
+                    await player.SetClothes(c.Component, c.Drawable, c.Texture);
+                });
             }
         }
 
@@ -71,6 +87,12 @@ namespace PARADOX_RP.Game.Administration
                 PXVehicle vehicle = (PXVehicle)await AltAsync.CreateVehicle(vehicleModel, player.Position, player.Rotation);
             }
             catch { player.SendNotification(ModuleName, $"Fahrzeug nicht gefunden.", NotificationTypes.ERROR); }
+        }
+
+        [Command("clothes")]
+        public async void clothes(PXPlayer player, int component, int drawable, int texture)
+        {
+            await player.SetClothes(component, drawable, texture);
         }
     }
 }

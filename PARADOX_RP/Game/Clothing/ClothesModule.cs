@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace PARADOX_RP.Game.Clothes
+namespace PARADOX_RP.Game.Clothing
 {
     public class ClothesModule : ModuleBase<ClothesModule>
     {

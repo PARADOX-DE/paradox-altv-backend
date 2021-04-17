@@ -110,7 +110,6 @@ namespace PARADOX_RP.Controllers.Login
                 }
 
                 /**/
-
                 //player.Clothes = _clothingDictionary;
 
                 // InventoryModule.Instance.OpenInventory(player);

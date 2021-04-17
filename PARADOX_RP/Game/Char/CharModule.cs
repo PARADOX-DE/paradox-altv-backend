@@ -8,6 +8,7 @@ using PARADOX_RP.Core.Module;
 using PARADOX_RP.Game.Arrival;
 using PARADOX_RP.UI;
 using PARADOX_RP.UI.Windows;
+using PARADOX_RP.Utils.Enums;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -51,6 +52,26 @@ namespace PARADOX_RP.Game.Char
                         PlayerId = player.SqlId,
                         Customization = customizationString
                     };
+
+                    foreach(var arrivalClothing in ArrivalModule.Instance._arrivalClothes)
+                    {
+                        //TODO: do the same for females 
+                        if(arrivalClothing.Value.Gender == (int)Gender.MALE)
+                        {
+                            var clothingToInsert = new PlayerClothesWearing()
+                            {
+                                PlayerId = player.SqlId,
+                                ComponentVariation = arrivalClothing.Key,
+                                ClothingId = arrivalClothing.Value.Id
+                            };
+
+                            px.PlayerClothesWearing.Add(clothingToInsert);
+
+                            player.Clothes[arrivalClothing.Key] = arrivalClothing.Value;
+                            await player.SetClothes((int)arrivalClothing.Key, arrivalClothing.Value.Drawable, arrivalClothing.Value.Texture);
+                        }
+                    }
+
                     await px.PlayerCustomization.AddAsync(dbPlayerCustomization);
                     await px.SaveChangesAsync();
                 }

@@ -10,6 +10,7 @@ using PARADOX_RP.Game.Login;
 using PARADOX_RP.Game.MiniGames.Models;
 using PARADOX_RP.Game.Team;
 using PARADOX_RP.Models;
+using PARADOX_RP.Utils.Enums;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -94,7 +95,7 @@ namespace PARADOX_RP.Core.Factories
         public DimensionTypes DimensionType { get; set; }
         public DutyTypes DutyType { get; set; }
         public CancellationTokenSource CancellationToken { get; set; }
-        public Dictionary<int, Clothes> Clothes { get; set; }
+        public Dictionary<ComponentVariation, Clothes> Clothes { get; set; }
         public MinigameTypes Minigame { get; set; }
         internal PXPlayer(IntPtr nativePointer, ushort id) : base(nativePointer, id)
         {
@@ -109,7 +110,7 @@ namespace PARADOX_RP.Core.Factories
             DimensionType = DimensionTypes.WORLD;
             DutyType = DutyTypes.OFFDUTY;
             CancellationToken = null;
-            Clothes = new Dictionary<int, Clothes>();
+            Clothes = new Dictionary<ComponentVariation, Clothes>();
         }
 
         public async Task<bool> TakeMoney(int moneyAmount)

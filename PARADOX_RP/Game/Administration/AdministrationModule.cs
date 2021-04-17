@@ -12,13 +12,15 @@ using PARADOX_RP.Game.Commands.Attributes;
 using PARADOX_RP.Controllers.Vehicle.Interface;
 using PARADOX_RP.Game.Clothing.Extensions;
 using PARADOX_RP.Core.Database.Models;
+using AltV.Net.Data;
 
 namespace PARADOX_RP.Game.Administration
 {
     class AdministrationModule : ModuleBase<AdministrationModule>, ICommand
     {
         private IVehicleController _vehicleController;
-        public AdministrationModule(IVehicleController vehicleController) : base("Administration") {
+        public AdministrationModule(IVehicleController vehicleController) : base("Administration")
+        {
             _vehicleController = vehicleController;
         }
 
@@ -67,7 +69,7 @@ namespace PARADOX_RP.Game.Administration
 
                 player.DutyType = DutyTypes.OFFDUTY;
                 await player.EmitAsync("UpdateAdminDuty");
-                
+
                 player.AssignLoadedClothes();
             }
         }
@@ -93,6 +95,27 @@ namespace PARADOX_RP.Game.Administration
         public async void clothes(PXPlayer player, int component, int drawable, int texture)
         {
             await player.SetClothes(component, drawable, texture);
+        }
+
+        [Command("pos")]
+        public void pos(PXPlayer player, string positionName)
+        {
+            Position position;
+            Rotation rotation;
+
+            if (player.Vehicle != null)
+            {
+                position = player.Vehicle.Position;
+                rotation = player.Vehicle.Rotation;
+            }
+            else
+            {
+                position = player.Position;
+                rotation = player.Rotation;
+            }
+
+            player.SendNotification("Position", "Position an die Konsole gesendet.", NotificationTypes.SUCCESS);
+            Alt.Log($"{positionName} X: {position.X.ToString().Replace(",", ".")} Y: {position.Y.ToString().Replace(",", ".")} Z: {position.Z.ToString().Replace(",", ".")} | ROT: {rotation.Yaw.ToString().Replace(",", ".")}");
         }
     }
 }

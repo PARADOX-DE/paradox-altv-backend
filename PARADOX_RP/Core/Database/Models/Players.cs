@@ -11,7 +11,7 @@ namespace PARADOX_RP.Core.Database.Models
         public Players()
         {
             PlayerCustomization = new HashSet<PlayerCustomization>();
-            PlayerClothes = new HashSet<PlayerClothes>();
+            PlayerClothes = new HashSet<PlayerClothesWearing>();
             PlayerTeamData = new HashSet<PlayerTeamData>();
         }
 
@@ -27,15 +27,15 @@ namespace PARADOX_RP.Core.Database.Models
         public int TeamsId { get; set; }
 
         /* SPAWN POS */
-        public float Position_X { get; private set; }
-        public float Position_Y { get; private set; }
-        public float Position_Z { get; private set; }
+        public float Position_X { get; set; }
+        public float Position_Y { get; set; }
+        public float Position_Z { get; set; }
 
 
         public virtual SupportRankModel SupportRank { get; set; }
         public virtual Teams Team { get; set; }
         public virtual ICollection<PlayerCustomization> PlayerCustomization { get; set; }
-        public virtual ICollection<PlayerClothes> PlayerClothes { get; set; }
+        public virtual ICollection<PlayerClothesWearing> PlayerClothes { get; set; }
         public virtual ICollection<PlayerTeamData> PlayerTeamData { get; set; }
         public DateTime LastLogin { get; set; }
         public DateTime CreatedAt { get; set; }

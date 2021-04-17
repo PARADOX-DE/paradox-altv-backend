@@ -15,20 +15,10 @@ namespace PARADOX_RP.Game.Login.Extensions
     {
         public static async Task PreparePlayer(this PXPlayer client, Position pos)
         {
+            if (!await client.ExistsAsync()) return;
+            
             await client.SpawnAsync(pos);
-
-            await Task.Delay(2000);
-
-            if (await client.ExistsAsync())
-                WindowManager.Instance.Get<HUDWindow>().Show(client, new HUDWindowWriter(client.SqlId, client.Username, client.Money));
-
-            await Task.Delay(2000);
-
-            if (await client.ExistsAsync())
-            {
-                client?.SendChatMessage("PARADOX RP", "PreparePlayer", true);
-                client?.SendNotification("PARADOX RP", "PreparePlayer", NotificationTypes.SUCCESS);
-            }
+            WindowManager.Instance.Get<HUDWindow>().Show(client, new HUDWindowWriter(client.SqlId, client.Username, client.Money));
         }
     }
 }

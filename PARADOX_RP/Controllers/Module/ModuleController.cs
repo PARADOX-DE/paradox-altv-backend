@@ -9,13 +9,15 @@ using System.Threading.Tasks;
 using AltV.Net.Elements.Entities;
 using PARADOX_RP.Game.Misc.Progressbar.Extensions;
 using PARADOX_RP.Utils;
+using PARADOX_RP.Controllers.Interval.Interface;
+using PARADOX_RP.Controllers.Login.Interface;
 
 namespace PARADOX_RP.Controllers
 {
     class ModuleController : IModuleController
     {
         private readonly IEnumerable<IModuleBase> _modules;
-        public ModuleController(IEnumerable<IModuleBase> modules)
+        public ModuleController(IEnumerable<IModuleBase> modules, ILoginController loginController, IIntervalController intervalController)
         {
             _modules = modules;
 
@@ -26,6 +28,9 @@ namespace PARADOX_RP.Controllers
             AltAsync.OnColShape += OnColShape;
             AltAsync.OnPlayerEnterVehicle += OnPlayerEnterVehicle;
             AltAsync.OnPlayerLeaveVehicle += OnPlayerLeaveVehicle;
+
+            //TODO: add module base cons
+            intervalController.SetInterval(1000 * 15,  (s, e) => loginController.SavePlayers());
         }
 
 

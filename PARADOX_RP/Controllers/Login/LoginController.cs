@@ -16,6 +16,7 @@ using System.Threading.Tasks;
 using PARADOX_RP.Game.Login.Extensions;
 using PARADOX_RP.Game.Arrival;
 using PARADOX_RP.Utils.Enums;
+using PARADOX_RP.Game.Clothing;
 
 namespace PARADOX_RP.Controllers.Login
 {
@@ -64,7 +65,7 @@ namespace PARADOX_RP.Controllers.Login
                 {
                     Players dbPlayer = await px.Players
                                                         .Include(p => p.SupportRank).ThenInclude(p => p.PermissionAssignments).ThenInclude(p => p.Permission)
-                                                        .Include(p => p.PlayerClothes)
+                                                        .Include(p => p.PlayerClothes).ThenInclude(p => p.Clothing)
                                                         .Include(p => p.PlayerTeamData)
                                                         .Include(p => p.Team)
                                                         .Include(p => p.PlayerCustomization)
@@ -81,23 +82,6 @@ namespace PARADOX_RP.Controllers.Login
                     player.Team = dbPlayer.Team;
 
                     /* New-Player Generation */
-
-                    if (dbPlayer.PlayerClothes.FirstOrDefault() == null)
-                    {
-                        var playerClothesInsert = new PlayerClothes()
-                        {
-                            PlayerId = dbPlayer.Id,
-                            TopId = ArrivalModule.Instance.GetArrivalClothing(Gender.MALE, ComponentVariation.TOP).Id,
-                            LegsId = ArrivalModule.Instance.GetArrivalClothing(Gender.MALE, ComponentVariation.LEGS).Id,
-                        };
-
-                        await px.PlayerClothes.AddAsync(playerClothesInsert);
-                        await px.SaveChangesAsync();
-                    }
-                    else
-                    {
-                        Alt.Log("Kleidungs-Objekt existiert bereits.");
-                    }
 
                     if (dbPlayer.PlayerTeamData.FirstOrDefault() == null)
                     {
@@ -135,6 +119,17 @@ namespace PARADOX_RP.Controllers.Login
                         return await Task.FromResult(LoadPlayerResponse.NEW_PLAYER);
                     }
 
+                    await player?.EmitAsync("ApplyPlayerCharacter", dbPlayer.PlayerCustomization.FirstOrDefault().Customization);
+                    
+                    Dictionary<ComponentVariation, Clothes> wearingClothes = new Dictionary<ComponentVariation, Clothes>();
+                    foreach (PlayerClothesWearing playerClothesWearing in dbPlayer.PlayerClothes)
+                    {
+                        wearingClothes.Add(playerClothesWearing.ComponentVariation, playerClothesWearing.Clothing);
+                        await player.SetClothes((int)playerClothesWearing.ComponentVariation, playerClothesWearing.Clothing.Drawable, playerClothesWearing.Clothing.Texture);
+                    }
+
+                    player.Clothes = wearingClothes;
+
                     await player?.PreparePlayer(dbPlayer.Position);
 
                     return await Task.FromResult(LoadPlayerResponse.SUCCESS);
@@ -143,6 +138,27 @@ namespace PARADOX_RP.Controllers.Login
             }
             catch { Alt.Log("Failed to load player"); }
             return await Task.FromResult(LoadPlayerResponse.ABORT);
+        }
+
+        public async Task SavePlayers()
+        {
+            foreach(PXPlayer player in Pools.Instance.Get<PXPlayer>(PoolType.PLAYER))
+            {
+                await using(var px = new PXContext())
+                {
+                    Players dbPlayer = await px.Players.FindAsync(player.SqlId);
+                    if (dbPlayer == null) continue;
+
+                    if(player.Dimension == 0)
+                    {
+                        dbPlayer.Position_X = player.Position.X;
+                        dbPlayer.Position_Y = player.Position.Y;
+                        dbPlayer.Position_Z = player.Position.Z;
+                    }
+
+                    await px.SaveChangesAsync();
+                }
+            }
         }
     }
 }

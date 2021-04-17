@@ -21,18 +21,18 @@ namespace PARADOX_RP.Game.Arrival
     class ArrivalModule : ModuleBase<ArrivalModule>
     {
 
-        public Dictionary<int, Clothes> _arrivalClothes = null;
+        public Dictionary<ComponentVariation, Clothes> _arrivalClothes = null;
         public ArrivalModule(PXContext pxContext) : base("Arrival")
         {
-            _arrivalClothes = new Dictionary<int, Clothes>();
+            _arrivalClothes = new Dictionary<ComponentVariation, Clothes>();
 
             pxContext.Clothes.Where(c => c.Name.StartsWith("Einreise")).ForEach((arrivalCloth) =>
             {
-                _arrivalClothes.Add(arrivalCloth.Id, arrivalCloth);
+                _arrivalClothes.Add((ComponentVariation)arrivalCloth.Component, arrivalCloth);
             });
         }
 
-        private Position ArrivalPosition = new Position(0, 0, 72);
+        private Position ArrivalPosition = new Position(-1062.1978f, -2712.8044f, 0.78686523f);
 
         public async Task NewPlayerArrival(PXPlayer player)
         {

@@ -16,7 +16,7 @@ namespace PARADOX_RP.Game.Arrival.Extensions
 
         public static Task PlayArrivalCutscene(this PXPlayer player)
         {
-            return player.EmitAsync("Arrival::PlayCutscene");
+            return player.EmitAsync("StartArrivalCutscene");
         }
     }
 }

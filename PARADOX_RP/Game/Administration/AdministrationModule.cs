@@ -22,7 +22,7 @@ namespace PARADOX_RP.Game.Administration
             _vehicleController = vehicleController;
         }
 
-        private List<Clothes> _administrativeOutfit = new List<Clothes>()
+        private readonly List<Clothes> _administrativeOutfit = new List<Clothes>()
         {
             new Clothes() { Component = 1, Drawable = 134, Texture = 3 },
             new Clothes() { Component = 11, Drawable = 274, Texture = 3 },

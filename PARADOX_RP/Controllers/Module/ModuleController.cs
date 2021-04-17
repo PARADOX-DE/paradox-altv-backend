@@ -21,7 +21,7 @@ namespace PARADOX_RP.Controllers
 
             AltAsync.OnClient<PXPlayer>("Pressed_E", PressedE);
             AltAsync.OnClient<PXPlayer>("Pressed_F9", PressedF9);
-            AltAsync.OnPlayerConnect += OnPlayerConnect;
+            AltAsync.OnClient<PXPlayer>("PlayerReady", OnPlayerConnect);
             AltAsync.OnPlayerDisconnect += OnPlayerDisconnect;
             AltAsync.OnColShape += OnColShape;
             AltAsync.OnPlayerEnterVehicle += OnPlayerEnterVehicle;
@@ -61,9 +61,8 @@ namespace PARADOX_RP.Controllers
             });
         }
 
-        private async Task OnPlayerConnect(IPlayer player, string reason)
+        private async void OnPlayerConnect(PXPlayer pxPlayer)
         {
-            PXPlayer pxPlayer = (PXPlayer)player;
             await _modules.ForEach(e =>
             {
                 if (e.Enabled)

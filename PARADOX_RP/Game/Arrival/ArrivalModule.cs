@@ -36,13 +36,14 @@ namespace PARADOX_RP.Game.Arrival
 
         public async Task NewPlayerArrival(PXPlayer player)
         {
-            if (player.IsPlayerArrived()) return;
             await player.PlayArrivalCutscene();
             player.SendNotification("PARADOX RP", $"Du bist hiermit offiziell ein Bürger im Staate Los Santos.", NotificationTypes.SUCCESS);
 
             //todo: cutscene length
             await Task.Delay(25 * 1000);
-            await player?.PreparePlayer(ArrivalPosition);
+
+            if (await player?.ExistsAsync())
+                await player?.PreparePlayer(ArrivalPosition);
         }
 
         public Clothes GetArrivalClothing(Gender gender, ComponentVariation componentVariation)

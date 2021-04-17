@@ -71,6 +71,8 @@ namespace PARADOX_RP.Controllers.Login
                 player.SqlId = dbPlayer.Id;
                 player.Username = dbPlayer.Username;
                 player.SupportRank = dbPlayer.SupportRank;
+                player.Money = dbPlayer.Money;
+                player.BankMoney = dbPlayer.BankMoney;
                 player.Team = dbPlayer.Team;
 
                 /* New-Player Generation */
@@ -112,26 +114,21 @@ namespace PARADOX_RP.Controllers.Login
                 //player.Clothes = _clothingDictionary;
 
                 // InventoryModule.Instance.OpenInventory(player);
-                Alt.Log("Check Ban-State.");
-
+                
                 if (await ModerationModule.Instance.IsBanned(player))
                 {
                     await player.KickAsync("Du bist gebannt. Für weitere Informationen melde dich im Support!");
                     return await Task.FromResult(LoadPlayerResponse.ABORT);
                 }
-                Alt.Log("Add Pool.");
-
+                
                 Pools.Instance.Register(player.SqlId, player);
-                Alt.Log("Check PlayerCustomization.");
-
+                
                 if (dbPlayer.PlayerCustomization.FirstOrDefault() == null)
                 {
                     return await Task.FromResult(LoadPlayerResponse.NEW_PLAYER);
                 }
-                Alt.Log("prepare.");
 
                 await player?.PreparePlayer(dbPlayer.Position);
-                Alt.Log("success.");
 
                 return await Task.FromResult(LoadPlayerResponse.SUCCESS);
             }

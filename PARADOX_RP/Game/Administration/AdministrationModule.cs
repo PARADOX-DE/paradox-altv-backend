@@ -10,6 +10,7 @@ using AltV.Net;
 using PARADOX_RP.Game.Commands;
 using PARADOX_RP.Game.Commands.Attributes;
 using PARADOX_RP.Controllers.Vehicle.Interface;
+using PARADOX_RP.Game.Clothes.Extensions;
 
 namespace PARADOX_RP.Game.Administration
 {
@@ -50,6 +51,8 @@ namespace PARADOX_RP.Game.Administration
 
                 player.DutyType = DutyTypes.OFFDUTY;
                 await player.EmitAsync("UpdateAdminDuty");
+                
+                player.AssignLoadedClothes();
             }
         }
 

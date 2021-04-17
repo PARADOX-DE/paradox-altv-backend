@@ -1,4 +1,5 @@
 ﻿using AltV.Net;
+using AltV.Net.Async;
 using AltV.Net.Elements.Entities;
 using PARADOX_RP.Core.Database;
 using PARADOX_RP.Core.Database.Models;
@@ -46,7 +47,19 @@ namespace PARADOX_RP.Core.Factories
         public int SqlId { get; set; }
         public bool LoggedIn { get; set; }
         public string Username { get; set; }
-        public int Money { get; set; }
+
+        private int _money { get; set; }
+        public int Money
+        {
+            get => _money;
+            set
+            {
+                Emit("UpdateMoney", value);
+                _money = value;
+            }
+        }
+
+
         public int BankMoney { get; set; }
 
         private bool _injured;
@@ -129,10 +142,7 @@ namespace PARADOX_RP.Core.Factories
             Emit("PushNotification", Title, Message, 5000);
         }
 
-        public void SetClothes(int component, int drawable, int texture)
-        {
-            Emit("SetClothes", component, drawable, texture);
-        }
+        public Task SetClothes(int component, int drawable, int texture) => this.EmitAsync("SetClothes", component, drawable, texture);
 
         public void Freeze(bool state)
         {

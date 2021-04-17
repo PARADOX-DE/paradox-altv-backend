@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using PARADOX_RP.Controllers.Vehicle.Interface;
 using PARADOX_RP.Core.Database;
 using PARADOX_RP.Core.Database.Models;
+using PARADOX_RP.Core.Extensions;
 using PARADOX_RP.Core.Factories;
 using PARADOX_RP.Core.Module;
 using PARADOX_RP.UI;
@@ -32,6 +33,13 @@ namespace PARADOX_RP.Game.Garage
             AltAsync.OnClient<PXPlayer, int, int>("GarageParkOut", GarageParkOut);
         }
 
+        public override void OnPlayerConnect(PXPlayer player)
+        {
+            _garages.ForEach((g) =>
+            {
+                player.AddBlips(g.Value.Name, g.Value.Position, 524, 0, 1, true);
+            });
+        }
 
         public override async Task<bool> OnKeyPress(PXPlayer player, KeyEnumeration key)
         {
@@ -136,7 +144,9 @@ namespace PARADOX_RP.Game.Garage
                 dbVehicle.Position_X = dbGarage.Spawn_Position_X;
                 dbVehicle.Position_Y = dbGarage.Spawn_Position_Y;
                 dbVehicle.Position_Z = dbGarage.Spawn_Position_Z;
+
                 dbVehicle.Parked = false;
+                _garages[garageId].Vehicles.FirstOrDefault(i => i.Id == dbVehicle.Id).Parked = false;
 
                 await _vehicleController.CreateVehicle(dbVehicle);
                 await px.SaveChangesAsync();

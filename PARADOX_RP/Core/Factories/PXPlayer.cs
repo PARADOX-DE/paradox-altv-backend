@@ -1,5 +1,6 @@
 ﻿using AltV.Net;
 using AltV.Net.Async;
+using AltV.Net.Data;
 using AltV.Net.Elements.Entities;
 using PARADOX_RP.Core.Database;
 using PARADOX_RP.Core.Database.Models;
@@ -147,6 +148,11 @@ namespace PARADOX_RP.Core.Factories
         public void Freeze(bool state)
         {
             Emit("Freeze", state);
+        }
+
+        public void AddBlips(string label, Position pos, int number, int color, int scale, bool shortRange)
+        {
+            Emit("AddBlips", label, pos, number, color, scale, shortRange);
         }
 
         public bool IsValid()

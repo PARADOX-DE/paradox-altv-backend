@@ -32,6 +32,8 @@ namespace PARADOX_RP.UI.Windows
                 writer.Value(Id);
                 writer.Name("garageName");
                 writer.Value(GarageName);
+
+                writer.Name("vehicles");
                 writer.BeginArray();
                     foreach(Vehicles vehicle in Vehicles)
                     {

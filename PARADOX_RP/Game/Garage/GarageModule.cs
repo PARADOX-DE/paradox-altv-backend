@@ -42,7 +42,7 @@ namespace PARADOX_RP.Game.Garage
             Garages dbGarage = _garages.Values.FirstOrDefault(g => g.Position.Distance(player.Position) < 3);
             if (dbGarage == null) return await Task.FromResult(false);
 
-            WindowManager.Instance.Get<GarageWindow>().Show(player, new GarageWindowWriter(dbGarage.Id, dbGarage.Name, dbGarage.Vehicles));
+            WindowManager.Instance.Get<GarageWindow>().Show(player, new GarageWindowWriter(dbGarage.Id, dbGarage.Name, dbGarage.Vehicles.Where(p => p.Parked == true)));
             return await Task.FromResult(true);
         }
 
@@ -124,9 +124,20 @@ namespace PARADOX_RP.Game.Garage
                     return;
                 }
 
+
+                if (!dbVehicle.Parked)
+                {
+                    /*
+                     * VEHICLE ALREADY PARKED OUT
+                     */
+                    return;
+                }
+
                 dbVehicle.Position_X = dbGarage.Spawn_Position_X;
                 dbVehicle.Position_Y = dbGarage.Spawn_Position_Y;
                 dbVehicle.Position_Z = dbGarage.Spawn_Position_Z;
+                dbVehicle.Parked = false;
+
                 await _vehicleController.CreateVehicle(dbVehicle);
                 await px.SaveChangesAsync();
                 //TODO: change

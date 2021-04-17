@@ -46,9 +46,10 @@ namespace PARADOX_RP.Controllers.Login
                         return await Task.FromResult(true);
                     }
                 }
-                catch (BCrypt.Net.SaltParseException) {
-                    if (Configuration.Instance.DevMode) Alt.Log($"[DEVMODE] {dbPlayer.Username} threw SaltParseException."); 
-                    return await Task.FromResult(false); 
+                catch (BCrypt.Net.SaltParseException)
+                {
+                    if (Configuration.Instance.DevMode) Alt.Log($"[DEVMODE] {dbPlayer.Username} threw SaltParseException.");
+                    return await Task.FromResult(false);
                 }
             }
 
@@ -57,83 +58,91 @@ namespace PARADOX_RP.Controllers.Login
 
         public async Task<LoadPlayerResponse> LoadPlayer(PXPlayer player, string userName)
         {
-            await using (var px = new PXContext())
+            try
             {
-                Players dbPlayer = await px.Players
-                                                    .Include(p => p.SupportRank).ThenInclude(p => p.PermissionAssignments).ThenInclude(p => p.Permission)
-                                                    .Include(p => p.PlayerClothes)
-                                                    .Include(p => p.PlayerTeamData)
-                                                    .Include(p => p.Team)
-                                                    .Include(p => p.PlayerCustomization)
-                                                    .FirstOrDefaultAsync(p => p.Username == userName);
-
-                if (dbPlayer == null) return await Task.FromResult(LoadPlayerResponse.ABORT);
-                player.LoggedIn = true;
-
-                player.SqlId = dbPlayer.Id;
-                player.Username = dbPlayer.Username;
-                player.SupportRank = dbPlayer.SupportRank;
-                player.Money = dbPlayer.Money;
-                player.BankMoney = dbPlayer.BankMoney;
-                player.Team = dbPlayer.Team;
-
-                /* New-Player Generation */
-                if (dbPlayer.PlayerClothes.FirstOrDefault() == null)
+                await using (var px = new PXContext())
                 {
-                    var playerClothesInsert = new PlayerClothes()
+                    Players dbPlayer = await px.Players
+                                                        .Include(p => p.SupportRank).ThenInclude(p => p.PermissionAssignments).ThenInclude(p => p.Permission)
+                                                        .Include(p => p.PlayerClothes)
+                                                        .Include(p => p.PlayerTeamData)
+                                                        .Include(p => p.Team)
+                                                        .Include(p => p.PlayerCustomization)
+                                                        .FirstOrDefaultAsync(p => p.Username == userName);
+
+                    if (dbPlayer == null) return await Task.FromResult(LoadPlayerResponse.ABORT);
+                    player.LoggedIn = true;
+
+                    player.SqlId = dbPlayer.Id;
+                    player.Username = dbPlayer.Username;
+                    player.SupportRank = dbPlayer.SupportRank;
+                    player.Money = dbPlayer.Money;
+                    player.BankMoney = dbPlayer.BankMoney;
+                    player.Team = dbPlayer.Team;
+
+                    /* New-Player Generation */
+
+                    if (dbPlayer.PlayerClothes.FirstOrDefault() == null)
                     {
-                        PlayerId = dbPlayer.Id,
-                        //Top = ArrivalModule.Instance._arrivalClothes.FirstOrDefault(c => c.Key == Gender.MALE && c.Value.Component == )
-                    };
+                        var playerClothesInsert = new PlayerClothes()
+                        {
+                            PlayerId = dbPlayer.Id,
+                            TopId = ArrivalModule.Instance.GetArrivalClothing(Gender.MALE, ComponentVariation.TOP).Id,
+                            LegsId = ArrivalModule.Instance.GetArrivalClothing(Gender.MALE, ComponentVariation.LEGS).Id,
+                        };
 
-                    await px.PlayerClothes.AddAsync(playerClothesInsert);
-                    await px.SaveChangesAsync();
-                }
-                else
-                {
-                    Alt.Log("Kleidungs-Objekt existiert bereits.");
-                }
-
-                if (dbPlayer.PlayerTeamData.FirstOrDefault() == null)
-                {
-                    var playerTeamDataInsert = new PlayerTeamData()
+                        await px.PlayerClothes.AddAsync(playerClothesInsert);
+                        await px.SaveChangesAsync();
+                    }
+                    else
                     {
-                        PlayerId = dbPlayer.Id
-                    };
+                        Alt.Log("Kleidungs-Objekt existiert bereits.");
+                    }
 
-                    await px.PlayerTeamData.AddAsync(playerTeamDataInsert);
-                    await px.SaveChangesAsync();
+                    if (dbPlayer.PlayerTeamData.FirstOrDefault() == null)
+                    {
+                        var playerTeamDataInsert = new PlayerTeamData()
+                        {
+                            PlayerId = dbPlayer.Id
+                        };
 
-                    player.PlayerTeamData = playerTeamDataInsert;
+                        await px.PlayerTeamData.AddAsync(playerTeamDataInsert);
+                        await px.SaveChangesAsync();
+
+                        player.PlayerTeamData = playerTeamDataInsert;
+                    }
+                    else
+                    {
+                        Alt.Log("FraktionsData-Objekt existiert bereits.");
+                        player.PlayerTeamData = dbPlayer.PlayerTeamData.FirstOrDefault();
+                    }
+
+                    /**/
+                    //player.Clothes = _clothingDictionary;
+
+                    // InventoryModule.Instance.OpenInventory(player);
+
+                    if (await ModerationModule.Instance.IsBanned(player))
+                    {
+                        await player.KickAsync("Du bist gebannt. Für weitere Informationen melde dich im Support!");
+                        return await Task.FromResult(LoadPlayerResponse.ABORT);
+                    }
+
+                    Pools.Instance.Register(player.SqlId, player);
+
+                    if (dbPlayer.PlayerCustomization.FirstOrDefault() == null)
+                    {
+                        return await Task.FromResult(LoadPlayerResponse.NEW_PLAYER);
+                    }
+
+                    await player?.PreparePlayer(dbPlayer.Position);
+
+                    return await Task.FromResult(LoadPlayerResponse.SUCCESS);
+
                 }
-                else
-                {
-                    Alt.Log("FraktionsData-Objekt existiert bereits.");
-                    player.PlayerTeamData = dbPlayer.PlayerTeamData.FirstOrDefault();
-                }
-
-                /**/
-                //player.Clothes = _clothingDictionary;
-
-                // InventoryModule.Instance.OpenInventory(player);
-                
-                if (await ModerationModule.Instance.IsBanned(player))
-                {
-                    await player.KickAsync("Du bist gebannt. Für weitere Informationen melde dich im Support!");
-                    return await Task.FromResult(LoadPlayerResponse.ABORT);
-                }
-                
-                Pools.Instance.Register(player.SqlId, player);
-                
-                if (dbPlayer.PlayerCustomization.FirstOrDefault() == null)
-                {
-                    return await Task.FromResult(LoadPlayerResponse.NEW_PLAYER);
-                }
-
-                await player?.PreparePlayer(dbPlayer.Position);
-
-                return await Task.FromResult(LoadPlayerResponse.SUCCESS);
             }
+            catch { Alt.Log("Failed to load player"); }
+            return await Task.FromResult(LoadPlayerResponse.ABORT);
         }
     }
 }

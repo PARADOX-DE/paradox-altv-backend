@@ -12,10 +12,11 @@ namespace PARADOX_RP.Game.Clothing.Extensions
         {
             if (!client.IsValid()) return;
             if (client.Clothes == null) return;
-            
+
             client.Clothes.ForEach(async (cloth) =>
             {
-                await client.SetClothes(cloth.Value.Component, cloth.Value.Drawable, cloth.Value.Texture);
+                if (cloth.Value != null)
+                    await client.SetClothes(cloth.Value.Component, cloth.Value.Drawable, cloth.Value.Texture);
             });
         }
     }

@@ -21,14 +21,14 @@ namespace PARADOX_RP.Game.Arrival
     class ArrivalModule : ModuleBase<ArrivalModule>
     {
 
-        public Dictionary<Gender, Clothes> _arrivalClothes = null;
+        public Dictionary<int, Clothes> _arrivalClothes = null;
         public ArrivalModule(PXContext pxContext) : base("Arrival")
         {
-            _arrivalClothes = new Dictionary<Gender, Clothes>();
+            _arrivalClothes = new Dictionary<int, Clothes>();
 
             pxContext.Clothes.Where(c => c.Name.StartsWith("Einreise")).ForEach((arrivalCloth) =>
             {
-                _arrivalClothes.Add((Gender)arrivalCloth.Gender, arrivalCloth);
+                _arrivalClothes.Add(arrivalCloth.Id, arrivalCloth);
             });
         }
 
@@ -43,6 +43,11 @@ namespace PARADOX_RP.Game.Arrival
             //todo: cutscene length
             await Task.Delay(25 * 1000);
             await player?.PreparePlayer(ArrivalPosition);
+        }
+
+        public Clothes GetArrivalClothing(Gender gender, ComponentVariation componentVariation)
+        {
+            return Instance._arrivalClothes.FirstOrDefault(c => c.Value.Gender == (int)gender && c.Value.Component == (int)componentVariation).Value;
         }
     }
 }

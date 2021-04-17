@@ -48,6 +48,7 @@ namespace PARADOX_RP.Core.Database
         {
             string connection = $"Server=localhost;Database=altv-paradox_rp;Uid=root;Pwd=divan123;";
             optionsBuilder.UseMySql(connection, ServerVersion.AutoDetect(connection));
+            optionsBuilder.UseLoggerFactory(loggerFactory);
         }
     }
 }

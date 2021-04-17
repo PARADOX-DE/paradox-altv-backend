@@ -13,6 +13,17 @@ namespace PARADOX_RP.Core.Database.Models
         public int PlayerId { get; set; }
         public virtual Players Player { get; set; }
 
+        public int MaskId { get; set; }
+        public int TorsoId { get; set; }
+        public int LegsId { get; set; }
+        public int BagId { get; set; }
+        public int ShoeId { get; set; }
+        public int AccessoireId { get; set; }
+        public int UndershirtId { get; set; }
+        public int ArmorId { get; set; }
+        public int DecalId { get; set; }
+        public int TopId { get; set; }
+
         public virtual Clothes Mask { get; set; }
         public virtual Clothes Torso { get; set; }
         public virtual Clothes Legs { get; set; }

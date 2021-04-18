@@ -8,7 +8,7 @@ namespace PARADOX_RP.Controllers.Login.Interface
 {
     interface ILoginController
     {
-        Task<bool> CheckLogin(PXPlayer player, string password);
+        Task<bool> CheckLogin(PXPlayer player, string userName, string password);
         Task<LoadPlayerResponse> LoadPlayer(PXPlayer player, string userName);
 
         Task SavePlayers();

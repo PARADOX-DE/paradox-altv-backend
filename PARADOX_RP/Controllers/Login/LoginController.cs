@@ -29,11 +29,10 @@ namespace PARADOX_RP.Controllers.Login
 
     class LoginController : ILoginController
     {
-        public async Task<bool> CheckLogin(PXPlayer player, string hashedPassword)
+        public async Task<bool> CheckLogin(PXPlayer player, string userName, string hashedPassword)
         {
             await using (var px = new PXContext())
             {
-                string userName = await player.GetNameAsync();
                 Players dbPlayer = await px.Players
                                        .FirstOrDefaultAsync(p => p.Username == userName);
 

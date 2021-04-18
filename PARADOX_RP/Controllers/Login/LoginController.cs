@@ -124,7 +124,7 @@ namespace PARADOX_RP.Controllers.Login
                     Dictionary<ComponentVariation, Clothes> wearingClothes = new Dictionary<ComponentVariation, Clothes>();
                     foreach (PlayerClothesWearing playerClothesWearing in dbPlayer.PlayerClothes)
                     {
-                        wearingClothes.Add(playerClothesWearing.ComponentVariation, playerClothesWearing.Clothing);
+                        wearingClothes[playerClothesWearing.ComponentVariation] = playerClothesWearing.Clothing;
                         await player.SetClothes((int)playerClothesWearing.ComponentVariation, playerClothesWearing.Clothing.Drawable, playerClothesWearing.Clothing.Texture);
                     }
 
@@ -136,7 +136,7 @@ namespace PARADOX_RP.Controllers.Login
 
                 }
             }
-            catch { Alt.Log("Failed to load player"); }
+            catch (Exception e) { Alt.Log("Failed to load player | " + e.Message); }
             return await Task.FromResult(LoadPlayerResponse.ABORT);
         }
            

@@ -41,7 +41,7 @@ namespace PARADOX_RP.Game.Char
             if (!player.LoggedIn) return;
             if (!WindowManager.Instance.Get<CharCreationWindow>().IsVisible(player)) return;
             WindowManager.Instance.Get<CharCreationWindow>().Hide(player);
-            
+
             await using (var px = new PXContext())
             {
                 PlayerCustomization dbPlayerCustomization = await px.PlayerCustomization.Where(p => p.PlayerId == player.SqlId).FirstOrDefaultAsync();
@@ -53,20 +53,27 @@ namespace PARADOX_RP.Game.Char
                         Customization = customizationString
                     };
 
-                    foreach(var arrivalClothing in ArrivalModule.Instance._arrivalClothes)
+                    foreach (var arrivalClothing in ArrivalModule.Instance._arrivalClothes)
                     {
                         //TODO: do the same for females 
-                        if(arrivalClothing.Value.Gender == (int)Gender.MALE)
+                        if (arrivalClothing.Value.Gender == (int)Gender.MALE)
                         {
-                            var clothingToInsert = new PlayerClothesWearing()
+                            PlayerClothesWearing alreadyExistingCloth = await px.PlayerClothesWearing.FirstOrDefaultAsync(i => (i.PlayerId == player.SqlId) && i.ComponentVariation == arrivalClothing.Key);
+                            if (alreadyExistingCloth != null)
                             {
-                                PlayerId = player.SqlId,
-                                ComponentVariation = arrivalClothing.Key,
-                                ClothingId = arrivalClothing.Value.Id
-                            };
+                                alreadyExistingCloth.ClothingId = arrivalClothing.Value.Id;
+                            }
+                            else
+                            {
+                                var clothingToInsert = new PlayerClothesWearing()
+                                {
+                                    PlayerId = player.SqlId,
+                                    ComponentVariation = arrivalClothing.Key,
+                                    ClothingId = arrivalClothing.Value.Id
+                                };
 
-                            px.PlayerClothesWearing.Add(clothingToInsert);
-
+                                px.PlayerClothesWearing.Add(clothingToInsert);
+                            }
                             player.Clothes[arrivalClothing.Key] = arrivalClothing.Value;
                             await player.SetClothes((int)arrivalClothing.Key, arrivalClothing.Value.Drawable, arrivalClothing.Value.Texture);
                         }

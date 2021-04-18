@@ -39,7 +39,7 @@ namespace PARADOX_RP.Game.Login
             AltAsync.OnClient<PXPlayer, string, string>("RequestLoginResponse", RequestLoginResponse);
         }
 
-        private Position _loginPosition = new Position(0, 0, 72);
+        private Position _loginPosition = new Position(3486.3296f, 3712.8264f, 57.2843f);
 
         public override void OnModuleLoad()
         {

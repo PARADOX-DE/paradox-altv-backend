@@ -92,15 +92,6 @@ namespace PARADOX_RP.Game.Team
             player.Team.SendNotification($"{player.Username} ist nun Mitglied der Fraktion.", NotificationTypes.SUCCESS);
         }
 
-        public void RequestTeamMembers(PXPlayer player, bool onlineState)
-        {
-            if (!player.CanInteract()) return;
-
-            IEnumerable<PXPlayer> _factionMembers = null;
-            if (onlineState) _factionMembers = Pools.Instance.Get<PXPlayer>(PoolType.PLAYER).Where(p => p.Team.Id == player.Team.Id);
-
-            //response to client
-        }
 
         [Command("set_team")]
         public void SetTeam(PXPlayer player)

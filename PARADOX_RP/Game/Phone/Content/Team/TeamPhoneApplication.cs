@@ -28,7 +28,7 @@ namespace PARADOX_RP.Game.Phone.Content
             if (onlineState) _factionMembers = Pools.Instance.Get<PXPlayer>(PoolType.PLAYER).Where(p => p.Team.Id == player.Team.Id);
 
             //response to client
-
+            
         }
     }
 }

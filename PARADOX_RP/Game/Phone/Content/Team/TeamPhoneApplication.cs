@@ -1,4 +1,5 @@
 ﻿using AltV.Net.Async;
+using PARADOX_RP.Core.Database.Models;
 using PARADOX_RP.Core.Factories;
 using PARADOX_RP.Game.Phone.Interfaces;
 using PARADOX_RP.Game.Team;
@@ -26,9 +27,12 @@ namespace PARADOX_RP.Game.Phone.Content
 
             IEnumerable<PXPlayer> _factionMembers = null;
             if (onlineState) _factionMembers = Pools.Instance.Get<PXPlayer>(PoolType.PLAYER).Where(p => p.Team.Id == player.Team.Id);
+            else
+            {
 
-            //response to client
+            }
             
+
         }
     }
 }

@@ -18,12 +18,19 @@ namespace PARADOX_RP.Core.Database.Models
 
     public partial class Teams
     {
+        public Teams()
+        {
+            Players = new HashSet<Players>();
+        }
+
         public int Id { get; set; }
         public string TeamName { get; set; }
         public TeamTypes TeamType { get; set; }
         public float SpawnPosition_X { get; set; }
         public float SpawnPosition_Y { get; set; }
         public float SpawnPosition_Z { get; set; }
+
+        public virtual ICollection<Players> Players { get; set; }
 
         public void SendNotification(string Message, NotificationTypes notificationType)
         {

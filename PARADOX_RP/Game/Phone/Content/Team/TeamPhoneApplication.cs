@@ -22,7 +22,13 @@ namespace PARADOX_RP.Game.Phone.Content
             AltAsync.OnClient<PXPlayer, bool>("RequestTeamMembers", RequestTeamMembers);
         }
 
-         
+        public async Task<bool> IsPermitted(PXPlayer player)
+        {
+            if (player.Team.Id != (int)TeamEnumeration.CIVILIAN) // not in any team
+                return await Task.FromResult(true);
+
+            return await Task.FromResult(false);
+        }
 
         private void RequestTeamMembers(PXPlayer player, bool onlineState)
         {
@@ -34,7 +40,7 @@ namespace PARADOX_RP.Game.Phone.Content
             {
 
             }
-            
+
 
         }
     }

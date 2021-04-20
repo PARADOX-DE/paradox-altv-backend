@@ -22,6 +22,11 @@ using System.Text;
 
 namespace PARADOX_RP.Game.Team
 {
+    // after adding teams in db => add to enum
+    public enum TeamEnumeration
+    {  
+        CIVILIAN
+    }
 
     class TeamModule : ModuleBase<TeamModule>, ICommand
     {

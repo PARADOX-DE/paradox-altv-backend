@@ -1,4 +1,6 @@
-﻿using PARADOX_RP.Core.Module;
+﻿using PARADOX_RP.Core.Database;
+using PARADOX_RP.Core.Extensions;
+using PARADOX_RP.Core.Module;
 using PARADOX_RP.Game.Phone.Interfaces;
 using PARADOX_RP.Game.Phone.Models;
 using System;
@@ -9,10 +11,13 @@ namespace PARADOX_RP.Game.Phone
 {
     class PhoneModule : ModuleBase<PhoneModule>
     {
-        private Dictionary<int, PhoneApplicationModel> _phoneApplications;
-        public PhoneModule(IEnumerable<IPhoneApplication> phoneApplications) : base("Phone")
+        private IEnumerable<PhoneApplicationModel> _phoneApplications;
+        public PhoneModule(PXContext pxContext, IEnumerable<IPhoneApplication> phoneApplications) : base("Phone")
         {
-            _phoneApplications = new Dictionary<int, PhoneApplicationModel>();
+            _phoneApplications = LoadDatabaseTable<PhoneApplicationModel>(null, (p) =>
+            {
+                //todo: db table yk
+            });
         }
 
     }

@@ -5,6 +5,7 @@ using PARADOX_RP.Core.Factories;
 using PARADOX_RP.Game.Phone.Content.Team.Models;
 using PARADOX_RP.Game.Phone.Interfaces;
 using PARADOX_RP.Game.Team;
+using PARADOX_RP.UI;
 using PARADOX_RP.Utils;
 using System;
 using System.Collections.Generic;
@@ -49,8 +50,18 @@ namespace PARADOX_RP.Game.Phone.Content
                 });
             else
             {
-
+                player.Team.Players.ForEach((p) =>
+                {
+                    _factionMembers.Add(p.Id, new TeamPhoneApplicationPlayer()
+                    {
+                        Id = p.Id,
+                        Name = p.Username,
+                        LastLogin = DateTime.Now
+                    });
+                });
             }
+
+            //view callback responseTeamMembers
         }
     }
 }

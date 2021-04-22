@@ -86,13 +86,18 @@ namespace PARADOX_RP.Controllers.Login
                     {
                         var playerTeamDataInsert = new PlayerTeamData()
                         {
-                            PlayerId = dbPlayer.Id
+                            PlayerId = dbPlayer.Id,
+                            Joined = DateTime.Now,
+                            Rank = 0,
+                            Payday = 0
                         };
 
                         await px.PlayerTeamData.AddAsync(playerTeamDataInsert);
                         await px.SaveChangesAsync();
 
                         player.PlayerTeamData = playerTeamDataInsert;
+
+                        Alt.Log("FraktionsData-Objekt generiert.");
                     }
                     else
                     {
@@ -129,7 +134,7 @@ namespace PARADOX_RP.Controllers.Login
 
                     player.Clothes = wearingClothes;
 
-                    await player?.PreparePlayer(dbPlayer.Position);
+                    await player.PreparePlayer(dbPlayer.Position);
 
                     return await Task.FromResult(LoadPlayerResponse.SUCCESS);
 

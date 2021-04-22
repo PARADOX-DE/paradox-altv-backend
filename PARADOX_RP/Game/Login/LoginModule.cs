@@ -51,6 +51,7 @@ namespace PARADOX_RP.Game.Login
             player.Model = (uint)PedModel.FreemodeMale01;
             await player.SpawnAsync(_loginPosition);
 
+            //BCrypt.Net.BCrypt.has
             /*if (Configuration.Instance.DevMode)
             {
                 LoadPlayerResponse loadPlayerResponse = await _loginHandler.LoadPlayer(player, player.Name);
@@ -76,7 +77,7 @@ namespace PARADOX_RP.Game.Login
 
             if (await _loginHandler.CheckLogin(player, username, hashedPassword))
             {
-                LoadPlayerResponse loadPlayerResponse = await _loginHandler.LoadPlayer(player, player.Name);
+                LoadPlayerResponse loadPlayerResponse = await _loginHandler.LoadPlayer(player, username);
                 if (loadPlayerResponse == LoadPlayerResponse.ABORT) return;
                 else
                 {

@@ -92,7 +92,7 @@ namespace PARADOX_RP.Game.Administration
         }
 
         [Command("clothes")]
-        public async void clothes(PXPlayer player, int component, int drawable, int texture)
+        public async void cmd_Clothes(PXPlayer player, int component, int drawable, int texture)
         {
             await player.SetClothes(component, drawable, texture);
         }

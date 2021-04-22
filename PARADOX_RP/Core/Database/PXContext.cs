@@ -19,6 +19,7 @@ namespace PARADOX_RP.Core.Database
         public DbSet<PlayerCustomization> PlayerCustomization { get; set; }
         public DbSet<PlayerClothesWearing> PlayerClothesWearing { get; set; }
         public DbSet<PlayerTeamData> PlayerTeamData { get; set; }
+        public DbSet<PlayerPhoneSettings> PlayerPhoneSettings { get; set; }
         public DbSet<SupportRankModel> SupportRanks { get; set; }
         public DbSet<PermissionModel> Permissions { get; set; }
         public DbSet<PermissionAssignmentModel> PermissionAssignments { get; set; }

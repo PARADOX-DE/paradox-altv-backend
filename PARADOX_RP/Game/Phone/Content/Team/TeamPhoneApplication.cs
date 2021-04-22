@@ -1,6 +1,8 @@
 ﻿using AltV.Net.Async;
 using PARADOX_RP.Core.Database.Models;
+using PARADOX_RP.Core.Extensions;
 using PARADOX_RP.Core.Factories;
+using PARADOX_RP.Game.Phone.Content.Team.Models;
 using PARADOX_RP.Game.Phone.Interfaces;
 using PARADOX_RP.Game.Team;
 using PARADOX_RP.Utils;
@@ -34,8 +36,17 @@ namespace PARADOX_RP.Game.Phone.Content
         {
             if (!player.CanInteract()) return;
 
-            IEnumerable<PXPlayer> _factionMembers = null;
-            if (onlineState) _factionMembers = Pools.Instance.Get<PXPlayer>(PoolType.PLAYER).Where(p => p.Team.Id == player.Team.Id);
+            Dictionary<int, TeamPhoneApplicationPlayer> _factionMembers = new Dictionary<int, TeamPhoneApplicationPlayer>();
+            if (onlineState)
+                Pools.Instance.Get<PXPlayer>(PoolType.PLAYER).Where(p => p.Team.Id == player.Team.Id).ForEach((p) =>
+                {
+                    _factionMembers.Add(p.Id, new TeamPhoneApplicationPlayer()
+                    {
+                        Id = p.Id,
+                        Name = p.Username,
+                        LastLogin = DateTime.Now
+                    });
+                });
             else
             {
 

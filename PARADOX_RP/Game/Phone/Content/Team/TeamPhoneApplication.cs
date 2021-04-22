@@ -51,8 +51,6 @@ namespace PARADOX_RP.Game.Phone.Content
             {
 
             }
-
-
         }
     }
 }

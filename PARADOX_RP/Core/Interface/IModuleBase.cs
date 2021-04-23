@@ -23,5 +23,6 @@ namespace PARADOX_RP.Core.Module
         Task OnPlayerEnterVehicle(IVehicle vehicle, IPlayer player, byte seat);
         Task OnPlayerLeaveVehicle(IVehicle vehicle, IPlayer player, byte seat);
 
+        void ListenEvent(string eventName, Action action);
     }
 }

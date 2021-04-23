@@ -1,4 +1,6 @@
-﻿using AltV.Net.Elements.Entities;
+﻿using AltV.Net.Async;
+using AltV.Net.Elements.Entities;
+using PARADOX_RP.Controllers.Event;
 using PARADOX_RP.Core.Factories;
 using PARADOX_RP.Utils.Enums;
 using System;
@@ -23,6 +25,13 @@ namespace PARADOX_RP.Core.Module
         public virtual Task<bool> OnColShapeEntered(PXPlayer player, IColShape col) { return Task.FromResult(false); }
         public virtual Task OnPlayerEnterVehicle(IVehicle vehicle, IPlayer player, byte seat) { return Task.CompletedTask; }
         public virtual Task OnPlayerLeaveVehicle(IVehicle vehicle, IPlayer player, byte seat) { return Task.CompletedTask; }
+
+        public void ListenEvent(string eventName, Action action)
+        {
+            AltAsync.OnClient(eventName, action);
+
+            EventController.Instance.WhitelistEvent(eventName);
+        }
 
         public IEnumerable<T> LoadDatabaseTable<T>(IQueryable queryable, Action<T>? action = null) where T : class
         {

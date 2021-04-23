@@ -1,6 +1,8 @@
-﻿using AltV.Net.Async;
+﻿using AltV.Net;
+using AltV.Net.Async;
 using Autofac;
 using Microsoft.EntityFrameworkCore;
+using PARADOX_RP.Core.Attributes;
 using PARADOX_RP.Core.Database;
 using PARADOX_RP.Core.Interface;
 using PARADOX_RP.Core.Module;
@@ -20,6 +22,7 @@ namespace PARADOX_RP.Core.Factories
         private IContainer _container;
         private ILifetimeScope _scope;
 
+        private List<Type> _eventTypes = new List<Type>();
         private List<Type> _handlerTypes = new List<Type>();
         private List<Type> _moduleTypes = new List<Type>();
         private List<Type> _itemTypes = new List<Type>();
@@ -34,6 +37,14 @@ namespace PARADOX_RP.Core.Factories
 
             builder.RegisterType<Application>().As<IApplication>();
             builder.RegisterType<WindowManager>().As<IWindowManager>();
+
+            LogStartup("Register events");
+            foreach (var eventTarget in _eventTypes)
+            {
+                builder.RegisterTypes(eventTarget)
+                .AsImplementedInterfaces()
+                .SingleInstance();
+            }
 
             LogStartup("Register handlers");
             foreach (var handler in _handlerTypes)
@@ -121,7 +132,18 @@ namespace PARADOX_RP.Core.Factories
                 {
                     _windowTypes.Add(type);
                 }
+                else if(IsEventType(type))
+                {
+                    _eventTypes.Add(type);
+                    AltAsync.Log(type.FullName + " fullname blyat");
+                }
             }
+        }
+
+        private bool IsEventType(Type type)
+        {
+            Alt.Log(type.GetCustomAttribute<PXClientEventAttribute>() != null ? "!=null" : "==null");
+            return type.GetCustomAttribute<PXClientEventAttribute>() != null;
         }
 
         private bool IsHandlerType(Type type)

@@ -25,6 +25,7 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using PARADOX_RP.Core.Attributes;
 
 namespace PARADOX_RP.Game.Login
 {
@@ -36,7 +37,8 @@ namespace PARADOX_RP.Game.Login
         {
             _loginHandler = loginHandler;
 
-            AltAsync.OnClient<PXPlayer, string, string>("RequestLoginResponse", RequestLoginResponse);
+            ListenEvent("RequestLoginResponse", RequestLoginResponse);
+            //AltAsync.OnClient<PXPlayer, string, string>("RequestLoginResponse", RequestLoginResponse);
         }
 
         private Position _loginPosition = new Position(3486.3296f, 3712.8264f, 57.2843f);

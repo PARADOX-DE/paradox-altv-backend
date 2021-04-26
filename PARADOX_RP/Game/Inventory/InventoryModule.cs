@@ -8,6 +8,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using PARADOX_RP.Controllers.Event.Interface;
 
 namespace PARADOX_RP.Game.Inventory
 {
@@ -26,6 +27,7 @@ namespace PARADOX_RP.Game.Inventory
         public InventoryModule(IInventoryController inventoryHandler) : base("Inventory")
         {
             _inventoryHandler = inventoryHandler;
+
         }
 
         public InventoryTypes GetInventoryType(Position position, DimensionTypes dimensionType)

@@ -1,4 +1,5 @@
-﻿using PARADOX_RP.Core.Factories;
+﻿using PARADOX_RP.Controllers.Event.Interface;
+using PARADOX_RP.Core.Factories;
 using PARADOX_RP.Core.Module;
 using System;
 using System.Collections.Generic;
@@ -8,10 +9,13 @@ namespace PARADOX_RP.Game.Interaction
 {
     class PlayerInteractionModule : ModuleBase<PlayerInteractionModule>
     {
-        public PlayerInteractionModule() : base("PlayerInteraction")
+        private IEventController _eventController;
+    
+        public PlayerInteractionModule(IEventController eventController) : base("PlayerInteraction")
         {
+            _eventController = eventController;
 
-            
+            _eventController.OnClient<PXPlayer, PXPlayer>("CuffPlayer", CuffPlayer);
         }
 
         public void CuffPlayer(PXPlayer player, PXPlayer victim)

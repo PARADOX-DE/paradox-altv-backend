@@ -25,20 +25,21 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-using PARADOX_RP.Core.Attributes;
+using PARADOX_RP.Controllers.Event.Interface;
 
 namespace PARADOX_RP.Game.Login
 {
     class LoginModule : ModuleBase<LoginModule>
     {
+        private readonly IEventController _eventController;
         private readonly ILoginController _loginHandler;
 
-        public LoginModule(ILoginController loginHandler) : base("Login")
+        public LoginModule(IEventController eventController, ILoginController loginHandler) : base("Login")
         {
             _loginHandler = loginHandler;
+            _eventController = eventController;
 
-            ListenEvent("RequestLoginResponse", RequestLoginResponse);
-            //AltAsync.OnClient<PXPlayer, string, string>("RequestLoginResponse", RequestLoginResponse);
+            _eventController.OnClient<PXPlayer, string, string>("RequestLoginResponse", RequestLoginResponse);
         }
 
         private Position _loginPosition = new Position(3486.3296f, 3712.8264f, 57.2843f);

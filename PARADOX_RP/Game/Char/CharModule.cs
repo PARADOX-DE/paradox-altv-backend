@@ -1,6 +1,7 @@
 ﻿using AltV.Net.Async;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
+using PARADOX_RP.Controllers.Event.Interface;
 using PARADOX_RP.Core.Database;
 using PARADOX_RP.Core.Database.Models;
 using PARADOX_RP.Core.Factories;
@@ -25,10 +26,10 @@ namespace PARADOX_RP.Game.Char
     class CharModule : ModuleBase<CharModule>
     {
 
-        public CharModule() : base("Char")
+        public CharModule(IEventController eventController) : base("Char")
         {
 
-            AltAsync.OnClient<PXPlayer, string, string, string, string>("SavePlayerCharacter", SavePlayerCharacter);
+            eventController.OnClient<PXPlayer, string, string, string, string>("SavePlayerCharacter", SavePlayerCharacter);
         }
 
         public void CreatePlayerCharacter(PXPlayer player, CharCreationType charCreationType)

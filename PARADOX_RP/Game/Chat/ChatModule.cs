@@ -20,20 +20,21 @@ using System.Runtime.InteropServices;
 using AltV.Net.Elements.Args;
 using AltV.Net.FunctionParser;
 using PARADOX_RP.Game.Commands.Attributes;
+using PARADOX_RP.Controllers.Event.Interface;
 
 namespace PARADOX_RP.Game.Commands
 {
     class ChatModule : ModuleBase<ChatModule>
     {
 
-        public ChatModule(IEnumerable<ICommand> commands) : base("Chat")
+        public ChatModule(IEnumerable<ICommand> commands, IEventController eventController) : base("Chat")
         {
             foreach (var commandModule in commands)
             {
                 RegisterEvents(commandModule);
             }
 
-            Alt.OnClient<IPlayer, string>("chat:message", OnChatMessage, OnChatMessageParser);
+            eventController.OnClient<IPlayer, string>("chat:message", OnChatMessage, OnChatMessageParser);
         }
 
         private delegate void CommandDelegate(IPlayer player, string[] arguments);

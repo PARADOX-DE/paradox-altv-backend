@@ -1,5 +1,6 @@
 ﻿using AltV.Net;
 using AltV.Net.Async;
+using AltV.Net.FunctionParser;
 using PARADOX_RP.Controllers.Event.Interface;
 using PARADOX_RP.Core.Extensions;
 using PARADOX_RP.Core.Factories;
@@ -48,6 +49,12 @@ namespace PARADOX_RP.Controllers.Event
         public void OnClient<T1, T2>(string eventName, Action<T1, T2> action)
         {
             AltAsync.OnClient(eventName, action);
+            WhitelistEvent(eventName);
+        }
+
+        public void OnClient<T1, T2>(string eventName, Action<T1, T2> action, ClientEventParser<Action<T1, T2>> parser)
+        {
+            Alt.OnClient(eventName, action, parser);
             WhitelistEvent(eventName);
         }
 

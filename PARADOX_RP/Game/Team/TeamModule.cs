@@ -19,6 +19,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using PARADOX_RP.Controllers.Event.Interface;
 
 namespace PARADOX_RP.Game.Team
 {
@@ -31,9 +32,10 @@ namespace PARADOX_RP.Game.Team
     class TeamModule : ModuleBase<TeamModule>, ICommand
     {
         public Dictionary<int, Teams> TeamList;
+        private readonly IEventController _eventController;
         private readonly ITeamController _teamHandler;
 
-        public TeamModule(ITeamController teamHandler) : base("Team")
+        public TeamModule(IEventController eventController, ITeamController teamHandler) : base("Team")
         {
             TeamList = new Dictionary<int, Teams>();
 
@@ -45,10 +47,10 @@ namespace PARADOX_RP.Game.Team
             //        _teamHandler.LoadTeam(team);
             //    }
             //}
-
+            _eventController = eventController;
             _teamHandler = teamHandler;
 
-            AltAsync.OnClient<PXPlayer>("TeamInviteAccept", TeamInviteAccept);
+            _eventController.OnClient<PXPlayer>("TeamInviteAccept", TeamInviteAccept);
         }
 
         public void InviteTeamMember(PXPlayer player, string inviteString)

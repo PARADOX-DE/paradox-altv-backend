@@ -11,19 +11,21 @@ using PARADOX_RP.Game.Misc.Progressbar.Extensions;
 using PARADOX_RP.Utils;
 using PARADOX_RP.Controllers.Interval.Interface;
 using PARADOX_RP.Controllers.Login.Interface;
+using PARADOX_RP.Controllers.Event.Interface;
 
 namespace PARADOX_RP.Controllers
 {
     class ModuleController : IModuleController
     {
         private readonly IEnumerable<IModuleBase> _modules;
-        public ModuleController(IEnumerable<IModuleBase> modules, ILoginController loginController, IIntervalController intervalController)
+        public ModuleController(IEnumerable<IModuleBase> modules, IEventController eventController, ILoginController loginController, IIntervalController intervalController)
         {
             _modules = modules;
 
-            AltAsync.OnClient<PXPlayer>("Pressed_E", PressedE);
-            AltAsync.OnClient<PXPlayer>("Pressed_F9", PressedF9);
-            AltAsync.OnClient<PXPlayer>("PlayerReady", OnPlayerConnect);
+            eventController.OnClient<PXPlayer>("Pressed_E", PressedE);
+            eventController.OnClient<PXPlayer>("Pressed_F9", PressedF9);
+            eventController.OnClient<PXPlayer>("PlayerReady", OnPlayerConnect);
+
             AltAsync.OnPlayerDisconnect += OnPlayerDisconnect;
             AltAsync.OnColShape += OnColShape;
             AltAsync.OnPlayerEnterVehicle += OnPlayerEnterVehicle;

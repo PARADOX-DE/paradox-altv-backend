@@ -1,4 +1,5 @@
 ﻿using AltV.Net.Async;
+using PARADOX_RP.Controllers.Event.Interface;
 using PARADOX_RP.Core.Database.Models;
 using PARADOX_RP.Core.Extensions;
 using PARADOX_RP.Core.Factories;
@@ -19,10 +20,9 @@ namespace PARADOX_RP.Game.Phone.Content
     {
         public string ApplicationName { get => "TeamListApp"; }
 
-        public TeamPhoneApplication()
+        public TeamPhoneApplication(IEventController eventController)
         {
-
-            AltAsync.OnClient<PXPlayer, bool>("RequestTeamMembers", RequestTeamMembers);
+            eventController.OnClient<PXPlayer, bool>("RequestTeamMembers", RequestTeamMembers);
         }
 
         public async Task<bool> IsPermitted(PXPlayer player)

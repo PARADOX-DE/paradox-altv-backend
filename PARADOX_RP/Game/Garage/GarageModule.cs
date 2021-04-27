@@ -1,5 +1,6 @@
 ﻿using AltV.Net.Async;
 using Microsoft.EntityFrameworkCore;
+using PARADOX_RP.Controllers.Event.Interface;
 using PARADOX_RP.Controllers.Vehicle.Interface;
 using PARADOX_RP.Core.Database;
 using PARADOX_RP.Core.Database.Models;
@@ -20,17 +21,20 @@ namespace PARADOX_RP.Game.Garage
 {
     class GarageModule : ModuleBase<GarageModule>
     {
+        private readonly IEventController _eventController;
         private readonly IVehicleController _vehicleController;
         private Dictionary<int, Garages> _garages = new Dictionary<int, Garages>();
-        public GarageModule(PXContext pxContext, IVehicleController vehicleController) : base("Garage")
+        public GarageModule(PXContext pxContext, IEventController eventController, IVehicleController vehicleController) : base("Garage")
         {
+            _eventController = eventController;
             _vehicleController = vehicleController;
+
             LoadDatabaseTable(pxContext.Garages.Include(v => v.Vehicles), (Garages garage) =>
             {
                 _garages.Add(garage.Id, garage);
             });
 
-            AltAsync.OnClient<PXPlayer, int, int>("GarageParkOut", GarageParkOut);
+            _eventController.OnClient<PXPlayer, int, int>("GarageParkOut", GarageParkOut);
         }
 
         public override void OnPlayerConnect(PXPlayer player)

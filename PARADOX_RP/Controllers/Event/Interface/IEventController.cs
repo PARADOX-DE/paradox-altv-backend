@@ -1,4 +1,5 @@
-﻿using PARADOX_RP.Core.Factories;
+﻿using AltV.Net.FunctionParser;
+using PARADOX_RP.Core.Factories;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -15,6 +16,7 @@ namespace PARADOX_RP.Controllers.Event.Interface
         void OnClient<T1>(string eventName, Action<T1> action);
 
         void OnClient<T1, T2>(string eventName, Action<T1, T2> action);
+        void OnClient<T1, T2>(string eventName, Action<T1, T2> action, ClientEventParser<Action<T1, T2>> parser);
 
         void OnClient<T1, T2, T3>(string eventName, Action<T1, T2, T3> action);
 

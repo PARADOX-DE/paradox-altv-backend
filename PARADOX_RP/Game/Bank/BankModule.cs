@@ -1,6 +1,7 @@
 ﻿using AltV.Net.Async;
 using EntityStreamer;
 using Newtonsoft.Json;
+using PARADOX_RP.Controllers.Event.Interface;
 using PARADOX_RP.Core.Database;
 using PARADOX_RP.Core.Database.Models;
 using PARADOX_RP.Core.Extensions;
@@ -21,15 +22,15 @@ namespace PARADOX_RP.Game.Bank
     {
         private Dictionary<int, BankATMs> _BankATMs = new Dictionary<int, BankATMs>();
 
-        public BankModule(PXContext px) : base("Bank")
+        public BankModule(PXContext px, IEventController eventController) : base("Bank")
         {
             px.BankATMs.ForEach(b =>
             {
                 _BankATMs.Add(b.Id, b);
             });
 
-            AltAsync.OnClient<PXPlayer, int>("DepositMoney", DepositMoney);
-            AltAsync.OnClient<PXPlayer, int>("WithdrawMoney", WithdrawMoney);
+            eventController.OnClient<PXPlayer, int>("DepositMoney", DepositMoney);
+            eventController.OnClient<PXPlayer, int>("WithdrawMoney", WithdrawMoney);
 
         }
 

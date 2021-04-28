@@ -62,7 +62,7 @@ namespace PARADOX_RP.Game.Administration
                     await player.SetClothes(c.Component, c.Drawable, c.Texture);
                 });
             }
-        }  
+        }
 
         public async Task LeaveAduty(PXPlayer player)
         {

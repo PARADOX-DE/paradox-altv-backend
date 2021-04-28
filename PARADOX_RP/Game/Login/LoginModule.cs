@@ -26,6 +26,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using PARADOX_RP.Controllers.Event.Interface;
+using PARADOX_RP.Game.Login.Extensions;
 
 namespace PARADOX_RP.Game.Login
 {
@@ -53,7 +54,7 @@ namespace PARADOX_RP.Game.Login
         {
             player.Model = (uint)PedModel.FreemodeMale01;
             await player.SpawnAsync(_loginPosition);
-
+            
             //BCrypt.Net.BCrypt.has
             /*if (Configuration.Instance.DevMode)
             {

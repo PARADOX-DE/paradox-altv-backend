@@ -31,6 +31,8 @@ namespace PARADOX_RP.Core.Module
         {
             try
             {
+                if (queryable == null) return null;
+
                 List<T> items = new List<T>();
                 foreach (T item in queryable)
                 {

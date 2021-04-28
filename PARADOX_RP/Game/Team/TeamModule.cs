@@ -82,7 +82,7 @@ namespace PARADOX_RP.Game.Team
                 Team = player.Team
             };
 
-            WindowManager.Instance.Get<ConfirmationWindow>().Show(player, JsonConvert.SerializeObject(new ConfirmationWindowObject(player.Team.TeamName, $"{player.Username} hat dich eingeladen, um der Fraktion {player.Team.TeamName} beizutreten.", nameof(TeamInviteAccept), "TeamInviteDecline")));
+            WindowManager.Instance.Get<ConfirmationWindow>().Show(player, new ConfirmationWindowWriter(player.Team.TeamName, $"{player.Username} hat dich eingeladen, um der Fraktion {player.Team.TeamName} beizutreten.", nameof(TeamInviteAccept), "TeamInviteDecline"));
         }
 
         public async void TeamInviteAccept(PXPlayer player)

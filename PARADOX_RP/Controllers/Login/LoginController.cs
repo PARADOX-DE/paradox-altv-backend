@@ -133,7 +133,6 @@ namespace PARADOX_RP.Controllers.Login
                     }
 
                     player.Clothes = wearingClothes;
-
                     await player.PreparePlayer(dbPlayer.Position);
 
                     return await Task.FromResult(LoadPlayerResponse.SUCCESS);

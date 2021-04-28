@@ -2,7 +2,6 @@
 using AltV.Net.Async;
 using Autofac;
 using Microsoft.EntityFrameworkCore;
-using PARADOX_RP.Core.Attributes;
 using PARADOX_RP.Core.Database;
 using PARADOX_RP.Core.Interface;
 using PARADOX_RP.Core.Module;
@@ -132,19 +131,9 @@ namespace PARADOX_RP.Core.Factories
                 {
                     _windowTypes.Add(type);
                 }
-                else if(IsEventType(type))
-                {
-                    _eventTypes.Add(type);
-                    AltAsync.Log(type.FullName + " fullname blyat");
-                }
             }
         }
 
-        private bool IsEventType(Type type)
-        {
-            Alt.Log(type.GetCustomAttribute<PXClientEventAttribute>() != null ? "!=null" : "==null");
-            return type.GetCustomAttribute<PXClientEventAttribute>() != null;
-        }
 
         private bool IsHandlerType(Type type)
         {

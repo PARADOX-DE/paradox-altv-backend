@@ -20,7 +20,7 @@ namespace PARADOX_RP.UI.Models
             this.Enabled = Enabled;
         }
 
-        public void Show(PXPlayer player, params object[] windowObject)
+        public void Show(PXPlayer player, object windowObject = null)
         {
             if (Configuration.Instance.DevMode)
             {
@@ -33,6 +33,11 @@ namespace PARADOX_RP.UI.Models
 
         public void Hide(PXPlayer player)
         {
+            if (Configuration.Instance.DevMode)
+            {
+                AltAsync.Log($"[{WindowName}] Hide {player.Name}");
+            }
+
             player.CurrentWindow = "";
             player.EmitLocked("Webview::CloseWindow", WindowName);
         }

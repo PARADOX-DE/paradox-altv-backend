@@ -13,6 +13,9 @@ using PARADOX_RP.Controllers.Vehicle.Interface;
 using PARADOX_RP.Game.Clothing.Extensions;
 using PARADOX_RP.Core.Database.Models;
 using AltV.Net.Data;
+using PARADOX_RP.UI;
+using PARADOX_RP.UI.Windows;
+using Newtonsoft.Json;
 
 namespace PARADOX_RP.Game.Administration
 {
@@ -91,8 +94,16 @@ namespace PARADOX_RP.Game.Administration
             catch { player.SendNotification(ModuleName, $"Fahrzeug nicht gefunden.", NotificationTypes.ERROR); }
         }
 
+        [Command("sendconfirmation")]
+        public void SendConfirmation(PXPlayer player, string Title, string Description)
+        {
+            if (!player.IsValid()) return;
+
+            WindowManager.Instance.Get<ConfirmationWindow>().Show(player, new ConfirmationWindowWriter(Title, Description, "", ""));
+        }
+
         [Command("clothes")]
-        public async void cmd_Clothes(PXPlayer player, int component, int drawable, int texture)
+        public async void clothes(PXPlayer player, int component, int drawable, int texture)
         {
             await player.SetClothes(component, drawable, texture);
         }

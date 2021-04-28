@@ -35,7 +35,7 @@ namespace PARADOX_RP.Game.Bank
         }
 
         private readonly string _bankName = "N26 Bank";
-
+        
         public override Task<bool> OnKeyPress(PXPlayer player, KeyEnumeration key)
         {
             if (key == KeyEnumeration.E)

@@ -26,7 +26,7 @@ namespace PARADOX_RP.Controllers.Event
             if (targetEvent != null) return;
 
             AltAsync.Log($"[EventController] Received unknown / unregistered event ({eventName})");
-
+            // add logger
         }
 
         public void WhitelistEvent(string eventName)

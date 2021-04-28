@@ -53,7 +53,7 @@ namespace PARADOX_RP.Game.Char
                         PlayerId = player.SqlId,
                         Customization = customizationString
                     };
-
+                    
                     foreach (var arrivalClothing in ArrivalModule.Instance._arrivalClothes)
                     {
                         //TODO: do the same for females 

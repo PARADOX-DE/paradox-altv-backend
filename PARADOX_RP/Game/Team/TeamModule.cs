@@ -103,7 +103,6 @@ namespace PARADOX_RP.Game.Team
         [Command("set_team")]
         public void SetTeam(PXPlayer player)
         {
-            Console.WriteLine("SetTeam");
             InviteTeamMember(player, player.Username);
         }
     }

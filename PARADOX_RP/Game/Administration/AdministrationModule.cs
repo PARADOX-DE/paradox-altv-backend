@@ -94,7 +94,7 @@ namespace PARADOX_RP.Game.Administration
             catch { player.SendNotification(ModuleName, $"Fahrzeug nicht gefunden.", NotificationTypes.ERROR); }
         }
 
-        [Command("sendconfirmation")]
+        [Command("sendconfirmation", true)]
         public void SendConfirmation(PXPlayer player, string Title, string Description)
         {
             if (!player.IsValid()) return;

@@ -2,6 +2,7 @@
 using PARADOX_RP.Controllers.Team.Interface;
 using PARADOX_RP.Core.Factories;
 using PARADOX_RP.Core.Module;
+using PARADOX_RP.Game.Injury.Extensions;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -33,19 +34,19 @@ namespace PARADOX_RP.Game.Injury
         }
 
 
-        public override void OnPlayerDeath(PXPlayer player, PXPlayer killer, uint reason)
+        public override async void OnPlayerDeath(PXPlayer player, PXPlayer killer, uint weapon)
         {
             //InjuryModule only for injuries in dimension 0
             if (player.Dimension != 0) return;
 
-            if (_injuries.TryGetValue(reason, out object injuryType))
+            if (_injuries.TryGetValue(weapon, out object injuryType))
             {
 
             }
             else
             {
                 //Injury not found in database
-                player.
+                await player.Revive();
             }
         }
     }

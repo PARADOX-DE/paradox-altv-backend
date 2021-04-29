@@ -19,7 +19,7 @@ namespace PARADOX_RP.Core.Module
 
         public virtual void OnModuleLoad() { }
         public virtual Task<bool> OnKeyPress(PXPlayer player, KeyEnumeration key) { return Task.FromResult(false); }
-        public virtual void OnPlayerDeath(PXPlayer player, PXPlayer killer, uint reason) { }
+        public virtual void OnPlayerDeath(PXPlayer player, PXPlayer killer, uint weapon) { }
         public virtual void OnPlayerConnect(PXPlayer player) { }
         public virtual void OnPlayerDisconnect(PXPlayer player) { }
         public virtual void OnPlayerLogin(PXPlayer player) { }

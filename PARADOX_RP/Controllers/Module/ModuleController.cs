@@ -26,6 +26,7 @@ namespace PARADOX_RP.Controllers
             eventController.OnClient<PXPlayer>("Pressed_F9", PressedF9);
             eventController.OnClient<PXPlayer>("PlayerReady", OnPlayerConnect);
 
+            AltAsync.OnPlayerDead += OnPlayerDead;
             AltAsync.OnPlayerDisconnect += OnPlayerDisconnect;
             AltAsync.OnColShape += OnColShape;
             AltAsync.OnPlayerEnterVehicle += OnPlayerEnterVehicle;
@@ -35,6 +36,25 @@ namespace PARADOX_RP.Controllers
             intervalController.SetInterval(1000 * 15,  (s, e) => loginController.SavePlayers());
         }
 
+        private async Task OnPlayerDead(IPlayer client, IEntity killerEntity, uint weapon)
+        {
+            PXPlayer player = (PXPlayer)client;
+            PXPlayer killer = null;
+
+            if(killer is IPlayer)
+            {
+                killer = (PXPlayer)killerEntity;
+            }
+            else if(killer is IVehicle) {
+                killer = (PXPlayer) await ((IVehicle)killerEntity).GetDriverAsync();
+            }
+
+           await _modules.ForEach(e =>
+            {
+                if (e.Enabled)
+                    e.OnPlayerDeath(player, killer, weapon);
+            });
+        }
 
         public void Load()
         {

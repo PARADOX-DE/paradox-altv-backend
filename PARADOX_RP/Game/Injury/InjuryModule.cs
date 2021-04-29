@@ -45,7 +45,7 @@ namespace PARADOX_RP.Game.Injury
             }
             else
             {
-                //Injury not found in database
+                //Injury not found in database 
                 await player.Revive();
             }
         }

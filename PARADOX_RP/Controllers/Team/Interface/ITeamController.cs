@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace PARADOX_RP.Controllers.Team.Interface
 {
-    interface ITeamController
+    public interface ITeamController
     {
         void LoadTeam(Teams team);
 

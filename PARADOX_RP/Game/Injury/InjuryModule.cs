@@ -11,7 +11,11 @@ namespace PARADOX_RP.Game.Injury
     {
         private IEventController _eventController;
         private ITeamController _teamController;
-        public InjuryModule(IEventController eventController) : base("Injury") { }
+        public InjuryModule(IEventController eventController, ITeamController teamController) : base("Injury")
+        {
+            _eventController = eventController;
+            _teamController = teamController;
+        }
 
     }
 }

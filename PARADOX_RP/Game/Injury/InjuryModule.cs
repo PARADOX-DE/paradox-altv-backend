@@ -1,4 +1,5 @@
-﻿using PARADOX_RP.Controllers.Event.Interface;
+﻿using AltV.Net.Async;
+using PARADOX_RP.Controllers.Event.Interface;
 using PARADOX_RP.Controllers.Team.Interface;
 using PARADOX_RP.Core.Database.Models;
 using PARADOX_RP.Core.Factories;
@@ -40,8 +41,11 @@ namespace PARADOX_RP.Game.Injury
             //InjuryModule only for injuries in dimension 0
             if (player.Dimension != 0) return;
 
-            if (_injuries.TryGetValue(weapon, out Injuries injuryType))
+            if (_injuries.TryGetValue(weapon, out Injuries injury))
             {
+                await player.SpawnAsync(player.Position);
+                player.Injured = true;
+
 
             }
             else

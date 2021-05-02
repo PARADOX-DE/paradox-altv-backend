@@ -97,6 +97,7 @@ namespace PARADOX_RP.Core.Factories
         public CancellationTokenSource CancellationToken { get; set; }
         public Dictionary<ComponentVariation, Clothes> Clothes { get; set; }
         public MinigameTypes Minigame { get; set; }
+
         internal PXPlayer(IntPtr nativePointer, ushort id) : base(nativePointer, id)
         {
             SqlId = -1;
@@ -145,6 +146,8 @@ namespace PARADOX_RP.Core.Factories
         }
 
         public Task SetClothes(int component, int drawable, int texture) => this.EmitAsync("SetClothes", component, drawable, texture);
+
+        public Task StartEffect(string EffectName, int Duration) => this.EmitAsync("StartEffect", EffectName, Duration);
 
         public void Freeze(bool state)
         {

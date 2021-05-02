@@ -1,5 +1,6 @@
 ﻿using PARADOX_RP.Controllers.Event.Interface;
 using PARADOX_RP.Controllers.Team.Interface;
+using PARADOX_RP.Core.Database.Models;
 using PARADOX_RP.Core.Factories;
 using PARADOX_RP.Core.Module;
 using PARADOX_RP.Game.Injury.Extensions;
@@ -23,14 +24,14 @@ namespace PARADOX_RP.Game.Injury
         private ITeamController _teamController;
 
         //TODO: add dbInjury Model
-        private readonly Dictionary<uint, object> _injuries;
+        private readonly Dictionary<uint, Injuries> _injuries;
 
         public InjuryModule(IEventController eventController, ITeamController teamController) : base("Injury")
         {
             _eventController = eventController;
             _teamController = teamController;
 
-            _injuries = new Dictionary<uint, object>();
+            _injuries = new Dictionary<uint, Injuries>();
         }
 
 
@@ -39,13 +40,14 @@ namespace PARADOX_RP.Game.Injury
             //InjuryModule only for injuries in dimension 0
             if (player.Dimension != 0) return;
 
-            if (_injuries.TryGetValue(weapon, out object injuryType))
+            if (_injuries.TryGetValue(weapon, out Injuries injuryType))
             {
 
             }
             else
             {
                 //Injury not found in database 
+                player.SendNotification("Verletzung", "Deine Verletzung ist nicht ausschlaggebend, du stehst nun wieder.", NotificationTypes.SUCCESS);
                 await player.Revive();
             }
         }

@@ -27,6 +27,7 @@ namespace PARADOX_RP.Core.Database
         public DbSet<Clothes> Clothes { get; set; }
         public DbSet<Vehicles> Vehicles { get; set; }
         public DbSet<Garages> Garages { get; set; }
+        public DbSet<Injuries> Injuries { get; set; }
 
         public DbSet<Teams> Teams { get; set; }
 

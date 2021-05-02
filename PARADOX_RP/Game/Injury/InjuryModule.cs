@@ -80,6 +80,7 @@ namespace PARADOX_RP.Game.Injury
         {
             //TODO: spawn at medical department
             await player.Revive();
+            player.SendNotification("Verletzung", $"Der Notfallmediziner hat deine Verletzung geheilt.", NotificationTypes.SUCCESS);
         }
     }
 }

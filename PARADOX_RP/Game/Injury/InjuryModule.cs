@@ -69,6 +69,7 @@ namespace PARADOX_RP.Game.Injury
                 {
                     //REVIVE PLAYER
                     await FinishedPlayerDeath(player);
+                    player.InjuryTimeLeft = 0;
                 }
 
                 if (Configuration.Instance.DevMode)

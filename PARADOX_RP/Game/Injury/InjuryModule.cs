@@ -46,7 +46,7 @@ namespace PARADOX_RP.Game.Injury
                 await player.SpawnAsync(player.Position);
                 player.Injured = true;
 
-
+                player.StartEffect()
             }
             else
             {

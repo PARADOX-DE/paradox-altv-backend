@@ -11,5 +11,6 @@ namespace PARADOX_RP.Core.Database.Models
         public string Name { get; set; }
         public string EffectName { get; set; }
         public string Sound { get; set; }
+        public int Duration { get; set; }
     }
 }

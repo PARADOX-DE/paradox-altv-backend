@@ -21,6 +21,7 @@ namespace PARADOX_RP.Game.Injury.Extensions
             if (!keepInventory) { /* TODO: clear inventory */ }
 
             player.Injured = false;
+            player.InjuryTimeLeft = 0;
 
             await using(var px = new PXContext())
             {

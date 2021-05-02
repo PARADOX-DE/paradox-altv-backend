@@ -59,7 +59,7 @@ namespace PARADOX_RP.Game.Injury
             }
         }
 
-        public override Task OnEveryMinute()
+        public override async Task OnEveryMinute()
         {
             foreach (PXPlayer player in Pools.Instance.Get<PXPlayer>(PoolType.PLAYER).Where(p => p.InjuryTimeLeft >= 1))
             {
@@ -68,14 +68,12 @@ namespace PARADOX_RP.Game.Injury
                 else
                 {
                     //REVIVE PLAYER
-
+                    await FinishedPlayerDeath(player);
                 }
 
                 if (Configuration.Instance.DevMode)
                     player.SendNotification("InjuryModule", $"Minute-Tick | InjuryTimeLeft: {player.InjuryTimeLeft}", NotificationTypes.SUCCESS);
             }
-
-            return Task.CompletedTask;
         }
 
         public async Task FinishedPlayerDeath(PXPlayer player)

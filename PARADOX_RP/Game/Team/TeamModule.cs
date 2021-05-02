@@ -92,7 +92,7 @@ namespace PARADOX_RP.Game.Team
             WindowManager.Instance.Get<ConfirmationWindow>().Hide(player);
 
             if (!player.CanInteract()) return;
-            if (player.Invitation == null) return;
+            if (player.Invitation == null || player.Invitation.Team == null) return;
 
             Invitation invitation = player.Invitation;
             await _teamHandler.SetPlayerTeam(player, invitation.Team.Id);

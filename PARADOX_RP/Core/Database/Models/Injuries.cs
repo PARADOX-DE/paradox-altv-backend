@@ -9,6 +9,8 @@ namespace PARADOX_RP.Core.Database.Models
         public int Id { get; set; }
         public uint Weapon { get; set; }
         public string Name { get; set; }
+        public string AnimationDictionary { get; set; }
+        public string AnimationName { get; set; }
         public string EffectName { get; set; }
         public string Sound { get; set; }
         public int Duration { get; set; }

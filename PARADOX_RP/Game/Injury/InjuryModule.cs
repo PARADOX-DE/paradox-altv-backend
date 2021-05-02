@@ -8,6 +8,7 @@ using PARADOX_RP.Game.Injury.Extensions;
 using PARADOX_RP.Utils;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -60,7 +61,21 @@ namespace PARADOX_RP.Game.Injury
 
         public override Task OnEveryMinute()
         {
-            
+            foreach (PXPlayer player in Pools.Instance.Get<PXPlayer>(PoolType.PLAYER).Where(p => p.InjuryTimeLeft >= 1))
+            {
+                if (player.InjuryTimeLeft > 1)
+                    player.InjuryTimeLeft--;
+                else
+                {
+                    //REVIVE PLAYER
+
+                }
+
+                if (Configuration.Instance.DevMode)
+                    player.SendNotification("InjuryModule", $"Minute-Tick | InjuryTimeLeft: {player.InjuryTimeLeft}", NotificationTypes.SUCCESS);
+            }
+
+            return Task.CompletedTask;
         }
 
         public async Task FinishedPlayerDeath(PXPlayer player)

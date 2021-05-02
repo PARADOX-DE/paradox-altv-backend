@@ -163,6 +163,10 @@ namespace PARADOX_RP.Core.Factories
             this.EmitLocked("AddBlips", label, pos, number, color, scale, shortRange);
         }
 
+        public Task PlayAnimation(string dict, string name, int flag = 9, int duration = -1) => this.EmitAsync("PlayAnimation", dict, name, flag, duration);
+
+        public Task StopAnimation() => this.EmitAsync("StopAnimation");
+
         public bool IsValid()
         {
             if (!LoggedIn) return false;

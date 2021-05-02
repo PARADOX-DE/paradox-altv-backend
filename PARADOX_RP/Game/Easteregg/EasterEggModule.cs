@@ -44,12 +44,12 @@ namespace PARADOX_RP.Game.Easteregg
                 Eastereggs easterEgg = _easterEggs.FirstOrDefault(e => e.Value.Position.Distance(player.Position) <= 3).Value;
                 if (easterEgg == null) return await Task.FromResult(false);
 
-                await player.PlayAnimation("mini@strip_club@idles@stripper", "stripper_idle_06");
+                await player.PlayAnimation(easterEgg.AnimationDictionary, easterEgg.AnimationName);
                 await player.RunProgressBar(async () =>
                 {
                     await player.AddMoney(easterEgg.Money);
-                    //TODO: stop animation
                     player.SendNotification(easterEgg.Name, "Danke, hat echt Spaß gemacht. Hier nimm das.", NotificationTypes.SUCCESS);
+                    
                     await player.StopAnimation();
                 }, easterEgg.Name, "Easter-Egg Auftrag", easterEgg.Duration);
 

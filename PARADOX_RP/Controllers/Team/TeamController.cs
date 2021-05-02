@@ -70,5 +70,14 @@ namespace PARADOX_RP.Controllers.Team
                     team.SendNotification(Message, notificationType);
             });
         }
+
+        public void SendNotification(int Id, string Title, string Message, NotificationTypes notificationType)
+        {
+            TeamModule.Instance.TeamList.Values.ForEach((team) =>
+            {
+                if (team.Id == Id)
+                    team.SendNotification(Message, notificationType);
+            });
+        }
     }
 }

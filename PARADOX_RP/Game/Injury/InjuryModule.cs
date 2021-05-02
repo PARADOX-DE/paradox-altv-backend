@@ -5,6 +5,7 @@ using PARADOX_RP.Core.Database.Models;
 using PARADOX_RP.Core.Factories;
 using PARADOX_RP.Core.Module;
 using PARADOX_RP.Game.Injury.Extensions;
+using PARADOX_RP.Game.Team;
 using PARADOX_RP.Utils;
 using System;
 using System.Collections.Generic;
@@ -51,7 +52,7 @@ namespace PARADOX_RP.Game.Injury
 
                 await player.StartEffect(injury.EffectName, injury.Duration);
 
-                _teamController.
+                _teamController.SendNotification((int)TeamEnumeration.LSMC, "LSMC", "Es wurde eine verletzte Person gemeldet!", NotificationTypes.SUCCESS);
             }
             else
             {

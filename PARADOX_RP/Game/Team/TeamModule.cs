@@ -26,7 +26,9 @@ namespace PARADOX_RP.Game.Team
     // after adding teams in db => add to enum
     public enum TeamEnumeration
     {  
-        CIVILIAN
+        CIVILIAN,
+        LSPD,
+        LSMC
     }
 
     class TeamModule : ModuleBase<TeamModule>, ICommand

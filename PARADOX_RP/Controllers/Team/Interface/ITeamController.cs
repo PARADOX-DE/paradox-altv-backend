@@ -15,5 +15,6 @@ namespace PARADOX_RP.Controllers.Team.Interface
         public void SpawnPlayer(PXPlayer player);
         public void SendNotificationToDepartments(string Title, string Message, NotificationTypes notificationType);
         public void SendNotificationToBads(string Title, string Message, NotificationTypes notificationType);
+        public void SendNotification(int Id, string Title, string Message, NotificationTypes notificationType);
     }
 }

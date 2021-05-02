@@ -16,7 +16,6 @@ namespace PARADOX_RP.Game.Administration.Content
         [Command("sendconfirmation")]
         public void SendConfirmation(PXPlayer player, string Title, string Description)
         {
-            Alt.Log("works");
             if (!player.IsValid()) return;
 
             WindowManager.Instance.Get<ConfirmationWindow>().Show(player, new ConfirmationWindowWriter(Title, Description, "", ""));

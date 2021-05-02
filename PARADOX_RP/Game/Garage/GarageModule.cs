@@ -43,7 +43,6 @@ namespace PARADOX_RP.Game.Garage
             {
                 player.AddBlips(g.Value.Name, g.Value.Position, 524, 0, 1, true);
             });
-            float.TryParse(player.Name, out float result);
         }
 
         public override async Task<bool> OnKeyPress(PXPlayer player, KeyEnumeration key)

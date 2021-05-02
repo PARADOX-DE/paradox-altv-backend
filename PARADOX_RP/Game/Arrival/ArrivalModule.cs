@@ -34,6 +34,11 @@ namespace PARADOX_RP.Game.Arrival
 
         private Position ArrivalPosition = new Position(-1062.1978f, -2712.8044f, 0.78686523f);
 
+        public override void OnPlayerConnect(PXPlayer player)
+        {
+            player.AddBlips("Flughafen", ArrivalPosition, 90, 0, 1, true);
+        }
+
         public async Task NewPlayerArrival(PXPlayer player)
         {
             await player.PlayArrivalCutscene();

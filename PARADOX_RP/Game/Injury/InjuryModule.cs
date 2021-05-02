@@ -8,6 +8,7 @@ using PARADOX_RP.Game.Injury.Extensions;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace PARADOX_RP.Game.Injury
 {
@@ -46,7 +47,7 @@ namespace PARADOX_RP.Game.Injury
                 await player.SpawnAsync(player.Position);
                 player.Injured = true;
 
-                player.StartEffect()
+                await player.StartEffect(injury.EffectName, injury.Duration);
             }
             else
             {
@@ -54,6 +55,12 @@ namespace PARADOX_RP.Game.Injury
                 player.SendNotification("Verletzung", "Deine Verletzung ist nicht ausschlaggebend, du stehst nun wieder.", NotificationTypes.SUCCESS);
                 await player.Revive();
             }
+        }
+
+        public async Task FinishedPlayerDeath(PXPlayer player)
+        {
+            //TODO: spawn at medical department
+            await player.Revive();
         }
     }
 }

@@ -56,7 +56,7 @@ namespace PARADOX_RP.Core.Factories
             get => _money;
             set
             {
-                Emit("UpdateMoney", value);
+                this.EmitLocked("UpdateMoney", value);
                 _money = value;
             }
         }
@@ -70,7 +70,7 @@ namespace PARADOX_RP.Core.Factories
             get => _injured;
             set
             {
-                Emit("UpdateInjured", value);
+                this.EmitLocked("UpdateInjured", value);
                 _injured = value;
             }
         }
@@ -81,7 +81,7 @@ namespace PARADOX_RP.Core.Factories
             get => _cuffed;
             set
             {
-                Emit("UpdateCuff", value);
+                this.EmitLocked("UpdateCuff", value);
                 _cuffed = value;
             }
         }
@@ -142,7 +142,7 @@ namespace PARADOX_RP.Core.Factories
 
         public void SendNotification(string Title, string Message, NotificationTypes notificationType)
         {
-            Emit("PushNotification", Title, Message, 5000);
+            this.EmitLocked("PushNotification", Title, Message, 5000);
         }
 
         public Task SetClothes(int component, int drawable, int texture) => this.EmitAsync("SetClothes", component, drawable, texture);
@@ -151,12 +151,12 @@ namespace PARADOX_RP.Core.Factories
 
         public void Freeze(bool state)
         {
-            Emit("Freeze", state);
+            this.EmitLocked("Freeze", state);
         }
 
         public void AddBlips(string label, Position pos, int number, int color, int scale, bool shortRange)
         {
-            Emit("AddBlips", label, pos, number, color, scale, shortRange);
+            this.EmitLocked("AddBlips", label, pos, number, color, scale, shortRange);
         }
 
         public bool IsValid()

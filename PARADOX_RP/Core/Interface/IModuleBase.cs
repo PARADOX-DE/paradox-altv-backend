@@ -19,6 +19,9 @@ namespace PARADOX_RP.Core.Module
         void OnPlayerConnect(PXPlayer player);
         void OnPlayerDisconnect(PXPlayer player);
         void OnPlayerLogin(PXPlayer player);
+
+        Task OnEveryMinute();
+
         Task<bool> OnColShapeEntered(PXPlayer player, IColShape col);
         Task OnPlayerEnterVehicle(IVehicle vehicle, IPlayer player, byte seat);
         Task OnPlayerLeaveVehicle(IVehicle vehicle, IPlayer player, byte seat);

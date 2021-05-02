@@ -5,6 +5,7 @@ using PARADOX_RP.Core.Database.Models;
 using PARADOX_RP.Core.Factories;
 using PARADOX_RP.Core.Module;
 using PARADOX_RP.Game.Injury.Extensions;
+using PARADOX_RP.Utils;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -55,6 +56,11 @@ namespace PARADOX_RP.Game.Injury
                 player.SendNotification("Verletzung", "Deine Verletzung ist nicht ausschlaggebend, du stehst nun wieder.", NotificationTypes.SUCCESS);
                 await player.Revive();
             }
+        }
+
+        public override Task OnEveryMinute()
+        {
+            
         }
 
         public async Task FinishedPlayerDeath(PXPlayer player)

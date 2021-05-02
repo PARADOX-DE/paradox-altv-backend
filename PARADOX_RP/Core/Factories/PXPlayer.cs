@@ -75,6 +75,9 @@ namespace PARADOX_RP.Core.Factories
             }
         }
 
+        public int InjuryTimeLeft { get; set; }
+
+
         private bool _cuffed;
         public bool Cuffed
         {
@@ -110,6 +113,7 @@ namespace PARADOX_RP.Core.Factories
             Invitation = null;
             DimensionType = DimensionTypes.WORLD;
             DutyType = DutyTypes.OFFDUTY;
+            InjuryTimeLeft = 0;
             CancellationToken = null;
             Clothes = new Dictionary<ComponentVariation, Clothes>();
         }

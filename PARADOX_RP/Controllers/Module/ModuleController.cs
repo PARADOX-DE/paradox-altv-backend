@@ -33,7 +33,16 @@ namespace PARADOX_RP.Controllers
             AltAsync.OnPlayerLeaveVehicle += OnPlayerLeaveVehicle;
 
             //TODO: add module base cons
-            intervalController.SetInterval(1000 * 15,  (s, e) => loginController.SavePlayers());
+            intervalController.SetInterval(1000 * 60, async (s, e) =>
+            {
+                await loginController.SavePlayers();
+
+                await _modules.ForEach(async e =>
+                {
+                    if (e.Enabled)
+                        await e.OnEveryMinute();
+                });
+            });
         }
 
         private async Task OnPlayerDead(IPlayer client, IEntity killerEntity, uint weapon)
@@ -41,19 +50,20 @@ namespace PARADOX_RP.Controllers
             PXPlayer player = (PXPlayer)client;
             PXPlayer killer = null;
 
-            if(killer is IPlayer)
+            if (killer is IPlayer)
             {
                 killer = (PXPlayer)killerEntity;
             }
-            else if(killer is IVehicle) {
-                killer = (PXPlayer) await ((IVehicle)killerEntity).GetDriverAsync();
+            else if (killer is IVehicle)
+            {
+                killer = (PXPlayer)await ((IVehicle)killerEntity).GetDriverAsync();
             }
 
-           await _modules.ForEach(e =>
-            {
-                if (e.Enabled)
-                    e.OnPlayerDeath(player, killer, weapon);
-            });
+            await _modules.ForEach(e =>
+             {
+                 if (e.Enabled)
+                     e.OnPlayerDeath(player, killer, weapon);
+             });
         }
 
         public void Load()

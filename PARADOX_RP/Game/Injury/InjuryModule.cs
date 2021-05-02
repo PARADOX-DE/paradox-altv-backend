@@ -50,6 +50,8 @@ namespace PARADOX_RP.Game.Injury
                 player.Injured = true;
 
                 await player.StartEffect(injury.EffectName, injury.Duration);
+
+                _teamController.
             }
             else
             {

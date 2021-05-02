@@ -57,7 +57,7 @@ namespace PARADOX_RP.Controllers.Team
         {
             TeamModule.Instance.TeamList.Values.ForEach((team) =>
             {
-                if (team.TeamType == TeamTypes.NEUTRAL)
+                if (team.TeamType == TeamTypes.DEPARTMENT)
                     team.SendNotification(Message, notificationType);
             });
         }

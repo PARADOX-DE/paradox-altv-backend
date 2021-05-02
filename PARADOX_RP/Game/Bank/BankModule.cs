@@ -9,6 +9,7 @@ using PARADOX_RP.Core.Factories;
 using PARADOX_RP.Core.Module;
 using PARADOX_RP.UI;
 using PARADOX_RP.UI.Windows;
+using PARADOX_RP.Utils;
 using PARADOX_RP.Utils.Enums;
 using System;
 using System.Collections.Generic;
@@ -31,8 +32,10 @@ namespace PARADOX_RP.Game.Bank
 
             eventController.OnClient<PXPlayer, int>("DepositMoney", DepositMoney);
             eventController.OnClient<PXPlayer, int>("WithdrawMoney", WithdrawMoney);
+            eventController.OnClient<PXPlayer, string, int>("TransferMoney", TransferMoney);
 
         }
+
 
         private readonly string _bankName = "N26 Bank";
         
@@ -91,6 +94,39 @@ namespace PARADOX_RP.Game.Bank
             }
 
             await player.AddMoney(moneyAmount);
+        }
+        private async void TransferMoney(PXPlayer player, string targetString, int moneyAmount)
+        {
+            if (!player.IsValid()) return;
+            if (!player.CanInteract()) return;
+            if (!WindowManager.Instance.Get<BankWindow>().IsVisible(player)) return;
+
+            if (player.BankMoney < moneyAmount)
+            {
+                player.SendNotification(_bankName, "Du hast nicht genügend Geld auf dem Konto!", NotificationTypes.ERROR);
+                return;
+            }
+
+            PXPlayer target = Pools.Instance.Get<PXPlayer>(PoolType.PLAYER).FirstOrDefault(p => p.Username == targetString);
+            if(target == null || !target.IsValid())
+            {
+                player.SendNotification(_bankName, $"Es wurde kein Konto mit dem Besitzer {targetString} gefunden!", NotificationTypes.ERROR);
+                return;
+            }
+
+            await using (var px = new PXContext())
+            {
+                player.BankMoney -= moneyAmount;
+                target.BankMoney += moneyAmount;
+
+                Players dbPlayer = await px.Players.FindAsync(player.SqlId);
+                Players dbTargetPlayer = await px.Players.FindAsync(target.SqlId);
+
+                dbPlayer.BankMoney = player.BankMoney;
+                dbTargetPlayer.BankMoney = target.BankMoney;
+
+                await px.SaveChangesAsync();
+            }
         }
     }
 }

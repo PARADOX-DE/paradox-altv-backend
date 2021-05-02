@@ -52,6 +52,7 @@ namespace PARADOX_RP.Game.Team
             _eventController = eventController;
             _teamHandler = teamHandler;
 
+            _eventController.OnClient<PXPlayer, string>("InviteTeamMember", InviteTeamMember);
             _eventController.OnClient<PXPlayer>("TeamInviteAccept", TeamInviteAccept);
         }
 

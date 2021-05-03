@@ -25,20 +25,29 @@ namespace PARADOX_RP.Game.Bank
 
         public BankModule(PXContext px, IEventController eventController) : base("Bank")
         {
-            px.BankATMs.ForEach(b =>
+            LoadDatabaseTable(px.BankATMs, (BankATMs atm) =>
             {
-                _BankATMs.Add(b.Id, b);
+                _BankATMs.Add(atm.Id, atm);
             });
 
             eventController.OnClient<PXPlayer, int>("DepositMoney", DepositMoney);
             eventController.OnClient<PXPlayer, int>("WithdrawMoney", WithdrawMoney);
             eventController.OnClient<PXPlayer, string, int>("TransferMoney", TransferMoney);
-
         }
 
+        public override void OnPlayerConnect(PXPlayer player)
+        {
+            if (Configuration.Instance.DevMode)
+            {
+                _BankATMs.ForEach((atm) =>
+                {
+                    player.AddBlips($"Bankautomat #{atm.Key}", atm.Value.Position, 108, 25, 1, true);
+                });
+            }
+        }
 
         private readonly string _bankName = "N26 Bank";
-        
+
         public override Task<bool> OnKeyPress(PXPlayer player, KeyEnumeration key)
         {
             if (key == KeyEnumeration.E)
@@ -101,14 +110,16 @@ namespace PARADOX_RP.Game.Bank
             if (!player.CanInteract()) return;
             if (!WindowManager.Instance.Get<BankWindow>().IsVisible(player)) return;
 
+            if (player.Username.ToLower() == targetString.ToLower()) return;
+
             if (player.BankMoney < moneyAmount)
             {
                 player.SendNotification(_bankName, "Du hast nicht genügend Geld auf dem Konto!", NotificationTypes.ERROR);
                 return;
             }
 
-            PXPlayer target = Pools.Instance.Get<PXPlayer>(PoolType.PLAYER).FirstOrDefault(p => p.Username == targetString);
-            if(target == null || !target.IsValid())
+            PXPlayer target = Pools.Instance.Get<PXPlayer>(PoolType.PLAYER).FirstOrDefault(p => p.Username.ToLower() == targetString.ToLower());
+            if (target == null || !target.IsValid())
             {
                 player.SendNotification(_bankName, $"Es wurde kein Konto mit dem Besitzer {targetString} gefunden!", NotificationTypes.ERROR);
                 return;

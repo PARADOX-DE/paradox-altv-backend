@@ -36,23 +36,30 @@ namespace PARADOX_RP.Controllers.Login
                 Players dbPlayer = await px.Players
                                        .FirstOrDefaultAsync(p => p.Username == userName);
 
-                if (dbPlayer == null) return await Task.FromResult(false);
+                if (dbPlayer == null)
+                {
+                    await player.EmitAsync("ResponseLoginStatus", "Charakter nicht gefunden!");
+                    return await Task.FromResult(false);
+                }
 
                 try
                 {
                     if (BCrypt.Net.BCrypt.Verify(hashedPassword, dbPlayer.Password))
                     {
                         if (Configuration.Instance.DevMode) Alt.Log($"[DEVMODE] {dbPlayer.Username} requested Login.");
+                        await player.EmitAsync("ResponseLoginStatus", "Anmeldevorgang erfolgreich, lade Daten...");
                         return await Task.FromResult(true);
                     }
                 }
                 catch (BCrypt.Net.SaltParseException)
                 {
                     if (Configuration.Instance.DevMode) Alt.Log($"[DEVMODE] {dbPlayer.Username} threw SaltParseException.");
+                    await player.EmitAsync("ResponseLoginStatus", "Fehler, bitte der Entwicklung melden!");
                     return await Task.FromResult(false);
                 }
             }
 
+            await player.EmitAsync("ResponseLoginStatus", "Das angegebene Passwort stimmt nicht überein.");
             return await Task.FromResult(false);
         }
 
@@ -117,6 +124,7 @@ namespace PARADOX_RP.Controllers.Login
                     }
 
                     Pools.Instance.Register(player.SqlId, player);
+                    await player.EmitAsync("ResponseLoginStatus", "Erfolgreich eingeloggt!");
 
                     if (dbPlayer.PlayerCustomization.FirstOrDefault() == null)
                     {

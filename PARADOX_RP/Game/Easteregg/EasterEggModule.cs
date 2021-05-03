@@ -32,7 +32,7 @@ namespace PARADOX_RP.Game.Easteregg
             {
                 _easterEggs.ForEach((e) =>
                 {
-                    player.AddBlips($"EasterEgg #{e.Key}", e.Value.Position, 255, 0, 1, true);
+                    player.AddBlips($"EasterEgg #{e.Key}", e.Value.Position, 515, 0, 1, true);
                 });
             }
         }

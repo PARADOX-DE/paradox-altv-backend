@@ -18,7 +18,7 @@ namespace PARADOX_RP.Game.Administration.NativeMenu
         public List<NativeMenuItem> Items => new List<NativeMenuItem>()
         {
             new NativeMenuItem("Schliessen", NativeMenuItemTypes.Button, true),
-            new NativeMenuItem("Verwaltung: Spieler", NativeMenuItemTypes.Button, false),
+            new NativeMenuItem("Verwaltung: Spieler", NativeMenuItemTypes.Input, false),
         };
 
         public void Callback(PXPlayer player, NativeMenuItem item)

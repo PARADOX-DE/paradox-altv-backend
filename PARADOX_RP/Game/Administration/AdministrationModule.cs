@@ -16,6 +16,8 @@ using AltV.Net.Data;
 using PARADOX_RP.UI;
 using PARADOX_RP.UI.Windows;
 using Newtonsoft.Json;
+using PARADOX_RP.UI.Windows.NativeMenu;
+using PARADOX_RP.Game.Administration.NativeMenu;
 
 namespace PARADOX_RP.Game.Administration
 {
@@ -61,6 +63,8 @@ namespace PARADOX_RP.Game.Administration
                 {
                     await player.SetClothes(c.Component, c.Drawable, c.Texture);
                 });
+
+                WindowManager.Instance.Get<NativeMenuWindow>().DisplayMenu<AdministrationNativeMenu>(player);
             }
         } 
 

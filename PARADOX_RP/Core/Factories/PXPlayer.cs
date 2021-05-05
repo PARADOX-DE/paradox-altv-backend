@@ -10,6 +10,7 @@ using PARADOX_RP.Game.Login;
 using PARADOX_RP.Game.MiniGames.Models;
 using PARADOX_RP.Game.Team;
 using PARADOX_RP.Models;
+using PARADOX_RP.UI.Windows.NativeMenu;
 using PARADOX_RP.Utils.Enums;
 using System;
 using System.Collections.Generic;
@@ -95,6 +96,7 @@ namespace PARADOX_RP.Core.Factories
         public PlayerTeamData PlayerTeamData { get; set; }
         public Invitation Invitation { get; set; }
         public string CurrentWindow { get; set; }
+        public INativeMenu CurrentNativeMenu { get; set; }
         public DimensionTypes DimensionType { get; set; }
         public DutyTypes DutyType { get; set; }
         public CancellationTokenSource CancellationToken { get; set; }
@@ -115,6 +117,7 @@ namespace PARADOX_RP.Core.Factories
             DutyType = DutyTypes.OFFDUTY;
             InjuryTimeLeft = 0;
             CancellationToken = null;
+            CurrentNativeMenu = null;
             Clothes = new Dictionary<ComponentVariation, Clothes>();
         }
 

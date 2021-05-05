@@ -7,6 +7,7 @@ using PARADOX_RP.Core.Interface;
 using PARADOX_RP.Core.Module;
 using PARADOX_RP.UI;
 using PARADOX_RP.UI.Models;
+using PARADOX_RP.UI.Windows.NativeMenu;
 using System;
 using System.Collections.Generic;
 using System.Reflection;
@@ -26,6 +27,7 @@ namespace PARADOX_RP.Core.Factories
         private List<Type> _moduleTypes = new List<Type>();
         private List<Type> _itemTypes = new List<Type>();
         private List<Type> _windowTypes = new List<Type>();
+        private List<Type> _nativeMenuTypes = new List<Type>();
 
         internal void RegisterTypes()
         {
@@ -71,6 +73,15 @@ namespace PARADOX_RP.Core.Factories
                 .SingleInstance();
             }
 
+            LogStartup("Register NativeMenus");
+            foreach (var window in _nativeMenuTypes)
+            {
+                builder.RegisterType(window)
+                .AsImplementedInterfaces()
+                .AsSelf()
+                .SingleInstance();
+            }
+
             //LogStartup("Register itemscripts");
             //foreach (var item in _itemTypes)
             //{
@@ -104,6 +115,11 @@ namespace PARADOX_RP.Core.Factories
             {
                 _scope.Resolve(type);
             }
+
+            foreach (var type in _nativeMenuTypes)
+            {
+                _scope.Resolve(type);
+            }
         }
 
         internal T Resolve<T>()
@@ -130,6 +146,10 @@ namespace PARADOX_RP.Core.Factories
                 else if (IsWindowType(type))
                 {
                     _windowTypes.Add(type);
+                }
+                else if (IsNativeMenuType(type))
+                {
+                    _nativeMenuTypes.Add(type);
                 }
             }
         }
@@ -159,6 +179,14 @@ namespace PARADOX_RP.Core.Factories
                                             type.BaseType != null &&
                                             (type.BaseType == typeof(Window) ||
                                             type.BaseType.IsGenericType) &&
+                                            !type.Name.StartsWith("<");
+        }
+
+        private bool IsNativeMenuType(Type type)
+        {
+            if (type.Namespace == null) return false;
+            return type.Namespace.StartsWith("PARADOX_RP.Game") &&
+                                            type.IsAssignableTo<INativeMenu>() &&
                                             !type.Name.StartsWith("<");
         }
 

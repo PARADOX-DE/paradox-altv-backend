@@ -21,7 +21,7 @@ namespace PARADOX_RP.Game.Administration.NativeMenu
             new NativeMenuItem("Verwaltung: Spieler", NativeMenuItemTypes.Button, false),
         };
 
-        public void Callback(PXPlayer player, NativeMenuItem)
+        public void Callback(PXPlayer player, NativeMenuItem item)
         {
 
         }

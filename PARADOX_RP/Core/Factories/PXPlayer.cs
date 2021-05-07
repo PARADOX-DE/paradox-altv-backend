@@ -90,6 +90,17 @@ namespace PARADOX_RP.Core.Factories
             }
         }
 
+        private VoiceRangeEnumeration _voiceRange;
+        public VoiceRangeEnumeration VoiceRange
+        {
+            get => _voiceRange;
+            set
+            {
+                this.EmitLocked("UpdateVoiceRange", (int)value);
+                _voiceRange = value;
+            }
+        }
+
         public SupportRankModel SupportRank { get; set; }
         public Teams Team { get; set; }
         public PlayerCustomization PlayerCustomization { get; set; }

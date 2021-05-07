@@ -1,5 +1,8 @@
 ﻿using AltV.Net;
+using AltV.Net.Async;
+using PARADOX_RP.Core.Factories;
 using PARADOX_RP.UI.Models;
+using PARADOX_RP.Utils.Enums;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -10,8 +13,6 @@ namespace PARADOX_RP.UI.Windows
     class HUDWindow : Window
     {
         public HUDWindow() : base("Hud") { }
-
-        public void UpdateVoiceRange()
     }
 
     class HUDWindowWriter : IWritable

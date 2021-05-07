@@ -6,9 +6,12 @@ using System.Text;
 
 namespace PARADOX_RP.UI.Windows
 {
+
     class HUDWindow : Window
     {
         public HUDWindow() : base("Hud") { }
+
+        public void UpdateVoiceRange()
     }
 
     class HUDWindowWriter : IWritable

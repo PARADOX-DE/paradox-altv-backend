@@ -32,5 +32,6 @@
 
 	<ItemGroup>
 	  <Folder Include="Game\Inventory\Models\" />
+	  <Folder Include="Game\Mission\" />
 	</ItemGroup>
 </Project>

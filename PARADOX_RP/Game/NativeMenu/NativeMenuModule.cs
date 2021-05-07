@@ -19,10 +19,10 @@ namespace PARADOX_RP.Game.NativeMenu
             _nativeMenus = nativeMenus;
             _eventController = eventController;
 
-            _eventController.OnClient<PXPlayer, string>("NativeMenuCallback", NativeMenuCallback);
+            _eventController.OnClient<PXPlayer, string, string>("NativeMenuCallback", NativeMenuCallback);
         }
 
-        private void NativeMenuCallback(PXPlayer player, string ItemName)
+        private void NativeMenuCallback(PXPlayer player, string ItemName, string InputString = "")
         {
             if (!player.IsValid()) return;
             
@@ -32,7 +32,7 @@ namespace PARADOX_RP.Game.NativeMenu
             var item = menu.Items.FirstOrDefault((i) => i.Text == ItemName);
             if (item == null) return;
 
-            menu.Callback(player, item);
+            menu.Callback(player, item, InputString);
         }
     }
 }

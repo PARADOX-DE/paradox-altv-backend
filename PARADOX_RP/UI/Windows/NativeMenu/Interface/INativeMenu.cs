@@ -12,6 +12,6 @@ namespace PARADOX_RP.UI.Windows.NativeMenu
         string Description { get; }
         List<NativeMenuItem> Items { get; }
 
-        void Callback(PXPlayer player, NativeMenuItem item);
+        void Callback(PXPlayer player, NativeMenuItem item, string inputString = "");
     }
 }

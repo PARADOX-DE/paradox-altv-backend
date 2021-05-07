@@ -9,6 +9,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using PARADOX_RP.Controllers.Event.Interface;
+using PARADOX_RP.Game.Inventory.Interfaces;
 
 namespace PARADOX_RP.Game.Inventory
 {
@@ -24,10 +25,11 @@ namespace PARADOX_RP.Game.Inventory
     class InventoryModule : ModuleBase<InventoryModule>
     {
         public readonly IInventoryController _inventoryHandler;
-        public InventoryModule(IInventoryController inventoryHandler) : base("Inventory")
+        public InventoryModule(IInventoryController inventoryHandler, IEnumerable<IItemScript> itemScripts) : base("Inventory")
         {
             _inventoryHandler = inventoryHandler;
 
+            //itemScripts.FirstOrDefault(i => i.ScriptName == "vest_itemscript").UseItem();
         }
 
         public InventoryTypes GetInventoryType(Position position, DimensionTypes dimensionType)

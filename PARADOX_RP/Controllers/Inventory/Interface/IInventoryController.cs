@@ -11,6 +11,6 @@ namespace PARADOX_RP.Controllers.Inventory
     interface IInventoryController
     {
         Task LoadInventory(InventoryTypes type, int Id);
-        Task CreateItem(int Id, IItem item, string OriginInformation, [CallerMemberName] string callerName = null);
+        Task CreateItem(int Id, IItemScript item, string OriginInformation, [CallerMemberName] string callerName = null);
     }
 }

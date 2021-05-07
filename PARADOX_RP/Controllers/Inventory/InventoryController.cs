@@ -26,7 +26,7 @@ namespace PARADOX_RP.Controllers.Inventory
             }
         }
 
-        public async Task CreateItem(int Id, IItem item, string OriginInformation, [CallerMemberName] string callerName = null)
+        public async Task CreateItem(int Id, IItemScript item, string OriginInformation, [CallerMemberName] string callerName = null)
         {
             await using(var px = new PXContext())
             {

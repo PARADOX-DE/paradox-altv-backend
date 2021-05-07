@@ -31,7 +31,7 @@ namespace PARADOX_RP.Game.Interaction
                     player.VoiceRange = VoiceRangeEnumeration.HIGH;
                 else if (player.VoiceRange == VoiceRangeEnumeration.HIGH)
                 {
-                    if (player.DutyType == DutyTypes.ONDUTY)
+                    if (player.DutyType != DutyTypes.OFFDUTY)
                         player.VoiceRange = VoiceRangeEnumeration.SPECIAL;
                     else
                         player.VoiceRange = VoiceRangeEnumeration.LOW;

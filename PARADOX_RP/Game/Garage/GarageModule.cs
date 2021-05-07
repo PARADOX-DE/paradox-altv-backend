@@ -120,6 +120,8 @@ namespace PARADOX_RP.Game.Garage
             await using (var px = new PXContext())
             {
                 Vehicles dbVehicle = await px.Vehicles.FindAsync(vehicleId);
+                if (dbVehicle == null) return;
+
                 if (dbVehicle.GarageId != garageId)
                 {
                     /*

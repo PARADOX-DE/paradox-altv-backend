@@ -37,6 +37,6 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <Folder Include="Game\Mission\" />
+	  <Folder Include="Game\Misc\Mission\" />
 	</ItemGroup>
 </Project>

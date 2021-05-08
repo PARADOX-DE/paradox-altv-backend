@@ -85,7 +85,7 @@ namespace PARADOX_RP.Game.Login
                 if (loadPlayerResponse == LoadPlayerResponse.ABORT) return;
                 else
                 {
-                    WindowManager.Instance.Get<LoginWindow>().Hide(player);
+                    //WindowManager.Instance.Get<LoginWindow>().Hide(player);
 
                     // HANDLE EVERYTHING AFTER LOAD PLAYER
                     if (loadPlayerResponse == LoadPlayerResponse.NEW_PLAYER)

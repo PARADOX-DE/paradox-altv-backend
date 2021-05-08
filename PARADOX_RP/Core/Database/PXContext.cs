@@ -33,6 +33,7 @@ namespace PARADOX_RP.Core.Database
         public DbSet<Teams> Teams { get; set; }
 
         public DbSet<Inventories> Inventories { get; set; }
+        public DbSet<InventoryInfo> InventoryInfo { get; set; }
         public DbSet<InventoryItemAssignments> InventoryItemAssignments { get; set; }
         public DbSet<InventoryItemSignatures> InventoryItemSignatures { get; set; }
 

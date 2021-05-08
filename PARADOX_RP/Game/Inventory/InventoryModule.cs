@@ -37,6 +37,7 @@ namespace PARADOX_RP.Game.Inventory
 
         private IEnumerable<IInventoriable> _inventories;
         public Dictionary<int, Items> _items = new Dictionary<int, Items>();
+        public Dictionary<int, InventoryInfo> _inventoryInfo = new Dictionary<int, InventoryInfo>();
 
         public InventoryModule(PXContext pxContext, IInventoryController inventoryHandler, IEnumerable<IInventoriable> inventories, IEnumerable<IItemScript> itemScripts) : base("Inventory")
         {
@@ -44,6 +45,7 @@ namespace PARADOX_RP.Game.Inventory
             _inventories = inventories;
 
             LoadDatabaseTable<Items>(pxContext.Items, (i) => _items.Add(i.Id, i));
+            LoadDatabaseTable<InventoryInfo>(pxContext.InventoryInfo, (i) => _inventoryInfo.Add((int)i.InventoryType, i));
             //itemScripts.FirstOrDefault(i => i.ScriptName == "vest_itemscript").UseItem();
         }
 
@@ -81,8 +83,9 @@ namespace PARADOX_RP.Game.Inventory
             if (inventory == null) return;
 
             AltAsync.Log(Enum.GetName(typeof(InventoryTypes), await GetInventoryType(player, player.Position)));
+            GetInventoryType(player, player.Position)
 
-            WindowManager.Instance.Get<InventoryWindow>().Show(player, new InventoryWindowWriter(player.Inventory.Items));
+            WindowManager.Instance.Get<InventoryWindow>().Show(player, new InventoryWindowWriter(player.Inventory, null));
         }
 
         public bool HasItem(Inventories inventory, int ItemId)

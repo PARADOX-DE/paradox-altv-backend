@@ -15,17 +15,35 @@ namespace PARADOX_RP.UI.Windows.Inventory
     }
     class InventoryWindowWriter : IWritable
     {
-        private readonly ICollection<InventoryItemAssignments> inventoryItemAssignments;
+        private readonly Inventories playerInventory;
+        private readonly Inventories additionalInventory;
 
-        public InventoryWindowWriter(ICollection<InventoryItemAssignments> inventoryItemAssignments)
+        public InventoryWindowWriter(Inventories playerInventory, Inventories additionalInventory)
         {
-            this.inventoryItemAssignments = inventoryItemAssignments;
+            this.playerInventory = playerInventory;
+            this.additionalInventory = additionalInventory;
         }
 
         public void OnWrite(IMValueWriter writer)
         {
+            writer.BeginObject();
+
+            WriteInventory("player", ref writer, playerInventory);
+            WriteInventory("additional", ref writer, additionalInventory);
+
+            writer.EndObject();
+        }
+
+        private void WriteInventory(string name, ref IMValueWriter writer, Inventories inventory)
+        {
+            if (inventory == null) return;
+
+            writer.Name(name);
+            writer.BeginObject();
+
+            writer.Name("items");
             writer.BeginArray();
-            foreach (var item in inventoryItemAssignments)
+            foreach (var item in inventory.Items)
             {
                 if (InventoryModule.Instance._items.TryGetValue(item.Id, out Items itemInfo))
                 {
@@ -54,6 +72,20 @@ namespace PARADOX_RP.UI.Windows.Inventory
                 }
             }
             writer.EndArray();
+
+            if (InventoryModule.Instance._inventoryInfo.TryGetValue((int)inventory.Type, out InventoryInfo inventoryInfo))
+            {
+                writer.Name("title");
+                writer.Value(inventoryInfo.Name);
+
+                writer.Name("max_slots");
+                writer.Value(inventoryInfo.MaxSlots);
+
+                writer.Name("max_weight");
+                writer.Value(inventoryInfo.MaxWeight);
+            }
+
+            writer.EndObject();
         }
     }
 }

@@ -49,7 +49,7 @@ namespace PARADOX_RP.Core.Database
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            string connection = $"Server=localhost;Database=alt-paradox_rp;Uid=root;Pwd=paradox_rp";
+            string connection = $"Server=127.0.0.1; port=3306; Database=altv-paradox_rp; UserId=root; Password=lCvLpEGKhvz4WDsN;";
             optionsBuilder.UseMySql(connection, ServerVersion.AutoDetect(connection));
             optionsBuilder.UseLoggerFactory(loggerFactory);
         }

@@ -83,7 +83,7 @@ namespace PARADOX_RP.Game.Inventory
             if (inventory == null) return;
 
             AltAsync.Log(Enum.GetName(typeof(InventoryTypes), await GetInventoryType(player, player.Position)));
-
+             
             WindowManager.Instance.Get<InventoryWindow>().Show(player, new InventoryWindowWriter(player.Inventory, null));
         }
 

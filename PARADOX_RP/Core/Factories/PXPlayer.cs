@@ -101,8 +101,20 @@ namespace PARADOX_RP.Core.Factories
             }
         }
 
+        private bool _hasPhone;
+        public bool HasPhone
+        {
+            get => _hasPhone;
+            set
+            {
+                this.EmitLocked("UpdatePhone", value);
+                _hasPhone = value;
+            }
+        }
+
         public SupportRankModel SupportRank { get; set; }
         public Teams Team { get; set; }
+        public Inventories Inventory { get; set; }
         public PlayerCustomization PlayerCustomization { get; set; }
         public PlayerTeamData PlayerTeamData { get; set; }
         public Invitation Invitation { get; set; }

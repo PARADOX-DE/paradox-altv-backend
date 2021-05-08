@@ -2,6 +2,7 @@
 using AltV.Net.Data;
 using PARADOX_RP.Core.Factories;
 using PARADOX_RP.Game.Commands.Extensions;
+using PARADOX_RP.Game.Inventory.Extensions;
 using PARADOX_RP.UI;
 using PARADOX_RP.UI.Windows;
 using System;
@@ -19,6 +20,17 @@ namespace PARADOX_RP.Game.Login.Extensions
             
             await client.SpawnAsync(pos);
             WindowManager.Instance.Get<HUDWindow>().Show(client, new HUDWindowWriter(client.SqlId, client.Username, client.Money));
+
+            /*
+             * SHOW VOICE-SECTION
+             */
+            AltAsync.Log(client.Inventory.HasItem(1).ToString());
+
+            if (client.Inventory.HasItem(1))
+            {
+                client.HasPhone = true;
+                AltAsync.Log("Has phone");
+            }
         }
     }
 }

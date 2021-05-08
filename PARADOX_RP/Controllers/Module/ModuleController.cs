@@ -22,6 +22,7 @@ namespace PARADOX_RP.Controllers
         {
             _modules = modules;
 
+            eventController.OnClient<PXPlayer>("Pressed_I", PressedI);
             eventController.OnClient<PXPlayer>("Pressed_Y", PressedY);
             eventController.OnClient<PXPlayer>("Pressed_E", PressedE);
             eventController.OnClient<PXPlayer>("Pressed_F9", PressedF9);
@@ -85,6 +86,18 @@ namespace PARADOX_RP.Controllers
             {
                 if (e.Enabled)
                     if (await e.OnKeyPress(player, Utils.Enums.KeyEnumeration.E)) return;
+            });
+        }
+
+        private async void PressedI(PXPlayer player)
+        {
+            if (!player.LoggedIn) return;
+            if (player.CancelProgressBar()) return;
+
+            await _modules.ForEach(async e =>
+            {
+                if (e.Enabled)
+                    if (await e.OnKeyPress(player, Utils.Enums.KeyEnumeration.I)) return;
             });
         }
 

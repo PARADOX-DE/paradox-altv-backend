@@ -17,6 +17,7 @@ using PARADOX_RP.Game.Login.Extensions;
 using PARADOX_RP.Game.Arrival;
 using PARADOX_RP.Utils.Enums;
 using PARADOX_RP.Game.Clothing;
+using PARADOX_RP.Controllers.Inventory;
 
 namespace PARADOX_RP.Controllers.Login
 {
@@ -29,6 +30,14 @@ namespace PARADOX_RP.Controllers.Login
 
     class LoginController : ILoginController
     {
+        private IInventoryController _inventoryController;
+
+        public LoginController(IInventoryController inventoryController)
+        {
+            _inventoryController = inventoryController;
+            Alt.Log("reached login controller");
+        }
+
         public async Task<bool> CheckLogin(PXPlayer player, string userName, string hashedPassword)
         {
             await using (var px = new PXContext())
@@ -111,6 +120,8 @@ namespace PARADOX_RP.Controllers.Login
                         Alt.Log("FraktionsData-Objekt existiert bereits.");
                         player.PlayerTeamData = dbPlayer.PlayerTeamData.FirstOrDefault();
                     }
+
+                    player.Inventory = await _inventoryController.LoadInventory(InventoryTypes.PLAYER, player.SqlId);
 
                     /**/
                     //player.Clothes = _clothingDictionary;

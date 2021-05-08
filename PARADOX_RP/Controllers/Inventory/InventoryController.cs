@@ -16,13 +16,18 @@ namespace PARADOX_RP.Controllers.Inventory
 {
     class InventoryController : IInventoryController
     {
-        public async Task LoadInventory(InventoryTypes type, int Id)
+        public async Task<Inventories> LoadInventory(InventoryTypes type, int Id)
         {
             await using (var px = new PXContext())
             {
                 Inventories inventory = await px.Inventories.Include(i => i.Items).FirstOrDefaultAsync(p => p.Type == type && p.TargetId == Id);
-                foreach (InventoryItemAssignments item in inventory.Items)
-                    Alt.Log(item.Item.ToString());
+                if (inventory == null)
+                {
+                    //TODO: add logger
+                    return null;
+                }
+
+                return inventory;
             }
         }
 

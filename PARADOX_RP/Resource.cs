@@ -20,8 +20,11 @@ namespace PARADOX_RP
             using (var px = new PXContext())
             {
                 var databaseCreator = px.Database.GetService<IDatabaseCreator>() as RelationalDatabaseCreator;
-                databaseCreator.EnsureCreated();
-
+                try
+                {
+                    databaseCreator.CreateTables();
+                }
+                catch { }
                 AltAsync.Log("Initialized Database.");
             }
 

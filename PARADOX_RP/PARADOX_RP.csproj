@@ -11,6 +11,12 @@
 	</PropertyGroup>
 
 	<ItemGroup>
+	  <Compile Remove="Game\Inventory\Models\**" />
+	  <EmbeddedResource Remove="Game\Inventory\Models\**" />
+	  <None Remove="Game\Inventory\Models\**" />
+	</ItemGroup>
+
+	<ItemGroup>
 		<None Remove=".gitignore" />
 	</ItemGroup>
 
@@ -31,7 +37,6 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <Folder Include="Game\Inventory\Models\" />
 	  <Folder Include="Game\Mission\" />
 	</ItemGroup>
 </Project>

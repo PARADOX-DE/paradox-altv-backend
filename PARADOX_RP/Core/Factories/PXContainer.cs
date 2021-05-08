@@ -91,7 +91,7 @@ namespace PARADOX_RP.Core.Factories
             //}
 
             //LogStartup("Register database context");
-            var connection = "Server=localhost;Database=paradox;Uid=altv;Pwd=paradox_rp";
+            var connection = "Server=localhost;Database=alt-paradox_rp;Uid=root;Pwd=paradox_rp";
             var dbContextOptionsBuilder = new DbContextOptionsBuilder<PXContext>()
                 .UseMySql(connection, ServerVersion.AutoDetect(connection));
 

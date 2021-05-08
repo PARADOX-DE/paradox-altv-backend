@@ -16,7 +16,8 @@ namespace PARADOX_RP.Game.Login.Extensions
         public static async Task PreparePlayer(this PXPlayer client, Position pos)
         {
             if (!await client.ExistsAsync()) return;
-            
+
+            WindowManager.Instance.Get<LoginWindow>().Hide(client);
             await client.SpawnAsync(pos);
             WindowManager.Instance.Get<HUDWindow>().Show(client, new HUDWindowWriter(client.SqlId, client.Username, client.Money));
         }

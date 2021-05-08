@@ -7,7 +7,7 @@
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-		<OutputPath>C:\Users\PARADOX\source\repos\RP\Server\resources\PARADOX_RP\</OutputPath>
+		<OutputPath>../../Server/resources/PARADOX_RP/server/</OutputPath>
 	</PropertyGroup>
 
 	<ItemGroup>

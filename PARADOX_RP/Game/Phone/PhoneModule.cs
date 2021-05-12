@@ -1,4 +1,5 @@
-﻿using PARADOX_RP.Controllers.Event.Interface;
+﻿using AltV.Net.Async;
+using PARADOX_RP.Controllers.Event.Interface;
 using PARADOX_RP.Core.Database;
 using PARADOX_RP.Core.Extensions;
 using PARADOX_RP.Core.Factories;
@@ -23,7 +24,7 @@ namespace PARADOX_RP.Game.Phone
                 //todo: db table yk
             });
 
-            eventController.OnClient<PXPlayer>("OpenPhone", OpenPhone);
+            eventController.OnClient<PXPlayer>("RequestOpenPhone", OpenPhone);
         }
 
         private void OpenPhone(PXPlayer player)
@@ -32,6 +33,7 @@ namespace PARADOX_RP.Game.Phone
             if (!player.HasPhone) return;
 
             WindowManager.Instance.Get<PhoneWindow>().Show(player);
+            player.EmitLocked("ResponseOpenPhone");
         }
     }
 }

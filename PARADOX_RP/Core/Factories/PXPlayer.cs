@@ -6,6 +6,7 @@ using PARADOX_RP.Core.Database;
 using PARADOX_RP.Core.Database.Models;
 using PARADOX_RP.Game.Administration.Models;
 using PARADOX_RP.Game.Commands.Extensions;
+using PARADOX_RP.Game.Inventory.Models;
 using PARADOX_RP.Game.Login;
 using PARADOX_RP.Game.MiniGames.Models;
 using PARADOX_RP.Game.Team;
@@ -115,6 +116,7 @@ namespace PARADOX_RP.Core.Factories
         public SupportRankModel SupportRank { get; set; }
         public Teams Team { get; set; }
         public Inventories Inventory { get; set; }
+        public LocalInventoryData LocalInventoryData { get; set; }
         public PlayerCustomization PlayerCustomization { get; set; }
         public PlayerTeamData PlayerTeamData { get; set; }
         public Invitation Invitation { get; set; }

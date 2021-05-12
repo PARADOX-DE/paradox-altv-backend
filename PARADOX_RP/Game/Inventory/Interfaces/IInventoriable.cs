@@ -1,4 +1,5 @@
 ﻿using AltV.Net.Data;
+using PARADOX_RP.Core.Database.Models;
 using PARADOX_RP.Core.Factories;
 using System;
 using System.Collections.Generic;
@@ -9,6 +10,7 @@ namespace PARADOX_RP.Game.Inventory.Interfaces
 {
     public interface IInventoriable
     {
-        Task<InventoryTypes> OnInventoryOpen(PXPlayer player, Position position);
+        Task<Inventories> OnInventoryOpen(PXPlayer player, Position position);
+        Task<bool?> CanAccessInventory(PXPlayer player, Inventories inventory);
     }
 }

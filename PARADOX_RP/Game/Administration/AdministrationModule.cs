@@ -18,6 +18,7 @@ using PARADOX_RP.UI.Windows;
 using Newtonsoft.Json;
 using PARADOX_RP.UI.Windows.NativeMenu;
 using PARADOX_RP.Game.Administration.NativeMenu;
+using AltV.Net.Enums;
 
 namespace PARADOX_RP.Game.Administration
 {
@@ -110,6 +111,12 @@ namespace PARADOX_RP.Game.Administration
         public async void clothes(PXPlayer player, int component, int drawable, int texture)
         {
             await player.SetClothes(component, drawable, texture);
+        }
+
+        [Command("weapon")]
+        public async void weapon(PXPlayer player, WeaponModel weaponModel)
+        {
+            await player.GiveWeaponAsync((uint)weaponModel, 9999, true);
         }
 
         [Command("pos")]

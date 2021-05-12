@@ -19,6 +19,7 @@ using PARADOX_RP.Core.Database;
 using PARADOX_RP.UI;
 using PARADOX_RP.UI.Windows.Inventory;
 using AltV.Net.Async;
+using PARADOX_RP.Game.Inventory.Models;
 
 namespace PARADOX_RP.Game.Inventory
 {
@@ -39,7 +40,7 @@ namespace PARADOX_RP.Game.Inventory
         public Dictionary<int, Items> _items = new Dictionary<int, Items>();
         public Dictionary<int, InventoryInfo> _inventoryInfo = new Dictionary<int, InventoryInfo>();
 
-        public InventoryModule(PXContext pxContext, IInventoryController inventoryHandler, IEnumerable<IInventoriable> inventories, IEnumerable<IItemScript> itemScripts) : base("Inventory")
+        public InventoryModule(PXContext pxContext, IInventoryController inventoryHandler, IEventController eventController, IEnumerable<IInventoriable> inventories, IEnumerable<IItemScript> itemScripts) : base("Inventory")
         {
             _inventoryHandler = inventoryHandler;
             _inventories = inventories;
@@ -47,6 +48,8 @@ namespace PARADOX_RP.Game.Inventory
             LoadDatabaseTable<Items>(pxContext.Items, (i) => _items.Add(i.Id, i));
             LoadDatabaseTable<InventoryInfo>(pxContext.InventoryInfo, (i) => _inventoryInfo.Add((int)i.InventoryType, i));
             //itemScripts.FirstOrDefault(i => i.ScriptName == "vest_itemscript").UseItem();
+
+            eventController.OnClient<PXPlayer, int, int, int, bool>("MoveInventoryItem", MoveInventoryItem);
         }
 
         public override async Task<bool> OnKeyPress(PXPlayer player, KeyEnumeration key)
@@ -60,21 +63,28 @@ namespace PARADOX_RP.Game.Inventory
             return await Task.FromResult(false);
         }
 
-        public async Task<InventoryTypes> GetInventoryType(PXPlayer player, Position position)
+        private void MoveInventoryItem(PXPlayer player, int OldSlot, int NewSlot, int Amount, bool ToAdditional)
         {
-            InventoryTypes inventoryType = InventoryTypes.PLAYER;
+            LocalInventoryData localInventoryData = player.LocalInventoryData;
+            if (localInventoryData == null) return;
+
+        }
+
+        public async Task<Inventories> GetAdditionalInventory(PXPlayer player, Position position)
+        {
+            Inventories inventory = null;
 
             await _inventories.ForEach(async (i) =>
             {
-                InventoryTypes type = await i.OnInventoryOpen(player, position);
-                if(type != InventoryTypes.PLAYER)
+                Inventories additionalInventory = await i.OnInventoryOpen(player, position);
+                if (additionalInventory != null)
                 {
-                    inventoryType = type;
+                    inventory = additionalInventory;
                     return;
                 }
             });
 
-            return inventoryType;
+            return inventory;
         }
 
         public async Task OpenInventory(PXPlayer player)
@@ -82,9 +92,15 @@ namespace PARADOX_RP.Game.Inventory
             Inventories inventory = player.Inventory;
             if (inventory == null) return;
 
-            AltAsync.Log(Enum.GetName(typeof(InventoryTypes), await GetInventoryType(player, player.Position)));
-             
-            WindowManager.Instance.Get<InventoryWindow>().Show(player, new InventoryWindowWriter(player.Inventory, null));
+            Inventories additionalInventory = await GetAdditionalInventory(player, player.Position);
+            if (additionalInventory != null)
+            {
+                AltAsync.Log("OPENINV: " + Enum.GetName(typeof(InventoryTypes), additionalInventory.Type));
+            }
+
+            player.LocalInventoryData = new LocalInventoryData(player.Inventory, additionalInventory);
+
+            WindowManager.Instance.Get<InventoryWindow>().Show(player, new InventoryWindowWriter(player.Inventory, additionalInventory));
         }
 
         public bool HasItem(Inventories inventory, int ItemId)
@@ -92,6 +108,23 @@ namespace PARADOX_RP.Game.Inventory
             if (inventory == null) return false;
 
             return inventory.Items.FirstOrDefault(i => i.Item == ItemId) != null;
+        }
+
+        public async Task<bool?> CanAccessInventory(Inventories inventory, PXPlayer player)
+        {
+            bool? accessible = null;
+
+            await _inventories.ForEach(async (i) =>
+            {
+                bool? _accessible = await i.CanAccessInventory(player, inventory);
+                if (_accessible != null)
+                {
+                    accessible = _accessible;
+                    return;
+                }
+            });
+
+            return accessible;
         }
     }
 }

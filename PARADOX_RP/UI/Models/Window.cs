@@ -4,6 +4,7 @@ using PARADOX_RP.Core.Factories;
 using PARADOX_RP.Utils;
 using System;
 using System.Collections.Generic;
+using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -18,6 +19,13 @@ namespace PARADOX_RP.UI.Models
         {
             this.WindowName = WindowName;
             this.Enabled = Enabled;
+
+            AltAsync.OnClient<PXPlayer, object[]>("ViewCallback", ViewCallback);
+        }
+
+        private void ViewCallback(PXPlayer player, params object[] args)
+        {
+            player.EmitAsync("ViewCallback", WindowName, args);
         }
 
         public void Show(PXPlayer player, object windowObject = null)

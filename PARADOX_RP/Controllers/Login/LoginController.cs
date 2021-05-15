@@ -35,7 +35,6 @@ namespace PARADOX_RP.Controllers.Login
         public LoginController(IInventoryController inventoryController)
         {
             _inventoryController = inventoryController;
-            Alt.Log("reached login controller");
         }
 
         public async Task<bool> CheckLogin(PXPlayer player, string userName, string hashedPassword)

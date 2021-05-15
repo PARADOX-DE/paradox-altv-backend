@@ -1,4 +1,6 @@
-﻿using PARADOX_RP.UI.Models;
+﻿using AltV.Net.Async;
+using PARADOX_RP.Core.Factories;
+using PARADOX_RP.UI.Models;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -7,7 +9,10 @@ namespace PARADOX_RP.UI.Windows
 {
     class LoginWindow : Window
     {
-        public LoginWindow() : base("Login") { }
+        public LoginWindow() : base("Login")
+        {
+
+        }
     }
 
     class LoginWindowObject

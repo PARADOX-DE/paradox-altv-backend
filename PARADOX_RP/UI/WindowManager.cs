@@ -23,13 +23,6 @@ namespace PARADOX_RP.UI
                 _windows[window.GetType()] = window;
                 AltAsync.Log($"[{window.WindowName}] Window loaded.");
             });
-
-            AltAsync.OnClient<PXPlayer, object[]>("ViewCallback", ViewCallback);
-        }
-
-        private void ViewCallback(PXPlayer obj, params object[] args)
-        {
-            // not implemented yet
         }
 
         public T Get<T>() where T : Window

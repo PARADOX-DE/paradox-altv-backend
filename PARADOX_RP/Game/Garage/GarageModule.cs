@@ -1,4 +1,5 @@
-﻿using AltV.Net.Async;
+﻿using AltV.Net;
+using AltV.Net.Async;
 using Microsoft.EntityFrameworkCore;
 using PARADOX_RP.Controllers.Event.Interface;
 using PARADOX_RP.Controllers.Vehicle.Interface;
@@ -91,7 +92,6 @@ namespace PARADOX_RP.Game.Garage
             await using (var px = new PXContext())
             {
                 IEnumerable<Vehicles> vehicles = px.Vehicles.Where(v => v.GarageId == garageId);
-
 
             }
         }

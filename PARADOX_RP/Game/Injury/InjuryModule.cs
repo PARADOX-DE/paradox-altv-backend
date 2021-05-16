@@ -52,6 +52,7 @@ namespace PARADOX_RP.Game.Injury
                 player.Injured = true;
 
                 await player.StartEffect(injury.EffectName, injury.Duration);
+                player.InjuryTimeLeft = injury.Duration;
 
                 _teamController.SendNotification((int)TeamEnumeration.LSMC, "LSMC", "Es wurde eine verletzte Person gemeldet!", NotificationTypes.SUCCESS);
             }

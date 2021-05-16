@@ -29,6 +29,7 @@ namespace PARADOX_RP.Controllers
             eventController.OnClient<PXPlayer>("PlayerReady", OnPlayerConnect);
 
             AltAsync.OnPlayerDead += OnPlayerDead;
+            AltAsync.OnPlayerConnect += PlayerConnectDebug;
             AltAsync.OnPlayerDisconnect += OnPlayerDisconnect;
             AltAsync.OnColShape += OnColShape;
             AltAsync.OnPlayerEnterVehicle += OnPlayerEnterVehicle;
@@ -45,6 +46,18 @@ namespace PARADOX_RP.Controllers
                         await e.OnEveryMinute();
                 });
             });
+        }
+
+        private Task PlayerConnectDebug(IPlayer player, string reason)
+        {
+            Alt.LogFast("=================");
+            Alt.LogFast($"LOGIN: {player.Name}");
+            Alt.LogFast($"SCID: {player.SocialClubId}");
+            Alt.LogFast($"HWID: {player.HardwareIdHash}");
+            Alt.LogFast($"HWID2: {player.HardwareIdExHash}");
+            Alt.LogFast("=================");
+
+            return Task.FromResult(true);
         }
 
         private async Task OnPlayerDead(IPlayer client, IEntity killerEntity, uint weapon)

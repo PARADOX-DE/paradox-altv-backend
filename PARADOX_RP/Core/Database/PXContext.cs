@@ -31,6 +31,7 @@ namespace PARADOX_RP.Core.Database
         public DbSet<Items> Items { get; set; }
         public DbSet<Eastereggs> Eastereggs { get; set; }
         public DbSet<Teams> Teams { get; set; }
+        public DbSet<PositionList> PositionList { get; set; }
 
         public DbSet<Inventories> Inventories { get; set; }
         public DbSet<InventoryInfo> InventoryInfo { get; set; }

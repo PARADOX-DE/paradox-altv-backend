@@ -108,7 +108,5 @@ namespace PARADOX_RP.Game.MiniGames.Content.SuperMario
 
             return await Task.FromResult(false);
         }
-
-
     }
 }

@@ -127,8 +127,8 @@ namespace PARADOX_RP.Controllers.Login
                         var playerInjuryDataInsert = new PlayerInjuryData()
                         {
                             PlayerId = dbPlayer.Id,
-                            InjuryTimeLeft = 0,
-                            InjuryId = 0
+                            InjuryId = 1,
+                            InjuryTimeLeft = 0
                         };
 
                         await px.PlayerInjuryData.AddAsync(playerInjuryDataInsert);

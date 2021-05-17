@@ -114,6 +114,7 @@ namespace PARADOX_RP.Game.Injury
         {
             await player.SpawnAsync(PositionModule.Instance.Get(Positions.MEDICAL_DEPARTMENT));
             await player.Revive(false, false, false);
+
             player.SendNotification("Verletzung", $"Der Notfallmediziner hat deine Verletzung geheilt.", NotificationTypes.SUCCESS);
         }
     }

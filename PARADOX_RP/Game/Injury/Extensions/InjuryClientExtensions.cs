@@ -35,10 +35,11 @@ namespace PARADOX_RP.Game.Injury.Extensions
 
             await using (var px = new PXContext())
             {
-                Players dbPlayer = await px.Players.FindAsync(player.SqlId);
-                if (dbPlayer == null) return await Task.FromResult(false);
+                PlayerInjuryData dbPlayerInjury = await px.PlayerInjuryData.FindAsync(player.PlayerInjuryData.Id);
+                if (dbPlayerInjury == null) return await Task.FromResult(false);
 
-                //TODO: clear db injurystate
+                dbPlayerInjury.InjuryId = 1;
+                dbPlayerInjury.InjuryTimeLeft = 0;
 
                 await px.SaveChangesAsync();
             }

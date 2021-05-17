@@ -22,8 +22,8 @@ namespace PARADOX_RP.Game.Misc.Position
         {
             LoadDatabaseTable<PositionList>(pxContext.PositionList, (pos) =>
             {
-                //Enum.TryParse<Positions>(pos.Id, out Positions positionEnum);
                 if (!Enum.IsDefined(typeof(Positions), pos.Id)) return;
+             
                 _positions.Add((Positions)pos.Id, pos.Position);
             });
         }

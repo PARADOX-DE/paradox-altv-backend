@@ -35,6 +35,7 @@ namespace PARADOX_RP.UI.Windows
 
                 writer.Name("vehicles");
                 writer.BeginArray();
+                if(Vehicles != null)
                     foreach(Vehicles vehicle in Vehicles)
                     {
                         writer.BeginObject();

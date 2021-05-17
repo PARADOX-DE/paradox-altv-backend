@@ -63,8 +63,10 @@ namespace PARADOX_RP.Game.Garage
 
         public async Task<IEnumerable<Vehicles>> RequestGarageVehicles(PXPlayer player, int garageId)
         {
-            if (!player.IsValid()) return null;
-            if (!player.CanInteract()) return null;
+            IEnumerable<Vehicles> result = null;
+
+            if (!player.IsValid()) return result;
+            if (!player.CanInteract()) return result;
 
             //if (!WindowManager.Instance.Get<GarageWindow>().IsVisible(player))
             //{
@@ -93,9 +95,9 @@ namespace PARADOX_RP.Game.Garage
 
             await using (var px = new PXContext())
             {
-                IEnumerable<Vehicles> vehicles = px.Vehicles.Where(v => v.GarageId == garageId && v.PlayerId == player.SqlId);
+                result = px.Vehicles.Where(v => v.GarageId == garageId && v.PlayerId == player.SqlId);
 
-                return vehicles;
+                return result;
             }
         }
 

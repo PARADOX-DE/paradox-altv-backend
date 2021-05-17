@@ -14,7 +14,7 @@ namespace PARADOX_RP.UI.Windows
 
     class GarageWindowWriter : IWritable
     {
-        public GarageWindowWriter(int id, string garageName, IEnumerable<Vehicles> vehicles)
+        public GarageWindowWriter(int id, string garageName, Tuple<Vehicles, IEnumerable<Vehicles>> vehicles)
         {
             Id = id;
             GarageName = garageName;
@@ -23,7 +23,7 @@ namespace PARADOX_RP.UI.Windows
 
         private int Id { get; set; }
         private string GarageName { get; set; }
-        private IEnumerable<Vehicles> Vehicles { get; set; }
+        private Tuple<Vehicles, IEnumerable<Vehicles>> Vehicles { get; set; }
 
         public void OnWrite(IMValueWriter writer)
         {
@@ -33,10 +33,18 @@ namespace PARADOX_RP.UI.Windows
                 writer.Name("garageName");
                 writer.Value(GarageName);
 
+                writer.Name("nearest_vehicle");
+                writer.BeginObject();
+                    writer.Name("id");
+                    writer.Value(Vehicles.Item1.Id);
+                    writer.Name("model");
+                    writer.Value(Vehicles.Item1.VehicleModel);
+                writer.EndObject();
+
                 writer.Name("vehicles");
                 writer.BeginArray();
                 if(Vehicles != null)
-                    foreach(Vehicles vehicle in Vehicles)
+                    foreach(Vehicles vehicle in Vehicles.Item2)
                     {
                         writer.BeginObject();
                             writer.Name("id");

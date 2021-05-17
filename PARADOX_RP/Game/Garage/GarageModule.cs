@@ -39,6 +39,7 @@ namespace PARADOX_RP.Game.Garage
             });
 
             _eventController.OnClient<PXPlayer, int, int>("GarageParkOut", GarageParkOut);
+            _eventController.OnClient<PXPlayer, int, int>("GarageParkIn", GarageParkOut);
         }
 
         public override void OnPlayerConnect(PXPlayer player)
@@ -58,25 +59,26 @@ namespace PARADOX_RP.Game.Garage
             Garages dbGarage = _garages.Values.FirstOrDefault(g => g.Position.Distance(player.Position) < 3);
             if (dbGarage == null) return await Task.FromResult(false);
 
-            IEnumerable<Vehicles> vehicles = await RequestGarageVehicles(player, dbGarage.Id);
+            Tuple<Vehicles, IEnumerable<Vehicles>> vehicles = await RequestGarageVehicles(player, dbGarage.Id);
 
             WindowManager.Instance.Get<GarageWindow>().Show(player, new GarageWindowWriter(dbGarage.Id, dbGarage.Name, vehicles));
             return await Task.FromResult(true);
         }
 
-        public async Task<IEnumerable<Vehicles>> RequestGarageVehicles(PXPlayer player, int garageId)
+        // a) ParkIn Vehicle
+        // b) Vehicles in Garage to park out 
+        public async Task<Tuple<Vehicles, IEnumerable<Vehicles>>> RequestGarageVehicles(PXPlayer player, int garageId)
         {
-            IEnumerable<Vehicles> result = null;
-
-            if (!player.IsValid()) return result;
-            if (!player.CanInteract()) return result;
+            //very shitty needs rework
+            if (!player.IsValid()) return null;
+            if (!player.CanInteract()) return null;
 
             //if (!WindowManager.Instance.Get<GarageWindow>().IsVisible(player))
             //{
-                /*
-                 * ADD LOGGER
-                 */
-                //return null;
+            /*
+             * ADD LOGGER
+             */
+            //return null;
             //}
 
             if (!_garages.TryGetValue(garageId, out Garages dbGarage))
@@ -98,7 +100,12 @@ namespace PARADOX_RP.Game.Garage
 
             await using (var px = new PXContext())
             {
-                return await px.Vehicles.Where(v => v.GarageId == garageId && v.PlayerId == player.SqlId && v.Parked).ToListAsync();
+                List<Vehicles> vehicles = await px.Vehicles.Where(v => v.GarageId == garageId && v.PlayerId == player.SqlId && v.Parked).ToListAsync();
+
+                var nearest = Pools.Instance.Get<PXVehicle>(PoolType.VEHICLE).FirstOrDefault(v => v.OwnerId == player.SqlId && (v.Position.Distance(dbGarage.Position) < 10));
+
+                Vehicles dbNearest = await px.Vehicles.FindAsync(nearest.SqlId);
+                return new Tuple<Vehicles, IEnumerable<Vehicles>>(dbNearest, vehicles);
             }
         }
 
@@ -161,8 +168,8 @@ namespace PARADOX_RP.Game.Garage
                 _garages[garageId].Vehicles.FirstOrDefault(i => i.Id == dbVehicle.Id).Parked = false;
 
                 await _vehicleController.CreateVehicle(dbVehicle);
-                player.SendNotification("Garage", $"Fahrzeug {dbVehicle.VehicleModel.ToUpper()} wurde ausgeparkt.", NotificationTypes.ERROR); 
-                
+                player.SendNotification("Garage", $"Fahrzeug {dbVehicle.VehicleModel.ToUpper()} wurde ausgeparkt.", NotificationTypes.ERROR);
+
                 await px.SaveChangesAsync();
 
                 //TODO: change

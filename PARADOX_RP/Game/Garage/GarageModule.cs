@@ -30,6 +30,9 @@ namespace PARADOX_RP.Game.Garage
             _eventController = eventController;
             _vehicleController = vehicleController;
 
+            pxContext.Vehicles.ForEach((v) => v.Parked = true);
+            pxContext.SaveChanges();
+
             LoadDatabaseTable(pxContext.Garages.Include(v => v.Vehicles), (Garages garage) =>
             {
                 _garages.Add(garage.Id, garage);
@@ -158,7 +161,9 @@ namespace PARADOX_RP.Game.Garage
                 _garages[garageId].Vehicles.FirstOrDefault(i => i.Id == dbVehicle.Id).Parked = false;
 
                 await _vehicleController.CreateVehicle(dbVehicle);
-                player.SendNotification("Garage", $"Fahrzeug {dbVehicle.VehicleModel.ToUpper()} wurde ausgeparkt.", NotificationTypes.ERROR);                await px.SaveChangesAsync();
+                player.SendNotification("Garage", $"Fahrzeug {dbVehicle.VehicleModel.ToUpper()} wurde ausgeparkt.", NotificationTypes.ERROR); 
+                
+                await px.SaveChangesAsync();
 
                 //TODO: change
             }

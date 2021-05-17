@@ -10,6 +10,7 @@ namespace PARADOX_RP.Game.Misc.Position
     //TODO: after database entry => add to enumeration
     public enum Positions
     {
+        NULL_POINT,
         MEDICAL_DEPARTMENT
     }
 

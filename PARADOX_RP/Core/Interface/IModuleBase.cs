@@ -15,7 +15,7 @@ namespace PARADOX_RP.Core.Module
 
         void OnModuleLoad();
         Task<bool> OnKeyPress(PXPlayer player, KeyEnumeration key);
-        void OnPlayerDeath(PXPlayer player, PXPlayer killer, uint weapon);
+        void OnPlayerDeath(PXPlayer player, PXPlayer killer, DeathReasons deathReason, uint weapon);
         void OnPlayerConnect(PXPlayer player);
         void OnPlayerDisconnect(PXPlayer player);
         void OnPlayerLogin(PXPlayer player);

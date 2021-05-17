@@ -55,29 +55,31 @@ namespace PARADOX_RP.Game.Garage
             Garages dbGarage = _garages.Values.FirstOrDefault(g => g.Position.Distance(player.Position) < 3);
             if (dbGarage == null) return await Task.FromResult(false);
 
-            WindowManager.Instance.Get<GarageWindow>().Show(player, new GarageWindowWriter(dbGarage.Id, dbGarage.Name, dbGarage.Vehicles.Where(p => p.Parked)));
+            IEnumerable<Vehicles> vehicles = await RequestGarageVehicles(player, dbGarage.Id);
+
+            WindowManager.Instance.Get<GarageWindow>().Show(player, new GarageWindowWriter(dbGarage.Id, dbGarage.Name, vehicles));
             return await Task.FromResult(true);
         }
 
-        public async void RequestGarageVehicles(PXPlayer player, int garageId)
+        public async Task<IEnumerable<Vehicles>> RequestGarageVehicles(PXPlayer player, int garageId)
         {
-            if (!player.IsValid()) return;
-            if (!player.CanInteract()) return;
+            if (!player.IsValid()) return null;
+            if (!player.CanInteract()) return null;
 
-            if (!WindowManager.Instance.Get<GarageWindow>().IsVisible(player))
-            {
+            //if (!WindowManager.Instance.Get<GarageWindow>().IsVisible(player))
+            //{
                 /*
                  * ADD LOGGER
                  */
-                return;
-            }
+                //return null;
+            //}
 
             if (!_garages.TryGetValue(garageId, out Garages dbGarage))
             {
                 /*
                  * ADD LOGGER
                  */
-                return;
+                return null;
             }
 
             if (dbGarage.Position.Distance(player.Position) > 10)
@@ -85,14 +87,15 @@ namespace PARADOX_RP.Game.Garage
                 /*
                 * ADD LOGGER
                 */
-                return;
+                return null;
             }
 
 
             await using (var px = new PXContext())
             {
-                IEnumerable<Vehicles> vehicles = px.Vehicles.Where(v => v.GarageId == garageId);
+                IEnumerable<Vehicles> vehicles = px.Vehicles.Where(v => v.GarageId == garageId && v.PlayerId == player.SqlId);
 
+                return vehicles;
             }
         }
 

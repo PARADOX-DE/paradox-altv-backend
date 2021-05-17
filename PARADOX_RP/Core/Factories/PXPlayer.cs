@@ -118,6 +118,7 @@ namespace PARADOX_RP.Core.Factories
         public Inventories Inventory { get; set; }
         public LocalInventoryData LocalInventoryData { get; set; }
         public PlayerCustomization PlayerCustomization { get; set; }
+        public PlayerInjuryData PlayerInjuryData { get; set; }
         public PlayerTeamData PlayerTeamData { get; set; }
         public Invitation Invitation { get; set; }
         public string CurrentWindow { get; set; }
@@ -136,6 +137,7 @@ namespace PARADOX_RP.Core.Factories
             SupportRank = new SupportRankModel();
             Team = null;
             PlayerCustomization = null;
+            PlayerInjuryData = null;
             PlayerTeamData = null;
             Invitation = null;
             DimensionType = DimensionTypes.WORLD;

@@ -15,5 +15,6 @@ namespace PARADOX_RP.Core.Database.Models
         public int InjuryTimeLeft { get; set; }
 
         public virtual Players Player { get; set; }
+        public virtual Injuries Injury { get; set; }
     }
 }

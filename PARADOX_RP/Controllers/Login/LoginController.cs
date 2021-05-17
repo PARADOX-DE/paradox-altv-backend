@@ -83,6 +83,7 @@ namespace PARADOX_RP.Controllers.Login
                                                         .Include(p => p.PlayerTeamData)
                                                         .Include(p => p.Team)
                                                         .Include(p => p.PlayerCustomization)
+                                                        .Include(p => p.PlayerInjuryData).ThenInclude(p => p.Injury)
                                                         .FirstOrDefaultAsync(p => p.Username == userName);
 
                     if (dbPlayer == null) return await Task.FromResult(LoadPlayerResponse.ABORT);
@@ -118,6 +119,29 @@ namespace PARADOX_RP.Controllers.Login
                     {
                         Alt.Log("FraktionsData-Objekt existiert bereits.");
                         player.PlayerTeamData = dbPlayer.PlayerTeamData.FirstOrDefault();
+                    }
+
+                    // PlayerInjuryData
+                    if (dbPlayer.PlayerInjuryData.FirstOrDefault() == null)
+                    {
+                        var playerInjuryDataInsert = new PlayerInjuryData()
+                        {
+                            PlayerId = dbPlayer.Id,
+                            InjuryTimeLeft = 0,
+                            InjuryId = 0
+                        };
+
+                        await px.PlayerInjuryData.AddAsync(playerInjuryDataInsert);
+                        await px.SaveChangesAsync();
+
+                        player.PlayerInjuryData = playerInjuryDataInsert;
+
+                        Alt.Log("Injury-Objekt generiert.");
+                    }
+                    else
+                    {
+                        Alt.Log("Injury-Objekt existiert bereits.");
+                        player.PlayerInjuryData = dbPlayer.PlayerInjuryData.FirstOrDefault();
                     }
 
                     player.Inventory = await _inventoryController.LoadInventory(InventoryTypes.PLAYER, player.SqlId);

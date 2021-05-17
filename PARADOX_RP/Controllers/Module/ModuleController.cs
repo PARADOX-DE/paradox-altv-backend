@@ -12,6 +12,7 @@ using PARADOX_RP.Utils;
 using PARADOX_RP.Controllers.Interval.Interface;
 using PARADOX_RP.Controllers.Login.Interface;
 using PARADOX_RP.Controllers.Event.Interface;
+using PARADOX_RP.Utils.Enums;
 
 namespace PARADOX_RP.Controllers
 {
@@ -65,19 +66,18 @@ namespace PARADOX_RP.Controllers
             PXPlayer player = (PXPlayer)client;
             PXPlayer killer = null;
 
-            if (killer is IPlayer)
+            DeathReasons deathReason = killerEntity switch
             {
-                killer = (PXPlayer)killerEntity;
-            }
-            else if (killer is IVehicle)
-            {
-                killer = (PXPlayer)await ((IVehicle)killerEntity).GetDriverAsync();
-            }
+                IPlayer attackerPlayer when attackerPlayer == client => DeathReasons.SELF,
+                IPlayer killerPlayer => DeathReasons.PLAYER,
+                IVehicle vehicle => DeathReasons.VEHICLE,
+                _ => DeathReasons.WORLD
+            };
 
             await _modules.ForEach(e =>
              {
                  if (e.Enabled)
-                     e.OnPlayerDeath(player, killer, weapon);
+                     e.OnPlayerDeath(player, killer, deathReason, weapon);
              });
         }
 

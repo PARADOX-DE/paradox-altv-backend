@@ -2,6 +2,7 @@
 using AltV.Net.Data;
 using PARADOX_RP.Core.Factories;
 using PARADOX_RP.Game.Commands.Extensions;
+using PARADOX_RP.Game.Injury.Extensions;
 using PARADOX_RP.Game.Inventory.Extensions;
 using PARADOX_RP.UI;
 using PARADOX_RP.UI.Windows;
@@ -28,10 +29,11 @@ namespace PARADOX_RP.Game.Login.Extensions
             AltAsync.Log(client.Inventory.HasItem(1).ToString());
 
             if (client.Inventory.HasItem(1))
-            {
                 client.HasPhone = true;
-                AltAsync.Log("Has phone");
-            }
+            
+            if(client.PlayerInjuryData.InjuryTimeLeft > 1)
+                await client.ApplyInjury();
+            
         }
     }
 }

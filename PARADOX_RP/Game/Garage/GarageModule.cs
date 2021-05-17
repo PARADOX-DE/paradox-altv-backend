@@ -95,9 +95,7 @@ namespace PARADOX_RP.Game.Garage
 
             await using (var px = new PXContext())
             {
-                result = px.Vehicles.Where(v => v.GarageId == garageId && v.PlayerId == player.SqlId);
-
-                return result;
+                return await px.Vehicles.Where(v => v.GarageId == garageId && v.PlayerId == player.SqlId && v.Parked).ToListAsync();
             }
         }
 

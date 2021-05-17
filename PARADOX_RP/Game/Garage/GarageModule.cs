@@ -102,9 +102,10 @@ namespace PARADOX_RP.Game.Garage
             {
                 List<Vehicles> vehicles = await px.Vehicles.Where(v => v.GarageId == garageId && v.PlayerId == player.SqlId && v.Parked).ToListAsync();
 
-                var nearest = Pools.Instance.Get<PXVehicle>(PoolType.VEHICLE).FirstOrDefault(v => v.OwnerId == player.SqlId && (v.Position.Distance(dbGarage.Position) < 10));
+                PXVehicle nearest = Pools.Instance.Get<PXVehicle>(PoolType.VEHICLE).FirstOrDefault(v => v.OwnerId == player.SqlId && (v.Position.Distance(dbGarage.Position) < 10));
+                if (nearest == null) AltAsync.Log("vehicle not found");
 
-                Vehicles dbNearest = await px.Vehicles.FindAsync(nearest.SqlId);
+                Vehicles dbNearest = await px.Vehicles.FindAsync(nearest?.SqlId);
                 return new Tuple<Vehicles, IEnumerable<Vehicles>>(dbNearest, vehicles);
             }
         }

@@ -35,10 +35,12 @@ namespace PARADOX_RP.UI.Windows
 
                 writer.Name("nearest_vehicle");
                 writer.BeginObject();
-                    writer.Name("id");
-                    writer.Value(Vehicles.Item1.Id);
-                    writer.Name("model");
-                    writer.Value(Vehicles.Item1.VehicleModel);
+                    if(Vehicles.Item1 != null) { 
+                        writer.Name("id");
+                        writer.Value(Vehicles.Item1.Id);
+                        writer.Name("model");
+                        writer.Value(Vehicles.Item1.VehicleModel);
+                    }
                 writer.EndObject();
 
                 writer.Name("vehicles");

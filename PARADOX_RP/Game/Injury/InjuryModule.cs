@@ -64,7 +64,6 @@ namespace PARADOX_RP.Game.Injury
 
                 await player.ApplyInjury();
 
-
                 _teamController.SendNotification((int)TeamEnumeration.LSMC, "LSMC", "Es wurde eine verletzte Person gemeldet!", NotificationTypes.SUCCESS);
             }
             else

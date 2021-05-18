@@ -124,9 +124,10 @@ namespace PARADOX_RP.Game.Injury
             if (!player.IsValid()) return;
             if (!target.IsValid()) return;
 
-            
+            if (!PermissionsModule.Instance.HasPermissions(player)) return;
 
-                
+            await target.Revive(true, true, true);
+
         }
     }
 }

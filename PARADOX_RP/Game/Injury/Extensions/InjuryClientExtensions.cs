@@ -26,6 +26,8 @@ namespace PARADOX_RP.Game.Injury.Extensions
             if (!player.IsValid()) return await Task.FromResult(false);
 
             if (spawnAtCurrentPosition) await player.SpawnAsync(player.Position);
+            else await player.SpawnAsync(PositionModule.Instance.Get(Positions.MEDICAL_DEPARTMENT));
+
             if (!keepMoney) player.Money = 0;
             if (!keepInventory) { /* TODO: clear inventory */ }
 
@@ -39,13 +41,19 @@ namespace PARADOX_RP.Game.Injury.Extensions
                 PlayerInjuryData dbPlayerInjury = await px.PlayerInjuryData.FindAsync(player.PlayerInjuryData.Id);
                 if (dbPlayerInjury == null) return await Task.FromResult(false);
 
+                if (!keepMoney)
+                {
+                    Players dbPlayer = await px.Players.FindAsync(player.Id);
+                    if (dbPlayer == null) return await Task.FromResult(false);
+
+                    dbPlayer.Money = player.Money;
+                }
+
                 dbPlayerInjury.InjuryId = 1;
                 dbPlayerInjury.InjuryTimeLeft = 0;
 
                 await px.SaveChangesAsync();
             }
-
-            await player.SpawnAsync(PositionModule.Instance.Get(Positions.MEDICAL_DEPARTMENT));
 
             return await Task.FromResult(true);
         }

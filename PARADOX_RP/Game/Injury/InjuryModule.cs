@@ -5,6 +5,9 @@ using PARADOX_RP.Core.Database;
 using PARADOX_RP.Core.Database.Models;
 using PARADOX_RP.Core.Factories;
 using PARADOX_RP.Core.Module;
+using PARADOX_RP.Game.Administration;
+using PARADOX_RP.Game.Commands;
+using PARADOX_RP.Game.Commands.Attributes;
 using PARADOX_RP.Game.Injury.Extensions;
 using PARADOX_RP.Game.Misc.Position;
 using PARADOX_RP.Game.Team;
@@ -26,7 +29,7 @@ namespace PARADOX_RP.Game.Injury
         SHOT
     }
 
-    class InjuryModule : ModuleBase<InjuryModule>
+    class InjuryModule : ModuleBase<InjuryModule>, ICommand
     {
         private IEventController _eventController;
         private ITeamController _teamController;
@@ -41,7 +44,6 @@ namespace PARADOX_RP.Game.Injury
 
             LoadDatabaseTable<Injuries>(pxContext.Injuries, (injury) => _injuries.Add(injury.Weapon, injury));
         }
-
 
         public override async void OnPlayerDeath(PXPlayer player, PXPlayer killer, DeathReasons deathReason, uint weapon)
         {
@@ -111,10 +113,20 @@ namespace PARADOX_RP.Game.Injury
 
         public async Task FinishedPlayerDeath(PXPlayer player)
         {
-            await player.SpawnAsync(PositionModule.Instance.Get(Positions.MEDICAL_DEPARTMENT));
             await player.Revive(false, false, false);
 
             player.SendNotification("Verletzung", $"Der Notfallmediziner hat deine Verletzung geheilt.", NotificationTypes.SUCCESS);
+        }
+
+        [Command("revive")]
+        public void CommandRevive(PXPlayer player, PXPlayer target)
+        {
+            if (!player.IsValid()) return;
+            if (!target.IsValid()) return;
+
+            
+
+                
         }
     }
 }

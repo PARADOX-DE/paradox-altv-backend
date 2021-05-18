@@ -2,6 +2,7 @@
 using PARADOX_RP.Core.Database;
 using PARADOX_RP.Core.Database.Models;
 using PARADOX_RP.Core.Factories;
+using PARADOX_RP.Game.Misc.Position;
 using System.Threading.Tasks;
 
 namespace PARADOX_RP.Game.Injury.Extensions
@@ -43,6 +44,8 @@ namespace PARADOX_RP.Game.Injury.Extensions
 
                 await px.SaveChangesAsync();
             }
+
+            await player.SpawnAsync(PositionModule.Instance.Get(Positions.MEDICAL_DEPARTMENT));
 
             return await Task.FromResult(true);
         }

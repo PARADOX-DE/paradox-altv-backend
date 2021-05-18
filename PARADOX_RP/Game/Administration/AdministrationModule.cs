@@ -67,7 +67,7 @@ namespace PARADOX_RP.Game.Administration
 
                 WindowManager.Instance.Get<NativeMenuWindow>().DisplayMenu<AdministrationNativeMenu>(player);
             }
-        } 
+        }
 
         public async Task LeaveAduty(PXPlayer player)
         {
@@ -90,8 +90,10 @@ namespace PARADOX_RP.Game.Administration
         }
 
         [Command("veh")]
-        public async void veh(PXPlayer player, string vehicleModel)
+        public async void CommandVeh(PXPlayer player, string vehicleModel)
         {
+            if (!PermissionsModule.Instance.HasPermissions(player)) return;
+
             try
             {
                 PXVehicle vehicle = (PXVehicle)await AltAsync.CreateVehicle(vehicleModel, player.Position, player.Rotation);
@@ -100,28 +102,35 @@ namespace PARADOX_RP.Game.Administration
         }
 
         [Command("sendconfirmation", true)]
-        public void SendConfirmation(PXPlayer player, string Title, string Description)
+        public void CommandSendConfirmation(PXPlayer player, string Title, string Description)
         {
             if (!player.IsValid()) return;
+            if (!PermissionsModule.Instance.HasPermissions(player)) return;
 
             WindowManager.Instance.Get<ConfirmationWindow>().Show(player, new ConfirmationWindowWriter(Title, Description, "", ""));
         }
 
         [Command("clothes")]
-        public async void clothes(PXPlayer player, int component, int drawable, int texture)
+        public async void CommandClothes(PXPlayer player, int component, int drawable, int texture)
         {
+            if (!PermissionsModule.Instance.HasPermissions(player)) return;
+
             await player.SetClothes(component, drawable, texture);
         }
 
         [Command("weapon")]
-        public async void weapon(PXPlayer player, WeaponModel weaponModel)
+        public async void CommandWeapon(PXPlayer player, WeaponModel weaponModel)
         {
+            if (!PermissionsModule.Instance.HasPermissions(player)) return;
+
             await player.GiveWeaponAsync((uint)weaponModel, 9999, true);
         }
 
         [Command("pos")]
-        public void pos(PXPlayer player, string positionName)
+        public void CommandPos(PXPlayer player, string positionName)
         {
+            if (!PermissionsModule.Instance.HasPermissions(player)) return;
+
             Position position;
             Rotation rotation;
 

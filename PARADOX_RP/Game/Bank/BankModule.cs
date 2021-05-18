@@ -55,7 +55,7 @@ namespace PARADOX_RP.Game.Bank
                 BankATMs targetATM = _BankATMs.Values.FirstOrDefault(a => a.Position.Distance(player.Position) < 3);
                 if (targetATM == null) return Task.FromResult(false);
 
-                WindowManager.Instance.Get<BankWindow>().Show(player, JsonConvert.SerializeObject(new BankWindowObject(player.Username)));
+                WindowManager.Instance.Get<BankWindow>().Show(player, new BankWindowWriter(player.Username, player.Money, player.BankMoney));
                 return Task.FromResult(true);
             }
 

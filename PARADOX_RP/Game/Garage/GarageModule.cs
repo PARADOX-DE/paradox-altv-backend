@@ -39,7 +39,7 @@ namespace PARADOX_RP.Game.Garage
             });
 
             _eventController.OnClient<PXPlayer, int, int>("GarageParkOut", GarageParkOut);
-            _eventController.OnClient<PXPlayer, int, int>("GarageParkIn", GarageParkOut);
+            _eventController.OnClient<PXPlayer, int, int>("GarageParkIn", GarageParkIn);
         }
 
         public override void OnPlayerConnect(PXPlayer player)
@@ -89,7 +89,7 @@ namespace PARADOX_RP.Game.Garage
                 return null;
             }
 
-            if (dbGarage.Position.Distance(player.Position) > 10)
+            if (dbGarage.Position.Distance(player.Position) > 15)
             {
                 /*
                 * ADD LOGGER
@@ -167,15 +167,76 @@ namespace PARADOX_RP.Game.Garage
 
                 dbVehicle.Parked = false;
                 _garages[garageId].Vehicles.FirstOrDefault(i => i.Id == dbVehicle.Id).Parked = false;
+                await px.SaveChangesAsync();
 
                 await _vehicleController.CreateVehicle(dbVehicle);
                 player.SendNotification("Garage", $"Fahrzeug {dbVehicle.VehicleModel.ToUpper()} wurde ausgeparkt.", NotificationTypes.ERROR);
+                //TODO: change
+
+            }
+        }
+
+        public async void GarageParkIn(PXPlayer player, int vehicleId, int garageId)
+        {
+            if (!player.IsValid()) return;
+            if (!player.CanInteract()) return;
+
+            if (!WindowManager.Instance.Get<GarageWindow>().IsVisible(player))
+            {
+                /*
+                 * ADD LOGGER
+                 */
+                return;
+            }
+
+            if (!_garages.TryGetValue(garageId, out Garages dbGarage))
+            {
+                /*
+                 * ADD LOGGER
+                 */
+                return;
+            }
+
+            await using (var px = new PXContext())
+            {
+                Vehicles dbVehicle = await px.Vehicles.FindAsync(vehicleId);
+                if (dbVehicle == null) return;
+
+                if (!Pools.Instance.Find<PXVehicle>(PoolType.VEHICLE, dbVehicle.Id))
+                {
+                    /*
+                     * VEHICLE NOT PARKED OUT
+                     */
+                    return;
+                }
+
+
+                if (dbVehicle.Parked)
+                {
+                    /*
+                     * VEHICLE ALREADY PARKED
+                     */
+                    return;
+                }
+
+                dbVehicle.Position_X = dbGarage.Spawn_Position_X;
+                dbVehicle.Position_Y = dbGarage.Spawn_Position_Y;
+                dbVehicle.Position_Z = dbGarage.Spawn_Position_Z;
+
+                dbVehicle.Parked = true;
+
+                PXVehicle vehicle = Pools.Instance.Get<PXVehicle>(PoolType.VEHICLE).FirstOrDefault(v => v.SqlId == dbVehicle.Id);
+                if (vehicle == null) return;
+
+                Pools.Instance.Remove(vehicle.SqlId, vehicle);
+                await vehicle.RemoveAsync();
+
+                player.SendNotification("Garage", $"Fahrzeug {dbVehicle.VehicleModel.ToUpper()} wurde eingparkt.", NotificationTypes.ERROR);
 
                 await px.SaveChangesAsync();
 
                 //TODO: change
             }
         }
-
     }
 }

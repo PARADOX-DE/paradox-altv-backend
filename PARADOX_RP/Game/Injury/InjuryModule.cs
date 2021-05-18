@@ -119,7 +119,7 @@ namespace PARADOX_RP.Game.Injury
         }
 
         [Command("revive")]
-        public void CommandRevive(PXPlayer player, PXPlayer target)
+        public async void CommandRevive(PXPlayer player, PXPlayer target)
         {
             if (!player.IsValid()) return;
             if (!target.IsValid()) return;

@@ -178,6 +178,8 @@ namespace PARADOX_RP.Game.Garage
 
         public async void GarageParkIn(PXPlayer player, int vehicleId, int garageId)
         {
+            AltAsync.Log("GarageParkIn");
+
             if (!player.IsValid()) return;
             if (!player.CanInteract()) return;
 
@@ -186,6 +188,8 @@ namespace PARADOX_RP.Game.Garage
                 /*
                  * ADD LOGGER
                  */
+                AltAsync.Log("WindowManager");
+
                 return;
             }
 
@@ -194,6 +198,8 @@ namespace PARADOX_RP.Game.Garage
                 /*
                  * ADD LOGGER
                  */
+                AltAsync.Log("Garages");
+
                 return;
             }
 
@@ -207,6 +213,8 @@ namespace PARADOX_RP.Game.Garage
                     /*
                      * VEHICLE NOT PARKED OUT
                      */
+                    AltAsync.Log("VEHICLE NOT PARKED OUT");
+
                     return;
                 }
 
@@ -216,6 +224,8 @@ namespace PARADOX_RP.Game.Garage
                     /*
                      * VEHICLE ALREADY PARKED
                      */
+                    AltAsync.Log("VEHICLE ALREADY PARKED");
+
                     return;
                 }
 
@@ -226,14 +236,19 @@ namespace PARADOX_RP.Game.Garage
                 dbVehicle.Parked = true;
 
                 PXVehicle vehicle = Pools.Instance.Get<PXVehicle>(PoolType.VEHICLE).FirstOrDefault(v => v.SqlId == dbVehicle.Id);
-                if (vehicle == null) return;
+                if (vehicle == null)
+                {
+                    AltAsync.Log("vehicle");
+                    return;
+                }
+
+                await px.SaveChangesAsync();
 
                 Pools.Instance.Remove(vehicle.SqlId, vehicle);
                 await vehicle.RemoveAsync();
 
                 player.SendNotification("Garage", $"Fahrzeug {dbVehicle.VehicleModel.ToUpper()} wurde eingparkt.", NotificationTypes.ERROR);
 
-                await px.SaveChangesAsync();
 
                 //TODO: change
             }

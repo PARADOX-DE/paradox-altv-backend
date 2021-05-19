@@ -11,6 +11,7 @@ namespace PARADOX_RP.Core.Factories
     public class PXVehicle : Vehicle
     {
         public int SqlId { get; set; }
+        public string VehicleModel { get; set; }
         public int OwnerId { get; set; }
         public bool HasRadio { get; set; }
         public Inventories Inventory { get; set; }
@@ -18,6 +19,7 @@ namespace PARADOX_RP.Core.Factories
         internal PXVehicle(IntPtr nativePointer, ushort id) : base(nativePointer, id)
         {
             SqlId = -1;
+            VehicleModel = "Unknown";
             HasRadio = false;
             Inventory = null;
         }

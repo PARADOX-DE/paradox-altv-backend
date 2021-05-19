@@ -12,18 +12,32 @@ namespace PARADOX_RP.UI.Windows
         public GarageWindow() : base("Garage") { }
     }
 
+    class GarageWindowVehicle
+    {
+        public GarageWindowVehicle(int id, string model)
+        {
+            Id = id;
+            VehicleModel = model;
+        }
+
+        public int Id { get; set; }
+        public string VehicleModel { get; set; }
+    }
+
     class GarageWindowWriter : IWritable
     {
-        public GarageWindowWriter(int id, string garageName, Tuple<Vehicles, IEnumerable<Vehicles>> vehicles)
+        public GarageWindowWriter(int id, string garageName, List<GarageWindowVehicle> vehicles, GarageWindowVehicle nearestVehicle)
         {
             Id = id;
             GarageName = garageName;
             Vehicles = vehicles;
+            NearestVehicle = nearestVehicle;
         }
 
         private int Id { get; set; }
         private string GarageName { get; set; }
-        private Tuple<Vehicles, IEnumerable<Vehicles>> Vehicles { get; set; }
+        private List<GarageWindowVehicle> Vehicles { get; set; }
+        private GarageWindowVehicle NearestVehicle { get; set; }
 
         public void OnWrite(IMValueWriter writer)
         {
@@ -35,18 +49,18 @@ namespace PARADOX_RP.UI.Windows
 
                 writer.Name("nearest_vehicle");
                 writer.BeginObject();
-                    if(Vehicles.Item1 != null) { 
+                    if(NearestVehicle != null) { 
                         writer.Name("id");
-                        writer.Value(Vehicles.Item1.Id);
+                        writer.Value(NearestVehicle.Id);
                         writer.Name("model");
-                        writer.Value(Vehicles.Item1.VehicleModel);
+                        writer.Value(NearestVehicle.VehicleModel);
                     }
                 writer.EndObject();
 
                 writer.Name("vehicles");
                 writer.BeginArray();
                 if(Vehicles != null)
-                    foreach(Vehicles vehicle in Vehicles.Item2)
+                    foreach(GarageWindowVehicle vehicle in Vehicles)
                     {
                         writer.BeginObject();
                             writer.Name("id");

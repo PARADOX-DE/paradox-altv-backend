@@ -61,5 +61,7 @@ namespace PARADOX_RP.Game.Garage
 
             return await Task.FromResult(true);
         }
+
+        public async Task<GarageWindowWriter
     }
 }

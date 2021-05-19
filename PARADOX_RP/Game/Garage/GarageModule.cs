@@ -67,8 +67,6 @@ namespace PARADOX_RP.Game.Garage
             return await Task.FromResult(true);
         }
 
-       
-
         public async void GarageParkOut(PXPlayer player, int vehicleId, int garageId)
         {
             if (!player.IsValid()) return;
@@ -120,9 +118,10 @@ namespace PARADOX_RP.Game.Garage
                     return;
                 }
 
-                dbVehicle.Position_X = dbGarage.Spawn_Position_X;
-                dbVehicle.Position_Y = dbGarage.Spawn_Position_Y;
-                dbVehicle.Position_Z = dbGarage.Spawn_Position_Z;
+                GarageSpawns garageSpawn = await _garageController.GetFreeGarageSpawn(dbGarage);
+                dbVehicle.Position_X = garageSpawn.Spawn_Position_X;
+                dbVehicle.Position_Y = garageSpawn.Spawn_Position_Y;
+                dbVehicle.Position_Z = garageSpawn.Spawn_Position_Z;
 
                 dbVehicle.Parked = false;
                 await px.SaveChangesAsync();

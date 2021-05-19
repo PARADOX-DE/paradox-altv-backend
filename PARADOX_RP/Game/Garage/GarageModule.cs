@@ -128,7 +128,6 @@ namespace PARADOX_RP.Game.Garage
 
                 await _vehicleController.CreateVehicle(dbVehicle);
                 player.SendNotification("Garage", $"Fahrzeug {dbVehicle.VehicleModel.ToUpper()} wurde ausgeparkt.", NotificationTypes.ERROR);
-                //TODO: change
             }
         }
     }

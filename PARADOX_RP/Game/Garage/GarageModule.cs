@@ -62,5 +62,7 @@ namespace PARADOX_RP.Game.Garage
             return await Task.FromResult(true);
         }
 
+        private bool CanParkOutVehicle(PXPlayer player, Vehicles dbVehicle, Garages garage) => dbVehicle.GarageId == garage.Id && dbVehicle.PlayerId == player.SqlId && dbVehicle.Parked;
+
     }
 }

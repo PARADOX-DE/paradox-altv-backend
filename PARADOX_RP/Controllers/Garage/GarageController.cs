@@ -1,0 +1,36 @@
+﻿using Microsoft.EntityFrameworkCore;
+using PARADOX_RP.Controllers.Garage.Interface;
+using PARADOX_RP.Core.Database;
+using PARADOX_RP.Core.Database.Models;
+using PARADOX_RP.Core.Factories;
+using PARADOX_RP.UI.Windows;
+using PARADOX_RP.Utils;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace PARADOX_RP.Controllers.Garage
+{
+    class GarageController : IGarageController
+    {
+
+        public async Task<GarageWindowWriter> RequestGarageVehicles(PXPlayer player, Garages garage)
+        {
+            PXVehicle tmpNearestVehicle = Pools.Instance.Get<PXVehicle>(PoolType.VEHICLE).FirstOrDefault(v => v.OwnerId == player.SqlId && (v.Position.Distance(garage.Position) < 20));
+            GarageWindowVehicle NearestVehicle = tmpNearestVehicle == null ? null : new GarageWindowVehicle(tmpNearestVehicle.Id, tmpNearestVehicle.VehicleModel);
+
+            await using (var px = new PXContext())
+            {
+                List<GarageWindowVehicle> Vehicles = new List<GarageWindowVehicle>();
+                await px.Vehicles.Where(v => v.GarageId == garage.Id && v.PlayerId == player.SqlId && v.Parked).ForEachAsync((v) =>
+                {
+                    Vehicles.Add(new GarageWindowVehicle(v.Id, v.VehicleModel));
+                });
+
+                return new GarageWindowWriter(garage.Id, garage.Name, Vehicles, NearestVehicle);
+            }
+        }
+    }
+}

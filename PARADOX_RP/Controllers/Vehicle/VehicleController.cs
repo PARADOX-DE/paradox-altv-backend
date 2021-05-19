@@ -26,6 +26,7 @@ namespace PARADOX_RP.Controllers.Vehicle
         {
             PXVehicle vehicle = (PXVehicle)await AltAsync.CreateVehicle(dbVehicle.VehicleModel, dbVehicle.Position, dbVehicle.Rotation);
             vehicle.SqlId = dbVehicle.Id;
+            vehicle.VehicleModel = dbVehicle.VehicleModel;
             vehicle.OwnerId = dbVehicle.PlayerId;
             vehicle.Inventory = await _inventoryController.LoadInventory(InventoryTypes.VEHICLE, dbVehicle.Id);
 

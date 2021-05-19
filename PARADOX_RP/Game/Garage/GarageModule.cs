@@ -59,6 +59,8 @@ namespace PARADOX_RP.Game.Garage
             Garages dbGarage = _garages.Values.FirstOrDefault(g => g.Position.Distance(player.Position) < 3);
             if (dbGarage == null) return await Task.FromResult(false);
 
+            WindowManager.Instance.Get<GarageWindow>().Show(player, await RequestGarageVehicles(player, dbGarage));
+
             return await Task.FromResult(true);
         }
 

@@ -41,7 +41,7 @@ namespace PARADOX_RP.Game.Garage
                 _garages.Add(garage.Id, garage);
             });
 
-            //_eventController.OnClient<PXPlayer, int, int>("GarageParkOut", GarageParkOut);
+            _eventController.OnClient<PXPlayer, int, int>("GarageParkOut", GarageParkOut);
             //_eventController.OnClient<PXPlayer, int, int>("GarageParkIn", GarageParkIn);
         }
 

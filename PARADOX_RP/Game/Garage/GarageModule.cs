@@ -119,6 +119,12 @@ namespace PARADOX_RP.Game.Garage
                 }
 
                 GarageSpawns garageSpawn = await _garageController.GetFreeGarageSpawn(dbGarage);
+                if (garageSpawn == null)
+                {
+                    player.SendNotification("Garage", $"Derzeit sind leider alle Ausparkpunkte belegt.", NotificationTypes.ERROR);
+                    return;
+                }
+
                 dbVehicle.Position_X = garageSpawn.Spawn_Position_X;
                 dbVehicle.Position_Y = garageSpawn.Spawn_Position_Y;
                 dbVehicle.Position_Z = garageSpawn.Spawn_Position_Z;

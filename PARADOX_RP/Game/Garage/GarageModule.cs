@@ -166,7 +166,6 @@ namespace PARADOX_RP.Game.Garage
                 dbVehicle.Position_Z = dbGarage.Spawn_Position_Z;
 
                 dbVehicle.Parked = false;
-                _garages[garageId].Vehicles.FirstOrDefault(i => i.Id == dbVehicle.Id).Parked = false;
                 await px.SaveChangesAsync();
 
                 await _vehicleController.CreateVehicle(dbVehicle);
@@ -232,6 +231,7 @@ namespace PARADOX_RP.Game.Garage
                 dbVehicle.Position_X = dbGarage.Spawn_Position_X;
                 dbVehicle.Position_Y = dbGarage.Spawn_Position_Y;
                 dbVehicle.Position_Z = dbGarage.Spawn_Position_Z;
+                dbVehicle.GarageId = garageId;
 
                 dbVehicle.Parked = true;
 

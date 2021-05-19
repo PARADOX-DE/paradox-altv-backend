@@ -50,7 +50,8 @@ namespace PARADOX_RP.Game.Injury
             //InjuryModule only for injuries in dimension 0
             if (player.Dimension != 0) return;
 
-            if (Configuration.Instance.DevMode) AltAsync.Log($"[DEATH] {player.Name} // REASON: {Enum.GetName(typeof(DeathReasons), deathReason)} // Weapon: {weapon}");
+            if (Configuration.Instance.DevMode) AltAsync.Log($"[DEATH] {player.Username} // REASON: {Enum.GetName(typeof(DeathReasons), deathReason)} // Weapon: {weapon}");
+            if (!player.IsValid()) return;
 
             if (_injuries.TryGetValue(weapon, out Injuries injury))
             {
@@ -64,9 +65,9 @@ namespace PARADOX_RP.Game.Injury
                     await px.SaveChangesAsync();
                 }
 
-                await player.ApplyInjury();
-
                 _teamController.SendNotification((int)TeamEnumeration.LSMC, "LSMC", "Es wurde eine verletzte Person gemeldet!", NotificationTypes.SUCCESS);
+
+                await player.ApplyInjury();
             }
             else
             {
@@ -97,10 +98,13 @@ namespace PARADOX_RP.Game.Injury
                             if (injuryData == null) continue;
 
                             injuryData.InjuryTimeLeft = player.InjuryTimeLeft;
+                            player.PlayerInjuryData.InjuryTimeLeft = player.InjuryTimeLeft;
 
                             await px.SaveChangesAsync();
                         }
                     }
+
+                    await player.PlayAnimation(player.PlayerInjuryData.Injury.AnimationDictionary, player.PlayerInjuryData.Injury.AnimationName);
                 }
                 else
                 {
@@ -119,15 +123,22 @@ namespace PARADOX_RP.Game.Injury
         }
 
         [Command("revive")]
-        public async void CommandRevive(PXPlayer player, PXPlayer target)
+        public async void CommandRevive(PXPlayer player, string targetString)
         {
+            AltAsync.Log("command");
             if (!player.IsValid()) return;
-            if (!target.IsValid()) return;
-
             if (!PermissionsModule.Instance.HasPermissions(player)) return;
 
-            await target.Revive(true, true, true);
+            PXPlayer target = Pools.Instance.Get<PXPlayer>(PoolType.PLAYER).FirstOrDefault(p => p.Username.ToLower().Contains(targetString.ToLower()));
+            if (target == null)
+            {
+                player.SendNotification("Revive", "Person nicht gefunden!", NotificationTypes.ERROR);
+                return;
+            }
 
+            if (target == null || !target.IsValid()) return;
+
+            await target.Revive(true, true, true);
         }
     }
 }

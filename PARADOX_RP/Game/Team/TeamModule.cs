@@ -60,7 +60,7 @@ namespace PARADOX_RP.Game.Team
         {
             if (!player.CanInteract()) return;
 
-            PXPlayer invitePlayer = Pools.Instance.Get<PXPlayer>(PoolType.PLAYER).FirstOrDefault(p => p.Name.ToLower().Contains(inviteString.ToLower()));
+            PXPlayer invitePlayer = Pools.Instance.Get<PXPlayer>(PoolType.PLAYER).FirstOrDefault(p => p.Username.ToLower().Contains(inviteString.ToLower()));
             if (invitePlayer == null)
             {
                 player.Team.SendNotification(player, "Person nicht gefunden!", NotificationTypes.ERROR);

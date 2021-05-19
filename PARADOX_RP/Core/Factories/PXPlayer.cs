@@ -181,8 +181,9 @@ namespace PARADOX_RP.Core.Factories
 
         public Task SetClothes(int component, int drawable, int texture) => this.EmitAsync("SetClothes", component, drawable, texture);
 
-        public Task StartEffect(string EffectName, int Duration) => this.EmitAsync("StartEffect", EffectName, Duration);
-
+        public Task StartEffect(string EffectName, int Duration, bool Looped = false) => this.EmitAsync("StartEffect", EffectName, Duration, Looped);
+        public Task StopEffect() => this.EmitAsync("StopEffect");
+        
         public void Freeze(bool state)
         {
             this.EmitLocked("Freeze", state);

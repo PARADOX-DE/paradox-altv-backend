@@ -15,9 +15,8 @@ namespace PARADOX_RP.Game.Injury.Extensions
             player.Injured = true;
             player.InjuryTimeLeft = player.PlayerInjuryData.InjuryTimeLeft;
 
-            await player.StartEffect(player.PlayerInjuryData.Injury.EffectName, player.PlayerInjuryData.Injury.Duration * 1000);
+            await player.StartEffect(player.PlayerInjuryData.Injury.EffectName, (player.PlayerInjuryData.Injury.Duration * 1000) * 60);
             await player.PlayAnimation(player.PlayerInjuryData.Injury.AnimationDictionary, player.PlayerInjuryData.Injury.AnimationName);
-
         }
 
         public static async Task<bool> Revive(this PXPlayer player, bool spawnAtCurrentPosition = true, bool keepMoney = true, bool keepInventory = true)
@@ -35,6 +34,7 @@ namespace PARADOX_RP.Game.Injury.Extensions
             player.InjuryTimeLeft = 0;
 
             await player.StopAnimation();
+            await player.StopEffect();
 
             await using (var px = new PXContext())
             {

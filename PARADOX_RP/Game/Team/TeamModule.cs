@@ -20,12 +20,15 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using PARADOX_RP.Controllers.Event.Interface;
+using EntityStreamer;
+using System.Numerics;
+using AltV.Net.Data;
 
 namespace PARADOX_RP.Game.Team
 {
     // after adding teams in db => add to enum
     public enum TeamEnumeration
-    {  
+    {
         CIVILIAN = 1,
         LSPD,
         LSMC
@@ -33,27 +36,34 @@ namespace PARADOX_RP.Game.Team
 
     class TeamModule : ModuleBase<TeamModule>, ICommand
     {
-        public Dictionary<int, Teams> TeamList;
+        public Dictionary<int, Teams> TeamList = new Dictionary<int, Teams>();
         private readonly IEventController _eventController;
         private readonly ITeamController _teamHandler;
 
-        public TeamModule(IEventController eventController, ITeamController teamHandler) : base("Team")
+        public TeamModule(PXContext pxContext, IEventController eventController, ITeamController teamHandler) : base("Team")
         {
-            TeamList = new Dictionary<int, Teams>();
+            LoadDatabaseTable(pxContext.Teams, (Teams team) =>
+            {
+                TeamList.Add(team.Id, team);
+            });
 
-            //using (var px = new PXContext())
-            //{
-            //    foreach (Teams team in px.Teams)
-            //    {
-            //        TeamList.Add(team.Id, team);
-            //        _teamHandler.LoadTeam(team);
-            //    }
-            //}
             _eventController = eventController;
             _teamHandler = teamHandler;
 
             _eventController.OnClient<PXPlayer, string>("InviteTeamMember", InviteTeamMember);
             _eventController.OnClient<PXPlayer>("TeamInviteAccept", TeamInviteAccept);
+        }
+
+        public override void OnPlayerConnect(PXPlayer player)
+        {
+            TeamList.ForEach((team) =>
+            {
+                if (Configuration.Instance.DevMode)
+                {
+                    MarkerStreamer.Create(MarkerTypes.MarkerTypeThickChevronUp, team.Value.SpawnPosition, new Vector3(1, 1, 1), new Vector3(0, 0, 0), null, new Rgba(37, 165, 202, 125));
+                    TextLabelStreamer.Create($"[{Enum.GetName(typeof(TeamTypes), team.Value.TeamType)}] Team: {team.Value.TeamName}", team.Value.SpawnPosition);
+                }
+            });
         }
 
         public void InviteTeamMember(PXPlayer player, string inviteString)
@@ -81,7 +91,7 @@ namespace PARADOX_RP.Game.Team
 
             invitePlayer.Invitation = new Invitation()
             {
-                InviterId = player.Id,
+                InviterId = player.SqlId,
                 Team = player.Team
             };
 

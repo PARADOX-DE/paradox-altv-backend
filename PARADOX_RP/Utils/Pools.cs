@@ -76,6 +76,22 @@ namespace PARADOX_RP.Utils
             };
         }
 
+        public T GetObjectById<T>(PoolType poolType, int objId) where T : IEntity
+        {
+            Dictionary<int, T> targetDictionary = poolType switch
+            {
+                PoolType.PLAYER => playerPool as Dictionary<int, T>,
+                PoolType.VEHICLE => vehiclePool as Dictionary<int, T>,
+                PoolType.TEAM_PLAYER => teamPlayerPool as Dictionary<int, T>,
+                _ => playerPool as Dictionary<int, T>,
+            };
+
+            if (targetDictionary.TryGetValue(objId, out T value))
+                return value;
+
+            return default;
+        }
+
         public bool Find<T>(PoolType poolType, int objId) where T : IEntity
         {
             Dictionary<int, T> targetDictionary = poolType switch

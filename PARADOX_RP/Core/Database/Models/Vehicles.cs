@@ -17,6 +17,7 @@ namespace PARADOX_RP.Core.Database.Models
         public int Id { get; set; }
         public int PlayerId { get; set; }
         public string VehicleModel { get; set; }
+        public string Numberplate { get; set; }
         public int GarageId { get; set; }
         public bool Parked { get; set; }
 

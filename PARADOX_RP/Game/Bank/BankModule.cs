@@ -1,4 +1,5 @@
 ﻿using AltV.Net.Async;
+using AltV.Net.Data;
 using EntityStreamer;
 using Newtonsoft.Json;
 using PARADOX_RP.Controllers.Event.Interface;
@@ -14,6 +15,7 @@ using PARADOX_RP.Utils.Enums;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -30,6 +32,8 @@ namespace PARADOX_RP.Game.Bank
                 _BankATMs.Add(atm.Id, atm);
             });
 
+
+
             eventController.OnClient<PXPlayer, int>("DepositMoney", DepositMoney);
             eventController.OnClient<PXPlayer, int>("WithdrawMoney", WithdrawMoney);
             eventController.OnClient<PXPlayer, string, int>("TransferMoney", TransferMoney);
@@ -42,6 +46,9 @@ namespace PARADOX_RP.Game.Bank
                 _BankATMs.ForEach((atm) =>
                 {
                     player.AddBlips($"Bankautomat #{atm.Key}", atm.Value.Position, 108, 25, 1, true);
+
+                    if (Configuration.Instance.DevMode)
+                        MarkerStreamer.Create(MarkerTypes.MarkerTypeDallorSign, Vector3.Add(atm.Value.Position, new Vector3(0, 0, 1)), new Vector3(1, 1, 1), null, null, new Rgba(37, 165, 202, 200));
                 });
             }
         }
@@ -110,7 +117,12 @@ namespace PARADOX_RP.Game.Bank
             if (!player.CanInteract()) return;
             if (!WindowManager.Instance.Get<BankWindow>().IsVisible(player)) return;
 
-            if (player.Username.ToLower() == targetString.ToLower()) return;
+            if (player.Username.ToLower() == targetString.ToLower())
+            {
+                player.SendNotification(_bankName, "Du kannst dir nicht selber Geld senden!", NotificationTypes.ERROR);
+                //TODO: add log
+                return;
+            }
 
             if (player.BankMoney < moneyAmount)
             {

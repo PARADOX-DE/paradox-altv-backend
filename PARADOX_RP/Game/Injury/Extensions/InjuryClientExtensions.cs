@@ -43,7 +43,7 @@ namespace PARADOX_RP.Game.Injury.Extensions
 
                 if (!keepMoney)
                 {
-                    Players dbPlayer = await px.Players.FindAsync(player.Id);
+                    Players dbPlayer = await px.Players.FindAsync(player.SqlId);
                     if (dbPlayer == null) return await Task.FromResult(false);
 
                     dbPlayer.Money = player.Money;

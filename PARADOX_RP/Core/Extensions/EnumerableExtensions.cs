@@ -16,5 +16,14 @@ namespace PARADOX_RP.Core.Extensions
 
             return Task.CompletedTask;
         }
+
+        public static async Task ForEach<T>(this IEnumerable<T> sequence, Func<T, Task<bool>> action)
+        {
+            foreach (T obj in sequence)
+            {
+                if (!await action(obj))
+                    break;
+            }
+        }
     }
 }

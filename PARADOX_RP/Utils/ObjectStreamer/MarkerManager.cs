@@ -42,7 +42,8 @@ namespace EntityStreamer
         MarkerTypeDebugSphere = 28,
         MarkerTypeDallorSign = 29,
         MarkerTypeHorizontalBars = 30,
-        MarkerTypeWolfHead = 31
+        MarkerTypeWolfHead = 31,
+        MarkerTypeCarSymbol = 36,
     }
 
     /// <summary>

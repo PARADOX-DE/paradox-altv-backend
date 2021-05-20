@@ -1,5 +1,8 @@
 ﻿using AltV.Net;
 using AltV.Net.Async;
+using AltV.Net.Data;
+using AltV.Net.Elements.Entities;
+using EntityStreamer;
 using Microsoft.EntityFrameworkCore;
 using PARADOX_RP.Controllers.Event.Interface;
 using PARADOX_RP.Controllers.Garage.Interface;
@@ -16,6 +19,7 @@ using PARADOX_RP.Utils.Enums;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -50,6 +54,10 @@ namespace PARADOX_RP.Game.Garage
             _garages.ForEach((g) =>
             {
                 player.AddBlips(g.Value.Name, g.Value.Position, 524, 0, 1, true);
+
+                if (Configuration.Instance.DevMode)
+                    g.Value.Spawns.ForEach((spawn) => MarkerStreamer.Create(MarkerTypes.MarkerTypeCarSymbol, spawn.Spawn_Position, new Vector3(1, 1, 1), new Vector3(0, 0, (float)(spawn.Spawn_Rotation.Yaw * 180 / Math.PI)), null, new Rgba(37, 165, 202, 200)));
+                
             });
         }
 
@@ -128,6 +136,10 @@ namespace PARADOX_RP.Game.Garage
                 dbVehicle.Position_X = garageSpawn.Spawn_Position_X;
                 dbVehicle.Position_Y = garageSpawn.Spawn_Position_Y;
                 dbVehicle.Position_Z = garageSpawn.Spawn_Position_Z;
+
+                dbVehicle.Rotation_R = garageSpawn.Spawn_Rotation_X;
+                dbVehicle.Rotation_P = garageSpawn.Spawn_Rotation_Y;
+                dbVehicle.Rotation_Y = garageSpawn.Spawn_Rotation_Z;
 
                 dbVehicle.Parked = false;
                 await px.SaveChangesAsync();

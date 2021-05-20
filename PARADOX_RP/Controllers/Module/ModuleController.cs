@@ -97,8 +97,15 @@ namespace PARADOX_RP.Controllers
 
             await _modules.ForEach(async e =>
             {
+                AltAsync.Log(e.ModuleName);
                 if (e.Enabled)
-                    if (await e.OnKeyPress(player, Utils.Enums.KeyEnumeration.E)) return;
+                    if (await e.OnKeyPress(player, Utils.Enums.KeyEnumeration.E))
+                    {
+                        AltAsync.Log("Found!");
+                        return false;
+                    }
+
+                return true;
             });
         }
 
@@ -110,7 +117,9 @@ namespace PARADOX_RP.Controllers
             await _modules.ForEach(async e =>
             {
                 if (e.Enabled)
-                    if (await e.OnKeyPress(player, Utils.Enums.KeyEnumeration.I)) return;
+                    if (await e.OnKeyPress(player, Utils.Enums.KeyEnumeration.I)) return false;
+
+                return true;
             });
         }
 
@@ -121,7 +130,9 @@ namespace PARADOX_RP.Controllers
             await _modules.ForEach(async e =>
             {
                 if (e.Enabled)
-                    if (await e.OnKeyPress(player, Utils.Enums.KeyEnumeration.Y)) return;
+                    if (await e.OnKeyPress(player, Utils.Enums.KeyEnumeration.Y)) return false;
+
+                return true;
             });
         }
 
@@ -132,7 +143,9 @@ namespace PARADOX_RP.Controllers
             await _modules.ForEach(async e =>
             {
                 if (e.Enabled)
-                    if (await e.OnKeyPress(player, Utils.Enums.KeyEnumeration.F9)) return;
+                    if (await e.OnKeyPress(player, Utils.Enums.KeyEnumeration.F9)) return false;
+
+                return true;
             });
         }
 

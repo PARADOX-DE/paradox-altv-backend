@@ -136,8 +136,11 @@ namespace PARADOX_RP.Game.Administration
 
             if (player.Vehicle != null)
             {
-                position = player.Vehicle.Position;
-                rotation = player.Vehicle.Rotation;
+                lock (player.Vehicle)
+                {
+                    position = player.Vehicle.Position;
+                    rotation = player.Vehicle.Rotation;
+                }
             }
             else
             {

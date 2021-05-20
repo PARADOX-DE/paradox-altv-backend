@@ -296,19 +296,19 @@ namespace EntityStreamer
         /// <param name="streamRange">Stream range, default is 30.</param>
         /// <returns>The newly created dynamic textlabel.</returns>
         public static PlayerLabel Create(
-            string text, Vector3 position, int dimension = 0, bool? center = true, Rgba? color = null, float? scale = 0.7f,
-            DropShadow dropShadow = null, Rgba? edge = null, int? font = null, bool? proportional = null, uint streamRange = 45
+            string text, Vector3 position, int dimension = 0, float scale = 0.7f,
+          uint streamRange = 45
         )
         {
             PlayerLabel textLabel = new PlayerLabel(position, dimension, streamRange, 1)
             {
-                Center = center ?? true,
-                Color = color ?? new Rgba(255, 255, 255, 255),
-                DropShadow = dropShadow ?? new DropShadow { Distance = 0, R = 0, G = 0, B = 0, A = 255 },
-                Edge = edge ?? new Rgba(0, 0, 0, 150),
-                Font = font ?? 4,
+                Center = true,
+                Color = new Rgba(255, 255, 255, 255),
+                DropShadow =  new DropShadow { Distance = 0, R = 0, G = 0, B = 0, A = 255 },
+                Edge = new Rgba(0, 0, 0, 150),
+                Font =  4,
                 Text = text,
-                Proportional = proportional ?? true,
+                Proportional = true,
                 Scale = scale
             };
             PlayerLabel.LabelList.Add(textLabel);

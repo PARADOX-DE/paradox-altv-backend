@@ -46,7 +46,7 @@ namespace PARADOX_RP.Game.Garage
             });
 
             _eventController.OnClient<PXPlayer, int, int>("GarageParkOut", GarageParkOut);
-            //_eventController.OnClient<PXPlayer, int, int>("GarageParkIn", GarageParkIn);
+            _eventController.OnClient<PXPlayer, int, int>("GarageParkIn", GarageParkIn);
         }
 
         public override void OnPlayerConnect(PXPlayer player)
@@ -57,7 +57,7 @@ namespace PARADOX_RP.Game.Garage
 
                 if (Configuration.Instance.DevMode)
                     g.Value.Spawns.ForEach((spawn) => MarkerStreamer.Create(MarkerTypes.MarkerTypeCarSymbol, spawn.Spawn_Position, new Vector3(1, 1, 1), new Vector3(0, 0, (float)(spawn.Spawn_Rotation.Yaw * 180 / Math.PI)), null, new Rgba(37, 165, 202, 200)));
-                
+
             });
         }
 
@@ -146,6 +146,68 @@ namespace PARADOX_RP.Game.Garage
 
                 await _vehicleController.CreateVehicle(dbVehicle);
                 player.SendNotification("Garage", $"Fahrzeug {dbVehicle.VehicleModel.ToUpper()} wurde ausgeparkt.", NotificationTypes.ERROR);
+            }
+        }
+
+        public async void GarageParkIn(PXPlayer player, int vehicleId, int garageId)
+        {
+            if (!player.IsValid()) return;
+            if (!player.CanInteract()) return;
+
+            if (!WindowManager.Instance.Get<GarageWindow>().IsVisible(player))
+            {
+                /*
+                 * ADD LOGGER
+                 */
+                return;
+            }
+
+            if (!_garages.TryGetValue(garageId, out Garages dbGarage))
+            {
+                /*
+                 * ADD LOGGER
+                 */
+                return;
+            }
+
+            PXVehicle vehicle = Pools.Instance.GetObjectById<PXVehicle>(PoolType.VEHICLE, vehicleId);
+            if (vehicle == null)
+            {
+                /*
+                 * VEHICLE ALREADY PARKED IN
+                 */
+                AltAsync.Log("Not found Object");
+                return;
+            }
+
+
+            if (vehicle.Position.Distance(dbGarage.Position) > 30)
+            {
+                //TODO: ADD LOG
+                return;
+            }
+
+            await using (var px = new PXContext())
+            {
+                Vehicles dbVehicle = await px.Vehicles.FindAsync(vehicleId);
+                if (dbVehicle == null) return;
+
+
+                if (dbVehicle.Parked)
+                {
+                    /*
+                     * VEHICLE ALREADY PARKED
+                     */
+                    return;
+                }
+
+                dbVehicle.Parked = true;
+                await px.SaveChangesAsync();
+
+                Pools.Instance.Remove(vehicleId, vehicle);
+                await vehicle.RemoveAsync();
+
+                player.SendNotification("Garage", $"Fahrzeug {dbVehicle.VehicleModel.ToUpper()} wurde eingeparkt.", NotificationTypes.ERROR);
             }
         }
     }

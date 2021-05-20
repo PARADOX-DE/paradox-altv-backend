@@ -27,7 +27,7 @@ namespace PARADOX_RP.Game.Phone.Content
 
         public async Task<bool> IsPermitted(PXPlayer player)
         {
-            if (player.Team.Id != (int)TeamEnumeration.CIVILIAN) // not in any team
+            if (player.Team.Id != (int)TeamEnumeration.CIVILIAN) // not in any team 
                 return await Task.FromResult(true);
 
             return await Task.FromResult(false);
@@ -41,9 +41,9 @@ namespace PARADOX_RP.Game.Phone.Content
             if (onlineState)
                 Pools.Instance.Get<PXPlayer>(PoolType.PLAYER).Where(p => p.Team.Id == player.Team.Id).ForEach((p) =>
                 {
-                    _factionMembers.Add(p.Id, new TeamPhoneApplicationPlayer()
+                    _factionMembers.Add(p.SqlId, new TeamPhoneApplicationPlayer()
                     {
-                        Id = p.Id,
+                        Id = p.SqlId,
                         Name = p.Username,
                         LastLogin = DateTime.Now
                     });

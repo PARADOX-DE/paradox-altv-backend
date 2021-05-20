@@ -40,8 +40,8 @@ namespace PARADOX_RP.Controllers.Garage
 
         public async Task<GarageWindowWriter> RequestGarageVehicles(PXPlayer player, Garages garage)
         {
-            PXVehicle tmpNearestVehicle = Pools.Instance.Get<PXVehicle>(PoolType.VEHICLE).FirstOrDefault(v => v.OwnerId == player.SqlId && (v.Position.Distance(garage.Position) < 20));
-            GarageWindowVehicle NearestVehicle = tmpNearestVehicle == null ? null : new GarageWindowVehicle(tmpNearestVehicle.Id, tmpNearestVehicle.VehicleModel);
+            PXVehicle tmpNearestVehicle = Pools.Instance.Get<PXVehicle>(PoolType.VEHICLE).FirstOrDefault(v => v.OwnerId == player.SqlId && (v.Position.Distance(garage.Position) < 28));
+            GarageWindowVehicle NearestVehicle = tmpNearestVehicle == null ? null : new GarageWindowVehicle(tmpNearestVehicle.SqlId, tmpNearestVehicle.VehicleModel);
 
             await using (var px = new PXContext())
             {

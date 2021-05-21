@@ -21,14 +21,14 @@ namespace PARADOX_RP.Game.Arrival
     class ArrivalModule : ModuleBase<ArrivalModule>
     {
 
-        public Dictionary<ComponentVariation, Clothes> _arrivalClothes = null;
+        public Dictionary<Tuple<Gender, ComponentVariation>, Clothes> _arrivalClothes = null;
         public ArrivalModule(PXContext pxContext) : base("Arrival")
         {
-            _arrivalClothes = new Dictionary<ComponentVariation, Clothes>();
+            _arrivalClothes = new Dictionary<Tuple<Gender, ComponentVariation>, Clothes>();
 
             pxContext.Clothes.Where(c => c.Name.StartsWith("Einreise")).ForEach((arrivalCloth) =>
             {
-                _arrivalClothes.Add((ComponentVariation)arrivalCloth.Component, arrivalCloth);
+                _arrivalClothes.Add(new Tuple<Gender, ComponentVariation>((Gender)arrivalCloth.Gender, (ComponentVariation)arrivalCloth.Component), arrivalCloth);
             });
         }
 

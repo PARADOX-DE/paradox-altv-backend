@@ -15,6 +15,8 @@ namespace PARADOX_RP.UI.Windows
         public HUDWindow() : base("Hud") { }
     }
 
+    
+
     class HUDWindowWriter : IWritable
     {
         private int _charId;

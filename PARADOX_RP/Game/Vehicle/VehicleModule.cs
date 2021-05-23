@@ -2,6 +2,7 @@
 using AltV.Net.Async;
 using AltV.Net.Data;
 using AltV.Net.Elements.Entities;
+using PARADOX_RP.Core.Database;
 using PARADOX_RP.Core.Database.Models;
 using PARADOX_RP.Core.Factories;
 using PARADOX_RP.Core.Module;
@@ -18,9 +19,13 @@ namespace PARADOX_RP.Game.Vehicle
 {
     class VehicleModule : ModuleBase<VehicleModule>, IInventoriable
     {
-        public VehicleModule() : base("Vehicle")
+        public readonly Dictionary<int, VehicleClass> _vehicleClass = new Dictionary<int, VehicleClass>();
+        public VehicleModule(PXContext pxContext) : base("Vehicle")
         {
-
+            LoadDatabaseTable<VehicleClass>(pxContext.VehicleClass, (v) =>
+            {
+                _vehicleClass.Add(v.Id, v);
+            });
         }
 
         public Task<Inventories> OnInventoryOpen(PXPlayer player, Position position)

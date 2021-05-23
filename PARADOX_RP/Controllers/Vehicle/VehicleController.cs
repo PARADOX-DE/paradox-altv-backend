@@ -2,6 +2,7 @@
 using AltV.Net.Data;
 using PARADOX_RP.Controllers.Inventory;
 using PARADOX_RP.Controllers.Vehicle.Interface;
+using PARADOX_RP.Core.Database;
 using PARADOX_RP.Core.Database.Models;
 using PARADOX_RP.Core.Factories;
 using PARADOX_RP.Game.Inventory;
@@ -33,6 +34,24 @@ namespace PARADOX_RP.Controllers.Vehicle
             Pools.Instance.Register(dbVehicle.Id, vehicle);
 
             return await Task.FromResult(vehicle);
+        }
+
+        public async Task CreateDatabaseVehicle(int OwnerId, int VehicleClassId)
+        {
+            await using(var px = new PXContext())
+            {
+                Vehicles toInsert = new Vehicles()
+                {
+                    PlayerId = OwnerId,
+                    VehicleClassId = VehicleClassId,
+                    Numberplate = "PARADOX",
+                    Parked = true,
+                    CreatedAt = DateTime.Now,
+                    GarageId = 1,
+
+                };
+                await px.Vehicles.AddAsync(toInsert);
+            }
         }
     }
 }

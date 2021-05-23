@@ -54,6 +54,7 @@ namespace PARADOX_RP.Game.Garage
             _garages.ForEach((g) =>
             {
                 player.AddBlips(g.Value.Name, g.Value.Position, 524, 0, 1, true);
+                MarkerStreamer.Create(MarkerTypes.MarkerTypeUpsideDownCone, g.Value.Position, new Vector3(1, 1, 1), new Vector3(0, 0, 0), null, new Rgba(37, 165, 202, 125));
 
                 if (Configuration.Instance.DevMode)
                     g.Value.Spawns.ForEach((spawn) => MarkerStreamer.Create(MarkerTypes.MarkerTypeCarSymbol, spawn.Spawn_Position, new Vector3(1, 1, 1), new Vector3(0, 0, (float)(spawn.Spawn_Rotation.Yaw * 180 / Math.PI)), null, new Rgba(37, 165, 202, 200)));

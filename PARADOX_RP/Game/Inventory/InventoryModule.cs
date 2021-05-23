@@ -29,7 +29,8 @@ namespace PARADOX_RP.Game.Inventory
         VEHICLE,
         TEAMHOUSE,
         STORAGEROOM,
-        LOCKER
+        LOCKER,
+        EVENT
     }
 
     class InventoryModule : ModuleBase<InventoryModule>

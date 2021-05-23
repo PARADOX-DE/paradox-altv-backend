@@ -7,6 +7,6 @@ namespace PARADOX_RP.UI.Windows.CarShop
 {
     class VehicleShopWindow : Window
     {
-        public VehicleShopWindow() : base("VehicleShop") { }
+        public VehicleShopWindow() : base("CarShop") { }
     }
 }

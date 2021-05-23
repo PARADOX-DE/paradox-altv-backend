@@ -48,8 +48,7 @@ namespace PARADOX_RP.Game.Vehicle.Shop
                 MarkerStreamer.Create(MarkerTypes.MarkerTypeHorizontalCircleFat, Vector3.Subtract(v.Value.BoughtPosition, new Vector3(0, 0, 0.5f)), new Vector3(1, 1, 1), new Vector3(0, 0, 0), null, new Rgba(37, 165, 202, 125));
 
                 if (Configuration.Instance.DevMode)
-                    v.Value.Content.ForEach((preview) => AltAsync.CreateVehicleBuilder(preview.VehicleClass.VehicleModel, preview.PreviewPosition, preview.PreviewRotation).PrimaryColor(0).SecondaryColor(0));
-
+                    v.Value.Content.ForEach((preview) => AltAsync.CreateVehicleBuilder(preview.VehicleClass.VehicleModel, preview.PreviewPosition, preview.PreviewRotation).PrimaryColor(0).SecondaryColor(0).Build());
             });
         }
 
@@ -62,9 +61,53 @@ namespace PARADOX_RP.Game.Vehicle.Shop
             VehicleShops vehicleShop = _vehicleShops.Values.FirstOrDefault(g => g.Position.Distance(player.Position) < 3);
             if (vehicleShop == null) return await Task.FromResult(false);
 
-            WindowManager.Instance.Get<VehicleShopWindow>().Show(player);
+            WindowManager.Instance.Get<VehicleShopWindow>().Show(player, new VehicleShopWindowWriter(vehicleShop.Id, vehicleShop.Content.ToList()));
 
             return await Task.FromResult(true);
+        }
+
+        public async void BuyVehicleShop(PXPlayer player, int shopId, string vehicleName)
+        {
+            if (!player.IsValid()) return;
+            if (!player.CanInteract()) return;
+
+            if (!WindowManager.Instance.Get<VehicleShopWindow>().IsVisible(player))
+            {
+                /*
+                 * ADD LOGGER
+                 */
+                return;
+            }
+
+            if (!_vehicleShops.TryGetValue(shopId, out VehicleShops dbVehicleShop))
+            {
+                /*
+                 * ADD LOGGER
+                 */
+                return;
+            }
+
+            VehicleShopsContent vehicleContent = dbVehicleShop.Content.FirstOrDefault(v => v.VehicleClass.VehicleModel == vehicleName);
+            if (vehicleContent == null)
+            {
+                /*
+                 * ADD LOGGER
+                 */
+                return;
+            }
+
+            if (Pools.Instance.Get<PXVehicle>(PoolType.VEHICLE).FirstOrDefault(v => v.Position.Distance(dbVehicleShop.BoughtPosition) < 3) != null)
+            {
+                player.SendNotification("Fahrzeughandel", "Derzeit ist der Ausparkpunkt belegt.", NotificationTypes.SUCCESS);
+                return;
+            }
+
+            if (await player.TakeMoney(vehicleContent.Price))
+            {
+                player.SendNotification("Fahrzeughandel", $"Fahrzeug {vehicleContent.VehicleClass.VehicleModel} für {vehicleContent.Price}$ gekauft.", NotificationTypes.SUCCESS);
+
+
+            }
         }
     }
 }

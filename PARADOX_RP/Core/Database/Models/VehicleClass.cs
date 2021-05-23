@@ -26,7 +26,7 @@ namespace PARADOX_RP.Core.Database.Models
 
         /* TRUNK */
         public int InvWeight { get; set; } // IN GRAMM | tashish
-        public int InvSlots { get; }
+        public int InvSlots { get; set; }
 
         public byte Seats { get; set; }
 

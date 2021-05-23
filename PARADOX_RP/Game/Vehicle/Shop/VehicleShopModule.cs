@@ -33,7 +33,7 @@ namespace PARADOX_RP.Game.Vehicle.Shop
             _eventController = eventController;
             _vehicleController = vehicleController;
 
-            LoadDatabaseTable(pxContext.VehicleShops.Include(v => v.Content), (VehicleShops vehShop) =>
+            LoadDatabaseTable(pxContext.VehicleShops.Include(v => v.Content).ThenInclude(v => v.VehicleClass), (VehicleShops vehShop) =>
             {
                 _vehicleShops.Add(vehShop.Id, vehShop);
             });
@@ -48,7 +48,7 @@ namespace PARADOX_RP.Game.Vehicle.Shop
                 MarkerStreamer.Create(MarkerTypes.MarkerTypeHorizontalCircleFat, Vector3.Subtract(v.Value.BoughtPosition, new Vector3(0, 0, 0.5f)), new Vector3(1, 1, 1), new Vector3(0, 0, 0), null, new Rgba(37, 165, 202, 125));
 
                 if (Configuration.Instance.DevMode)
-                    v.Value.Content.ForEach((preview) => AltAsync.CreateVehicle(preview.VehicleModel, preview.PreviewPosition, preview.PreviewRotation));
+                    v.Value.Content.ForEach((preview) => AltAsync.CreateVehicleBuilder(preview.VehicleClass.VehicleModel, preview.PreviewPosition, preview.PreviewRotation).PrimaryColor(0).SecondaryColor(0));
 
             });
         }

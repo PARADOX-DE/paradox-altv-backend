@@ -99,7 +99,7 @@ namespace PARADOX_RP.Game.Garage
 
             await using (var px = new PXContext())
             {
-                Vehicles dbVehicle = await px.Vehicles.FindAsync(vehicleId);
+                Vehicles dbVehicle = await px.Vehicles.Include(vC => vC.VehicleClass).FirstOrDefaultAsync(v => v.Id == vehicleId);
                 if (dbVehicle == null) return;
 
                 if (dbVehicle.GarageId != garageId)
@@ -146,7 +146,7 @@ namespace PARADOX_RP.Game.Garage
                 await px.SaveChangesAsync();
 
                 await _vehicleController.CreateVehicle(dbVehicle);
-                player.SendNotification("Garage", $"Fahrzeug {dbVehicle.VehicleModel.ToUpper()} wurde ausgeparkt.", NotificationTypes.ERROR);
+                player.SendNotification("Garage", $"Fahrzeug {dbVehicle.VehicleClass.VehicleModel.ToUpper()} wurde ausgeparkt.", NotificationTypes.ERROR);
             }
         }
 
@@ -190,7 +190,8 @@ namespace PARADOX_RP.Game.Garage
 
             await using (var px = new PXContext())
             {
-                Vehicles dbVehicle = await px.Vehicles.FindAsync(vehicleId);
+                Vehicles dbVehicle = await px.Vehicles.Include(vC => vC.VehicleClass).FirstOrDefaultAsync(v => v.Id == vehicleId);
+
                 if (dbVehicle == null) return;
 
 
@@ -208,7 +209,7 @@ namespace PARADOX_RP.Game.Garage
                 Pools.Instance.Remove(vehicleId, vehicle);
                 await vehicle.RemoveAsync();
 
-                player.SendNotification("Garage", $"Fahrzeug {dbVehicle.VehicleModel.ToUpper()} wurde eingeparkt.", NotificationTypes.ERROR);
+                player.SendNotification("Garage", $"Fahrzeug {dbVehicle.VehicleClass.VehicleModel.ToUpper()} wurde eingeparkt.", NotificationTypes.ERROR);
             }
         }
     }

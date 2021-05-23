@@ -46,9 +46,9 @@ namespace PARADOX_RP.Controllers.Garage
             await using (var px = new PXContext())
             {
                 List<GarageWindowVehicle> Vehicles = new List<GarageWindowVehicle>();
-                await px.Vehicles.Where(v => v.GarageId == garage.Id && v.PlayerId == player.SqlId && v.Parked).ForEachAsync((v) =>
+                await px.Vehicles.Where(v => v.GarageId == garage.Id && v.PlayerId == player.SqlId && v.Parked).Include(vC => vC.VehicleClass).ForEachAsync((v) =>
                 {
-                    Vehicles.Add(new GarageWindowVehicle(v.Id, v.VehicleModel));
+                    Vehicles.Add(new GarageWindowVehicle(v.Id, v.VehicleClass.VehicleModel));
                 });
 
                 return new GarageWindowWriter(garage.Id, garage.Name, Vehicles, NearestVehicle);

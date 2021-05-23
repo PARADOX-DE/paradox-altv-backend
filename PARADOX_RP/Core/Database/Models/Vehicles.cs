@@ -8,15 +8,9 @@ namespace PARADOX_RP.Core.Database.Models
 {
     public partial class Vehicles
     {
-        public Vehicles(int playerId, string vehicleModel)
-        {
-            PlayerId = playerId;
-            VehicleModel = vehicleModel;
-        }
-
         public int Id { get; set; }
         public int PlayerId { get; set; }
-        public string VehicleModel { get; set; }
+        public int VehicleClassId { get; set; }
         public string Numberplate { get; set; }
         public int GarageId { get; set; }
         public bool Parked { get; set; }
@@ -30,6 +24,7 @@ namespace PARADOX_RP.Core.Database.Models
 
         public DateTime CreatedAt { get; set; }
 
+        public virtual VehicleClass VehicleClass { get; set; }
         public virtual Players Player { get; set; }
         public virtual Garages Garage { get; set; }
     }

@@ -10,7 +10,7 @@ namespace PARADOX_RP.Core.Database.Models
     public partial class VehicleShopsContent
     {
         public int Id { get; set; }
-        public string VehicleModel { get; set; }
+        public int VehicleClassId { get; set; }
         public int Price { get; set; }
 
         public float PreviewPosition_X { get; set; }
@@ -20,6 +20,8 @@ namespace PARADOX_RP.Core.Database.Models
         public float PreviewRotation_X { get; set; }
         public float PreviewRotation_Y { get; set; }
         public float PreviewRotation_Z { get; set; }
+
+        public virtual VehicleClass VehicleClass { get; set; }
     }
 
     public partial class VehicleShopsContent

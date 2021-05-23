@@ -106,7 +106,7 @@ namespace PARADOX_RP.Game.Vehicle.Shop
             {
                 player.SendNotification("Fahrzeughandel", $"Fahrzeug {vehicleContent.VehicleClass.VehicleModel} für {vehicleContent.Price}$ gekauft.", NotificationTypes.SUCCESS);
 
-
+                _vehicleController.CreateDatabaseVehicle()
             }
         }
     }

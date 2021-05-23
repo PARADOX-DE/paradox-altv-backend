@@ -10,6 +10,6 @@ namespace PARADOX_RP.Controllers.Vehicle.Interface
     interface IVehicleController
     {
         Task<PXVehicle> CreateVehicle(Vehicles dbVehicle);
-        Task CreateDatabaseVehicle(Vehicles dbVehicle);
+        Task CreateDatabaseVehicle(int OwnerId, int VehicleClassId);
     }
 }

@@ -1,5 +1,6 @@
 ﻿using AltV.Net.Async;
 using AltV.Net.Data;
+using Microsoft.EntityFrameworkCore;
 using PARADOX_RP.Controllers.Inventory;
 using PARADOX_RP.Controllers.Vehicle.Interface;
 using PARADOX_RP.Core.Database;
@@ -9,6 +10,7 @@ using PARADOX_RP.Game.Inventory;
 using PARADOX_RP.Utils;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -30,6 +32,7 @@ namespace PARADOX_RP.Controllers.Vehicle
             vehicle.VehicleModel = dbVehicle.VehicleClass.VehicleModel;
             vehicle.OwnerId = dbVehicle.PlayerId;
             vehicle.Inventory = await _inventoryController.LoadInventory(InventoryTypes.VEHICLE, dbVehicle.Id);
+            await vehicle.SetNumberplateTextAsync(dbVehicle.Numberplate);
 
             Pools.Instance.Register(dbVehicle.Id, vehicle);
 
@@ -38,7 +41,7 @@ namespace PARADOX_RP.Controllers.Vehicle
 
         public async Task CreateDatabaseVehicle(int OwnerId, int VehicleClassId)
         {
-            await using(var px = new PXContext())
+            await using (var px = new PXContext())
             {
                 Vehicles toInsert = new Vehicles()
                 {
@@ -50,7 +53,39 @@ namespace PARADOX_RP.Controllers.Vehicle
                     GarageId = 1,
 
                 };
+
                 await px.Vehicles.AddAsync(toInsert);
+                await px.SaveChangesAsync();
+            }
+        }
+
+        public async Task<PXVehicle> CreateDatabaseVehicle(int OwnerId, int VehicleClassId, Position SpawnPosition, Rotation SpawnRotation)
+        {
+            await using (var px = new PXContext())
+            {
+                Vehicles toInsert = new Vehicles()
+                {
+                    PlayerId = OwnerId,
+                    VehicleClassId = VehicleClassId,
+                    Numberplate = "PARADOX",
+                    Parked = false,
+                    CreatedAt = DateTime.Now,
+                    GarageId = 1,
+
+                    Position_X = SpawnPosition.X,
+                    Position_Y = SpawnPosition.Y,
+                    Position_Z = SpawnPosition.Z,
+
+                    Rotation_R = SpawnRotation.Roll,
+                    Rotation_P = SpawnRotation.Pitch,
+                    Rotation_Y = SpawnRotation.Yaw,
+                };
+
+                await px.Vehicles.AddAsync(toInsert);
+                await px.SaveChangesAsync();
+
+                var dbVehicle = await px.Vehicles.Include(v => v.VehicleClass).Where(v => v.Id == toInsert.Id).FirstOrDefaultAsync();
+                return await CreateVehicle(dbVehicle);
             }
         }
     }

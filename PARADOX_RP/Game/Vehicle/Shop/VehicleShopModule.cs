@@ -37,6 +37,8 @@ namespace PARADOX_RP.Game.Vehicle.Shop
             {
                 _vehicleShops.Add(vehShop.Id, vehShop);
             });
+
+            eventController.OnClient<PXPlayer, int, string>("BuyVehicleShop", BuyVehicleShop);
         }
 
         public override void OnPlayerConnect(PXPlayer player)
@@ -106,7 +108,11 @@ namespace PARADOX_RP.Game.Vehicle.Shop
             {
                 player.SendNotification("Fahrzeughandel", $"Fahrzeug {vehicleContent.VehicleClass.VehicleModel} für {vehicleContent.Price}$ gekauft.", NotificationTypes.SUCCESS);
 
-                _vehicleController.CreateDatabaseVehicle()
+                await _vehicleController.CreateDatabaseVehicle(player.SqlId, vehicleContent.VehicleClassId, dbVehicleShop.BoughtPosition, dbVehicleShop.BoughtRotation);
+            }
+            else
+            {
+                player.SendNotification("Fahrzeughandel", "Du hast nicht genug Geld dabei!", NotificationTypes.SUCCESS);
             }
         }
     }

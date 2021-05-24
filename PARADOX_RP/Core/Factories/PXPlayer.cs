@@ -195,9 +195,10 @@ namespace PARADOX_RP.Core.Factories
         }
 
         public Task PlayAnimation(string dict, string name, int flag = 9, int duration = -1) => this.EmitAsync("PlayAnimation", dict, name, flag, duration);
+        public Task SetPedIntoVeh(IVehicle vehicle, sbyte seatId) => this.EmitAsync("SetPedIntoVeh", vehicle, (int)seatId);
 
         public Task StopAnimation() => this.EmitAsync("StopAnimation");
-
+        
         public bool IsValid()
         {
             if (!LoggedIn) return false;

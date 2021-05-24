@@ -19,6 +19,8 @@ using Newtonsoft.Json;
 using PARADOX_RP.UI.Windows.NativeMenu;
 using PARADOX_RP.Game.Administration.NativeMenu;
 using AltV.Net.Enums;
+using PARADOX_RP.Game.Vehicle;
+using System.Linq;
 
 namespace PARADOX_RP.Game.Administration
 {
@@ -97,6 +99,7 @@ namespace PARADOX_RP.Game.Administration
             try
             {
                 PXVehicle vehicle = (PXVehicle)await AltAsync.CreateVehicle(vehicleModel, player.Position, player.Rotation);
+                await player.SetPedIntoVeh(vehicle, -1);
             }
             catch { player.SendNotification(ModuleName, $"Fahrzeug nicht gefunden.", NotificationTypes.ERROR); }
         }
@@ -150,6 +153,20 @@ namespace PARADOX_RP.Game.Administration
 
             player.SendNotification("Position", "Position an die Konsole gesendet.", NotificationTypes.SUCCESS);
             Alt.Log($"{positionName} X: {position.X.ToString().Replace(",", ".")} Y: {position.Y.ToString().Replace(",", ".")} Z: {position.Z.ToString().Replace(",", ".")} | ROT: {rotation.Yaw.ToString().Replace(",", ".")}");
+        }
+
+        [Command("createveh")]
+        public async void CommandCreateDatabaseVeh(PXPlayer player, string VehicleModel)
+        {
+            VehicleClass vehicleClass = VehicleModule.Instance._vehicleClass.FirstOrDefault(v => v.Value.VehicleModel.ToLower().StartsWith(VehicleModel.ToLower())).Value;
+            if (vehicleClass == null)
+            {
+                player.SendNotification("Administration", $"Fahrzeugmodell {VehicleModel} nicht gefunden.", NotificationTypes.SUCCESS);
+
+            }
+
+            PXVehicle result = await _vehicleController.CreateDatabaseVehicle(player.SqlId, vehicleClass.Id, player.Position, player.Rotation);
+            await player.SetPedIntoVeh(result, -1);
         }
     }
 }

@@ -93,7 +93,7 @@ namespace PARADOX_RP.Game.Vehicle.Shop
             if (vehicleContent == null)
             {
                 /*
-                 * ADD LOGGER
+                 * ADD LOGGER 
                  */
                 return;
             }

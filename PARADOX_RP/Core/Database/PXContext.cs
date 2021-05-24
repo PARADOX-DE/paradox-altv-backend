@@ -60,7 +60,7 @@ namespace PARADOX_RP.Core.Database
         {
             string connection = $"Server=127.0.0.1; port=3306; Database=altv-paradox_rp; UserId=root; Password=lCvLpEGKhvz4WDsN;";
             optionsBuilder.UseMySql(connection, ServerVersion.AutoDetect(connection));
-            optionsBuilder.UseLoggerFactory(loggerFactory);
+            //optionsBuilder.UseLoggerFactory(loggerFactory);
         }
     }
 }

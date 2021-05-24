@@ -22,6 +22,9 @@ namespace PARADOX_RP.Core.Database.Models
         public float Rotation_P { get; set; }
         public float Rotation_Y { get; set; }
 
+        public int PrimaryColor { get; set; }
+        public int SecondaryColor { get; set; }
+
         public DateTime CreatedAt { get; set; }
 
         public virtual VehicleClass VehicleClass { get; set; }

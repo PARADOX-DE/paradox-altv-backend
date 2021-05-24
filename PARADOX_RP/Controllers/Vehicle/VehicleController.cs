@@ -32,14 +32,18 @@ namespace PARADOX_RP.Controllers.Vehicle
             vehicle.VehicleModel = dbVehicle.VehicleClass.VehicleModel;
             vehicle.OwnerId = dbVehicle.PlayerId;
             vehicle.Inventory = await _inventoryController.LoadInventory(InventoryTypes.VEHICLE, dbVehicle.Id);
+
             await vehicle.SetNumberplateTextAsync(dbVehicle.Numberplate);
+
+            await vehicle.SetPrimaryColorAsync((byte)dbVehicle.PrimaryColor);
+            await vehicle.SetSecondaryColorAsync((byte)dbVehicle.SecondaryColor);
 
             Pools.Instance.Register(dbVehicle.Id, vehicle);
 
             return await Task.FromResult(vehicle);
         }
 
-        public async Task CreateDatabaseVehicle(int OwnerId, int VehicleClassId)
+        public async Task CreateDatabaseVehicle(int OwnerId, int VehicleClassId, int PrimaryColor = 0, int SecondaryColor = 0)
         {
             await using (var px = new PXContext())
             {
@@ -52,6 +56,8 @@ namespace PARADOX_RP.Controllers.Vehicle
                     CreatedAt = DateTime.Now,
                     GarageId = 1,
 
+                    PrimaryColor = PrimaryColor,
+                    SecondaryColor = SecondaryColor,
                 };
 
                 await px.Vehicles.AddAsync(toInsert);
@@ -59,7 +65,7 @@ namespace PARADOX_RP.Controllers.Vehicle
             }
         }
 
-        public async Task<PXVehicle> CreateDatabaseVehicle(int OwnerId, int VehicleClassId, Position SpawnPosition, Rotation SpawnRotation)
+        public async Task<PXVehicle> CreateDatabaseVehicle(int OwnerId, int VehicleClassId, Position SpawnPosition, Rotation SpawnRotation, int PrimaryColor = 0, int SecondaryColor = 0)
         {
             await using (var px = new PXContext())
             {
@@ -79,6 +85,9 @@ namespace PARADOX_RP.Controllers.Vehicle
                     Rotation_R = SpawnRotation.Roll,
                     Rotation_P = SpawnRotation.Pitch,
                     Rotation_Y = SpawnRotation.Yaw,
+
+                    PrimaryColor = PrimaryColor,
+                    SecondaryColor = SecondaryColor,
                 };
 
                 await px.Vehicles.AddAsync(toInsert);

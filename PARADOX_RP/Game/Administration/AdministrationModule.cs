@@ -162,7 +162,7 @@ namespace PARADOX_RP.Game.Administration
             if (vehicleClass == null)
             {
                 player.SendNotification("Administration", $"Fahrzeugmodell {VehicleModel} nicht gefunden.", NotificationTypes.SUCCESS);
-
+                return;
             }
 
             PXVehicle result = await _vehicleController.CreateDatabaseVehicle(player.SqlId, vehicleClass.Id, player.Position, player.Rotation);

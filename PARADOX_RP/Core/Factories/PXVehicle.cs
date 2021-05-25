@@ -1,5 +1,7 @@
 ﻿using AltV.Net;
+using AltV.Net.Async;
 using AltV.Net.Elements.Entities;
+using AltV.Net.Enums;
 using PARADOX_RP.Core.Database.Models;
 using PARADOX_RP.Utils;
 using System;
@@ -15,6 +17,18 @@ namespace PARADOX_RP.Core.Factories
         public int OwnerId { get; set; }
         public bool HasRadio { get; set; }
         public Inventories Inventory { get; set; }
+
+        private bool _locked;
+        public bool Locked
+        {
+            get => _locked;
+            set
+            {
+                this.SetLockStateAsync(value ? VehicleLockState.Locked : VehicleLockState.Unlocked);
+                _locked = value;
+            }
+        }
+
 
         internal PXVehicle(IntPtr nativePointer, ushort id) : base(nativePointer, id)
         {

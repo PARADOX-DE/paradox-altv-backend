@@ -97,14 +97,9 @@ namespace PARADOX_RP.Controllers
 
             await _modules.ForEach(async e =>
             {
-                AltAsync.Log(e.ModuleName);
                 if (e.Enabled)
-                    if (await e.OnKeyPress(player, Utils.Enums.KeyEnumeration.E))
-                    {
-                        AltAsync.Log("Found!");
-                        return false;
-                    }
-
+                    if (await e.OnKeyPress(player, KeyEnumeration.E)) return false;
+                    
                 return true;
             });
         }

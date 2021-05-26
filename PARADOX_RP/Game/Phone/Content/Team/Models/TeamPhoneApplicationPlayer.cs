@@ -8,6 +8,7 @@ namespace PARADOX_RP.Game.Phone.Content.Team.Models
     {
         public int Id { get; set; }
         public string Name { get; set; }
+        public bool Online { get; set; }
         public DateTime LastLogin { get; set; }
     }
 }

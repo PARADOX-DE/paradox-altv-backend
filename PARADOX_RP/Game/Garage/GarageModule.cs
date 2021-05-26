@@ -30,7 +30,9 @@ namespace PARADOX_RP.Game.Garage
         private readonly IEventController _eventController;
         private readonly IVehicleController _vehicleController;
         private readonly IGarageController _garageController;
+
         private Dictionary<int, Garages> _garages = new Dictionary<int, Garages>();
+
         public GarageModule(PXContext pxContext, IEventController eventController, IVehicleController vehicleController, IGarageController garageController) : base("Garage")
         {
             _eventController = eventController;

@@ -43,7 +43,7 @@ namespace PARADOX_RP.Controllers.Inventory
                     return null;
                 }
 
-                if(!InventoryModule.Instance._inventoryInfo.TryGetValue((int)dbInventory.Type, out InventoryInfo inventoryInfo))
+                if (!InventoryModule.Instance._inventoryInfo.TryGetValue((int)dbInventory.Type, out InventoryInfo inventoryInfo))
                 {
                     //Inventory got no valid type
                     return null;
@@ -56,7 +56,7 @@ namespace PARADOX_RP.Controllers.Inventory
                     TargetId = dbInventory.TargetId
                 };
 
-                foreach(InventoryItemAssignments item in dbInventory.Items)
+                foreach (InventoryItemAssignments item in dbInventory.Items)
                 {
                     inventory.Items.Add(item.Slot, item);
                 }
@@ -83,35 +83,73 @@ namespace PARADOX_RP.Controllers.Inventory
             return 0;
         }
 
-        public async Task CreateItem(PXInventory inventory, int ItemId, string OriginInformation, [CallerMemberName] string callerName = null)
+        public async Task<bool> CreateItem(PXInventory inventory, int ItemId, int Amount, string OriginInformation, [CallerMemberName] string callerName = null)
         {
-            if (!InventoryModule.Instance._items.TryGetValue(ItemId, out Items Item)) return;
+            if (!InventoryModule.Instance._items.TryGetValue(ItemId, out Items Item)) return false;
 
-            await using (var px = new PXContext())
+            var localItems = inventory.Items.Where(d => (d.Value.Item == ItemId) && (d.Value.Amount < Item.StackSize)).ToDictionary(pair => pair.Key).Values;
+
+            int toBeAdded = Amount;
+
+            foreach (var localItem in localItems)
             {
-                EntityEntry<InventoryItemSignatures> itemSignature = await px.InventoryItemSignatures.AddAsync(new InventoryItemSignatures()
-                {
-                    Origin = callerName,
-                    Information = OriginInformation
-                });
+                int oldAmount = localItem.Value.Amount;
+                int newAmount = localItem.Value.Amount += toBeAdded;
 
-                await px.SaveChangesAsync();
+                newAmount = newAmount >= Item.StackSize ? Item.StackSize : newAmount;
 
-                //TODO: item signatures system change
+                localItem.Value.Amount = newAmount;
+
+                toBeAdded -= (newAmount - oldAmount);
+                await ChangeAmount(inventory, localItem.Key, newAmount);
+
+                if (toBeAdded <= 0) return true;
+            }
+            //Add new Stacks
+
+            for (int i = 0; i < inventory.InventoryInfo.MaxSlots; i++)
+            {
+                if (inventory.Items.Keys.Contains(i)) continue;
+
                 var newItem = new InventoryItemAssignments()
                 {
                     InventoryId = inventory.Id,
-                    OriginId = itemSignature.Entity.Id,
+                    OriginId = 1,
                     Item = ItemId,
                     Weight = Item.Weight,
-                    Slot = GetNextAvailableSlot(inventory)
+                    Amount = toBeAdded >= Item.StackSize ? Item.StackSize : toBeAdded,
+                    Slot = i
                 };
 
-                await px.InventoryItemAssignments.AddAsync(newItem);
-                await px.SaveChangesAsync();
+                toBeAdded -= Item.StackSize;
+                inventory.Items.Add(i, newItem);
+                await using (var px = new PXContext())
+                {
+                    await px.InventoryItemAssignments.AddAsync(newItem);
+                    await px.SaveChangesAsync();
+                }
 
-                //inventory.Items.Add(newItem);
+                if (toBeAdded <= 0)
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        public async Task ChangeAmount(PXInventory inventory, int Slot, int Amount)
+        {
+            await using (var px = new PXContext())
+            {
+                InventoryItemAssignments item = await px.InventoryItemAssignments.FirstOrDefaultAsync(i => i.InventoryId == inventory.Id && i.Slot == Slot);
+                if (item == null) return;
+
+                item.Amount = Amount;
+                px.InventoryItemAssignments.Update(item);
+
+                await px.SaveChangesAsync();
             }
         }
+
     }
 }

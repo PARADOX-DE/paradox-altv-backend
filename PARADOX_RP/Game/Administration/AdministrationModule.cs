@@ -182,12 +182,12 @@ namespace PARADOX_RP.Game.Administration
                 return;
             }
 
-            await _inventoryController.CreateItem(player.Inventory, ItemId, "Administrativ erstellt");
+            //await _inventoryController.CreateItem(player.Inventory, ItemId, "Administrativ erstellt");
             player.SendNotification("Administration", $"Du hast dir 1x {Item.Name} gegeben.", NotificationTypes.SUCCESS);
         }
 
         [Command("additem")]
-        public void CommandAddItem(PXPlayer player, int ItemId)
+        public async void CommandAddItem(PXPlayer player, int ItemId, int Amount)
         {
             if (!InventoryModule.Instance._items.TryGetValue(ItemId, out Items Item))
             {
@@ -195,7 +195,7 @@ namespace PARADOX_RP.Game.Administration
                 return;
             }
 
-            var newItem = new InventoryItemAssignments()
+            /*var newItem = new InventoryItemAssignments()
             {
                 InventoryId = player.Inventory.Id,
                 OriginId = 1,
@@ -203,16 +203,10 @@ namespace PARADOX_RP.Game.Administration
                 Weight = Item.Weight,
                 Slot = _inventoryController.GetNextAvailableSlot(player.Inventory)
             };
+            */
 
             //player.Inventory.Items.Add(newItem);
-        }
-
-        [Command("additemsibaui")]
-        public async void Sibaui(PXPlayer player, int ItemId, int Amount)
-        {
-            //await InventoryModule.Instance.AddItem(player.Inventory, ItemId, Amount);
-            player.SendNotification("Administration", $"Du hast dir {Amount}x {ItemId} gegeben.", NotificationTypes.SUCCESS);
-
+            await _inventoryController.CreateItem(player.Inventory, ItemId, Amount, "Administrativ");
         }
     }
 }

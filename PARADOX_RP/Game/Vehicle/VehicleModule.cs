@@ -40,7 +40,7 @@ namespace PARADOX_RP.Game.Vehicle
 
                 return Task.FromResult(vehicle.Inventory);
             }
-            Weapons.Revolver
+
             return Task.FromResult<Inventories>(null);
         }
 

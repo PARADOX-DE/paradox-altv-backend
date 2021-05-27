@@ -94,13 +94,9 @@ namespace PARADOX_RP.Game.Inventory
             if (inventory == null) return;
 
             Inventories additionalInventory = await GetAdditionalInventory(player, player.Position);
-            if (additionalInventory != null)
-            {
-                AltAsync.Log("OPENINV: " + Enum.GetName(typeof(InventoryTypes), additionalInventory.Type));
-            }
 
             player.LocalInventoryData = new LocalInventoryData(player.Inventory, additionalInventory);
-
+            
             WindowManager.Instance.Get<InventoryWindow>().Show(player, new InventoryWindowWriter(player.Inventory, additionalInventory));
         }
 

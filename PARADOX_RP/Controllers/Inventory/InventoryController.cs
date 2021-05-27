@@ -45,7 +45,7 @@ namespace PARADOX_RP.Controllers.Inventory
             }
         }
 
-        public async Task CreateItem(int Id, IItemScript item, string OriginInformation, [CallerMemberName] string callerName = null)
+        public async Task CreateItem(Inventories inventory, int ItemId, string OriginInformation, [CallerMemberName] string callerName = null)
         {
             await using (var px = new PXContext())
             {
@@ -55,15 +55,18 @@ namespace PARADOX_RP.Controllers.Inventory
                     Information = OriginInformation
                 });
 
+                await px.SaveChangesAsync();
+
+                //TODO: item signatures system change
+                
                 await px.InventoryItemAssignments.AddAsync(new InventoryItemAssignments()
                 {
-                    InventoryId = Id,
+                    InventoryId = inventory.Id,
                     OriginId = itemSignature.Entity.Id,
-                    Item = item.Id,
+                    Item = ItemId,
                     Weight = 0,
                     Slot = 0
                 });
-
                 await px.SaveChangesAsync();
             }
         }

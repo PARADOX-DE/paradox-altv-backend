@@ -21,15 +21,19 @@ using PARADOX_RP.Game.Administration.NativeMenu;
 using AltV.Net.Enums;
 using PARADOX_RP.Game.Vehicle;
 using System.Linq;
+using PARADOX_RP.Controllers.Inventory;
+using PARADOX_RP.Game.Inventory;
 
 namespace PARADOX_RP.Game.Administration
 {
     class AdministrationModule : ModuleBase<AdministrationModule>, ICommand
     {
         private IVehicleController _vehicleController;
-        public AdministrationModule(IVehicleController vehicleController) : base("Administration")
+        private IInventoryController _inventoryController;
+        public AdministrationModule(IVehicleController vehicleController, IInventoryController inventoryController) : base("Administration")
         {
             _vehicleController = vehicleController;
+            _inventoryController = inventoryController;
         }
 
         private readonly List<Clothes> _administrativeOutfit = new List<Clothes>()
@@ -167,6 +171,20 @@ namespace PARADOX_RP.Game.Administration
 
             PXVehicle result = await _vehicleController.CreateDatabaseVehicle(player.SqlId, vehicleClass.Id, player.Position, player.Rotation);
             await player.SetPedIntoVeh(result, -1);
+        }
+
+        [Command("createitem")]
+        public async void CommandCreateItem(PXPlayer player, int ItemId)
+        {
+            if (!InventoryModule.Instance._items.TryGetValue(ItemId, out Items Item))
+            {
+                player.SendNotification("Administration", $"Item {ItemId} existiert nicht.", NotificationTypes.ERROR);
+
+                return;
+            }
+
+            await _inventoryController.CreateItem(player.Inventory, ItemId, "Administrativ erstellt");
+            player.SendNotification("Administration", $"Du hast dir 1x {Item.Name} gegeben.", NotificationTypes.SUCCESS);
         }
     }
 }

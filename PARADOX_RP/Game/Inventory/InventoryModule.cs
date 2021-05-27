@@ -96,7 +96,7 @@ namespace PARADOX_RP.Game.Inventory
             Inventories additionalInventory = await GetAdditionalInventory(player, player.Position);
 
             player.LocalInventoryData = new LocalInventoryData(player.Inventory, additionalInventory);
-            
+
             WindowManager.Instance.Get<InventoryWindow>().Show(player, new InventoryWindowWriter(player.Inventory, additionalInventory));
         }
 

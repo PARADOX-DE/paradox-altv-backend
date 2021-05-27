@@ -45,9 +45,9 @@ namespace PARADOX_RP.UI.Windows.Inventory
             writer.BeginArray();
             foreach (var item in inventory.Items)
             {
-                if (InventoryModule.Instance._items.TryGetValue(item.Id, out Items itemInfo))
+                if (InventoryModule.Instance._items.TryGetValue(item.Item, out Items itemInfo))
                 {
-
+                    Alt.Log(itemInfo.Name);
                     writer.BeginObject();
 
                     writer.Name("id");
@@ -63,8 +63,7 @@ namespace PARADOX_RP.UI.Windows.Inventory
                     writer.Value(itemInfo.Weight);
 
                     writer.Name("slot");
-                    writer.Value(item.Id);
-                    //TODO: slot ;)
+                    writer.Value(item.Slot);
 
                     //TODO: add reference to items db
 

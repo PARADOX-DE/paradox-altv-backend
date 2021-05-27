@@ -179,12 +179,32 @@ namespace PARADOX_RP.Game.Administration
             if (!InventoryModule.Instance._items.TryGetValue(ItemId, out Items Item))
             {
                 player.SendNotification("Administration", $"Item {ItemId} existiert nicht.", NotificationTypes.ERROR);
-
                 return;
             }
 
             await _inventoryController.CreateItem(player.Inventory, ItemId, "Administrativ erstellt");
             player.SendNotification("Administration", $"Du hast dir 1x {Item.Name} gegeben.", NotificationTypes.SUCCESS);
+        }
+
+        [Command("additem")]
+        public void CommandAddItem(PXPlayer player, int ItemId)
+        {
+            if (!InventoryModule.Instance._items.TryGetValue(ItemId, out Items Item))
+            {
+                player.SendNotification("Administration", $"Item {ItemId} existiert nicht.", NotificationTypes.ERROR);
+                return;
+            }
+
+            var newItem = new InventoryItemAssignments()
+            {
+                InventoryId = player.Inventory.Id,
+                OriginId = 1,
+                Item = ItemId,
+                Weight = Item.Weight,
+                Slot = _inventoryController.GetNextAvailableSlot(player.Inventory)
+            };
+
+            player.Inventory.Items.Add(newItem);
         }
     }
 }

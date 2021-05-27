@@ -17,11 +17,6 @@ namespace PARADOX_RP.Controllers.Inventory
 {
     class InventoryController : IInventoryController
     {
-        private readonly InventoryModule _inventoryModule;
-        public InventoryController(InventoryModule inventoryModule)
-        {
-            _inventoryModule = inventoryModule;
-        }
 
         public async Task<Inventories> CreateInventory(InventoryTypes type, int Id)
         {
@@ -52,9 +47,9 @@ namespace PARADOX_RP.Controllers.Inventory
 
         public int GetNextAvailableSlot(Inventories inventory)
         {
-            if (!_inventoryModule._inventoryInfo.TryGetValue((int)inventory.Type, out InventoryInfo inventoryInfo)) return -1;
+            if (!InventoryModule.Instance._inventoryInfo.TryGetValue((int)inventory.Type, out InventoryInfo inventoryInfo)) return -1;
 
-            for (int i = 0; i <= inventoryInfo.MaxSlots; i++)
+            for (int i = 1; i < inventoryInfo.MaxSlots; i++)
             {
                 if (inventory.Items.FirstOrDefault(item => item.Slot == i) == null)
                 {
@@ -67,7 +62,7 @@ namespace PARADOX_RP.Controllers.Inventory
 
         public async Task CreateItem(Inventories inventory, int ItemId, string OriginInformation, [CallerMemberName] string callerName = null)
         {
-            if (!_inventoryModule._items.TryGetValue(ItemId, out Items Item)) return;
+            if (!InventoryModule.Instance._items.TryGetValue(ItemId, out Items Item)) return;
 
             await using (var px = new PXContext())
             {
@@ -80,17 +75,19 @@ namespace PARADOX_RP.Controllers.Inventory
                 await px.SaveChangesAsync();
 
                 //TODO: item signatures system change
-
-                await px.InventoryItemAssignments.AddAsync(new InventoryItemAssignments()
+                var newItem = new InventoryItemAssignments()
                 {
                     InventoryId = inventory.Id,
                     OriginId = itemSignature.Entity.Id,
                     Item = ItemId,
                     Weight = Item.Weight,
                     Slot = GetNextAvailableSlot(inventory)
-                });
+                };
 
+                await px.InventoryItemAssignments.AddAsync(newItem);
                 await px.SaveChangesAsync();
+
+                inventory.Items.Add(newItem);
             }
         }
     }

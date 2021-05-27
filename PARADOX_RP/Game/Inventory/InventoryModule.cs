@@ -71,13 +71,13 @@ namespace PARADOX_RP.Game.Inventory
 
         }
 
-        public async Task<Inventories> GetAdditionalInventory(PXPlayer player, Position position)
+        public async Task<PXInventory> GetAdditionalInventory(PXPlayer player, Position position)
         {
-            Inventories inventory = null;
+            PXInventory inventory = null;
 
             await _inventories.ForEach(async (i) =>
             {
-                Inventories additionalInventory = await i.OnInventoryOpen(player, position);
+                PXInventory additionalInventory = await i.OnInventoryOpen(player, position);
                 if (additionalInventory != null)
                 {
                     inventory = additionalInventory;
@@ -90,21 +90,21 @@ namespace PARADOX_RP.Game.Inventory
 
         public async Task OpenInventory(PXPlayer player)
         {
-            Inventories inventory = player.Inventory;
+            PXInventory inventory = player.Inventory;
             if (inventory == null) return;
 
-            Inventories additionalInventory = await GetAdditionalInventory(player, player.Position);
+            PXInventory additionalInventory = await GetAdditionalInventory(player, player.Position);
 
             player.LocalInventoryData = new LocalInventoryData(player.Inventory, additionalInventory);
 
             WindowManager.Instance.Get<InventoryWindow>().Show(player, new InventoryWindowWriter(player.Inventory, additionalInventory));
         }
 
-        public bool HasItem(Inventories inventory, int ItemId)
+        public bool HasItem(PXInventory inventory, int ItemId)
         {
             if (inventory == null) return false;
 
-            return inventory.Items.FirstOrDefault(i => i.Item == ItemId) != null;
+            return inventory.Items.Values.FirstOrDefault(i => i.Item == ItemId) != null;
         }
 
         public async Task<bool> AddItem(Inventories inventory, int itemId, int amount = 1)
@@ -150,7 +150,7 @@ namespace PARADOX_RP.Game.Inventory
             return false;
         }
 
-        public async Task<bool?> CanAccessInventory(Inventories inventory, PXPlayer player)
+        public async Task<bool?> CanAccessInventory(PXInventory inventory, PXPlayer player)
         {
             bool? accessible = null;
 

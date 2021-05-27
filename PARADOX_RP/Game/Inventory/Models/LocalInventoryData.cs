@@ -7,13 +7,13 @@ namespace PARADOX_RP.Game.Inventory.Models
 {
     public class LocalInventoryData
     {
-        public LocalInventoryData(Inventories playerInventory, Inventories additionalInventory)
+        public LocalInventoryData(PXInventory playerInventory, PXInventory additionalInventory)
         {
             PlayerInventory = playerInventory;
             AdditionalInventory = additionalInventory;
         }
 
-        public Inventories PlayerInventory { get; set; }
-        public Inventories AdditionalInventory { get; set; }
+        public PXInventory PlayerInventory { get; set; }
+        public PXInventory AdditionalInventory { get; set; }
     }
 }

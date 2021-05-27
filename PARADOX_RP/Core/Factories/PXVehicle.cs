@@ -3,6 +3,7 @@ using AltV.Net.Async;
 using AltV.Net.Elements.Entities;
 using AltV.Net.Enums;
 using PARADOX_RP.Core.Database.Models;
+using PARADOX_RP.Game.Inventory.Models;
 using PARADOX_RP.Utils;
 using System;
 using System.Collections.Generic;
@@ -16,7 +17,7 @@ namespace PARADOX_RP.Core.Factories
         public string VehicleModel { get; set; }
         public int OwnerId { get; set; }
         public bool HasRadio { get; set; }
-        public Inventories Inventory { get; set; }
+        public PXInventory Inventory { get; set; }
 
         private bool _locked;
         public bool Locked

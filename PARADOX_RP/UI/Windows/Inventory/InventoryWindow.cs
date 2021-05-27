@@ -1,6 +1,7 @@
 ﻿using AltV.Net;
 using PARADOX_RP.Core.Database.Models;
 using PARADOX_RP.Game.Inventory;
+using PARADOX_RP.Game.Inventory.Models;
 using PARADOX_RP.UI.Models;
 using System;
 using System.Collections.Generic;
@@ -15,10 +16,10 @@ namespace PARADOX_RP.UI.Windows.Inventory
     }
     class InventoryWindowWriter : IWritable
     {
-        private readonly Inventories playerInventory;
-        private readonly Inventories additionalInventory;
+        private readonly PXInventory playerInventory;
+        private readonly PXInventory additionalInventory;
 
-        public InventoryWindowWriter(Inventories playerInventory, Inventories additionalInventory)
+        public InventoryWindowWriter(PXInventory playerInventory, PXInventory additionalInventory)
         {
             this.playerInventory = playerInventory;
             this.additionalInventory = additionalInventory;
@@ -34,7 +35,7 @@ namespace PARADOX_RP.UI.Windows.Inventory
             writer.EndObject();
         }
 
-        private void WriteInventory(string name, ref IMValueWriter writer, Inventories inventory)
+        private void WriteInventory(string name, ref IMValueWriter writer, PXInventory inventory)
         {
             if (inventory == null) return;
 
@@ -45,12 +46,12 @@ namespace PARADOX_RP.UI.Windows.Inventory
             writer.BeginArray();
             foreach (var item in inventory.Items)
             {
-                if (InventoryModule.Instance._items.TryGetValue(item.Item, out Items itemInfo))
+                if (InventoryModule.Instance._items.TryGetValue(item.Value.Item, out Items itemInfo))
                 {
                     writer.BeginObject();
 
                     writer.Name("id");
-                    writer.Value(item.Id);
+                    writer.Value(item.Value.Id);
 
                     writer.Name("name");
                     writer.Value(itemInfo.Name);
@@ -62,7 +63,7 @@ namespace PARADOX_RP.UI.Windows.Inventory
                     writer.Value(itemInfo.Weight);
 
                     writer.Name("slot");
-                    writer.Value(item.Slot);
+                    writer.Value(item.Key);
 
                     //TODO: add reference to items db
 
@@ -71,16 +72,16 @@ namespace PARADOX_RP.UI.Windows.Inventory
             }
             writer.EndArray();
 
-            if (InventoryModule.Instance._inventoryInfo.TryGetValue((int)inventory.Type, out InventoryInfo inventoryInfo))
+            if (inventory.InventoryInfo != null)
             {
                 writer.Name("title");
-                writer.Value(inventoryInfo.Name);
+                writer.Value(inventory.InventoryInfo.Name);
 
                 writer.Name("max_slots");
-                writer.Value(inventoryInfo.MaxSlots);
+                writer.Value(inventory.InventoryInfo.MaxSlots);
 
                 writer.Name("max_weight");
-                writer.Value(inventoryInfo.MaxWeight);
+                writer.Value(inventory.InventoryInfo.MaxWeight);
             }
 
             writer.EndObject();

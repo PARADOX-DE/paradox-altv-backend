@@ -115,8 +115,10 @@ namespace PARADOX_RP.Core.Factories
 
         public SupportRankModel SupportRank { get; set; }
         public Teams Team { get; set; }
-        public Inventories Inventory { get; set; }
+
+        public PXInventory Inventory { get; set; }
         public LocalInventoryData LocalInventoryData { get; set; }
+
         public PlayerCustomization PlayerCustomization { get; set; }
         public PlayerInjuryData PlayerInjuryData { get; set; }
         public PlayerTeamData PlayerTeamData { get; set; }

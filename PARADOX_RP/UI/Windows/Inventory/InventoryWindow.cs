@@ -57,7 +57,7 @@ namespace PARADOX_RP.UI.Windows.Inventory
                     writer.Value(itemInfo.Name);
 
                     writer.Name("amount");
-                    writer.Value(1);
+                    writer.Value(item.Value.Amount);
 
                     writer.Name("weight");
                     writer.Value(itemInfo.Weight);

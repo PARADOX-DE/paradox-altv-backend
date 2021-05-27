@@ -145,6 +145,19 @@ namespace PARADOX_RP.Controllers.Login
                     }
 
                     player.Inventory = await _inventoryController.LoadInventory(InventoryTypes.PLAYER, player.SqlId);
+                    if (player.Inventory == null)
+                    {
+                        await px.Inventories.AddAsync(new Inventories() { Type = InventoryTypes.PLAYER, TargetId = player.SqlId });
+                        await px.SaveChangesAsync();
+
+                        Alt.Log("Inventar erstellt. " + player.Username);
+
+                        player.Inventory = await _inventoryController.LoadInventory(InventoryTypes.PLAYER, player.SqlId);
+                        if(player.Inventory == null)
+                        {
+                            Alt.Log("Konnte erstelltes Inventar nicht laden.");
+                        }
+                    }
 
                     /**/
                     //player.Clothes = _clothingDictionary;
@@ -166,7 +179,7 @@ namespace PARADOX_RP.Controllers.Login
                     }
 
                     await player?.EmitAsync("ApplyPlayerCharacter", dbPlayer.PlayerCustomization.FirstOrDefault().Customization);
-                    
+
                     Dictionary<ComponentVariation, Clothes> wearingClothes = new Dictionary<ComponentVariation, Clothes>();
                     foreach (PlayerClothesWearing playerClothesWearing in dbPlayer.PlayerClothes)
                     {
@@ -184,17 +197,17 @@ namespace PARADOX_RP.Controllers.Login
             catch (Exception e) { Alt.Log("Failed to load player | " + e.Message); }
             return await Task.FromResult(LoadPlayerResponse.ABORT);
         }
-           
+
         public async Task SavePlayers()
         {
-            foreach(PXPlayer player in Pools.Instance.Get<PXPlayer>(PoolType.PLAYER))
+            foreach (PXPlayer player in Pools.Instance.Get<PXPlayer>(PoolType.PLAYER))
             {
-                await using(var px = new PXContext())
+                await using (var px = new PXContext())
                 {
                     Players dbPlayer = await px.Players.FindAsync(player.SqlId);
                     if (dbPlayer == null) continue;
 
-                    if(player.Dimension == 0)
+                    if (player.Dimension == 0)
                     {
                         dbPlayer.Position_X = player.Position.X;
                         dbPlayer.Position_Y = player.Position.Y;

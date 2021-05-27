@@ -14,5 +14,6 @@ namespace PARADOX_RP.Controllers.Inventory
         Task<Inventories> LoadInventory(InventoryTypes type, int Id);
         Task<Inventories> CreateInventory(InventoryTypes type, int Id);
         Task CreateItem(Inventories inventory, int ItemId, string OriginInformation, [CallerMemberName] string callerName = null);
+        int GetNextAvailableSlot(Inventories inventory);
     }
 }

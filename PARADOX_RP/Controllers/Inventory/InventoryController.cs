@@ -17,6 +17,11 @@ namespace PARADOX_RP.Controllers.Inventory
 {
     class InventoryController : IInventoryController
     {
+        private readonly InventoryModule _inventoryModule;
+        public InventoryController(InventoryModule inventoryModule)
+        {
+            _inventoryModule = inventoryModule;
+        }
 
         public async Task<Inventories> CreateInventory(InventoryTypes type, int Id)
         {
@@ -47,6 +52,8 @@ namespace PARADOX_RP.Controllers.Inventory
 
         public async Task CreateItem(Inventories inventory, int ItemId, string OriginInformation, [CallerMemberName] string callerName = null)
         {
+            if (!_inventoryModule._items.TryGetValue(ItemId, out Items Item)) return;
+
             await using (var px = new PXContext())
             {
                 EntityEntry<InventoryItemSignatures> itemSignature = await px.InventoryItemSignatures.AddAsync(new InventoryItemSignatures()
@@ -58,14 +65,14 @@ namespace PARADOX_RP.Controllers.Inventory
                 await px.SaveChangesAsync();
 
                 //TODO: item signatures system change
-                
+
                 await px.InventoryItemAssignments.AddAsync(new InventoryItemAssignments()
                 {
                     InventoryId = inventory.Id,
                     OriginId = itemSignature.Entity.Id,
                     Item = ItemId,
-                    Weight = 0,
-                    Slot = 0
+                    Weight = Item.Weight,
+                    Slot = 
                 });
                 await px.SaveChangesAsync();
             }

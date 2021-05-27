@@ -31,7 +31,11 @@ namespace PARADOX_RP.Controllers.Vehicle
             vehicle.SqlId = dbVehicle.Id;
             vehicle.VehicleModel = dbVehicle.VehicleClass.VehicleModel;
             vehicle.OwnerId = dbVehicle.PlayerId;
+
             vehicle.Inventory = await _inventoryController.LoadInventory(InventoryTypes.VEHICLE, dbVehicle.Id);
+
+            if (vehicle.Inventory == null)
+                vehicle.Inventory = await _inventoryController.CreateInventory(InventoryTypes.VEHICLE, dbVehicle.Id);
 
             await vehicle.SetNumberplateTextAsync(dbVehicle.Numberplate);
 

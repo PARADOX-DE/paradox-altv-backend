@@ -146,18 +146,8 @@ namespace PARADOX_RP.Controllers.Login
 
                     player.Inventory = await _inventoryController.LoadInventory(InventoryTypes.PLAYER, player.SqlId);
                     if (player.Inventory == null)
-                    {
-                        await px.Inventories.AddAsync(new Inventories() { Type = InventoryTypes.PLAYER, TargetId = player.SqlId });
-                        await px.SaveChangesAsync();
+                        player.Inventory = await _inventoryController.CreateInventory(InventoryTypes.PLAYER, player.Id);
 
-                        Alt.Log("Inventar erstellt. " + player.Username);
-
-                        player.Inventory = await _inventoryController.LoadInventory(InventoryTypes.PLAYER, player.SqlId);
-                        if(player.Inventory == null)
-                        {
-                            Alt.Log("Konnte erstelltes Inventar nicht laden.");
-                        }
-                    }
 
                     /**/
                     //player.Clothes = _clothingDictionary;

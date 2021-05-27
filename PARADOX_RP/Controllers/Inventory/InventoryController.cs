@@ -8,6 +8,7 @@ using PARADOX_RP.Game.Inventory;
 using PARADOX_RP.Game.Inventory.Interfaces;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
@@ -16,11 +17,24 @@ namespace PARADOX_RP.Controllers.Inventory
 {
     class InventoryController : IInventoryController
     {
+
+        public async Task<Inventories> CreateInventory(InventoryTypes type, int Id)
+        {
+            await using (var px = new PXContext())
+            {
+                await px.Inventories.AddAsync(new Inventories() { Type = InventoryTypes.VEHICLE, TargetId = Id });
+                await px.SaveChangesAsync();
+
+                var dbInventory = await px.Inventories.Include(i => i.Items).Where(p => p.Type == type && p.TargetId == Id).FirstOrDefaultAsync();
+                return dbInventory;
+            }
+        }
+
         public async Task<Inventories> LoadInventory(InventoryTypes type, int Id)
         {
             await using (var px = new PXContext())
             {
-                Inventories inventory = await px.Inventories.Include(i => i.Items).FirstOrDefaultAsync(p => p.Type == type && p.TargetId == Id);
+                Inventories inventory = await px.Inventories.Include(i => i.Items).Where(p => p.Type == type && p.TargetId == Id).FirstOrDefaultAsync();
                 if (inventory == null)
                 {
                     //TODO: add logger
@@ -33,7 +47,7 @@ namespace PARADOX_RP.Controllers.Inventory
 
         public async Task CreateItem(int Id, IItemScript item, string OriginInformation, [CallerMemberName] string callerName = null)
         {
-            await using(var px = new PXContext())
+            await using (var px = new PXContext())
             {
                 EntityEntry<InventoryItemSignatures> itemSignature = await px.InventoryItemSignatures.AddAsync(new InventoryItemSignatures()
                 {

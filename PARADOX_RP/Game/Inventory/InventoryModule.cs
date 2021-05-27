@@ -107,6 +107,49 @@ namespace PARADOX_RP.Game.Inventory
             return inventory.Items.FirstOrDefault(i => i.Item == ItemId) != null;
         }
 
+        public async Task<bool> AddItem(Inventories inventory, int itemId, int amount = 1)
+        {
+            if (!_items.TryGetValue(itemId, out Items itemData)) return false;
+            var localItems = inventory.Items.Where(d => (d.Item == itemId) && (d.Amount < itemData.StackSize)).ToDictionary(pair => pair.Slot).Values;
+
+            int toBeAdded = amount;
+
+            foreach (var localItem in localItems)
+            {
+                int oldAmount = localItem.Amount;
+                int newAmount = localItem.Amount += toBeAdded;
+
+                newAmount = newAmount >= itemData.StackSize ? itemData.StackSize : newAmount;
+
+                localItem.Amount = newAmount;
+
+                toBeAdded -= (newAmount - oldAmount);
+
+                Alt.Log("NewAmount: " + newAmount);
+                Alt.Log("toBeAdded: " + toBeAdded);
+
+                if (toBeAdded <= 0) return true;
+            }
+
+            //Add new Stacks
+
+            /*for (int i = 0; i < _inventoryInfo[(int)inventory.Type].MaxSlots; i++)
+            {
+                if (inventory.Items.Keys.Contains(i)) continue;
+
+                LocalItem item = new LocalItem(itemId, toBeAdded >= itemData.Stacksize ? itemData.Stacksize : toBeAdded, customItemData);
+                toBeAdded -= itemData.Stacksize;
+                inventory.InventoryItems.Add(i, item);
+                await _inventoryHandler.AddItemOnSlot(inventory.Id, itemId, i, item.Amount, customItemData);
+
+                if (toBeAdded <= 0)
+                {
+                    return true;
+                }
+            }*/
+            return false;
+        }
+
         public async Task<bool?> CanAccessInventory(Inventories inventory, PXPlayer player)
         {
             bool? accessible = null;

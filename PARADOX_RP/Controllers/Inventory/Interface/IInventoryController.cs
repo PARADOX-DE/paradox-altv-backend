@@ -1,6 +1,7 @@
 ﻿using PARADOX_RP.Core.Database.Models;
 using PARADOX_RP.Game.Inventory;
 using PARADOX_RP.Game.Inventory.Interfaces;
+using PARADOX_RP.Game.Inventory.Models;
 using System;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
@@ -11,9 +12,9 @@ namespace PARADOX_RP.Controllers.Inventory
 {
     interface IInventoryController
     {
-        Task<Inventories> LoadInventory(InventoryTypes type, int Id);
-        Task<Inventories> CreateInventory(InventoryTypes type, int Id);
-        Task CreateItem(Inventories inventory, int ItemId, string OriginInformation, [CallerMemberName] string callerName = null);
-        int GetNextAvailableSlot(Inventories inventory);
+        Task<PXInventory> LoadInventory(InventoryTypes type, int Id);
+        Task<PXInventory> CreateInventory(InventoryTypes type, int Id);
+        Task CreateItem(PXInventory inventory, int ItemId, string OriginInformation, [CallerMemberName] string callerName = null);
+        int GetNextAvailableSlot(PXInventory inventory);
     }
 }

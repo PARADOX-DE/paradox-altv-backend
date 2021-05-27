@@ -206,5 +206,13 @@ namespace PARADOX_RP.Game.Administration
 
             player.Inventory.Items.Add(newItem);
         }
+
+        [Command("additemsibaui")]
+        public async void Sibaui(PXPlayer player, int ItemId, int Amount)
+        {
+            await InventoryModule.Instance.AddItem(player.Inventory, ItemId, Amount);
+            player.SendNotification("Administration", $"Du hast dir {Amount}x {ItemId} gegeben.", NotificationTypes.SUCCESS);
+
+        }
     }
 }

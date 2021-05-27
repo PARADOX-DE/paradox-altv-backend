@@ -47,7 +47,6 @@ namespace PARADOX_RP.UI.Windows.Inventory
             {
                 if (InventoryModule.Instance._items.TryGetValue(item.Item, out Items itemInfo))
                 {
-                    Alt.Log(itemInfo.Name);
                     writer.BeginObject();
 
                     writer.Name("id");

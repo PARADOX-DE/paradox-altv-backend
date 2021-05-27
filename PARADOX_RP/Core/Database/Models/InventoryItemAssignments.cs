@@ -18,6 +18,7 @@ namespace PARADOX_RP.Core.Database.Models
         public int Item { get; set; }
         public string Attribute { get; set; }
         public float Weight { get; set; }
+        public int Amount { get; set; }
         public int Slot { get; set; }
     }
 }

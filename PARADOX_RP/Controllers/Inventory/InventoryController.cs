@@ -46,6 +46,7 @@ namespace PARADOX_RP.Controllers.Inventory
                 if (!InventoryModule.Instance._inventoryInfo.TryGetValue((int)dbInventory.Type, out InventoryInfo inventoryInfo))
                 {
                     //Inventory got no valid type
+                    Alt.Log("No Valid InventoryType");
                     return null;
                 }
 
@@ -101,13 +102,14 @@ namespace PARADOX_RP.Controllers.Inventory
                 localItem.Value.Amount = newAmount;
 
                 toBeAdded -= (newAmount - oldAmount);
+                Alt.Log("ChangeAmount: " + localItem.Value.Item + " " + newAmount);
                 await ChangeAmount(inventory, localItem.Key, newAmount);
 
                 if (toBeAdded <= 0) return true;
             }
             //Add new Stacks
 
-            for (int i = 0; i < inventory.InventoryInfo.MaxSlots; i++)
+            for (int i = 1; i < inventory.InventoryInfo.MaxSlots; i++)
             {
                 if (inventory.Items.Keys.Contains(i)) continue;
 
@@ -120,6 +122,9 @@ namespace PARADOX_RP.Controllers.Inventory
                     Amount = toBeAdded >= Item.StackSize ? Item.StackSize : toBeAdded,
                     Slot = i
                 };
+
+                Alt.Log("Add Items: " + ItemId + " " + (toBeAdded >= Item.StackSize ? Item.StackSize : toBeAdded) + " " + i);
+
 
                 toBeAdded -= Item.StackSize;
                 inventory.Items.Add(i, newItem);

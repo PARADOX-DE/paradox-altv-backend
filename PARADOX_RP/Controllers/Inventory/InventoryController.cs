@@ -50,6 +50,21 @@ namespace PARADOX_RP.Controllers.Inventory
             }
         }
 
+        public int GetNextAvailableSlot(Inventories inventory)
+        {
+            if (!_inventoryModule._inventoryInfo.TryGetValue((int)inventory.Type, out InventoryInfo inventoryInfo)) return -1;
+
+            for (int i = 0; i <= inventoryInfo.MaxSlots; i++)
+            {
+                if (inventory.Items.FirstOrDefault(item => item.Slot == i) == null)
+                {
+                    return i;
+                }
+            }
+
+            return -1;
+        }
+
         public async Task CreateItem(Inventories inventory, int ItemId, string OriginInformation, [CallerMemberName] string callerName = null)
         {
             if (!_inventoryModule._items.TryGetValue(ItemId, out Items Item)) return;
@@ -72,8 +87,9 @@ namespace PARADOX_RP.Controllers.Inventory
                     OriginId = itemSignature.Entity.Id,
                     Item = ItemId,
                     Weight = Item.Weight,
-                    Slot = 
+                    Slot = GetNextAvailableSlot(inventory)
                 });
+
                 await px.SaveChangesAsync();
             }
         }

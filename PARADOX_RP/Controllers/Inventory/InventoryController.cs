@@ -87,6 +87,7 @@ namespace PARADOX_RP.Controllers.Inventory
         public async Task<bool> CreateItem(PXInventory inventory, int ItemId, int Amount, string OriginInformation, [CallerMemberName] string callerName = null)
         {
             if (!InventoryModule.Instance._items.TryGetValue(ItemId, out Items Item)) return false;
+            if (Amount < 1) return false;
 
             var localItems = inventory.Items.Where(d => (d.Value.Item == ItemId) && (d.Value.Amount < Item.StackSize)).ToDictionary(pair => pair.Key).Values;
 
@@ -107,7 +108,6 @@ namespace PARADOX_RP.Controllers.Inventory
 
                 if (toBeAdded <= 0) return true;
             }
-            //Add new Stacks
 
             for (int i = 1; i < inventory.InventoryInfo.MaxSlots; i++)
             {

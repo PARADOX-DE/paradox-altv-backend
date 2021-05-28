@@ -102,7 +102,7 @@ namespace PARADOX_RP.Controllers.Inventory
                 localItem.Value.Amount = newAmount;
 
                 toBeAdded -= (newAmount - oldAmount);
-                Alt.Log("ChangeAmount: " + localItem.Value.Item + " " + newAmount);
+
                 await ChangeAmount(inventory, localItem.Key, newAmount);
 
                 if (toBeAdded <= 0) return true;
@@ -122,9 +122,6 @@ namespace PARADOX_RP.Controllers.Inventory
                     Amount = toBeAdded >= Item.StackSize ? Item.StackSize : toBeAdded,
                     Slot = i
                 };
-
-                Alt.Log("Add Items: " + ItemId + " " + (toBeAdded >= Item.StackSize ? Item.StackSize : toBeAdded) + " " + i);
-
 
                 toBeAdded -= Item.StackSize;
                 inventory.Items.Add(i, newItem);

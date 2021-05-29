@@ -125,6 +125,7 @@ namespace PARADOX_RP.Controllers.Inventory
 
                 toBeAdded -= Item.StackSize;
                 inventory.Items.Add(i, newItem);
+
                 await using (var px = new PXContext())
                 {
                     await px.InventoryItemAssignments.AddAsync(newItem);
@@ -132,9 +133,7 @@ namespace PARADOX_RP.Controllers.Inventory
                 }
 
                 if (toBeAdded <= 0)
-                {
                     return true;
-                }
             }
             return false;
         }

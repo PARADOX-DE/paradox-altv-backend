@@ -34,6 +34,8 @@ namespace PARADOX_RP.Core.Database
 
         public DbSet<Garages> Garages { get; set; }
         public DbSet<GarageSpawns> GarageSpawns { get; set; }
+        public DbSet<GasStations> GasStations { get; set; }
+        public DbSet<GasStationPetrols> GasStationPetrols { get; set; }
         public DbSet<Injuries> Injuries { get; set; }
         public DbSet<Items> Items { get; set; }
         public DbSet<Eastereggs> Eastereggs { get; set; }

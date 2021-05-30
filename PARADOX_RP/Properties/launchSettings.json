@@ -2,8 +2,8 @@
   "profiles": {
     "PARADOX_RP": {
       "commandName": "Executable",
-      "executablePath": "C:\\Users\\Felix\\Desktop\\Paradox\\Server\\altv-server2.exe",
-      "workingDirectory": "C:\\Users\\Felix\\Desktop\\Paradox\\Server"
+      "executablePath": "C:\\RP\\Server\\altv-server2.exe",
+      "workingDirectory": "C:\\RP\\Server"
     }
   }
 }

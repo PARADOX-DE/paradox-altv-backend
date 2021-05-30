@@ -14,7 +14,7 @@ namespace PARADOX_RP.UI.Windows
 
     class GasStationWindowWriter : IWritable
     {
-        public GasStationWindowWriter(int id, string gasStationName, int playerMoney, int petrol, int diesel, int electro, int maxfuel)
+        public GasStationWindowWriter(int id, string gasStationName, int playerMoney, int petrol, int diesel, int electro, float maxfuel)
         {
             Id = id;
             GasStationName = gasStationName;
@@ -31,7 +31,7 @@ namespace PARADOX_RP.UI.Windows
         private int Petrol { get; set; }
         private int Diesel { get; set; }
         private int Electro { get; set; }
-        private int MaxFuel { get; set; }
+        private float MaxFuel { get; set; }
 
         public void OnWrite(IMValueWriter writer)
         {

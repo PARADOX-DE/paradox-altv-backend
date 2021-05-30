@@ -14,10 +14,10 @@ namespace PARADOX_RP.UI.Windows
 
     class GasStationWindowWriter : IWritable
     {
-        public GasStationWindowWriter(int id, string gasstationName, int playerMoney, int petrol, int diesel, int electro)
+        public GasStationWindowWriter(int id, string gasStationName, int playerMoney, int petrol, int diesel, int electro)
         {
             Id = id;
-            GasStationName = gasstationName;
+            GasStationName = gasStationName;
             PlayerMoney = playerMoney;
             Petrol = petrol;
             Diesel = diesel;

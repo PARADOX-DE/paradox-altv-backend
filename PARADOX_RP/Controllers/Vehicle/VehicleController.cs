@@ -42,6 +42,9 @@ namespace PARADOX_RP.Controllers.Vehicle
             await vehicle.SetPrimaryColorAsync((byte)dbVehicle.PrimaryColor);
             await vehicle.SetSecondaryColorAsync((byte)dbVehicle.SecondaryColor);
 
+            vehicle.FuelType = dbVehicle.VehicleClass.FuelType;
+            vehicle.Fuel = dbVehicle.Fuel;
+
             Pools.Instance.Register(dbVehicle.Id, vehicle);
 
             return await Task.FromResult(vehicle);

@@ -11,12 +11,20 @@ using System.Text;
 
 namespace PARADOX_RP.Core.Factories
 {
+    public enum FuelTypes
+    {
+        PETROL,
+        DIESEL,
+        ELECTRO
+    }
     public class PXVehicle : Vehicle
     {
         public int SqlId { get; set; }
         public string VehicleModel { get; set; }
         public int OwnerId { get; set; }
         public bool HasRadio { get; set; }
+        public FuelTypes FuelType { get; set; } = FuelTypes.PETROL;
+        public float Fuel { get; set; }
         public PXInventory Inventory { get; set; }
 
         private bool _locked;

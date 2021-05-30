@@ -6,7 +6,7 @@ using PARADOX_RP.Game.Commands.Attributes;
 using PARADOX_RP.UI;
 using PARADOX_RP.UI.Windows;
 using System;
-using System.Collections.Generic;
+using System.Collections.Generic;-
 using System.Text;
 
 namespace PARADOX_RP.Game.Administration.Content

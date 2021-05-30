@@ -14,6 +14,7 @@ namespace PARADOX_RP.Core.Database.Models
         public string Numberplate { get; set; }
         public int GarageId { get; set; }
         public bool Parked { get; set; }
+        public float Fuel { get; set; }
 
         public float Position_X { get; set; }
         public float Position_Y { get; set; }

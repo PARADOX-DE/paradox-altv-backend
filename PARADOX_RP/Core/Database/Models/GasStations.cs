@@ -12,7 +12,7 @@ namespace PARADOX_RP.Core.Database.Models
         public int Id { get; set; }
         public string Name { get; set; }
         public int OwnerId { get; set; } = -1;
-        public float TankVolume { get; set; }
+        public int TankVolume { get; set; }
         public int Price { get; set; }
         public float Position_X { get; set; }
         public float Position_Y { get; set; }

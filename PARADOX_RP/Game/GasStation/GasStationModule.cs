@@ -60,7 +60,7 @@ namespace PARADOX_RP.Game.GasStation
 
             if (_GasStations.TryGetValue(dbPetrolStation.GasStationId, out GasStations dbGasStation))
             {
-                WindowManager.Instance.Get<GasStationWindow>().Show(player, new GasStationWindowWriter(dbGasStation.Id, dbGasStation.Name, dbGasStation.Petrol, dbGasStation.Diesel, dbGasStation.Electro));
+                WindowManager.Instance.Get<GasStationWindow>().Show(player, new GasStationWindowWriter(dbGasStation.Id, dbGasStation.Name, player.Money, dbGasStation.Petrol, dbGasStation.Diesel, dbGasStation.Electro));
             }
 
             return await Task.FromResult(true);

@@ -34,7 +34,7 @@ namespace PARADOX_RP.UI.Windows
             writer.BeginObject();
             writer.Name("id");
             writer.Value(Id);
-            writer.Name("gasstationname");
+            writer.Name("name");
             writer.Value(GasStationName);
             writer.Name("petrol");
             writer.Value(Petrol);

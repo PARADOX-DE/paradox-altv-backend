@@ -117,7 +117,9 @@ namespace PARADOX_RP.Game.GasStation
                     break;
             }
 
-            if(nearestVehicle.FuelType != FuelType)
+            if (price < 0) return;
+
+            if (nearestVehicle.FuelType != FuelType)
             {
                 // Falsch getankt
                 if (Configuration.Instance.DevMode)
@@ -141,20 +143,13 @@ namespace PARADOX_RP.Game.GasStation
                 player.SendNotification("Tankstelle", $"Die Tankstelle hat nicht genug Inhalt um Vollständig zu tanken daher wird die Füllmenge auf {Volume} reduziert.", NotificationTypes.ERROR);
             }
 
-            if(price == -1)
-            {
-                return;
-            }
-
-            if((nearestVehicle.Fuel+Volume) > vehicleClass.MaxFuel)
+            if((nearestVehicle.Fuel + Volume) > vehicleClass.MaxFuel)
             {
                 if(FuelType == FuelTypes.ELECTRO)
-                {
                     player.SendNotification("Tankstelle", $"Soviel kWh passt nicht in deine Batterie!", NotificationTypes.ERROR);
-                } else
-                {
+                else
                     player.SendNotification("Tankstelle", $"Soviel {fuelType} passt nicht in deinen Tank!", NotificationTypes.ERROR);
-                }
+             
                 return;
             }
 
@@ -166,13 +161,10 @@ namespace PARADOX_RP.Game.GasStation
 
             nearestVehicle.Fuel += Volume;
             if (FuelType == FuelTypes.ELECTRO)
-            {
                 player.SendNotification("Tankstelle", $"Du hast dein Fahrzeug erfolgreich für {Volume * price}$ aufgeladen.", NotificationTypes.SUCCESS);
-            }
             else
-            {
                 player.SendNotification("Tankstelle", $"Du hast dein Fahrzeug erfolgreich für {Volume * price}$ getankt.", NotificationTypes.SUCCESS);
-            }
+            
         }
     }
 }

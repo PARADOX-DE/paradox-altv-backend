@@ -80,7 +80,7 @@ namespace PARADOX_RP.Game.JumpPoints
             return await Task.FromResult(true);
         }
 
-        public async void enterJumpPoint(PXPlayer player, Jumppoints jp)
+        public void enterJumpPoint(PXPlayer player, Jumppoints jp)
         {
             if (jp.Locked) return;
 
@@ -98,7 +98,7 @@ namespace PARADOX_RP.Game.JumpPoints
             }
         }
 
-        public async void exitJumpPoint(PXPlayer player, Jumppoints jp)
+        public void exitJumpPoint(PXPlayer player, Jumppoints jp)
         {
             if (jp.Locked) return;
 
@@ -117,7 +117,7 @@ namespace PARADOX_RP.Game.JumpPoints
             }
         }
 
-        public async void lockJumpPoint(PXPlayer player, Jumppoints jp)
+        public void lockJumpPoint(PXPlayer player, Jumppoints jp)
         {
             if (player.Team.Id == jp.TeamId && jp.LastBreaked.AddMinutes(30) < DateTime.Now)
             {
@@ -126,7 +126,7 @@ namespace PARADOX_RP.Game.JumpPoints
             }
         }
 
-        public async void breakJumpPoint(PXPlayer player, Jumppoints jp)
+        public void breakJumpPoint(PXPlayer player, Jumppoints jp)
         {
             //Aufbrechen
         }

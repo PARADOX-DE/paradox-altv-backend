@@ -51,6 +51,7 @@ namespace PARADOX_RP.Game.Inventory
             //itemScripts.FirstOrDefault(i => i.ScriptName == "vest_itemscript").UseItem();
 
             eventController.OnClient<PXPlayer, int, int, int, bool>("MoveInventoryItem", MoveInventoryItem);
+            eventController.OnClient<PXPlayer, int>("UseItem", UseItem);
         }
 
         public override async Task<bool> OnKeyPress(PXPlayer player, KeyEnumeration key)
@@ -62,6 +63,14 @@ namespace PARADOX_RP.Game.Inventory
             }
 
             return await Task.FromResult(false);
+        }
+
+        private async void UseItem(PXPlayer player, int Slot)
+        {
+            LocalInventoryData localInventoryData = player.LocalInventoryData;
+            if (localInventoryData == null) return;
+
+
         }
 
         private void MoveInventoryItem(PXPlayer player, int OldSlot, int NewSlot, int Amount, bool ToAdditional)

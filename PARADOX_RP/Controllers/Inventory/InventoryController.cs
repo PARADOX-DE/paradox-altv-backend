@@ -119,9 +119,7 @@ namespace PARADOX_RP.Controllers.Inventory
                     NewOriginId = OriginId;
 
                 newAmount = newAmount >= Item.StackSize ? Item.StackSize : newAmount;
-
                 localItem.Value.Amount = newAmount;
-
                 toBeAdded -= (newAmount - oldAmount);
 
                 await ChangeAmount(inventory, localItem.Key, newAmount, NewOriginId);

@@ -38,6 +38,7 @@ namespace PARADOX_RP.Game.Inventory
         private IInventoryController _inventoryHandler;
 
         private IEnumerable<IInventoriable> _inventories;
+        private IEnumerable<IItemScript> _itemScripts;
         public Dictionary<int, Items> _items = new Dictionary<int, Items>();
         public Dictionary<int, InventoryInfo> _inventoryInfo = new Dictionary<int, InventoryInfo>();
 
@@ -45,7 +46,8 @@ namespace PARADOX_RP.Game.Inventory
         {
             _inventoryHandler = inventoryHandler;
             _inventories = inventories;
-
+            _itemScripts = itemScripts;
+            
             LoadDatabaseTable<Items>(pxContext.Items, (i) => _items.Add(i.Id, i));
             LoadDatabaseTable<InventoryInfo>(pxContext.InventoryInfo, (i) => _inventoryInfo.Add((int)i.InventoryType, i));
             //itemScripts.FirstOrDefault(i => i.ScriptName == "vest_itemscript").UseItem();
@@ -70,7 +72,7 @@ namespace PARADOX_RP.Game.Inventory
             LocalInventoryData localInventoryData = player.LocalInventoryData;
             if (localInventoryData == null) return;
 
-
+            
         }
 
         private void MoveInventoryItem(PXPlayer player, int OldSlot, int NewSlot, int Amount, bool ToAdditional)

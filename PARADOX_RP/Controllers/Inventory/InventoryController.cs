@@ -172,5 +172,16 @@ namespace PARADOX_RP.Controllers.Inventory
             }
         }
 
+        public async Task<bool> UseItem(PXInventory inventory, int Slot)
+        {
+            if(inventory.Items.TryGetValue(Slot, out InventoryItemAssignments Item))
+            {
+                //itemScripts.FirstOrDefault(i => i.ScriptName == "vest_itemscript").UseItem();
+
+                InventoryModule.Instance.
+            }
+
+            return false;
+        }
     }
 }

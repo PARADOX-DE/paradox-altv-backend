@@ -17,5 +17,7 @@ namespace PARADOX_RP.Controllers.Inventory
         Task<bool> CreateItem(PXInventory inventory, int ItemId, int Amount, string OriginInformation, [CallerMemberName] string callerName = null);
         int GetNextAvailableSlot(PXInventory inventory);
         Task<int> CreateItemSignature(string CallerName, string OriginInformation);
+
+        Task<bool> UseItem(PXInventory inventory, int Slot);
     }
 }

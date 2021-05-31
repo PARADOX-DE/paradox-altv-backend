@@ -84,19 +84,39 @@ namespace PARADOX_RP.Controllers.Inventory
             return 0;
         }
 
+        public async Task<int> CreateItemSignature(string CallerName, string OriginInformation)
+        {
+            await using (var px = new PXContext())
+            {
+                EntityEntry<InventoryItemSignatures> itemSignature = await px.InventoryItemSignatures.AddAsync(new InventoryItemSignatures()
+                {
+                    Origin = CallerName,
+                    Information = OriginInformation
+                });
+                await px.SaveChangesAsync();
+
+                return itemSignature.Entity.Id;
+            }
+        }
+
         public async Task<bool> CreateItem(PXInventory inventory, int ItemId, int Amount, string OriginInformation, [CallerMemberName] string callerName = null)
         {
             if (!InventoryModule.Instance._items.TryGetValue(ItemId, out Items Item)) return false;
             if (Amount < 1) return false;
 
             var localItems = inventory.Items.Where(d => (d.Value.Item == ItemId) && (d.Value.Amount < Item.StackSize)).ToDictionary(pair => pair.Key).Values;
-
             int toBeAdded = Amount;
+
+            int OriginId = await CreateItemSignature(callerName, OriginInformation);
 
             foreach (var localItem in localItems)
             {
                 int oldAmount = localItem.Value.Amount;
                 int newAmount = localItem.Value.Amount += toBeAdded;
+
+                int NewOriginId = -1;
+                if (newAmount > localItem.Value.Amount)
+                    NewOriginId = OriginId;
 
                 newAmount = newAmount >= Item.StackSize ? Item.StackSize : newAmount;
 
@@ -104,7 +124,7 @@ namespace PARADOX_RP.Controllers.Inventory
 
                 toBeAdded -= (newAmount - oldAmount);
 
-                await ChangeAmount(inventory, localItem.Key, newAmount);
+                await ChangeAmount(inventory, localItem.Key, newAmount, NewOriginId);
 
                 if (toBeAdded <= 0) return true;
             }
@@ -116,7 +136,7 @@ namespace PARADOX_RP.Controllers.Inventory
                 var newItem = new InventoryItemAssignments()
                 {
                     InventoryId = inventory.Id,
-                    OriginId = 1,
+                    OriginId = OriginId,
                     Item = ItemId,
                     Weight = Item.Weight,
                     Amount = toBeAdded >= Item.StackSize ? Item.StackSize : toBeAdded,

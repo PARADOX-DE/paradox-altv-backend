@@ -213,6 +213,7 @@ namespace PARADOX_RP.Controllers.Inventory
             if (NeedToRemoveItem)
             {
                 //Remove Item Logic here
+                await RemoveItemBySlotId(inventory, Slot, 1);
             }
 
             return false;

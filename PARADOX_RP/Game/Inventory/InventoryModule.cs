@@ -38,7 +38,8 @@ namespace PARADOX_RP.Game.Inventory
         private IInventoryController _inventoryHandler;
 
         private IEnumerable<IInventoriable> _inventories;
-        private IEnumerable<IItemScript> _itemScripts;
+        public IEnumerable<IItemScript> _itemScripts;
+
         public Dictionary<int, Items> _items = new Dictionary<int, Items>();
         public Dictionary<int, InventoryInfo> _inventoryInfo = new Dictionary<int, InventoryInfo>();
 

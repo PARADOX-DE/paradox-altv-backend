@@ -174,11 +174,15 @@ namespace PARADOX_RP.Controllers.Inventory
 
         public async Task<bool> UseItem(PXInventory inventory, int Slot)
         {
-            if(inventory.Items.TryGetValue(Slot, out InventoryItemAssignments Item))
-            {
-                //itemScripts.FirstOrDefault(i => i.ScriptName == "vest_itemscript").UseItem();
+            if (!inventory.Items.TryGetValue(Slot, out InventoryItemAssignments Item)) return false;
+            if (!InventoryModule.Instance._items.TryGetValue(Item.Item, out Items ItemInfo)) return false;
 
-                InventoryModule.Instance.
+            //itemScripts.FirstOrDefault(i => i.ScriptName == "vest_itemscript").UseItem();
+
+            bool NeedToRemoveItem = await InventoryModule.Instance._itemScripts.FirstOrDefault(i => i.ScriptName == ItemInfo.ScriptName).UseItem();
+            if (NeedToRemoveItem)
+            {
+                //Remove Item Logic here
             }
 
             return false;

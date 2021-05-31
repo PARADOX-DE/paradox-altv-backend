@@ -26,7 +26,7 @@ using System.Threading.Tasks;
 
 namespace PARADOX_RP.Game.GasStation
 {
-    class GasStationModule : ModuleBase<GasStationModule>
+    class JumpPointsModule : ModuleBase<JumpPointsModule>
     {
         private Dictionary<int, GasStations> _GasStations = new Dictionary<int, GasStations>();
         private Dictionary<int, GasStationPetrols> _GasStationPetrols = new Dictionary<int, GasStationPetrols>();
@@ -34,7 +34,7 @@ namespace PARADOX_RP.Game.GasStation
         private readonly IEventController _eventController;
         private readonly IVehicleController _vehicleController;
 
-        public GasStationModule(PXContext px, IEventController eventController, IVehicleController vehicleController) : base("GasStation")
+        public JumpPointsModule(PXContext px, IEventController eventController, IVehicleController vehicleController) : base("GasStation")
         {
             _eventController = eventController;
             _vehicleController = vehicleController;

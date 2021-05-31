@@ -24,7 +24,18 @@ namespace PARADOX_RP.Core.Factories
         public int OwnerId { get; set; }
         public bool HasRadio { get; set; }
         public FuelTypes FuelType { get; set; } = FuelTypes.PETROL;
-        public float Fuel { get; set; }
+
+        private float _fuel;
+        public float Fuel
+        {
+            get => _fuel;
+            set
+            {
+                this.SetStreamSyncedMetaDataAsync("Fuel", _fuel);
+                _fuel = value;
+            }
+        }
+
         public PXInventory Inventory { get; set; }
 
         private bool _locked;
@@ -45,6 +56,7 @@ namespace PARADOX_RP.Core.Factories
             VehicleModel = "Unknown";
             HasRadio = false;
             Inventory = null;
+            Fuel = 50;
         }
 
         public bool IsValid()

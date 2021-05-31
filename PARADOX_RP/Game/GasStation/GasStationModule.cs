@@ -68,20 +68,20 @@ namespace PARADOX_RP.Game.GasStation
             GasStationPetrols dbPetrolStation = _GasStationPetrols.Values.FirstOrDefault(gsp => gsp.Position.Distance(player.Position) < 3);
             if (dbPetrolStation == null) return await Task.FromResult(false);
 
+            if (!_GasStations.TryGetValue(dbPetrolStation.GasStationId, out GasStations dbGasStation)) return await Task.FromResult(false);
+
             PXVehicle nearestVehicle = Pools.Instance.Get<PXVehicle>(PoolType.VEHICLE).FirstOrDefault(v => v.Position.Distance(player.Position) < 5);
-            if (nearestVehicle == null) return await Task.FromResult(false);
+            if (nearestVehicle == null) return await Task.FromResult(true);
 
             VehicleClass vehicleClass = VehicleModule.Instance._vehicleClass.FirstOrDefault(v => v.Value.VehicleModel == nearestVehicle.VehicleModel).Value;
-            if (vehicleClass == null) return await Task.FromResult(false);
-
-            if (!_GasStations.TryGetValue(dbPetrolStation.GasStationId, out GasStations dbGasStation)) return await Task.FromResult(false);
+            if (vehicleClass == null) return await Task.FromResult(true);
 
             if (dbGasStation.OwnerId == -1) dbGasStation.TankVolume = 999999;
 
             if (dbGasStation.TankVolume <= 0)
             {
                 player.SendNotification("Tankstelle", $"Die Tankstelle hat keinen Inhalt.", NotificationTypes.ERROR);
-                return await Task.FromResult(false);
+                return await Task.FromResult(true);
             }
 
             WindowManager.Instance.Get<GasStationWindow>().Show(player, new GasStationWindowWriter(dbGasStation.Id, dbGasStation.Name, player.Money, dbGasStation.Petrol, dbGasStation.Diesel, dbGasStation.Electro, vehicleClass.MaxFuel-nearestVehicle.Fuel));

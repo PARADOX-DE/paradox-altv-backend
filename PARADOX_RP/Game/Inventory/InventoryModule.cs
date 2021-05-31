@@ -38,6 +38,8 @@ namespace PARADOX_RP.Game.Inventory
         private IInventoryController _inventoryHandler;
 
         private IEnumerable<IInventoriable> _inventories;
+        public IEnumerable<IItemScript> _itemScripts;
+
         public Dictionary<int, Items> _items = new Dictionary<int, Items>();
         public Dictionary<int, InventoryInfo> _inventoryInfo = new Dictionary<int, InventoryInfo>();
 
@@ -45,12 +47,14 @@ namespace PARADOX_RP.Game.Inventory
         {
             _inventoryHandler = inventoryHandler;
             _inventories = inventories;
-
+            _itemScripts = itemScripts;
+            
             LoadDatabaseTable<Items>(pxContext.Items, (i) => _items.Add(i.Id, i));
             LoadDatabaseTable<InventoryInfo>(pxContext.InventoryInfo, (i) => _inventoryInfo.Add((int)i.InventoryType, i));
             //itemScripts.FirstOrDefault(i => i.ScriptName == "vest_itemscript").UseItem();
 
             eventController.OnClient<PXPlayer, int, int, int, bool>("MoveInventoryItem", MoveInventoryItem);
+            eventController.OnClient<PXPlayer, int>("UseItem", UseItem);
         }
 
         public override async Task<bool> OnKeyPress(PXPlayer player, KeyEnumeration key)
@@ -62,6 +66,14 @@ namespace PARADOX_RP.Game.Inventory
             }
 
             return await Task.FromResult(false);
+        }
+
+        private async void UseItem(PXPlayer player, int Slot)
+        {
+            LocalInventoryData localInventoryData = player.LocalInventoryData;
+            if (localInventoryData == null) return;
+
+            await _inventoryHandler.UseItem(localInventoryData.PlayerInventory, Slot);
         }
 
         private void MoveInventoryItem(PXPlayer player, int OldSlot, int NewSlot, int Amount, bool ToAdditional)

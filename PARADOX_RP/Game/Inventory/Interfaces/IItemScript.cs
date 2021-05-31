@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace PARADOX_RP.Game.Inventory.Interfaces
 {
-    interface IItemScript
+    public interface IItemScript
     {
         int Id { get; }
         string ScriptName { get; }

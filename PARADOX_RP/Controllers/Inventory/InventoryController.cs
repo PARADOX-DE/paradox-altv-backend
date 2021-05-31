@@ -1,4 +1,5 @@
 ﻿using AltV.Net;
+using AltV.Net.Async;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Newtonsoft.Json;
@@ -84,27 +85,45 @@ namespace PARADOX_RP.Controllers.Inventory
             return 0;
         }
 
+        public async Task<int> CreateItemSignature(string CallerName, string OriginInformation)
+        {
+            await using (var px = new PXContext())
+            {
+                EntityEntry<InventoryItemSignatures> itemSignature = await px.InventoryItemSignatures.AddAsync(new InventoryItemSignatures()
+                {
+                    Origin = CallerName,
+                    Information = OriginInformation
+                });
+                await px.SaveChangesAsync();
+
+                return itemSignature.Entity.Id;
+            }
+        }
+
         public async Task<bool> CreateItem(PXInventory inventory, int ItemId, int Amount, string OriginInformation, [CallerMemberName] string callerName = null)
         {
             if (!InventoryModule.Instance._items.TryGetValue(ItemId, out Items Item)) return false;
             if (Amount < 1) return false;
 
             var localItems = inventory.Items.Where(d => (d.Value.Item == ItemId) && (d.Value.Amount < Item.StackSize)).ToDictionary(pair => pair.Key).Values;
-
             int toBeAdded = Amount;
+
+            int OriginId = await CreateItemSignature(callerName, OriginInformation);
 
             foreach (var localItem in localItems)
             {
                 int oldAmount = localItem.Value.Amount;
                 int newAmount = localItem.Value.Amount += toBeAdded;
 
+                int NewOriginId = -1;
+                if (newAmount > localItem.Value.Amount)
+                    NewOriginId = OriginId;
+
                 newAmount = newAmount >= Item.StackSize ? Item.StackSize : newAmount;
-
                 localItem.Value.Amount = newAmount;
-
                 toBeAdded -= (newAmount - oldAmount);
 
-                await ChangeAmount(inventory, localItem.Key, newAmount);
+                await ChangeAmount(inventory, localItem.Key, newAmount, NewOriginId);
 
                 if (toBeAdded <= 0) return true;
             }
@@ -116,7 +135,7 @@ namespace PARADOX_RP.Controllers.Inventory
                 var newItem = new InventoryItemAssignments()
                 {
                     InventoryId = inventory.Id,
-                    OriginId = 1,
+                    OriginId = OriginId,
                     Item = ItemId,
                     Weight = Item.Weight,
                     Amount = toBeAdded >= Item.StackSize ? Item.StackSize : toBeAdded,
@@ -138,7 +157,38 @@ namespace PARADOX_RP.Controllers.Inventory
             return false;
         }
 
-        public async Task ChangeAmount(PXInventory inventory, int Slot, int Amount)
+        public async Task RemoveItemBySlotId(PXInventory inventory, int SlotId, int Amount)
+        {
+            if (!inventory.Items.TryGetValue(SlotId, out InventoryItemAssignments Item)) return;
+            if (!InventoryModule.Instance._items.TryGetValue(Item.Item, out Items ItemInfo)) return;
+
+            if (Item.Amount < 1) return; // ggf. Logs hinzufügen.
+            if (Item.Amount > ItemInfo.StackSize) return; // ebenfalls ggf. Logs
+
+            if (Item.Amount <= Amount)
+            {
+                inventory.Items.Remove(SlotId);
+                await using (var px = new PXContext())
+                {
+                    InventoryItemAssignments dbItem = await px.InventoryItemAssignments.FirstOrDefaultAsync(i => i.InventoryId == inventory.Id && i.Slot == SlotId);
+                    if (dbItem == null) return;
+
+                    px.InventoryItemAssignments.Remove(dbItem);
+                    await px.SaveChangesAsync();
+                }
+
+                // Item komplett entfernen
+            }
+            else
+            {
+                // Item Anzahl entfernen
+                Item.Amount -= Amount;
+                await ChangeAmount(inventory, SlotId, Item.Amount);
+            }
+
+        }
+
+        public async Task ChangeAmount(PXInventory inventory, int Slot, int Amount, int NewSignatureId = -1)
         {
             await using (var px = new PXContext())
             {
@@ -146,10 +196,31 @@ namespace PARADOX_RP.Controllers.Inventory
                 if (item == null) return;
 
                 item.Amount = Amount;
+                if (NewSignatureId > 0) item.OriginId = NewSignatureId;
+
                 px.InventoryItemAssignments.Update(item);
 
                 await px.SaveChangesAsync();
             }
+        }
+
+        public async Task<bool> UseItem(PXInventory inventory, int Slot)
+        {
+            if (!inventory.Items.TryGetValue(Slot, out InventoryItemAssignments Item)) return false;
+            if (!InventoryModule.Instance._items.TryGetValue(Item.Item, out Items ItemInfo)) return false;
+
+            //itemScripts.FirstOrDefault(i => i.ScriptName == "vest_itemscript").UseItem();
+            IItemScript TargetItemScript = InventoryModule.Instance._itemScripts.FirstOrDefault(i => i.ScriptName == ItemInfo.ScriptName);
+            if (TargetItemScript == null) return false;
+
+            bool NeedToRemoveItem = await TargetItemScript.UseItem();
+            if (NeedToRemoveItem)
+            {
+                //Remove Item Logic here
+                await RemoveItemBySlotId(inventory, Slot, 1);
+            }
+
+            return false;
         }
 
     }

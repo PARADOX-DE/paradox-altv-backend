@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using PARADOX_RP.Core.Database;
 using PARADOX_RP.Core.Interface;
 using PARADOX_RP.Core.Module;
+using PARADOX_RP.Game.Inventory.Interfaces;
 using PARADOX_RP.UI;
 using PARADOX_RP.UI.Models;
 using PARADOX_RP.UI.Windows.NativeMenu;
@@ -82,13 +83,13 @@ namespace PARADOX_RP.Core.Factories
                 .SingleInstance();
             }
 
-            //LogStartup("Register itemscripts");
-            //foreach (var item in _itemTypes)
-            //{
-            //    builder.RegisterType(item)
-            //    .As<IItemScript>()
-            //    .SingleInstance();
-            //}
+            LogStartup("Register itemscripts");
+            foreach (var item in _itemTypes)
+            {
+                builder.RegisterType(item)
+                .As<IItemScript>()
+               .SingleInstance();
+            }
 
             //LogStartup("Register database context");
             string connection = $"Server=localhost; port=3306; Database=altv-paradox_rp; UserId=root; Password=lCvLpEGKhvz4WDsN;";
@@ -193,7 +194,7 @@ namespace PARADOX_RP.Core.Factories
         private bool IsItemType(Type type)
         {
             if (type.Namespace == null) return false;
-            return type.Namespace.StartsWith("GangRP_Server.Modules.Inventory.Item") &&
+            return type.Namespace.StartsWith("PARADOX_RP.Game.Inventory.Content") &&
                                             !type.Name.StartsWith("<");
         }
 

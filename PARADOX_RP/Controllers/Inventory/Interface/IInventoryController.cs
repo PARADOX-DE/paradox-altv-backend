@@ -15,9 +15,10 @@ namespace PARADOX_RP.Controllers.Inventory
         Task<PXInventory> LoadInventory(InventoryTypes type, int Id);
         Task<PXInventory> CreateInventory(InventoryTypes type, int Id);
         Task<bool> CreateItem(PXInventory inventory, int ItemId, int Amount, string OriginInformation, [CallerMemberName] string callerName = null);
+        Task RemoveItem(PXInventory inventory, int ItemId, int Amount);
         int GetNextAvailableSlot(PXInventory inventory);
         Task<int> CreateItemSignature(string CallerName, string OriginInformation);
-
+        
         Task<bool> UseItem(PXInventory inventory, int Slot);
     }
 }

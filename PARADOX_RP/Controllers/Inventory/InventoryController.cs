@@ -156,6 +156,36 @@ namespace PARADOX_RP.Controllers.Inventory
             return false;
         }
 
+        public async Task RemoveItemBySlotId(PXInventory inventory, int SlotId, int Amount)
+        {
+            if (!inventory.Items.TryGetValue(SlotId, out InventoryItemAssignments Item)) return;
+            if (!InventoryModule.Instance._items.TryGetValue(Item.Item, out Items ItemInfo)) return;
+
+            if (Item.Amount < 1) return; // ggf. Logs hinzufügen.
+            if (Item.Amount > ItemInfo.StackSize) return; // ebenfalls ggf. Logs
+
+            if (Item.Amount <= Amount)
+            {
+                await using (var px = new PXContext())
+                {
+                    InventoryItemAssignments dbItem = await px.InventoryItemAssignments.FirstOrDefaultAsync(i => i.InventoryId == inventory.Id && i.Slot == SlotId);
+                    if (dbItem == null) return;
+
+                    px.InventoryItemAssignments.Remove(dbItem);
+                    await px.SaveChangesAsync();
+                }
+                // Item komplett entfernen
+            }
+            else
+            {
+                // Item Anzahl entfernen
+
+                Item.Amount -= Amount;
+                await ChangeAmount(inventory, SlotId, Item.Amount);
+            }
+
+        }
+
         public async Task ChangeAmount(PXInventory inventory, int Slot, int Amount, int NewSignatureId = -1)
         {
             await using (var px = new PXContext())
@@ -187,5 +217,6 @@ namespace PARADOX_RP.Controllers.Inventory
 
             return false;
         }
+
     }
 }

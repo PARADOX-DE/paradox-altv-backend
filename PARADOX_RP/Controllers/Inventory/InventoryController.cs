@@ -138,7 +138,7 @@ namespace PARADOX_RP.Controllers.Inventory
             return false;
         }
 
-        public async Task ChangeAmount(PXInventory inventory, int Slot, int Amount)
+        public async Task ChangeAmount(PXInventory inventory, int Slot, int Amount, int NewSignatureId = -1)
         {
             await using (var px = new PXContext())
             {
@@ -146,6 +146,8 @@ namespace PARADOX_RP.Controllers.Inventory
                 if (item == null) return;
 
                 item.Amount = Amount;
+                if (NewSignatureId > 0) item.OriginId = NewSignatureId;
+
                 px.InventoryItemAssignments.Update(item);
 
                 await px.SaveChangesAsync();

@@ -1,4 +1,5 @@
-﻿using PARADOX_RP.Game.Inventory.Interfaces;
+﻿using AltV.Net.Async;
+using PARADOX_RP.Game.Inventory.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -10,11 +11,12 @@ namespace PARADOX_RP.Game.Inventory.Content
     {
         public string ScriptName => "vest_itemscript";
 
-        public int Id => throw new NotImplementedException();
+        public int Id => 1;
 
-        public Task<bool> UseItem()
+        public async Task<bool> UseItem()
         {
-            return null;
+            AltAsync.Log("Used Item Vest");
+            return true;
         }
     }
 }

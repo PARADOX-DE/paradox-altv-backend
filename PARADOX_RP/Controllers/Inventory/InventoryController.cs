@@ -1,4 +1,5 @@
 ﻿using AltV.Net;
+using AltV.Net.Async;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Newtonsoft.Json;
@@ -166,6 +167,7 @@ namespace PARADOX_RP.Controllers.Inventory
 
             if (Item.Amount <= Amount)
             {
+                inventory.Items.Remove(SlotId);
                 await using (var px = new PXContext())
                 {
                     InventoryItemAssignments dbItem = await px.InventoryItemAssignments.FirstOrDefaultAsync(i => i.InventoryId == inventory.Id && i.Slot == SlotId);
@@ -174,12 +176,12 @@ namespace PARADOX_RP.Controllers.Inventory
                     px.InventoryItemAssignments.Remove(dbItem);
                     await px.SaveChangesAsync();
                 }
+
                 // Item komplett entfernen
             }
             else
             {
                 // Item Anzahl entfernen
-
                 Item.Amount -= Amount;
                 await ChangeAmount(inventory, SlotId, Item.Amount);
             }
@@ -208,8 +210,10 @@ namespace PARADOX_RP.Controllers.Inventory
             if (!InventoryModule.Instance._items.TryGetValue(Item.Item, out Items ItemInfo)) return false;
 
             //itemScripts.FirstOrDefault(i => i.ScriptName == "vest_itemscript").UseItem();
+            IItemScript TargetItemScript = InventoryModule.Instance._itemScripts.FirstOrDefault(i => i.ScriptName == ItemInfo.ScriptName);
+            if (TargetItemScript == null) return false;
 
-            bool NeedToRemoveItem = await InventoryModule.Instance._itemScripts.FirstOrDefault(i => i.ScriptName == ItemInfo.ScriptName).UseItem();
+            bool NeedToRemoveItem = await TargetItemScript.UseItem();
             if (NeedToRemoveItem)
             {
                 //Remove Item Logic here

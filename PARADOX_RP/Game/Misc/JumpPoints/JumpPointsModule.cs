@@ -69,19 +69,19 @@ namespace PARADOX_RP.Game.JumpPoints
             {
                 if (dbJumpPoint.Position.Distance(player.Position) < 5)
                 {
-                    await enterJumpPoint(player, dbJumpPoint);
+                    await EnterJumpPoint(player, dbJumpPoint);
                 }
                 else
                 {
-                    await exitJumpPoint(player, dbJumpPoint);
+                    await ExitJumpPoint(player, dbJumpPoint);
                 }
             }
-            else if (key == KeyEnumeration.L) lockJumpPoint(player, dbJumpPoint);
+            else if (key == KeyEnumeration.L) LockJumpPoint(player, dbJumpPoint);
 
             return await Task.FromResult(true);
         }
 
-        public async Task enterJumpPoint(PXPlayer player, Jumppoints jp)
+        public async Task EnterJumpPoint(PXPlayer player, Jumppoints jp)
         {
             if (jp.Locked) return;
 
@@ -100,7 +100,7 @@ namespace PARADOX_RP.Game.JumpPoints
             }
         }
 
-        public async Task exitJumpPoint(PXPlayer player, Jumppoints jp)
+        public async Task ExitJumpPoint(PXPlayer player, Jumppoints jp)
         {
             if (jp.Locked) return;
 
@@ -119,7 +119,7 @@ namespace PARADOX_RP.Game.JumpPoints
             }
         }
 
-        public void lockJumpPoint(PXPlayer player, Jumppoints jp)
+        public void LockJumpPoint(PXPlayer player, Jumppoints jp)
         {
             if (player.Team.Id == jp.TeamId && jp.LastBreaked.AddMinutes(30) < DateTime.Now)
             {
@@ -128,7 +128,7 @@ namespace PARADOX_RP.Game.JumpPoints
             }
         }
 
-        public void breakJumpPoint(PXPlayer player, Jumppoints jp)
+        public void BreakJumpPoint(PXPlayer player, Jumppoints jp)
         {
             //Aufbrechen
         }

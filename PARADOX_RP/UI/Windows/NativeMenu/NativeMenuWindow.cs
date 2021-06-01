@@ -5,7 +5,9 @@ using PARADOX_RP.Core.Extensions;
 using PARADOX_RP.Core.Factories;
 using PARADOX_RP.UI.Models;
 using PARADOX_RP.UI.Windows.NativeMenu.Interface;
+using PARADOX_RP.Utils;
 using PARADOX_RP.Utils.Enums;
+using PARADOX_RP.Utils.Interface;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -16,13 +18,14 @@ namespace PARADOX_RP.UI.Windows.NativeMenu
     {
         private readonly Dictionary<Type, INativeMenu> _nativeMenus = new Dictionary<Type, INativeMenu>();
 
-        public NativeMenuWindow(IEnumerable<INativeMenu> nativeMenus) : base("NativeMenu")
+        public NativeMenuWindow(IEnumerable<INativeMenu> nativeMenus, ILogger logger) : base("NativeMenu")
         {
             nativeMenus.ForEach(menu =>
             {
                 _nativeMenus[menu.GetType()] = menu;
             });
-            AltAsync.Log("[+] Initializing >> Successfully initialized static native menus!");
+
+            logger.Console(ConsoleLogType.SUCCESS, "Initializing", "Successfully initialized static native menus!");
         }
 
         public void DisplayMenu<T>(PXPlayer player) where T : INativeMenu

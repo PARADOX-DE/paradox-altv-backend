@@ -10,14 +10,25 @@ using PARADOX_RP.Core.Database;
 using Microsoft.EntityFrameworkCore.Storage;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using AltV.Net.ColoredConsole;
+using PARADOX_RP.Utils;
+using PARADOX_RP.Utils.Interface;
 
 namespace PARADOX_RP
 {
     public class Resource : AsyncResource
     {
         private IApplication _application;
+        private ILogger _logger;
+
         public override void OnStart()
         {
+            using var autofac = new PXContainer();
+            autofac.RegisterTypes();
+            autofac.ResolveTypes();
+
+            _application = autofac.Resolve<IApplication>();
+            _logger = autofac.Resolve<ILogger>();
+
             using (var px = new PXContext())
             {
                 var databaseCreator = px.Database.GetService<IDatabaseCreator>() as RelationalDatabaseCreator;
@@ -26,12 +37,8 @@ namespace PARADOX_RP
                     databaseCreator.CreateTables();
                 }
                 catch { }
-                AltAsync.Log("[+] Database >> Successfully created database tables.");
+                _logger.Console(ConsoleLogType.SUCCESS, "Database", "Successfully created database tables.");
             }
-
-            using var autofac = new PXContainer();
-            autofac.RegisterTypes();
-            autofac.ResolveTypes();
 
             /*
              * 
@@ -39,9 +46,7 @@ namespace PARADOX_RP
              * 
              */
 
-            _application = autofac.Resolve<IApplication>();
-            Alt.Log($"[+] Application >> Starting {_application.Name}... // [by {_application.Author}]");
-
+            _logger.Console(ConsoleLogType.SUCCESS, "Application", $"Starting {_application.Name}... // [by {_application.Author}]");
             _application.Start();
         }
 

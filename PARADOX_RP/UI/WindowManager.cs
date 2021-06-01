@@ -6,6 +6,8 @@ using System.Text;
 using AltV.Net.Async;
 using Newtonsoft.Json;
 using PARADOX_RP.Core.Factories;
+using PARADOX_RP.Utils.Interface;
+using PARADOX_RP.Utils;
 
 namespace PARADOX_RP.UI
 {
@@ -14,7 +16,7 @@ namespace PARADOX_RP.UI
         public static WindowManager Instance { get; private set; }
 
         private readonly Dictionary<Type, object> _windows = new Dictionary<Type, object>();
-        public WindowManager(IEnumerable<IWindow> windows)
+        public WindowManager(IEnumerable<IWindow> windows, ILogger logger)
         {
             Instance = this;
 
@@ -22,7 +24,8 @@ namespace PARADOX_RP.UI
             {
                 _windows[window.GetType()] = window;
             });
-            AltAsync.Log("[+] Initializing >> Successfully initialized UI Windows!");
+
+            logger.Console(ConsoleLogType.SUCCESS, "Initializing", "Successfully initialized UI Windows!");
         }
 
         public T Get<T>() where T : Window

@@ -24,12 +24,15 @@ namespace PARADOX_RP.Core.Factories
 
         private IContainer _container;
         private ILifetimeScope _scope;
+        private ILogger _logger;
 
         private List<Type> _handlerTypes = new List<Type>();
         private List<Type> _moduleTypes = new List<Type>();
         private List<Type> _itemTypes = new List<Type>();
         private List<Type> _windowTypes = new List<Type>();
         private List<Type> _nativeMenuTypes = new List<Type>();
+
+               
 
         internal void RegisterTypes()
         {

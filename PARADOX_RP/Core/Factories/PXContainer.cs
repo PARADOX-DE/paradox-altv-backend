@@ -9,6 +9,8 @@ using PARADOX_RP.Game.Inventory.Interfaces;
 using PARADOX_RP.UI;
 using PARADOX_RP.UI.Models;
 using PARADOX_RP.UI.Windows.NativeMenu;
+using PARADOX_RP.Utils;
+using PARADOX_RP.Utils.Interface;
 using System;
 using System.Collections.Generic;
 using System.Reflection;
@@ -38,6 +40,7 @@ namespace PARADOX_RP.Core.Factories
 
             builder.RegisterType<Application>().As<IApplication>();
             builder.RegisterType<WindowManager>().As<IWindowManager>();
+            builder.RegisterType<Logger>().As<ILogger>();
 
             LogStartup("Loading controllers...");
             foreach (var handler in _handlerTypes)

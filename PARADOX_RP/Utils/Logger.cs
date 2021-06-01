@@ -18,15 +18,17 @@ namespace PARADOX_RP.Utils
     {
         public void Console(ConsoleLogType type, string Category, string Log)
         {
-            ColoredMessage message = new ColoredMessage();
-            message += "[";
-            message += type == ConsoleLogType.SUCCESS ? TextColor.Green : TextColor.Red;
+            string message = "[";
+            message += type == ConsoleLogType.SUCCESS ? "~g~" : "~r~";
             message += type == ConsoleLogType.SUCCESS ? "+" : "x";
+            message += "~w~";
             message += "] ";
 
             message += $"{Category} >> {Log}";
 
-            Alt.LogColored(message);
+            ColoredMessage cMessage = new ColoredMessage();
+            cMessage += message;
+            Alt.LogColored(cMessage);
         }
     }
 }

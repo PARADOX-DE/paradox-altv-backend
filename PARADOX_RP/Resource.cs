@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using PARADOX_RP.Core.Database;
 using Microsoft.EntityFrameworkCore.Storage;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using AltV.Net.ColoredConsole;
 
 namespace PARADOX_RP
 {

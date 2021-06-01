@@ -2,7 +2,9 @@
 using PARADOX_RP.Core.Database;
 using PARADOX_RP.Core.Database.Models;
 using PARADOX_RP.Core.Module;
+using PARADOX_RP.Utils;
 using PARADOX_RP.Utils.Enums;
+using PARADOX_RP.Utils.Interface;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -13,14 +15,14 @@ namespace PARADOX_RP.Game.Clothing
     {
         public Dictionary<int, Clothes> _clothes = new Dictionary<int, Clothes>();
         
-        public ClothesModule(PXContext px) : base("Clothes")
+        public ClothesModule(PXContext px, ILogger logger) : base("Clothes")
         {
             LoadDatabaseTable(px.Clothes, (Clothes c) =>
             {
                 _clothes.Add(c.Id, c);
             });
 
-            AltAsync.Log($"[+] Content >> Successfully loaded {_clothes.Count}x Clothes!");
+            logger.Console(ConsoleLogType.SUCCESS, "Content", $"Successfully loaded {_clothes.Count}x Clothes!");
         }
 
     }

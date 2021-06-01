@@ -21,10 +21,9 @@ namespace PARADOX_RP.UI.Windows.NativeMenu
             nativeMenus.ForEach(menu =>
             {
                 _nativeMenus[menu.GetType()] = menu;
-                AltAsync.Log($"[NativeMenu] {menu.Title} Menu loaded.");
             });
+            AltAsync.Log("[+] Initializing >> Successfully initialized static native menus!");
         }
-
 
         public void DisplayMenu<T>(PXPlayer player) where T : INativeMenu
         {

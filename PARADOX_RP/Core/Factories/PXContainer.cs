@@ -23,7 +23,6 @@ namespace PARADOX_RP.Core.Factories
         private IContainer _container;
         private ILifetimeScope _scope;
 
-        private List<Type> _eventTypes = new List<Type>();
         private List<Type> _handlerTypes = new List<Type>();
         private List<Type> _moduleTypes = new List<Type>();
         private List<Type> _itemTypes = new List<Type>();
@@ -34,21 +33,13 @@ namespace PARADOX_RP.Core.Factories
         {
             var builder = new ContainerBuilder();
 
-            LogStartup("Load types");
+            LogStartup("Loading applications...");
             LoadTypes();
 
             builder.RegisterType<Application>().As<IApplication>();
             builder.RegisterType<WindowManager>().As<IWindowManager>();
 
-            LogStartup("Register events");
-            foreach (var eventTarget in _eventTypes)
-            {
-                builder.RegisterTypes(eventTarget)
-                .AsImplementedInterfaces()
-                .SingleInstance();
-            }
-
-            LogStartup("Register handlers");
+            LogStartup("Loading controllers...");
             foreach (var handler in _handlerTypes)
             {
                 builder.RegisterTypes(handler)
@@ -56,7 +47,7 @@ namespace PARADOX_RP.Core.Factories
                 .SingleInstance();
             }
 
-            LogStartup("Register modules");
+            LogStartup("Loading game modules...");
             foreach (var module in _moduleTypes)
             {
                 builder.RegisterType(module)
@@ -65,7 +56,7 @@ namespace PARADOX_RP.Core.Factories
                 .SingleInstance();
             }
 
-            LogStartup("Register windows");
+            LogStartup("Loading UI Windows...");
             foreach (var window in _windowTypes)
             {
                 builder.RegisterType(window)
@@ -74,7 +65,7 @@ namespace PARADOX_RP.Core.Factories
                 .SingleInstance();
             }
 
-            LogStartup("Register NativeMenus");
+            LogStartup("Loading static native menus...");
             foreach (var window in _nativeMenuTypes)
             {
                 builder.RegisterType(window)
@@ -83,7 +74,7 @@ namespace PARADOX_RP.Core.Factories
                 .SingleInstance();
             }
 
-            LogStartup("Register itemscripts");
+            LogStartup("Loading itemscripts...");
             foreach (var item in _itemTypes)
             {
                 builder.RegisterType(item)
@@ -102,6 +93,7 @@ namespace PARADOX_RP.Core.Factories
                .InstancePerLifetimeScope();
 
             _container = builder.Build();
+            LogStartup("Successfully build server container!");
         }
 
         internal void ResolveTypes()
@@ -200,7 +192,7 @@ namespace PARADOX_RP.Core.Factories
 
         private static void LogStartup(string text)
         {
-            AltAsync.Log($"[STARTUP] {text}");
+            AltAsync.Log($"[+] Load >> {text}");
         }
 
         public void Dispose()

@@ -25,7 +25,7 @@ namespace PARADOX_RP
                     databaseCreator.CreateTables();
                 }
                 catch { }
-                AltAsync.Log("Initialized Database.");
+                AltAsync.Log("[+] Database >> Successfully created database tables.");
             }
 
             using var autofac = new PXContainer();
@@ -39,9 +39,9 @@ namespace PARADOX_RP
              */
 
             _application = autofac.Resolve<IApplication>();
-            _application.Start();
+            Alt.Log($"[+] Application >> Starting {_application.Name}... // [by {_application.Author}]");
 
-            Alt.Log($"Application {_application.Name} made by {_application.Author} started.");
+            _application.Start();
         }
 
         public override void OnStop()

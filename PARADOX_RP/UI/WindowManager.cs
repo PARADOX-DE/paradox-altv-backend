@@ -21,8 +21,8 @@ namespace PARADOX_RP.UI
             windows.ForEach(window =>
             {
                 _windows[window.GetType()] = window;
-                AltAsync.Log($"[{window.WindowName}] Window loaded.");
             });
+            AltAsync.Log("[+] Initializing >> Successfully initialized UI Windows!");
         }
 
         public T Get<T>() where T : Window

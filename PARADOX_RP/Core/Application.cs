@@ -49,7 +49,22 @@ namespace PARADOX_RP.Core
                 },
             new IdProvider());
 
-            AltAsync.Log("Server started.");
+            AltAsync.Log("                                        ");
+            AltAsync.Log("          ..............                ");
+            AltAsync.Log("         .ck0000000000000ko;.           ");
+            AltAsync.Log("           ,oooooooooooodkXW0:          ");
+            AltAsync.Log("             ............ 'kWNc         ");
+            AltAsync.Log("            lXXXXXXXXXXXk. ;XMx.        ");
+            AltAsync.Log("           ;KM0lcccccccc,  oWWo         ");
+            AltAsync.Log("          .xMWl .,;;;;;;;ckNNd.         ");
+            AltAsync.Log("           cKWKldNMWWWWWWX0d,           ");
+            AltAsync.Log("            .lKWWMXl,,,,,.              ");
+            AltAsync.Log("              .lKWo                     ");
+            AltAsync.Log("                .;.                     ");
+            AltAsync.Log("                                        ");
+            AltAsync.Log("                  © by PARADOX Roleplay.");
+            AltAsync.Log("                                        ");
+
             _moduleController.Load();
         }
 

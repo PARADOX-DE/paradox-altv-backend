@@ -67,12 +67,13 @@ namespace PARADOX_RP.Game.JumpPoints
 
             if (key == KeyEnumeration.E)
             {
-                if(dbJumpPoint.Position.Distance(player.Position) < 5)
+                if (dbJumpPoint.Position.Distance(player.Position) < 5)
                 {
-                    enterJumpPoint(player, dbJumpPoint);
-                } else
+                    await enterJumpPoint(player, dbJumpPoint);
+                }
+                else
                 {
-                    exitJumpPoint(player, dbJumpPoint);
+                    await exitJumpPoint(player, dbJumpPoint);
                 }
             }
             else if (key == KeyEnumeration.L) lockJumpPoint(player, dbJumpPoint);
@@ -80,17 +81,18 @@ namespace PARADOX_RP.Game.JumpPoints
             return await Task.FromResult(true);
         }
 
-        public void enterJumpPoint(PXPlayer player, Jumppoints jp)
+        public async Task enterJumpPoint(PXPlayer player, Jumppoints jp)
         {
             if (jp.Locked) return;
 
-            if(player.IsInVehicle && jp.Vehicle == true)
+            if (await player.IsInVehicleAsync() && jp.Vehicle == true)
             {
                 player.Vehicle.Dimension = jp.EndDimension;
 
                 player.Vehicle.Position = jp.EndPosition;
                 player.Vehicle.Rotation = jp.EndRotation;
-            } else if (!player.IsInVehicle)
+            }
+            else if (!await player.IsInVehicleAsync())
             {
                 player.Dimension = jp.EndDimension;
                 player.Position = jp.EndPosition;
@@ -98,18 +100,18 @@ namespace PARADOX_RP.Game.JumpPoints
             }
         }
 
-        public void exitJumpPoint(PXPlayer player, Jumppoints jp)
+        public async Task exitJumpPoint(PXPlayer player, Jumppoints jp)
         {
             if (jp.Locked) return;
 
-            if (player.IsInVehicle && jp.Vehicle == true)
+            if (await player.IsInVehicleAsync() && jp.Vehicle == true)
             {
                 player.Vehicle.Dimension = jp.Dimension;
 
                 player.Vehicle.Position = jp.Position;
                 player.Vehicle.Rotation = jp.Rotation;
             }
-            else if (!player.IsInVehicle)
+            else if (!await player.IsInVehicleAsync())
             {
                 player.Dimension = jp.Dimension;
                 player.Position = jp.Position;

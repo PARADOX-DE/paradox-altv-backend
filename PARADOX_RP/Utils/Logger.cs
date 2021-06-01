@@ -28,6 +28,7 @@ namespace PARADOX_RP.Utils
 
             ColoredMessage cMessage = new ColoredMessage();
             cMessage += message;
+
             Alt.LogColored(cMessage);
         }
     }

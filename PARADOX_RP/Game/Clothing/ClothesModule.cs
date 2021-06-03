@@ -1,13 +1,9 @@
-﻿using AltV.Net.Async;
-using PARADOX_RP.Core.Database;
+﻿using PARADOX_RP.Core.Database;
 using PARADOX_RP.Core.Database.Models;
 using PARADOX_RP.Core.Module;
 using PARADOX_RP.Utils;
-using PARADOX_RP.Utils.Enums;
 using PARADOX_RP.Utils.Interface;
-using System;
 using System.Collections.Generic;
-using System.Text;
 
 namespace PARADOX_RP.Game.Clothing
 {
@@ -25,5 +21,6 @@ namespace PARADOX_RP.Game.Clothing
             logger.Console(ConsoleLogType.SUCCESS, "Content", $"Successfully loaded {_clothes.Count}x Clothes!");
         }
 
+        
     }
 }

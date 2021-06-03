@@ -54,7 +54,7 @@ namespace PARADOX_RP.Game.Phone.Content
             });
 
             //view callback responseTeamMembers
-            WindowManager.Instance.Get<TeamListAppWindow>().ViewCallback(player, "ResponseMembers", new TeamListAppWindowMemberWriter(_factionMembers));
+            WindowController.Instance.Get<TeamListAppWindow>().ViewCallback(player, "ResponseMembers", new TeamListAppWindowMemberWriter(_factionMembers));
         }
     }
 }

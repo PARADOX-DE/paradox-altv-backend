@@ -19,8 +19,8 @@ namespace PARADOX_RP.Core
         public string Author { get; } = "PARADOX International";
 
         private readonly IModuleController _moduleController;
-        private readonly IWindowManager _componentManager;
-        public Application(IModuleController moduleController, IWindowManager componentManager)
+        private readonly IWindowController _componentManager;
+        public Application(IModuleController moduleController, IWindowController componentManager)
         {
             _moduleController = moduleController;
             _componentManager = componentManager;

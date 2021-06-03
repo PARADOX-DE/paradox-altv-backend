@@ -36,13 +36,13 @@ namespace PARADOX_RP.Game.Char
 
         public void CreatePlayerCharacter(PXPlayer player, CharCreationType charCreationType)
         {
-            WindowManager.Instance.Get<CharCreationWindow>().Show(player);
+            WindowController.Instance.Get<CharCreationWindow>().Show(player);
         }
 
         public async void SetModel(PXPlayer player, uint model)
         {
             if (!player.LoggedIn) return;
-            if (!WindowManager.Instance.Get<CharCreationWindow>().IsVisible(player)) return;
+            if (!WindowController.Instance.Get<CharCreationWindow>().IsVisible(player)) return;
 
             await player.SetModelAsync(model);
         }
@@ -50,8 +50,8 @@ namespace PARADOX_RP.Game.Char
         public async void SavePlayerCharacter(PXPlayer player, string firstName, string lastName, string birthDate, string customizationString)
         {
             if (!player.LoggedIn) return;
-            if (!WindowManager.Instance.Get<CharCreationWindow>().IsVisible(player)) return;
-            WindowManager.Instance.Get<CharCreationWindow>().Hide(player);
+            if (!WindowController.Instance.Get<CharCreationWindow>().IsVisible(player)) return;
+            WindowController.Instance.Get<CharCreationWindow>().Hide(player);
 
             await using (var px = new PXContext())
             {

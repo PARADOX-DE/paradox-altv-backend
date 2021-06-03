@@ -71,7 +71,7 @@ namespace PARADOX_RP.Game.Administration
                     await player.SetClothes(c.Component, c.Drawable, c.Texture);
                 });
 
-                WindowManager.Instance.Get<NativeMenuWindow>().DisplayMenu<AdministrationNativeMenu>(player);
+                WindowController.Instance.Get<NativeMenuWindow>().DisplayMenu<AdministrationNativeMenu>(player);
             }
         }
 
@@ -114,7 +114,7 @@ namespace PARADOX_RP.Game.Administration
             if (!player.IsValid()) return;
             if (!PermissionsModule.Instance.HasPermissions(player)) return;
 
-            WindowManager.Instance.Get<ConfirmationWindow>().Show(player, new ConfirmationWindowWriter(Title, Description, "", ""));
+            WindowController.Instance.Get<ConfirmationWindow>().Show(player, new ConfirmationWindowWriter(Title, Description, "", ""));
         }
 
         [Command("clothes")]

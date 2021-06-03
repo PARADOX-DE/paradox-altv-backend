@@ -73,7 +73,7 @@ namespace PARADOX_RP.Game.Garage
             Garages dbGarage = _garages.Values.FirstOrDefault(g => g.Position.Distance(player.Position) < 3);
             if (dbGarage == null) return await Task.FromResult(false);
 
-            WindowManager.Instance.Get<GarageWindow>().Show(player, await _garageController.RequestGarageVehicles(player, dbGarage));
+            WindowController.Instance.Get<GarageWindow>().Show(player, await _garageController.RequestGarageVehicles(player, dbGarage));
 
             return await Task.FromResult(true);
         }
@@ -83,7 +83,7 @@ namespace PARADOX_RP.Game.Garage
             if (!player.IsValid()) return;
             if (!player.CanInteract()) return;
 
-            if (!WindowManager.Instance.Get<GarageWindow>().IsVisible(player))
+            if (!WindowController.Instance.Get<GarageWindow>().IsVisible(player))
             {
                 /*
                  * ADD LOGGER
@@ -157,7 +157,7 @@ namespace PARADOX_RP.Game.Garage
             if (!player.IsValid()) return;
             if (!player.CanInteract()) return;
 
-            if (!WindowManager.Instance.Get<GarageWindow>().IsVisible(player))
+            if (!WindowController.Instance.Get<GarageWindow>().IsVisible(player))
             {
                 /*
                  * ADD LOGGER

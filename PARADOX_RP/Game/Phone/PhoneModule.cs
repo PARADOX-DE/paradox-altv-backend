@@ -32,7 +32,7 @@ namespace PARADOX_RP.Game.Phone
             if (!player.CanInteract() || !player.IsValid()) return;
             if (!player.HasPhone) return;
 
-            WindowManager.Instance.Get<PhoneWindow>().Show(player);
+            WindowController.Instance.Get<PhoneWindow>().Show(player);
             player.EmitLocked("ResponseOpenPhone");
         }
     }

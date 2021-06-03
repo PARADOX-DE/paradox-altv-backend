@@ -5,7 +5,7 @@ using System.Text;
 
 namespace PARADOX_RP.UI
 {
-    interface IWindowManager
+    interface IWindowController
     {
         T Get<T>() where T : Window;
     }

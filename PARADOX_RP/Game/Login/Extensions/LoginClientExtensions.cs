@@ -19,9 +19,9 @@ namespace PARADOX_RP.Game.Login.Extensions
         {
             if (!await client.ExistsAsync()) return;
 
-            WindowManager.Instance.Get<LoginWindow>().Hide(client);
+            WindowController.Instance.Get<LoginWindow>().Hide(client);
             await client.SpawnAsync(pos);
-            WindowManager.Instance.Get<HUDWindow>().Show(client, new HUDWindowWriter(client.SqlId, client.Username, client.Money));
+            WindowController.Instance.Get<HUDWindow>().Show(client, new HUDWindowWriter(client.SqlId, client.Username, client.Money));
 
             /*
              * SHOW VOICE-SECTION

@@ -84,7 +84,7 @@ namespace PARADOX_RP.Game.GasStation
                 return await Task.FromResult(true);
             }
 
-            WindowManager.Instance.Get<GasStationWindow>().Show(player, new GasStationWindowWriter(dbGasStation.Id, dbGasStation.Name, player.Money, dbGasStation.Petrol, dbGasStation.Diesel, dbGasStation.Electro, vehicleClass.MaxFuel-nearestVehicle.Fuel));
+            WindowController.Instance.Get<GasStationWindow>().Show(player, new GasStationWindowWriter(dbGasStation.Id, dbGasStation.Name, player.Money, dbGasStation.Petrol, dbGasStation.Diesel, dbGasStation.Electro, vehicleClass.MaxFuel-nearestVehicle.Fuel));
 
             return await Task.FromResult(true);
         }
@@ -97,7 +97,7 @@ namespace PARADOX_RP.Game.GasStation
             int price = -1;
             FuelTypes FuelType = FuelTypes.PETROL;
 
-            if (!WindowManager.Instance.Get<GasStationWindow>().IsVisible(player)) return;
+            if (!WindowController.Instance.Get<GasStationWindow>().IsVisible(player)) return;
 
             if (!_GasStations.TryGetValue(GasStationId, out GasStations dbGasStation)) return;
 

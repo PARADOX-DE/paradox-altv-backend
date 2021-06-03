@@ -42,7 +42,7 @@ namespace PARADOX_RP.Core.Factories
             LoadTypes();
 
             builder.RegisterType<Application>().As<IApplication>();
-            builder.RegisterType<WindowManager>().As<IWindowManager>();
+            builder.RegisterType<WindowController>().As<IWindowController>();
             builder.RegisterType<Logger>().As<ILogger>();
 
             LogStartup("Loading controllers...");

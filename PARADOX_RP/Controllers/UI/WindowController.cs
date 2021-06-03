@@ -11,12 +11,12 @@ using PARADOX_RP.Utils;
 
 namespace PARADOX_RP.UI
 {
-    class WindowManager : IWindowManager
+    class WindowController : IWindowController
     {
-        public static WindowManager Instance { get; private set; }
+        public static WindowController Instance { get; private set; }
 
         private readonly Dictionary<Type, object> _windows = new Dictionary<Type, object>();
-        public WindowManager(IEnumerable<IWindow> windows, ILogger logger)
+        public WindowController(IEnumerable<IWindow> windows, ILogger logger)
         {
             Instance = this;
 

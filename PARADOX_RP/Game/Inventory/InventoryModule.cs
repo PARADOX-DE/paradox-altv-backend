@@ -109,7 +109,7 @@ namespace PARADOX_RP.Game.Inventory
 
             player.LocalInventoryData = new LocalInventoryData(player.Inventory, additionalInventory);
 
-            WindowManager.Instance.Get<InventoryWindow>().Show(player, new InventoryWindowWriter(player.Inventory, additionalInventory));
+            WindowController.Instance.Get<InventoryWindow>().Show(player, new InventoryWindowWriter(player.Inventory, additionalInventory));
         }
 
         public bool HasItem(PXInventory inventory, int ItemId)

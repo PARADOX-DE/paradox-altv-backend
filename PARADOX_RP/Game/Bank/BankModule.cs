@@ -62,7 +62,7 @@ namespace PARADOX_RP.Game.Bank
                 BankATMs targetATM = _BankATMs.Values.FirstOrDefault(a => a.Position.Distance(player.Position) < 3);
                 if (targetATM == null) return Task.FromResult(false);
 
-                WindowManager.Instance.Get<BankWindow>().Show(player, new BankWindowWriter(player.Username, player.Money, player.BankMoney));
+                WindowController.Instance.Get<BankWindow>().Show(player, new BankWindowWriter(player.Username, player.Money, player.BankMoney));
                 return Task.FromResult(true);
             }
 
@@ -73,7 +73,7 @@ namespace PARADOX_RP.Game.Bank
         {
             if (!player.IsValid()) return;
             if (!player.CanInteract()) return;
-            if (!WindowManager.Instance.Get<BankWindow>().IsVisible(player)) return;
+            if (!WindowController.Instance.Get<BankWindow>().IsVisible(player)) return;
 
             if (!await player.TakeMoney(moneyAmount))
             {
@@ -93,7 +93,7 @@ namespace PARADOX_RP.Game.Bank
         {
             if (!player.IsValid()) return;
             if (!player.CanInteract()) return;
-            if (!WindowManager.Instance.Get<BankWindow>().IsVisible(player)) return;
+            if (!WindowController.Instance.Get<BankWindow>().IsVisible(player)) return;
 
             if (player.BankMoney < moneyAmount)
             {
@@ -115,7 +115,7 @@ namespace PARADOX_RP.Game.Bank
         {
             if (!player.IsValid()) return;
             if (!player.CanInteract()) return;
-            if (!WindowManager.Instance.Get<BankWindow>().IsVisible(player)) return;
+            if (!WindowController.Instance.Get<BankWindow>().IsVisible(player)) return;
 
             if (player.Username.ToLower() == targetString.ToLower())
             {

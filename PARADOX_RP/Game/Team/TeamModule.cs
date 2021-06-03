@@ -95,12 +95,12 @@ namespace PARADOX_RP.Game.Team
                 Team = player.Team
             };
 
-            WindowManager.Instance.Get<ConfirmationWindow>().Show(player, new ConfirmationWindowWriter(player.Team.TeamName, $"{player.Username} hat dich eingeladen, um der Fraktion {player.Team.TeamName} beizutreten.", nameof(TeamInviteAccept), "TeamInviteDecline"));
+            WindowController.Instance.Get<ConfirmationWindow>().Show(player, new ConfirmationWindowWriter(player.Team.TeamName, $"{player.Username} hat dich eingeladen, um der Fraktion {player.Team.TeamName} beizutreten.", nameof(TeamInviteAccept), "TeamInviteDecline"));
         }
 
         public async void TeamInviteAccept(PXPlayer player)
         {
-            WindowManager.Instance.Get<ConfirmationWindow>().Hide(player);
+            WindowController.Instance.Get<ConfirmationWindow>().Hide(player);
 
             if (!player.CanInteract()) return;
             if (player.Invitation == null || player.Invitation.Team == null) return;

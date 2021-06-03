@@ -63,7 +63,7 @@ namespace PARADOX_RP.Game.Vehicle.Shop
             VehicleShops vehicleShop = _vehicleShops.Values.FirstOrDefault(g => g.Position.Distance(player.Position) < 3);
             if (vehicleShop == null) return await Task.FromResult(false);
 
-            WindowManager.Instance.Get<VehicleShopWindow>().Show(player, new VehicleShopWindowWriter(vehicleShop.Id, vehicleShop.Content.ToList()));
+            WindowController.Instance.Get<VehicleShopWindow>().Show(player, new VehicleShopWindowWriter(vehicleShop.Id, vehicleShop.Content.ToList()));
 
             return await Task.FromResult(true);
         }
@@ -73,7 +73,7 @@ namespace PARADOX_RP.Game.Vehicle.Shop
             if (!player.IsValid()) return;
             if (!player.CanInteract()) return;
 
-            if (!WindowManager.Instance.Get<VehicleShopWindow>().IsVisible(player))
+            if (!WindowController.Instance.Get<VehicleShopWindow>().IsVisible(player))
             {
                 /*
                  * ADD LOGGER

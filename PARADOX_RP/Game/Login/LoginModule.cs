@@ -72,7 +72,7 @@ namespace PARADOX_RP.Game.Login
                 }
             }*/
 
-            WindowManager.Instance.Get<LoginWindow>().Show(player);
+            WindowController.Instance.Get<LoginWindow>().Show(player);
         }
 
         public async void RequestLoginResponse(PXPlayer player, string username, string hashedPassword)
@@ -89,7 +89,7 @@ namespace PARADOX_RP.Game.Login
                     // HANDLE EVERYTHING AFTER LOAD PLAYER
                     if (loadPlayerResponse == LoadPlayerResponse.NEW_PLAYER)
                     {
-                        WindowManager.Instance.Get<LoginWindow>().Hide(player);
+                        WindowController.Instance.Get<LoginWindow>().Hide(player);
 
                         CharModule.Instance.CreatePlayerCharacter(player, CharCreationType.NEW);
                         return;

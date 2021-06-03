@@ -31,6 +31,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <Folder Include="Core\Events\" />
 	  <Folder Include="Game\Misc\Mission\" />
 	</ItemGroup>
 </Project>

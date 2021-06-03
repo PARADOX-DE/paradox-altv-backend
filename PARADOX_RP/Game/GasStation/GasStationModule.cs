@@ -129,9 +129,8 @@ namespace PARADOX_RP.Game.GasStation
             {
                 // Falsch getankt
                 if (Configuration.Instance.DevMode)
-                {
                     player.SendNotification("Tankstelle", $"Falsch Getankt.", NotificationTypes.ERROR);
-                }
+                
                 return;
             }
 

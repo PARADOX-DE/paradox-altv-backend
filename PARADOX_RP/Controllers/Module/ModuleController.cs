@@ -52,7 +52,7 @@ namespace PARADOX_RP.Controllers
             AltAsync.OnPlayerEnterVehicle += OnPlayerEnterVehicle;
             AltAsync.OnPlayerLeaveVehicle += OnPlayerLeaveVehicle;
 
-            //TODO: add module base cons
+            //TODO: add module timer controller
             intervalController.SetInterval(1000 * 60, async (s, e) =>
             {
                 await loginController.SavePlayers();

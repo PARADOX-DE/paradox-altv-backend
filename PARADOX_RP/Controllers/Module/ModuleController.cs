@@ -174,7 +174,7 @@ namespace PARADOX_RP.Controllers
 
         private async void OnPlayerConnect(PXPlayer pxPlayer)
         {
-            await _modules.ForEach(e =>
+            await _playerConnectEvents.ForEach(e =>
             {
                 if (e.Enabled)
                     e.OnPlayerConnect(pxPlayer);
@@ -188,7 +188,7 @@ namespace PARADOX_RP.Controllers
             if (pxPlayer.LoggedIn)
                 Pools.Instance.Remove(pxPlayer.SqlId, pxPlayer);
 
-            await _modules.ForEach(e =>
+            await _playerConnectEvents.ForEach(e =>
             {
                 if (e.Enabled)
                     e.OnPlayerDisconnect(pxPlayer);
@@ -201,7 +201,7 @@ namespace PARADOX_RP.Controllers
         {
 
             PXPlayer pxPlayer = (PXPlayer)targetEntity;
-            await _modules.ForEach(e =>
+            await _colshapeEvents.ForEach(e =>
             {
                 if (e.Enabled && state)
                     e.OnColShapeEntered(pxPlayer, colShape);
@@ -213,7 +213,7 @@ namespace PARADOX_RP.Controllers
         {
             await player.EmitAsync("playerLeaveVehicle", vehicle, seat);
 
-            await _modules.ForEach(async e =>
+            await _playerVehicleEvents.ForEach(async e =>
             {
                 if (e.Enabled)
                     await e.OnPlayerLeaveVehicle(vehicle, player, seat);
@@ -224,7 +224,7 @@ namespace PARADOX_RP.Controllers
         {
             await player.EmitAsync("playerEnterVehicle", vehicle, seat);
 
-            await _modules.ForEach(async e =>
+            await _playerVehicleEvents.ForEach(async e =>
             {
                 if (e.Enabled)
                     await e.OnPlayerEnterVehicle(vehicle, player, seat);

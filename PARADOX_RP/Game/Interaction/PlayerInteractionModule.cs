@@ -1,5 +1,6 @@
 ﻿using PARADOX_RP.Controllers.Event.Interface;
 using PARADOX_RP.Core.Database.Models;
+using PARADOX_RP.Core.Events;
 using PARADOX_RP.Core.Factories;
 using PARADOX_RP.Core.Module;
 using PARADOX_RP.Utils.Enums;
@@ -10,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace PARADOX_RP.Game.Interaction
 {
-    class PlayerInteractionModule : ModuleBase<PlayerInteractionModule>
+    class PlayerInteractionModule : ModuleBase<PlayerInteractionModule>, IEventKeyPressed
     {
         private IEventController _eventController;
 
@@ -21,7 +22,7 @@ namespace PARADOX_RP.Game.Interaction
             _eventController.OnClient<PXPlayer, PXPlayer>("CuffPlayer", CuffPlayer);
         }
 
-        public override Task<bool> OnKeyPress(PXPlayer player, KeyEnumeration key)
+        public Task<bool> OnKeyPress(PXPlayer player, KeyEnumeration key)
         {
             if (key == KeyEnumeration.Y)
             {

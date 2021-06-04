@@ -23,10 +23,11 @@ using PARADOX_RP.Game.Vehicle;
 using System.Linq;
 using PARADOX_RP.Controllers.Inventory;
 using PARADOX_RP.Game.Inventory;
+using PARADOX_RP.Core.Events;
 
 namespace PARADOX_RP.Game.Administration
 {
-    class AdministrationModule : ModuleBase<AdministrationModule>, ICommand
+    class AdministrationModule : ModuleBase<AdministrationModule>, ICommand, IEventKeyPressed
     {
         private IVehicleController _vehicleController;
         private IInventoryController _inventoryController;
@@ -46,7 +47,7 @@ namespace PARADOX_RP.Game.Administration
             new Clothes() { Component = 6, Drawable = 83, Texture = 3 }
         };
 
-        public override async Task<bool> OnKeyPress(PXPlayer player, KeyEnumeration key)
+        public async Task<bool> OnKeyPress(PXPlayer player, KeyEnumeration key)
         {
             if (key == KeyEnumeration.F9)
             {

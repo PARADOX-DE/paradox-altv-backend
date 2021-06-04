@@ -9,6 +9,7 @@ using PARADOX_RP.Controllers.Garage.Interface;
 using PARADOX_RP.Controllers.Vehicle.Interface;
 using PARADOX_RP.Core.Database;
 using PARADOX_RP.Core.Database.Models;
+using PARADOX_RP.Core.Events;
 using PARADOX_RP.Core.Extensions;
 using PARADOX_RP.Core.Factories;
 using PARADOX_RP.Core.Module;
@@ -26,7 +27,7 @@ using System.Threading.Tasks;
 
 namespace PARADOX_RP.Game.GasStation
 {
-    class JumpPointsModule : ModuleBase<JumpPointsModule>
+    class JumpPointsModule : ModuleBase<JumpPointsModule>, IEventKeyPressed
     {
         private Dictionary<int, GasStations> _GasStations = new Dictionary<int, GasStations>();
         private Dictionary<int, GasStationPetrols> _GasStationPetrols = new Dictionary<int, GasStationPetrols>();
@@ -59,7 +60,7 @@ namespace PARADOX_RP.Game.GasStation
             });
         }
 
-        public override async Task<bool> OnKeyPress(PXPlayer player, KeyEnumeration key)
+        public async Task<bool> OnKeyPress(PXPlayer player, KeyEnumeration key)
         {
             if (key != KeyEnumeration.E) return await Task.FromResult(false);
             if (!player.IsValid()) return await Task.FromResult(false);

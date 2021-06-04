@@ -5,6 +5,7 @@ using Newtonsoft.Json;
 using PARADOX_RP.Controllers.Event.Interface;
 using PARADOX_RP.Core.Database;
 using PARADOX_RP.Core.Database.Models;
+using PARADOX_RP.Core.Events;
 using PARADOX_RP.Core.Extensions;
 using PARADOX_RP.Core.Factories;
 using PARADOX_RP.Core.Module;
@@ -21,7 +22,7 @@ using System.Threading.Tasks;
 
 namespace PARADOX_RP.Game.Bank
 {
-    class BankModule : ModuleBase<BankModule>
+    class BankModule : ModuleBase<BankModule>, IEventKeyPressed 
     {
         private Dictionary<int, BankATMs> _BankATMs = new Dictionary<int, BankATMs>();
 
@@ -55,7 +56,7 @@ namespace PARADOX_RP.Game.Bank
 
         private readonly string _bankName = "N26 Bank";
 
-        public override Task<bool> OnKeyPress(PXPlayer player, KeyEnumeration key)
+        public Task<bool> OnKeyPress(PXPlayer player, KeyEnumeration key)
         {
             if (key == KeyEnumeration.E)
             {

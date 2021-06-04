@@ -9,9 +9,9 @@ namespace PARADOX_RP.Core.Models
         public static T Instance { get; set; }
     }
 
-    public class Instance<T> : InstanceBase<T> where T : Instance<T>
+    public class Singleton<T> : InstanceBase<T> where T : Singleton<T>
     {
-        public Instance()
+        public Singleton()
         {
             Instance = (T)this;
         }

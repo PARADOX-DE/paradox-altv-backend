@@ -3,6 +3,7 @@ using AltV.Net.Async;
 using AltV.Net.Data;
 using AltV.Net.Elements.Entities;
 using EntityStreamer;
+using PARADOX_RP.Core.Events;
 using PARADOX_RP.Core.Factories;
 using PARADOX_RP.Core.Module;
 using PARADOX_RP.Game.Lobby;
@@ -16,7 +17,7 @@ using System.Threading.Tasks;
 
 namespace PARADOX_RP.Game.MiniGames.Content.SuperMario
 {
-    class SuperMarioMinigameModule : ModuleBase<SuperMarioMinigameModule>, IMinigame
+    class SuperMarioMinigameModule : ModuleBase<SuperMarioMinigameModule>, IMinigame, IEventKeyPressed
     {
         private Position _spawnPoint = new Position(3755.6572f, -798.4879f, 47.696655f);
 
@@ -92,7 +93,7 @@ namespace PARADOX_RP.Game.MiniGames.Content.SuperMario
             return await Task.FromResult(false);
         }
 
-        public override async Task<bool> OnKeyPress(PXPlayer player, KeyEnumeration key)
+        public async Task<bool> OnKeyPress(PXPlayer player, KeyEnumeration key)
         {
             if (key == KeyEnumeration.E)
             {

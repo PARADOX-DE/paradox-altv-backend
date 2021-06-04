@@ -1,4 +1,5 @@
-﻿using PARADOX_RP.Core.Factories;
+﻿using PARADOX_RP.Core.Events;
+using PARADOX_RP.Core.Factories;
 using PARADOX_RP.Core.Module;
 using PARADOX_RP.Utils.Enums;
 using System;
@@ -8,11 +9,11 @@ using System.Threading.Tasks;
 
 namespace PARADOX_RP.Game.Misc.Doors
 {
-    class DoorModule : ModuleBase<DoorModule>
+    class DoorModule : ModuleBase<DoorModule>, IEventKeyPressed
     {
         public DoorModule() : base("Door") { }
 
-        public override Task<bool> OnKeyPress(PXPlayer player, KeyEnumeration key)
+        public Task<bool> OnKeyPress(PXPlayer player, KeyEnumeration key)
         {
             if(key == KeyEnumeration.L)
             {

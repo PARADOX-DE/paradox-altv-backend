@@ -20,6 +20,7 @@ using PARADOX_RP.UI;
 using PARADOX_RP.UI.Windows.Inventory;
 using AltV.Net.Async;
 using PARADOX_RP.Game.Inventory.Models;
+using PARADOX_RP.Core.Events;
 
 namespace PARADOX_RP.Game.Inventory
 {
@@ -33,7 +34,7 @@ namespace PARADOX_RP.Game.Inventory
         EVENT
     }
 
-    class InventoryModule : ModuleBase<InventoryModule>
+    class InventoryModule : ModuleBase<InventoryModule>, IEventKeyPressed
     {
         private IInventoryController _inventoryHandler;
 
@@ -57,7 +58,7 @@ namespace PARADOX_RP.Game.Inventory
             eventController.OnClient<PXPlayer, int>("UseItem", UseItem);
         }
 
-        public override async Task<bool> OnKeyPress(PXPlayer player, KeyEnumeration key)
+        public async Task<bool> OnKeyPress(PXPlayer player, KeyEnumeration key)
         {
             if (key == KeyEnumeration.I)
             {

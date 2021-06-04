@@ -42,7 +42,6 @@ namespace PARADOX_RP.Game.Arrival
             await player.PlayArrivalCutscene();
             player.SendNotification("PARADOX RP", $"Du bist hiermit offiziell ein Bürger im Staate Los Santos.", NotificationTypes.SUCCESS);
 
-            //todo: cutscene length
             await Task.Delay(25 * 1000);
 
             if (await player?.ExistsAsync())

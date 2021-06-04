@@ -27,7 +27,7 @@ using System.Threading.Tasks;
 
 namespace PARADOX_RP.Game.GasStation
 {
-    class JumpPointsModule : ModuleBase<JumpPointsModule>, IEventKeyPressed
+    class JumpPointsModule : ModuleBase<JumpPointsModule>, IEventKeyPressed, IEventPlayerConnect
     {
         private Dictionary<int, GasStations> _GasStations = new Dictionary<int, GasStations>();
         private Dictionary<int, GasStationPetrols> _GasStationPetrols = new Dictionary<int, GasStationPetrols>();
@@ -52,7 +52,7 @@ namespace PARADOX_RP.Game.GasStation
 
             _eventController.OnClient<PXPlayer, int, string, int>("PayGasStation", PayGasStation);
         }
-        public override void OnPlayerConnect(PXPlayer player)
+        public void OnPlayerConnect(PXPlayer player)
         {
             _GasStations.ForEach((gs) =>
             {

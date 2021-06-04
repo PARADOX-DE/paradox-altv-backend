@@ -23,6 +23,7 @@ using PARADOX_RP.Controllers.Event.Interface;
 using EntityStreamer;
 using System.Numerics;
 using AltV.Net.Data;
+using PARADOX_RP.Core.Events;
 
 namespace PARADOX_RP.Game.Team
 {
@@ -34,7 +35,7 @@ namespace PARADOX_RP.Game.Team
         LSMC
     }
 
-    class TeamModule : ModuleBase<TeamModule>, ICommand
+    class TeamModule : ModuleBase<TeamModule>, ICommand, IEventPlayerConnect
     {
         public Dictionary<int, Teams> TeamList = new Dictionary<int, Teams>();
         private readonly IEventController _eventController;
@@ -54,7 +55,7 @@ namespace PARADOX_RP.Game.Team
             _eventController.OnClient<PXPlayer>("TeamInviteAccept", TeamInviteAccept);
         }
 
-        public override void OnPlayerConnect(PXPlayer player)
+        public void OnPlayerConnect(PXPlayer player)
         {
             TeamList.ForEach((team) =>
             {

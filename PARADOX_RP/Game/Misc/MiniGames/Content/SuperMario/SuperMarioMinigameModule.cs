@@ -17,7 +17,7 @@ using System.Threading.Tasks;
 
 namespace PARADOX_RP.Game.MiniGames.Content.SuperMario
 {
-    class SuperMarioMinigameModule : ModuleBase<SuperMarioMinigameModule>, IMinigame, IEventKeyPressed
+    class SuperMarioMinigameModule : ModuleBase<SuperMarioMinigameModule>, IMinigame, IEventKeyPressed, IEventColshape
     {
         private Position _spawnPoint = new Position(3755.6572f, -798.4879f, 47.696655f);
 
@@ -60,7 +60,7 @@ namespace PARADOX_RP.Game.MiniGames.Content.SuperMario
             player.GiveWeapon(AltV.Net.Enums.WeaponModel.AssaultSMG, 9999, true);
         }
 
-        public override async Task<bool> OnColShapeEntered(PXPlayer player, IColShape col)
+        public async Task<bool> OnColShapeEntered(PXPlayer player, IColShape col)
         {
             if (col.HasData("superMarioPickupId"))
             {
@@ -108,6 +108,11 @@ namespace PARADOX_RP.Game.MiniGames.Content.SuperMario
             }
 
             return await Task.FromResult(false);
+        }
+
+        public void OnPlayerConnect(PXPlayer player)
+        {
+            throw new NotImplementedException();
         }
     }
 }

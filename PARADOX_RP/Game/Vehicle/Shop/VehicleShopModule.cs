@@ -23,7 +23,7 @@ using System.Threading.Tasks;
 
 namespace PARADOX_RP.Game.Vehicle.Shop
 {
-    class VehicleShopModule : ModuleBase<VehicleShopModule>, IEventKeyPressed
+    class VehicleShopModule : ModuleBase<VehicleShopModule>, IEventKeyPressed, IEventPlayerConnect
     {
         private readonly IEventController _eventController;
         private readonly IVehicleController _vehicleController;
@@ -42,7 +42,7 @@ namespace PARADOX_RP.Game.Vehicle.Shop
             eventController.OnClient<PXPlayer, int, string, int>("BuyVehicleShop", BuyVehicleShop);
         }
 
-        public override void OnPlayerConnect(PXPlayer player)
+        public void OnPlayerConnect(PXPlayer player)
         {
             _vehicleShops.ForEach((v) =>
             {
@@ -116,5 +116,12 @@ namespace PARADOX_RP.Game.Vehicle.Shop
                 player.SendNotification("Fahrzeughandel", "Du hast nicht genug Geld dabei!", NotificationTypes.SUCCESS);
             }
         }
+
+        public void OnPlayerLogin(PXPlayer player)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void OnPlayerDisconnect(PXPlayer player) { }
     }
 }

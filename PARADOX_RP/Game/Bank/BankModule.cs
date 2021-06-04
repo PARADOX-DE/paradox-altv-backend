@@ -22,7 +22,7 @@ using System.Threading.Tasks;
 
 namespace PARADOX_RP.Game.Bank
 {
-    class BankModule : ModuleBase<BankModule>, IEventKeyPressed 
+    class BankModule : ModuleBase<BankModule>, IEventKeyPressed, IEventPlayerConnect
     {
         private Dictionary<int, BankATMs> _BankATMs = new Dictionary<int, BankATMs>();
 
@@ -40,7 +40,7 @@ namespace PARADOX_RP.Game.Bank
             eventController.OnClient<PXPlayer, string, int>("TransferMoney", TransferMoney);
         }
 
-        public override void OnPlayerConnect(PXPlayer player)
+        public void OnPlayerConnect(PXPlayer player)
         {
             if (Configuration.Instance.DevMode)
             {

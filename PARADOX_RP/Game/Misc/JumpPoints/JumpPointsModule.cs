@@ -27,7 +27,7 @@ using System.Threading.Tasks;
 
 namespace PARADOX_RP.Game.JumpPoints
 {
-    class JumpPointsModule : ModuleBase<JumpPointsModule>, IEventKeyPressed
+    class JumpPointsModule : ModuleBase<JumpPointsModule>, IEventKeyPressed, IEventPlayerConnect
     {
         private Dictionary<int, Jumppoints> _JumpPoints = new Dictionary<int, Jumppoints>();
 
@@ -43,7 +43,7 @@ namespace PARADOX_RP.Game.JumpPoints
             });
         }
 
-        public override void OnPlayerConnect(PXPlayer player)
+        public void OnPlayerConnect(PXPlayer player)
         {
             if (Configuration.Instance.DevMode)
             {

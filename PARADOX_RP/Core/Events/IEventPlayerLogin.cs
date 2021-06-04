@@ -5,9 +5,9 @@ using System.Text;
 
 namespace PARADOX_RP.Core.Events
 {
-    interface IEventPlayerConnect
+    interface IEventPlayerLogin
     {
         bool Enabled { get; }
-        void OnPlayerConnect(PXPlayer player);
+        void OnPlayerLogin(PXPlayer player);
     }
 }

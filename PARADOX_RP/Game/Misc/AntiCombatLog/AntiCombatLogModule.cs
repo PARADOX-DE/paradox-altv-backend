@@ -1,5 +1,6 @@
 ﻿using AltV.Net;
 using AltV.Net.Elements.Entities;
+using PARADOX_RP.Core.Events;
 using PARADOX_RP.Core.Factories;
 using PARADOX_RP.Core.Module;
 using PARADOX_RP.Utils;
@@ -9,11 +10,11 @@ using System.Text;
 
 namespace PARADOX_RP.Game.Misc.AntiCombatLog
 {
-    class AntiCombatLogModule : ModuleBase<AntiCombatLogModule>
+    class AntiCombatLogModule : ModuleBase<AntiCombatLogModule>, IEventPlayerDisconnect
     {
         public AntiCombatLogModule() : base("AntiCombatLog") { }
 
-        public override void OnPlayerDisconnect(PXPlayer player)
+        public void OnPlayerDisconnect(PXPlayer player)
         {
             if (!player.LoggedIn) return;
 

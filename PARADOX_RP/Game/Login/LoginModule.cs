@@ -31,7 +31,7 @@ using PARADOX_RP.Core.Events;
 
 namespace PARADOX_RP.Game.Login
 {
-    class LoginModule : ModuleBase<LoginModule>, IEventModuleLoad
+    class LoginModule : ModuleBase<LoginModule>, IEventModuleLoad, IEventPlayerConnect
     {
         private readonly IEventController _eventController;
         private readonly ILoginController _loginHandler;
@@ -51,7 +51,7 @@ namespace PARADOX_RP.Game.Login
 
         }
 
-        public override async void OnPlayerConnect(PXPlayer player)
+        public async void OnPlayerConnect(PXPlayer player)
         {
             player.Model = (uint)PedModel.FreemodeMale01;
             await player.SpawnAsync(_loginPosition);

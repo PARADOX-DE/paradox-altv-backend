@@ -2,6 +2,7 @@
 using AltV.Net.Data;
 using PARADOX_RP.Core.Database;
 using PARADOX_RP.Core.Database.Models;
+using PARADOX_RP.Core.Events;
 using PARADOX_RP.Core.Extensions;
 using PARADOX_RP.Core.Factories;
 using PARADOX_RP.Core.Module;
@@ -18,7 +19,7 @@ using System.Threading.Tasks;
 
 namespace PARADOX_RP.Game.Arrival
 {
-    class ArrivalModule : ModuleBase<ArrivalModule>
+    class ArrivalModule : ModuleBase<ArrivalModule>, IEventPlayerConnect
     {
 
         public Dictionary<Tuple<Gender, ComponentVariation>, Clothes> _arrivalClothes = null;
@@ -34,10 +35,7 @@ namespace PARADOX_RP.Game.Arrival
 
         private Position ArrivalPosition = new Position(-1062.1978f, -2712.8044f, 0.78686523f);
 
-        public override void OnPlayerConnect(PXPlayer player)
-        {
-            player.AddBlips("Flughafen", ArrivalPosition, 90, 0, 1, true);
-        }
+        public void OnPlayerConnect(PXPlayer player) =>  player.AddBlips("Flughafen", ArrivalPosition, 90, 0, 1, true);
 
         public async Task NewPlayerArrival(PXPlayer player)
         {
@@ -51,9 +49,6 @@ namespace PARADOX_RP.Game.Arrival
                 await player?.PreparePlayer(ArrivalPosition);
         }
 
-        public Clothes GetArrivalClothing(Gender gender, ComponentVariation componentVariation)
-        {
-            return Instance._arrivalClothes.FirstOrDefault(c => c.Value.Gender == (int)gender && c.Value.Component == (int)componentVariation).Value;
-        }
+        public Clothes GetArrivalClothing(Gender gender, ComponentVariation componentVariation) => Instance._arrivalClothes.FirstOrDefault(c => c.Value.Gender == (int)gender && c.Value.Component == (int)componentVariation).Value;
     }
 }

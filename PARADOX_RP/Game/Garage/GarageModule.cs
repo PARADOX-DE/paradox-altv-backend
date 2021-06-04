@@ -26,7 +26,7 @@ using System.Threading.Tasks;
 
 namespace PARADOX_RP.Game.Garage
 {
-    class GarageModule : ModuleBase<GarageModule>, IEventKeyPressed
+    class GarageModule : ModuleBase<GarageModule>, IEventKeyPressed, IEventPlayerConnect
     {
         private readonly IEventController _eventController;
         private readonly IVehicleController _vehicleController;
@@ -52,7 +52,7 @@ namespace PARADOX_RP.Game.Garage
             _eventController.OnClient<PXPlayer, int, int>("GarageParkIn", GarageParkIn);
         }
 
-        public override void OnPlayerConnect(PXPlayer player)
+        public void OnPlayerConnect(PXPlayer player)
         {
             _garages.ForEach((g) =>
             {

@@ -1,5 +1,6 @@
 ﻿using AltV.Net.Async;
 using AltV.Net.Elements.Entities;
+using PARADOX_RP.Core.Events;
 using PARADOX_RP.Core.Factories;
 using PARADOX_RP.Core.Module;
 using PARADOX_RP.Utils;
@@ -11,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace PARADOX_RP.Game.Vehicle.Radio
 {
-    class VehicleRadioModule : ModuleBase<VehicleRadioModule>
+    class VehicleRadioModule : ModuleBase<VehicleRadioModule>, IEventPlayerVehicle
     {
         public VehicleRadioModule() : base("VehicleRadio")
         {
@@ -45,7 +46,7 @@ namespace PARADOX_RP.Game.Vehicle.Radio
             }
         }
 
-        public override async Task OnPlayerEnterVehicle(IVehicle v, IPlayer p, byte seat)
+        public async Task OnPlayerEnterVehicle(IVehicle v, IPlayer p, byte seat)
         {
             PXVehicle vehicle = (PXVehicle)v;
             if (!vehicle.IsValid()) return;
@@ -56,7 +57,7 @@ namespace PARADOX_RP.Game.Vehicle.Radio
             }
         }
 
-        public override async Task OnPlayerLeaveVehicle(IVehicle v, IPlayer p, byte seat)
+        public async Task OnPlayerLeaveVehicle(IVehicle v, IPlayer p, byte seat)
         {
             PXVehicle vehicle = (PXVehicle)v;
             if (!vehicle.IsValid()) return;

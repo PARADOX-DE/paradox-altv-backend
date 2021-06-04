@@ -25,6 +25,8 @@ namespace PARADOX_RP.Controllers
         private readonly IEnumerable<IEventModuleLoad> _moduleLoadEvents;
         private readonly IEnumerable<IEventPlayerDeath> _playerDeathEvents;
         private readonly IEnumerable<IEventPlayerConnect> _playerConnectEvents;
+        private readonly IEnumerable<IEventPlayerDisconnect> _playerDisconnectEvents;
+        private readonly IEnumerable<IEventPlayerLogin> _playerLoginEvents;
         private readonly IEnumerable<IEventPlayerVehicle> _playerVehicleEvents;
         private readonly IEnumerable<IEventColshape> _colshapeEvents;
 
@@ -37,6 +39,8 @@ namespace PARADOX_RP.Controllers
         IEnumerable<IEventModuleLoad> moduleLoadEvents,
         IEnumerable<IEventPlayerDeath> playerDeathEvents,
         IEnumerable<IEventPlayerConnect> playerConnectEvents,
+        IEnumerable<IEventPlayerDisconnect> playerDisconnectEvents,
+        IEnumerable<IEventPlayerLogin> playerLoginEvents,
         IEnumerable<IEventPlayerVehicle> playerVehicleEvents,
         IEnumerable<IEventColshape> colshapeEvents,
 
@@ -48,6 +52,8 @@ namespace PARADOX_RP.Controllers
             _moduleLoadEvents = moduleLoadEvents;
             _playerDeathEvents = playerDeathEvents;
             _playerConnectEvents = playerConnectEvents;
+            _playerDisconnectEvents = playerDisconnectEvents;
+            _playerLoginEvents = playerLoginEvents;
             _playerVehicleEvents = playerVehicleEvents;
             _colshapeEvents = colshapeEvents;
             
@@ -188,7 +194,7 @@ namespace PARADOX_RP.Controllers
             if (pxPlayer.LoggedIn)
                 Pools.Instance.Remove(pxPlayer.SqlId, pxPlayer);
 
-            await _playerConnectEvents.ForEach(e =>
+            await _playerDisconnectEvents.ForEach(e =>
             {
                 if (e.Enabled)
                     e.OnPlayerDisconnect(pxPlayer);

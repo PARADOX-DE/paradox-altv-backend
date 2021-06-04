@@ -27,10 +27,11 @@ using System.Threading;
 using System.Threading.Tasks;
 using PARADOX_RP.Controllers.Event.Interface;
 using PARADOX_RP.Game.Login.Extensions;
+using PARADOX_RP.Core.Events;
 
 namespace PARADOX_RP.Game.Login
 {
-    class LoginModule : ModuleBase<LoginModule>
+    class LoginModule : ModuleBase<LoginModule>, IEventModuleLoad
     {
         private readonly IEventController _eventController;
         private readonly ILoginController _loginHandler;
@@ -45,7 +46,7 @@ namespace PARADOX_RP.Game.Login
 
         private Position _loginPosition = new Position(3486.3296f, 3712.8264f, 57.2843f);
 
-        public override void OnModuleLoad()
+        public void OnModuleLoad()
         {
 
         }

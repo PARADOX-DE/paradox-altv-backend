@@ -6,5 +6,8 @@ namespace PARADOX_RP.Core.Events
 {
     interface IEventModuleLoad
     {
+        bool Enabled { get; }
+
+        void OnModuleLoad();
     }
 }

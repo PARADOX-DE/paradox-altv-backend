@@ -13,15 +13,31 @@ using PARADOX_RP.Controllers.Interval.Interface;
 using PARADOX_RP.Controllers.Login.Interface;
 using PARADOX_RP.Controllers.Event.Interface;
 using PARADOX_RP.Utils.Enums;
+using PARADOX_RP.Core.Events;
 
 namespace PARADOX_RP.Controllers
 {
     class ModuleController : IModuleController
     {
         private readonly IEnumerable<IModuleBase> _modules;
-        public ModuleController(IEnumerable<IModuleBase> modules, IEventController eventController, ILoginController loginController, IIntervalController intervalController)
+
+        private readonly IEnumerable<IEventKeyPressed> _keyPressedEvents;
+        private readonly IEnumerable<IEventModuleLoad> _moduleLoadEvents;
+
+        public ModuleController(IEnumerable<IModuleBase> modules,
+        /*
+         * INSERT EVENT ENUMERABLES HERE
+         */
+
+        IEnumerable<IEventKeyPressed> keyPressedEvents,
+        IEnumerable<IEventModuleLoad> moduleLoadEvents,
+
+        IEventController eventController, ILoginController loginController, IIntervalController intervalController)
         {
             _modules = modules;
+
+            _keyPressedEvents = keyPressedEvents;
+            _moduleLoadEvents = moduleLoadEvents;
 
             eventController.OnClient<PXPlayer>("Pressed_I", PressedI);
             eventController.OnClient<PXPlayer>("Pressed_Y", PressedY);
@@ -83,7 +99,7 @@ namespace PARADOX_RP.Controllers
 
         public void Load()
         {
-            _modules.ForEach(e =>
+            _moduleLoadEvents.ForEach(e =>
             {
                 if (e.Enabled)
                     e.OnModuleLoad();
@@ -95,11 +111,11 @@ namespace PARADOX_RP.Controllers
             if (!player.LoggedIn) return;
             if (player.CancelProgressBar()) return;
 
-            await _modules.ForEach(async e =>
+            await _keyPressedEvents.ForEach(async e =>
             {
                 if (e.Enabled)
                     if (await e.OnKeyPress(player, KeyEnumeration.E)) return false;
-                    
+
                 return true;
             });
         }
@@ -109,7 +125,7 @@ namespace PARADOX_RP.Controllers
             if (!player.LoggedIn) return;
             if (player.CancelProgressBar()) return;
 
-            await _modules.ForEach(async e =>
+            await _keyPressedEvents.ForEach(async e =>
             {
                 if (e.Enabled)
                     if (await e.OnKeyPress(player, Utils.Enums.KeyEnumeration.I)) return false;
@@ -122,7 +138,7 @@ namespace PARADOX_RP.Controllers
         {
             if (!player.LoggedIn) return;
 
-            await _modules.ForEach(async e =>
+            await _keyPressedEvents.ForEach(async e =>
             {
                 if (e.Enabled)
                     if (await e.OnKeyPress(player, Utils.Enums.KeyEnumeration.Y)) return false;
@@ -135,7 +151,7 @@ namespace PARADOX_RP.Controllers
         {
             if (!player.LoggedIn) return;
 
-            await _modules.ForEach(async e =>
+            await _keyPressedEvents.ForEach(async e =>
             {
                 if (e.Enabled)
                     if (await e.OnKeyPress(player, Utils.Enums.KeyEnumeration.F9)) return false;

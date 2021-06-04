@@ -9,6 +9,7 @@ namespace PARADOX_RP.Core.Events
 {
     interface IEventKeyPressed
     {
+        bool Enabled { get; }
         Task<bool> OnKeyPress(PXPlayer player, KeyEnumeration key);
     }
 }

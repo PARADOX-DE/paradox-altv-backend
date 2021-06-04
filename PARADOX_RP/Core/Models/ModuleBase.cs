@@ -17,7 +17,6 @@ namespace PARADOX_RP.Core.Module
         public bool Enabled { get; set; }
         public string ModuleName { get; set; }
 
-        public virtual void OnPlayerDeath(PXPlayer player, PXPlayer killer, DeathReasons deathReason, uint weapon) { }
         public virtual void OnPlayerConnect(PXPlayer player) { }
         public virtual void OnPlayerDisconnect(PXPlayer player) { }
         public virtual void OnPlayerLogin(PXPlayer player) { }

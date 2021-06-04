@@ -3,6 +3,7 @@ using PARADOX_RP.Controllers.Event.Interface;
 using PARADOX_RP.Controllers.Team.Interface;
 using PARADOX_RP.Core.Database;
 using PARADOX_RP.Core.Database.Models;
+using PARADOX_RP.Core.Events;
 using PARADOX_RP.Core.Factories;
 using PARADOX_RP.Core.Module;
 using PARADOX_RP.Game.Administration;
@@ -29,7 +30,7 @@ namespace PARADOX_RP.Game.Injury
         SHOT
     }
 
-    class InjuryModule : ModuleBase<InjuryModule>, ICommand
+    class InjuryModule : ModuleBase<InjuryModule>, ICommand, IEventPlayerDeath
     {
         private IEventController _eventController;
         private ITeamController _teamController;
@@ -45,7 +46,7 @@ namespace PARADOX_RP.Game.Injury
             LoadDatabaseTable<Injuries>(pxContext.Injuries, (injury) => _injuries.Add(injury.Weapon, injury));
         }
 
-        public override async void OnPlayerDeath(PXPlayer player, PXPlayer killer, DeathReasons deathReason, uint weapon)
+        public async void OnPlayerDeath(PXPlayer player, PXPlayer killer, DeathReasons deathReason, uint weapon)
         {
             //InjuryModule only for injuries in dimension 0
             if (player.Dimension != 0) return;

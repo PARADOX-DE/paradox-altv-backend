@@ -23,6 +23,7 @@ namespace PARADOX_RP.Controllers
 
         private readonly IEnumerable<IEventKeyPressed> _keyPressedEvents;
         private readonly IEnumerable<IEventModuleLoad> _moduleLoadEvents;
+        private readonly IEnumerable<IEventPlayerDeath> _playerDeathEvents;
 
         public ModuleController(IEnumerable<IModuleBase> modules,
         /*
@@ -31,6 +32,7 @@ namespace PARADOX_RP.Controllers
 
         IEnumerable<IEventKeyPressed> keyPressedEvents,
         IEnumerable<IEventModuleLoad> moduleLoadEvents,
+        IEnumerable<IEventPlayerDeath> playerDeathEvents,
 
         IEventController eventController, ILoginController loginController, IIntervalController intervalController)
         {
@@ -38,7 +40,8 @@ namespace PARADOX_RP.Controllers
 
             _keyPressedEvents = keyPressedEvents;
             _moduleLoadEvents = moduleLoadEvents;
-
+            _playerDeathEvents = playerDeathEvents;
+            
             eventController.OnClient<PXPlayer>("Pressed_I", PressedI);
             eventController.OnClient<PXPlayer>("Pressed_Y", PressedY);
             eventController.OnClient<PXPlayer>("Pressed_E", PressedE);
@@ -90,7 +93,7 @@ namespace PARADOX_RP.Controllers
                 _ => DeathReasons.WORLD
             };
 
-            await _modules.ForEach(e =>
+            await _playerDeathEvents.ForEach(e =>
              {
                  if (e.Enabled)
                      e.OnPlayerDeath(player, killer, deathReason, weapon);

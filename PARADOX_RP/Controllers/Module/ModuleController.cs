@@ -24,6 +24,9 @@ namespace PARADOX_RP.Controllers
         private readonly IEnumerable<IEventKeyPressed> _keyPressedEvents;
         private readonly IEnumerable<IEventModuleLoad> _moduleLoadEvents;
         private readonly IEnumerable<IEventPlayerDeath> _playerDeathEvents;
+        private readonly IEnumerable<IEventPlayerConnect> _playerConnectEvents;
+        private readonly IEnumerable<IEventPlayerVehicle> _playerVehicleEvents;
+        private readonly IEnumerable<IEventColshape> _colshapeEvents;
 
         public ModuleController(IEnumerable<IModuleBase> modules,
         /*
@@ -33,6 +36,9 @@ namespace PARADOX_RP.Controllers
         IEnumerable<IEventKeyPressed> keyPressedEvents,
         IEnumerable<IEventModuleLoad> moduleLoadEvents,
         IEnumerable<IEventPlayerDeath> playerDeathEvents,
+        IEnumerable<IEventPlayerConnect> playerConnectEvents,
+        IEnumerable<IEventPlayerVehicle> playerVehicleEvents,
+        IEnumerable<IEventColshape> colshapeEvents,
 
         IEventController eventController, ILoginController loginController, IIntervalController intervalController)
         {
@@ -41,6 +47,9 @@ namespace PARADOX_RP.Controllers
             _keyPressedEvents = keyPressedEvents;
             _moduleLoadEvents = moduleLoadEvents;
             _playerDeathEvents = playerDeathEvents;
+            _playerConnectEvents = playerConnectEvents;
+            _playerVehicleEvents = playerVehicleEvents;
+            _colshapeEvents = colshapeEvents;
             
             eventController.OnClient<PXPlayer>("Pressed_I", PressedI);
             eventController.OnClient<PXPlayer>("Pressed_Y", PressedY);

@@ -17,12 +17,6 @@ namespace PARADOX_RP.Core.Module
         public bool Enabled { get; set; }
         public string ModuleName { get; set; }
 
-        public virtual void OnPlayerConnect(PXPlayer player) { }
-        public virtual void OnPlayerDisconnect(PXPlayer player) { }
-        public virtual void OnPlayerLogin(PXPlayer player) { }
-        public virtual Task<bool> OnColShapeEntered(PXPlayer player, IColShape col) { return Task.FromResult(false); }
-        public virtual Task OnPlayerEnterVehicle(IVehicle vehicle, IPlayer player, byte seat) { return Task.CompletedTask; }
-        public virtual Task OnPlayerLeaveVehicle(IVehicle vehicle, IPlayer player, byte seat) { return Task.CompletedTask; }
         public virtual Task OnEveryMinute() { return Task.CompletedTask; }
 
         public IEnumerable<T> LoadDatabaseTable<T>(IQueryable queryable, Action<T>? action = null) where T : class

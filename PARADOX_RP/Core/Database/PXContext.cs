@@ -24,6 +24,7 @@ namespace PARADOX_RP.Core.Database
         public DbSet<SupportRankModel> SupportRanks { get; set; }
         public DbSet<PermissionModel> Permissions { get; set; }
         public DbSet<PermissionAssignmentModel> PermissionAssignments { get; set; }
+        public DbSet<ArrivalQuestions> ArrivalQuestions { get; set; }
         public DbSet<BankATMs> BankATMs { get; set; }
         public DbSet<Clothes> Clothes { get; set; }
 

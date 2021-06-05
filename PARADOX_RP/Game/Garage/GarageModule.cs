@@ -60,7 +60,7 @@ namespace PARADOX_RP.Game.Garage
                 MarkerStreamer.Create(MarkerTypes.MarkerTypeUpsideDownCone, g.Value.Position, new Vector3(1, 1, 1), new Vector3(0, 0, 0), null, new Rgba(37, 165, 202, 125));
 
                 if (Configuration.Instance.DevMode)
-                    g.Value.Spawns.ForEach((spawn) => MarkerStreamer.Create(MarkerTypes.MarkerTypeCarSymbol, spawn.Spawn_Position, new Vector3(1, 1, 1), new Vector3(0, 0, (float)(spawn.Spawn_Rotation.Yaw * 180 / Math.PI)), null, new Rgba(37, 165, 202, 200)));
+                    g.Value.Spawns.ForEach((spawn) => MarkerStreamer.Create(MarkerTypes.MarkerTypeCarSymbol, spawn.Spawn_Position, new Vector3(1, 1, 1), new Vector3(0, 0, spawn.Spawn_Rotation.Yaw.YawToDegree()), null, new Rgba(37, 165, 202, 200)));
 
             });
         }
@@ -73,6 +73,18 @@ namespace PARADOX_RP.Game.Garage
 
             Garages dbGarage = _garages.Values.FirstOrDefault(g => g.Position.Distance(player.Position) < 3);
             if (dbGarage == null) return await Task.FromResult(false);
+
+            if (dbGarage.TeamId > 1)
+            {
+                // GARAGE IS TEAM GARAGE
+                if (player.Team.Id != dbGarage.TeamId)
+                {
+                    if (Configuration.Instance.DevMode)
+                        player.SendNotification("Garage", "Du bist nicht in der zugehörigen Fraktion.", NotificationTypes.SUCCESS);
+
+                    return await Task.FromResult(true);
+                }
+            }
 
             WindowController.Instance.Get<GarageWindow>().Show(player, await _garageController.RequestGarageVehicles(player, dbGarage));
 
@@ -147,7 +159,7 @@ namespace PARADOX_RP.Game.Garage
 
                 dbVehicle.Parked = false;
                 await px.SaveChangesAsync();
-                
+
                 await _vehicleController.CreateVehicle(dbVehicle);
                 player.SendNotification("Garage", $"Fahrzeug {dbVehicle.VehicleClass.VehicleModel.ToUpper()} wurde ausgeparkt.", NotificationTypes.ERROR);
             }

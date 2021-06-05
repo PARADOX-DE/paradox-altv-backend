@@ -13,6 +13,6 @@ namespace PARADOX_RP.Core.Database.Models
         public string AnswerA { get; set; }
         public string AnswerB { get; set; }
         public string AnswerC { get; set; }
-        public string Solution { get; set; }
+        public char Solution { get; set; } // SOLUTION NEEDS TO BE THE LETTER OF THE RIGHT ANSWER
     }
 }

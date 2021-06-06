@@ -228,9 +228,8 @@ namespace PARADOX_RP.Game.Garage
                 dbVehicle.Parked = true;
                 await px.SaveChangesAsync();
 
-                Pools.Instance.Remove(vehicleId, vehicle);
-                await vehicle.RemoveAsync();
-                
+                await _vehicleController.RemoveVehicle(vehicle);
+
                 player.SendNotification("Garage", $"Fahrzeug {dbVehicle.VehicleClass.VehicleModel.ToUpper()} wurde eingeparkt.", NotificationTypes.ERROR);
             }
         }

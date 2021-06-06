@@ -22,7 +22,7 @@ using System.Threading.Tasks;
 
 namespace PARADOX_RP.Game.Bank
 {
-    class BankModule : ModuleBase<BankModule>, IEventKeyPressed, IEventPlayerConnect
+    class BankModule : ModuleBase<BankModule>, IEventKeyPressed, IEventPlayerConnect, IEventModuleLoad
     {
         private Dictionary<int, BankATMs> _BankATMs = new Dictionary<int, BankATMs>();
 
@@ -32,8 +32,6 @@ namespace PARADOX_RP.Game.Bank
             {
                 _BankATMs.Add(atm.Id, atm);
             });
-
-
 
             eventController.OnClient<PXPlayer, int>("DepositMoney", DepositMoney);
             eventController.OnClient<PXPlayer, int>("WithdrawMoney", WithdrawMoney);
@@ -48,8 +46,18 @@ namespace PARADOX_RP.Game.Bank
                 {
                     player.AddBlips($"Bankautomat #{atm.Key}", atm.Value.Position, 108, 25, 1, true);
 
-                    if (Configuration.Instance.DevMode)
-                        MarkerStreamer.Create(MarkerTypes.MarkerTypeDallorSign, Vector3.Add(atm.Value.Position, new Vector3(0, 0, 1)), new Vector3(1, 1, 1), null, null, new Rgba(37, 165, 202, 200));
+                    MarkerStreamer.Create(MarkerTypes.MarkerTypeDallorSign, Vector3.Add(atm.Value.Position, new Vector3(0, 0, 1)), new Vector3(1, 1, 1), null, null, new Rgba(37, 165, 202, 200));
+                });
+            }
+        }
+
+        public void OnModuleLoad()
+        {
+            if (Configuration.Instance.DevMode)
+            {
+                _BankATMs.ForEach((atm) =>
+                {
+                    MarkerStreamer.Create(MarkerTypes.MarkerTypeDallorSign, Vector3.Add(atm.Value.Position, new Vector3(0, 0, 1)), new Vector3(1, 1, 1), null, null, new Rgba(37, 165, 202, 200));
                 });
             }
         }

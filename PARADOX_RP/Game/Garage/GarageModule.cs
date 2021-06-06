@@ -26,7 +26,7 @@ using System.Threading.Tasks;
 
 namespace PARADOX_RP.Game.Garage
 {
-    class GarageModule : ModuleBase<GarageModule>, IEventKeyPressed, IEventPlayerConnect
+    class GarageModule : ModuleBase<GarageModule>, IEventKeyPressed, IEventPlayerConnect, IEventModuleLoad
     {
         private readonly IEventController _eventController;
         private readonly IVehicleController _vehicleController;
@@ -57,11 +57,18 @@ namespace PARADOX_RP.Game.Garage
             _garages.ForEach((g) =>
             {
                 player.AddBlips(g.Value.Name, g.Value.Position, 524, 0, 1, true);
+
+            });
+        }
+
+        public void OnModuleLoad()
+        {
+            _garages.ForEach((g) =>
+            {
                 MarkerStreamer.Create(MarkerTypes.MarkerTypeUpsideDownCone, g.Value.Position, new Vector3(1, 1, 1), new Vector3(0, 0, 0), null, new Rgba(37, 165, 202, 125));
 
                 if (Configuration.Instance.DevMode)
                     g.Value.Spawns.ForEach((spawn) => MarkerStreamer.Create(MarkerTypes.MarkerTypeCarSymbol, spawn.Spawn_Position, new Vector3(1, 1, 1), new Vector3(0, 0, spawn.Spawn_Rotation.Yaw.YawToDegree()), null, new Rgba(37, 165, 202, 200)));
-
             });
         }
 

@@ -54,12 +54,7 @@ namespace PARADOX_RP.Game.Bank
         public void OnModuleLoad()
         {
             if (Configuration.Instance.DevMode)
-            {
-                _BankATMs.ForEach((atm) =>
-                {
-                    MarkerStreamer.Create(MarkerTypes.MarkerTypeDallorSign, Vector3.Add(atm.Value.Position, new Vector3(0, 0, 1)), new Vector3(1, 1, 1), null, null, new Rgba(37, 165, 202, 200));
-                });
-            }
+                _BankATMs.ForEach((atm) => MarkerStreamer.Create(MarkerTypes.MarkerTypeDallorSign, Vector3.Add(atm.Value.Position, new Vector3(0, 0, 1)), new Vector3(1, 1, 1), null, null, new Rgba(37, 165, 202, 200)));
         }
 
         private readonly string _bankName = "N26 Bank";

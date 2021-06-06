@@ -56,7 +56,8 @@ namespace PARADOX_RP.Controllers
             _playerLoginEvents = playerLoginEvents;
             _playerVehicleEvents = playerVehicleEvents;
             _colshapeEvents = colshapeEvents;
-            
+
+            eventController.OnClient<PXPlayer>("Pressed_L", PressedL);
             eventController.OnClient<PXPlayer>("Pressed_I", PressedI);
             eventController.OnClient<PXPlayer>("Pressed_Y", PressedY);
             eventController.OnClient<PXPlayer>("Pressed_E", PressedE);
@@ -160,6 +161,19 @@ namespace PARADOX_RP.Controllers
             {
                 if (e.Enabled)
                     if (await e.OnKeyPress(player, Utils.Enums.KeyEnumeration.Y)) return false;
+
+                return true;
+            });
+        }
+
+        private async void PressedL(PXPlayer player)
+        {
+            if (!player.LoggedIn) return;
+
+            await _keyPressedEvents.ForEach(async e =>
+            {
+                if (e.Enabled)
+                    if (await e.OnKeyPress(player, KeyEnumeration.L)) return false;
 
                 return true;
             });

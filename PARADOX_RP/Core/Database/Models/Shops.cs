@@ -17,6 +17,7 @@ namespace PARADOX_RP.Core.Database.Models
         public int Id { get; set; }
         public string Name { get; set; }
         public int TeamId { get; set; }
+        public virtual Teams Team { get; set; }
         public virtual ICollection<ShopItems> Items { get; set; }
 
         public float Position_X { get; set; }

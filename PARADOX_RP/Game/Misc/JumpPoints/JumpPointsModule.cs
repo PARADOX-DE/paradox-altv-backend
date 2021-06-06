@@ -83,6 +83,7 @@ namespace PARADOX_RP.Game.JumpPoints
         public async Task EnterJumpPoint(PXPlayer player, Jumppoints jp)
         {
             if (jp.Locked) return;
+            if (player.Dimension != jp.Dimension) return;
 
             if (await player.IsInVehicleAsync() && jp.Vehicle == true)
             {
@@ -102,6 +103,7 @@ namespace PARADOX_RP.Game.JumpPoints
         public async Task ExitJumpPoint(PXPlayer player, Jumppoints jp)
         {
             if (jp.Locked) return;
+            if (player.Dimension != jp.EndDimension) return;
 
             if (await player.IsInVehicleAsync() && jp.Vehicle == true)
             {

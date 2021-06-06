@@ -18,6 +18,7 @@ namespace PARADOX_RP.Core.Database.Models
 
         public int Id { get; set; }
         public string Name { get; set; }
+<<<<<<< HEAD
         public int Price { get; set; }
     }
 
@@ -25,6 +26,11 @@ namespace PARADOX_RP.Core.Database.Models
     {
         public int Id { get; set; }
         public List<ShopItem> Items { get; set; }
+=======
+        public int TeamId { get; set; }
+        public virtual Teams Team { get; set; }
+        public virtual ICollection<ShopItems> Items { get; set; }
+>>>>>>> b24d8a5a29ed443c37c053bac3914fe8a6a94b53
 
         public float Position_X { get; set; }
         public float Position_Y { get; set; }

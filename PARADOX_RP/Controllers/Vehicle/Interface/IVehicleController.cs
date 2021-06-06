@@ -11,6 +11,7 @@ namespace PARADOX_RP.Controllers.Vehicle.Interface
     interface IVehicleController
     {
         Task<PXVehicle> CreateVehicle(Vehicles dbVehicle);
+        Task RemoveVehicle(PXVehicle vehicle);
         Task CreateDatabaseVehicle(int OwnerId, int VehicleClassId, int PrimaryColor = 0, int SecondaryColor = 0);
         Task<PXVehicle> CreateDatabaseVehicle(int OwnerId, int VehicleClassId, Position SpawnPosition, Rotation SpawnRotation, int PrimaryColor = 0, int SecondaryColor = 0);
     }

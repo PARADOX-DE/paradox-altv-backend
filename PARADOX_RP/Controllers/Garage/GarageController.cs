@@ -42,8 +42,7 @@ namespace PARADOX_RP.Controllers.Garage
         public async Task<GarageWindowWriter> RequestGarageVehicles(PXPlayer player, Garages garage)
         {
             PXVehicle tmpNearestVehicle = Pools.Instance.Get<PXVehicle>(PoolType.VEHICLE).FirstOrDefault(v => v.OwnerId == player.SqlId && (v.Position.Distance(garage.Position) < 28));
-            VehicleClass vehicleClass = VehicleModule.Instance._vehicleClass.FirstOrDefault(v => v.Value.VehicleModel == tmpNearestVehicle.VehicleModel).Value;
-            if (vehicleClass == null) return null;
+            VehicleClass vehicleClass = VehicleModule.Instance._vehicleClass.FirstOrDefault(v => v.Value.VehicleModel == tmpNearestVehicle?.VehicleModel).Value;
 
             GarageWindowVehicle NearestVehicle = tmpNearestVehicle == null ? null : new GarageWindowVehicle(tmpNearestVehicle.SqlId, tmpNearestVehicle.VehicleModel, tmpNearestVehicle.Fuel, vehicleClass.MaxFuel);
 

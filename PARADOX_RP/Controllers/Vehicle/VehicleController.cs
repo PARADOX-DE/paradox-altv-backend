@@ -104,5 +104,11 @@ namespace PARADOX_RP.Controllers.Vehicle
                 return await CreateVehicle(dbVehicle);
             }
         }
+
+        public async Task RemoveVehicle(PXVehicle vehicle)
+        {
+            _inventoryController.LoadInventory
+            await vehicle.RemoveAsync();
+        }
     }
 }

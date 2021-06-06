@@ -97,13 +97,10 @@ namespace PARADOX_RP.Game.JumpPoints
 
         public async Task ExitJumpPoint(PXPlayer player, Jumppoints jp)
         {
-            Alt.Log("Exiting JumpPoint");
             if (jp.Locked) return;
 
-            Alt.Log("Not locked");
             if (await player.GetDimensionAsync() != jp.EndDimension) return;
 
-            Alt.Log("not in dim");
             if (await player.IsInVehicleAsync() && jp.Vehicle == true)
             {
                 player.Vehicle.Dimension = jp.Dimension;

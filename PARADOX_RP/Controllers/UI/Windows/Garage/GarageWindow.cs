@@ -14,14 +14,18 @@ namespace PARADOX_RP.UI.Windows
 
     class GarageWindowVehicle
     {
-        public GarageWindowVehicle(int id, string model)
+        public GarageWindowVehicle(int id, string model, float fuel, float maxfuel)
         {
             Id = id;
             VehicleModel = model;
+            Fuel = fuel;
+            MaxFuel = maxfuel;
         }
 
         public int Id { get; set; }
         public string VehicleModel { get; set; }
+        public float Fuel { get; set; }
+        public float MaxFuel { get; set; }
     }
 
     class GarageWindowWriter : IWritable
@@ -54,6 +58,10 @@ namespace PARADOX_RP.UI.Windows
                         writer.Value(NearestVehicle.Id);
                         writer.Name("model");
                         writer.Value(NearestVehicle.VehicleModel);
+                        writer.Name("fuel");
+                        writer.Value(NearestVehicle.Fuel);
+                        writer.Name("maxfuel");
+                        writer.Value(NearestVehicle.MaxFuel);
                     }
                 writer.EndObject();
 
@@ -67,7 +75,11 @@ namespace PARADOX_RP.UI.Windows
                             writer.Value(vehicle.Id);
                             writer.Name("model");
                             writer.Value(vehicle.VehicleModel);
-                        writer.EndObject();
+                            writer.Name("fuel");
+                            writer.Value(vehicle.Fuel);
+                            writer.Name("maxfuel");
+                            writer.Value(vehicle.MaxFuel);
+                            writer.EndObject();
                     }
                 writer.EndArray();
             writer.EndObject();

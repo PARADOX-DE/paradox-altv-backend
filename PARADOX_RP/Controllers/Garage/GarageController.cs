@@ -5,6 +5,7 @@ using PARADOX_RP.Core.Database;
 using PARADOX_RP.Core.Database.Models;
 using PARADOX_RP.Core.Extensions;
 using PARADOX_RP.Core.Factories;
+using PARADOX_RP.Game.Vehicle;
 using PARADOX_RP.UI.Windows;
 using PARADOX_RP.Utils;
 using System;
@@ -41,14 +42,17 @@ namespace PARADOX_RP.Controllers.Garage
         public async Task<GarageWindowWriter> RequestGarageVehicles(PXPlayer player, Garages garage)
         {
             PXVehicle tmpNearestVehicle = Pools.Instance.Get<PXVehicle>(PoolType.VEHICLE).FirstOrDefault(v => v.OwnerId == player.SqlId && (v.Position.Distance(garage.Position) < 28));
-            GarageWindowVehicle NearestVehicle = tmpNearestVehicle == null ? null : new GarageWindowVehicle(tmpNearestVehicle.SqlId, tmpNearestVehicle.VehicleModel);
+            VehicleClass vehicleClass = VehicleModule.Instance._vehicleClass.FirstOrDefault(v => v.Value.VehicleModel == tmpNearestVehicle.VehicleModel).Value;
+            if (vehicleClass == null) return null;
+
+            GarageWindowVehicle NearestVehicle = tmpNearestVehicle == null ? null : new GarageWindowVehicle(tmpNearestVehicle.SqlId, tmpNearestVehicle.VehicleModel, tmpNearestVehicle.Fuel, vehicleClass.MaxFuel);
 
             await using (var px = new PXContext())
             {
                 List<GarageWindowVehicle> Vehicles = new List<GarageWindowVehicle>();
                 await px.Vehicles.Where(v => v.GarageId == garage.Id && v.PlayerId == player.SqlId && v.Parked).Include(vC => vC.VehicleClass).ForEachAsync((v) =>
                 {
-                    Vehicles.Add(new GarageWindowVehicle(v.Id, v.VehicleClass.VehicleModel));
+                    Vehicles.Add(new GarageWindowVehicle(v.Id, v.VehicleClass.VehicleModel, v.Fuel, v.VehicleClass.MaxFuel));
                 });
 
                 return new GarageWindowWriter(garage.Id, garage.Name, Vehicles, NearestVehicle);

@@ -23,7 +23,7 @@ namespace PARADOX_RP.Game.Phone.Content
 
         public TeamPhoneApplication(IEventController eventController)
         {
-            eventController.OnClient<PXPlayer>("RequestTeamMembers", RequestTeamMembers);
+            eventController.OnClient<PXPlayer>("RequestTeamMemberse", RequestTeamMembers);
         }
 
         public async Task<bool> IsPermitted(PXPlayer player)
@@ -36,8 +36,8 @@ namespace PARADOX_RP.Game.Phone.Content
 
         private void RequestTeamMembers(PXPlayer player)
         {
+            AltAsync.Log("RequestTeamMembers");
             if (!player.CanInteract()) return;
-
             List<TeamPhoneApplicationPlayer> _factionMembers = new List<TeamPhoneApplicationPlayer>();
 
             player.Team.Players.ForEach((p) =>

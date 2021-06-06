@@ -6,6 +6,7 @@ using PARADOX_RP.Core.Database;
 using PARADOX_RP.Core.Interface;
 using PARADOX_RP.Core.Module;
 using PARADOX_RP.Game.Inventory.Interfaces;
+using PARADOX_RP.Game.Phone.Interfaces;
 using PARADOX_RP.UI;
 using PARADOX_RP.UI.Models;
 using PARADOX_RP.UI.Windows.NativeMenu;
@@ -24,15 +25,13 @@ namespace PARADOX_RP.Core.Factories
 
         private IContainer _container;
         private ILifetimeScope _scope;
-        private ILogger _logger;
 
         private List<Type> _handlerTypes = new List<Type>();
         private List<Type> _moduleTypes = new List<Type>();
         private List<Type> _itemTypes = new List<Type>();
         private List<Type> _windowTypes = new List<Type>();
         private List<Type> _nativeMenuTypes = new List<Type>();
-
-               
+        private List<Type> _phoneAppTypes = new List<Type>();
 
         internal void RegisterTypes()
         {
@@ -80,6 +79,15 @@ namespace PARADOX_RP.Core.Factories
                 .SingleInstance();
             }
 
+            LogStartup("Loading phone applications...");
+            foreach (var app in _phoneAppTypes)
+            {
+                builder.RegisterType(app)
+                .AsImplementedInterfaces()
+                .AsSelf()
+                .SingleInstance();
+            }
+
             LogStartup("Loading itemscripts...");
             foreach (var item in _itemTypes)
             {
@@ -119,6 +127,11 @@ namespace PARADOX_RP.Core.Factories
             {
                 _scope.Resolve(type);
             }
+
+            foreach (var type in _phoneAppTypes)
+            {
+                _scope.Resolve(type);
+            }
         }
 
         internal T Resolve<T>()
@@ -150,9 +163,12 @@ namespace PARADOX_RP.Core.Factories
                 {
                     _nativeMenuTypes.Add(type);
                 }
+                else if (IsPhoneAppType(type))
+                {
+                    _phoneAppTypes.Add(type);
+                }
             }
         }
-
 
         private bool IsHandlerType(Type type)
         {
@@ -186,6 +202,15 @@ namespace PARADOX_RP.Core.Factories
             if (type.Namespace == null) return false;
             return type.Namespace.StartsWith("PARADOX_RP.Game") &&
                                             type.IsAssignableTo<INativeMenu>() &&
+                                            !type.Name.StartsWith("<");
+        }
+
+        private bool IsPhoneAppType(Type type)
+        {
+            if (type.Namespace == null) return false;
+            return type.Namespace.StartsWith("PARADOX_RP.Game.Phone.Content") &&
+                                            type.BaseType != null &&
+                                            type.IsAssignableTo<IPhoneApplication>() &&
                                             !type.Name.StartsWith("<");
         }
 

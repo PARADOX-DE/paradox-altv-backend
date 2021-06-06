@@ -125,7 +125,7 @@ namespace PARADOX_RP.Game.JumpPoints
             if (jp.TeamId == player.Team.Id && jp.LastBreaked.AddMinutes(30) < DateTime.Now)
             {
                 jp.Locked = !jp.Locked;
-                player.SendNotification(jp.Name, jp.Locked ? "Du hast die Tür Abgeschlossen." : "Du hast die Tür Aufgeschlossen.", jp.Locked ? NotificationTypes.ERROR : NotificationTypes.SUCCESS);
+                player.SendNotification(jp.Name, jp.Locked ? "Du hast die Tür abgeschlossen." : "Du hast die Tür aufgeschlossen.", jp.Locked ? NotificationTypes.ERROR : NotificationTypes.SUCCESS);
             }
         }
 

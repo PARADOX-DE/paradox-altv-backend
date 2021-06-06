@@ -9,6 +9,7 @@ namespace PARADOX_RP.Core.Database.Models
     [Table("shop_items")]
     public partial class ShopItems
     {
+        public int Id { get; set; }
         public int ShopsId { get; set; }
         public int Item { get; set; }
         public int Price { get; set; }

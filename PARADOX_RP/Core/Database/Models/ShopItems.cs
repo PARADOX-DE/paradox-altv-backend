@@ -11,18 +11,11 @@ namespace PARADOX_RP.Core.Database.Models
     public partial class ShopItems
     {
         public int Id { get; set; }
-        public int ShopsId { get; set; }
-        public int Item { get; set; }
+        public int ShopId { get; set; }
+        public int ItemId { get; set; }
         public int Price { get; set; }
-    }
 
-    public partial class ShopItems
-    {
-        public ShopItems () {
-            if (!InventoryModule.Instance._items.TryGetValue(this.Item, out Items Item)) return;
-
-            Name = Item.Name;
-        }
-        public string Name { get; set; }
+        public virtual Shops Shop { get; set; }
+        public virtual Items Item { get; set; }
     }
 }

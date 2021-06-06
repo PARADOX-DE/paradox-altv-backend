@@ -14,14 +14,14 @@ namespace PARADOX_RP.UI.Windows
 
     class ShopWindowWriter : IWritable
     {
-        public ShopWindowWriter(int id, List<ShopItem> items)
+        public ShopWindowWriter(int id, IEnumerable<ShopItems> items)
         {
             Id = id;
             Items = items;
         }
 
         private int Id { get; set; }
-        private List<ShopItem> Items { get; set; }
+        private IEnumerable<ShopItems> Items { get; set; }
 
         public void OnWrite(IMValueWriter writer)
         {
@@ -32,13 +32,13 @@ namespace PARADOX_RP.UI.Windows
             writer.Name("productList");
             writer.BeginArray();
             if (Items != null)
-                foreach (ShopItem item in Items)
+                foreach (var item in Items)
                 {
                     writer.BeginObject();
                     writer.Name("id");
                     writer.Value(item.Id);
                     writer.Name("name");
-                    writer.Value(item.Name);
+                    writer.Value(item.Item.Name);
                     writer.Name("price");
                     writer.Value(item.Price);
                     writer.EndObject();

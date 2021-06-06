@@ -69,6 +69,12 @@ namespace PARADOX_RP.Controllers.Inventory
             }
         }
 
+        public void UnloadInventory(int InventoryId)
+        {
+            if (_inventories.ContainsKey(InventoryId)) _inventories.Remove(InventoryId);
+        }
+
+
         public int GetNextAvailableSlot(PXInventory inventory)
         {
             /*if (!InventoryModule.Instance._inventoryInfo.TryGetValue((int)inventory.Type, out InventoryInfo inventoryInfo)) return -1;

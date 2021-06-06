@@ -13,6 +13,7 @@ namespace PARADOX_RP.Controllers.Inventory
     interface IInventoryController
     {
         Task<PXInventory> LoadInventory(InventoryTypes type, int Id);
+        void UnloadInventory(int InventoryId);
         Task<PXInventory> CreateInventory(InventoryTypes type, int Id);
         Task<bool> CreateItem(PXInventory inventory, int ItemId, int Amount, string OriginInformation, [CallerMemberName] string callerName = null);
         Task RemoveItemBySlotId(PXInventory inventory, int ItemId, int Amount);

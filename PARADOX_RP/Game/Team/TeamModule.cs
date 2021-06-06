@@ -35,7 +35,7 @@ namespace PARADOX_RP.Game.Team
         LSMC
     }
 
-    class TeamModule : ModuleBase<TeamModule>, ICommand, IEventPlayerConnect
+    class TeamModule : ModuleBase<TeamModule>, ICommand, IEventModuleLoad
     {
         public Dictionary<int, Teams> TeamList = new Dictionary<int, Teams>();
         private readonly IEventController _eventController;
@@ -55,16 +55,14 @@ namespace PARADOX_RP.Game.Team
             _eventController.OnClient<PXPlayer>("TeamInviteAccept", TeamInviteAccept);
         }
 
-        public void OnPlayerConnect(PXPlayer player)
+        public void OnModuleLoad()
         {
-            TeamList.ForEach((team) =>
-            {
-                if (Configuration.Instance.DevMode)
+            if (Configuration.Instance.DevMode)
+                TeamList.ForEach((team) =>
                 {
                     MarkerStreamer.Create(MarkerTypes.MarkerTypeThickChevronUp, team.Value.SpawnPosition, new Vector3(1, 1, 1), new Vector3(0, 0, 0), null, new Rgba(37, 165, 202, 125));
                     TextLabelStreamer.Create($"[{Enum.GetName(typeof(TeamTypes), team.Value.TeamType)}] Team: {team.Value.TeamName}", team.Value.SpawnPosition);
-                }
-            });
+                });
         }
 
         public void InviteTeamMember(PXPlayer player, string inviteString)

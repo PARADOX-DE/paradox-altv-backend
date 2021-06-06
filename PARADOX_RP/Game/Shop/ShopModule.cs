@@ -1,4 +1,5 @@
-﻿using PARADOX_RP.Controllers.Event.Interface;
+﻿using Microsoft.EntityFrameworkCore;
+using PARADOX_RP.Controllers.Event.Interface;
 using PARADOX_RP.Controllers.Vehicle.Interface;
 using PARADOX_RP.Core.Database;
 using PARADOX_RP.Core.Database.Models;
@@ -19,8 +20,7 @@ namespace PARADOX_RP.Game.Shop
 {
     class ShopModule : ModuleBase<ShopModule>, IEventKeyPressed, IEventPlayerConnect
     {
-        private Dictionary<int, Shops> _Shops = new Dictionary<int, Shops>();
-        private Dictionary<int, ShopItems> _ShopItems = new Dictionary<int, ShopItems>();
+        private Dictionary<int, Shops> _shops = new Dictionary<int, Shops>();
 
         private readonly IEventController _eventController;
         private readonly IVehicleController _vehicleController;
@@ -28,20 +28,11 @@ namespace PARADOX_RP.Game.Shop
         public ShopModule(PXContext px, IEventController eventController, IVehicleController vehicleController) : base("GasStation")
         {
             _eventController = eventController;
-            _vehicleController = vehicleController;;
+            _vehicleController = vehicleController; ;
 
-            LoadDatabaseTable(px.Shops, (Shops sp) =>
+            LoadDatabaseTable(px.Shops.Include(s => s.Items), (Shops sp) =>
             {
-                _Shops.Add(sp.Id, sp);
-            });
-
-            LoadDatabaseTable(px.ShopItems, (ShopItems item) =>
-            {
-                _ShopItems.Add(item.Id, item);
-
-                if (!_Shops.TryGetValue(item.ShopsId, out Shops shop)) return;
-
-                shop.Items.Add(new ShopItem(item.Id, item.Name, item.Price));
+                _shops.Add(sp.Id, sp);
             });
 
             //_eventController.OnClient<PXPlayer, int, string, int>("PayShop", PayShop);
@@ -49,7 +40,7 @@ namespace PARADOX_RP.Game.Shop
 
         public void OnPlayerConnect(PXPlayer player)
         {
-            _Shops.ForEach((sp) =>
+            _shops.ForEach((sp) =>
             {
                 player.AddBlips($"Shop", sp.Value.Position, 52, 2, 1, true);
             });
@@ -61,12 +52,18 @@ namespace PARADOX_RP.Game.Shop
             if (!player.IsValid()) return await Task.FromResult(false);
             if (!player.CanInteract()) return await Task.FromResult(false);
 
-            Shops dbShop = _Shops.Values.FirstOrDefault(sp => sp.Position.Distance(player.Position) < 3);
+            Shops dbShop = _shops.Values.FirstOrDefault(sp => sp.Position.Distance(player.Position) < 3);
             if (dbShop == null) return await Task.FromResult(false);
 
             WindowController.Instance.Get<ShopWindow>().Show(player, new ShopWindowWriter(dbShop.Id, dbShop.Items));
 
             return await Task.FromResult(true);
+        }
+
+        public Shops GetShopById(int Id)
+        {
+            if (_shops.TryGetValue(Id, out Shops shop)) return shop;
+            return null;
         }
     }
 }

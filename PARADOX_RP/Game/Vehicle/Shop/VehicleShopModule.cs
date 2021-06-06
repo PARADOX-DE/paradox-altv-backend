@@ -23,7 +23,7 @@ using System.Threading.Tasks;
 
 namespace PARADOX_RP.Game.Vehicle.Shop
 {
-    class VehicleShopModule : ModuleBase<VehicleShopModule>, IEventKeyPressed, IEventModuleLoad
+    class VehicleShopModule : ModuleBase<VehicleShopModule>, IEventKeyPressed, IEventModuleLoad, IEventPlayerConnect
     {
         private readonly IEventController _eventController;
         private readonly IVehicleController _vehicleController;
@@ -52,7 +52,6 @@ namespace PARADOX_RP.Game.Vehicle.Shop
                     MarkerStreamer.Create(MarkerTypes.MarkerTypeUpsideDownCone, v.Value.Position, new Vector3(1, 1, 1), new Vector3(0, 0, 0), null, new Rgba(37, 165, 202, 125));
                     MarkerStreamer.Create(MarkerTypes.MarkerTypeHorizontalCircleFat, Vector3.Subtract(v.Value.BoughtPosition, new Vector3(0, 0, 0.5f)), new Vector3(1, 1, 1), new Vector3(0, 0, 0), null, new Rgba(37, 165, 202, 125));
                 }
-
             });
         }
 

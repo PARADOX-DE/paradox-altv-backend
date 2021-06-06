@@ -27,7 +27,7 @@ using System.Threading.Tasks;
 
 namespace PARADOX_RP.Game.JumpPoints
 {
-    class JumpPointsModule : ModuleBase<JumpPointsModule>, IEventKeyPressed, IEventPlayerConnect
+    class JumpPointsModule : ModuleBase<JumpPointsModule>, IEventKeyPressed, IEventModuleLoad
     {
         private Dictionary<int, Jumppoints> _JumpPoints = new Dictionary<int, Jumppoints>();
 
@@ -43,16 +43,14 @@ namespace PARADOX_RP.Game.JumpPoints
             });
         }
 
-        public void OnPlayerConnect(PXPlayer player)
+        public void OnModuleLoad()
         {
             if (Configuration.Instance.DevMode)
-            {
                 _JumpPoints.ForEach((jp) =>
                 {
                     MarkerStreamer.Create(MarkerTypes.MarkerTypeDallorSign, Vector3.Add(jp.Value.Position, new Vector3(0, 0, 1)), new Vector3(1, 1, 1), null, null, new Rgba(242, 137, 24, 255));
                     MarkerStreamer.Create(MarkerTypes.MarkerTypeDallorSign, Vector3.Add(jp.Value.EndPosition, new Vector3(0, 0, 1)), new Vector3(1, 1, 1), null, null, new Rgba(242, 137, 24, 255));
                 });
-            }
         }
 
         public async Task<bool> OnKeyPress(PXPlayer player, KeyEnumeration key)

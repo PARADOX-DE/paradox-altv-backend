@@ -7,17 +7,24 @@ using System.Text;
 
 namespace PARADOX_RP.Core.Database.Models
 {
-    public partial class Shops
+    public partial class ShopItem
     {
-        public Shops()
+        public ShopItem(int id, string name, int price)
         {
-            Items = new HashSet<ShopItems>();
+            Id = id;
+            Name = name;
+            Price = price;
         }
 
         public int Id { get; set; }
         public string Name { get; set; }
-        public int TeamId { get; set; }
-        public virtual ICollection<ShopItems> Items { get; set; }
+        public int Price { get; set; }
+    }
+
+    public partial class Shops
+    {
+        public int Id { get; set; }
+        public List<ShopItem> Items { get; set; }
 
         public float Position_X { get; set; }
         public float Position_Y { get; set; }

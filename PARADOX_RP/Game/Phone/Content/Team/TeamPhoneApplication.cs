@@ -23,7 +23,7 @@ namespace PARADOX_RP.Game.Phone.Content
 
         public TeamPhoneApplication(IEventController eventController)
         {
-            eventController.OnClient<PXPlayer>("RequestTeamMemberse", RequestTeamMembers);
+            eventController.OnClient<PXPlayer>("RequestTeamInfo", RequestTeamInfo);
         }
 
         public async Task<bool> IsPermitted(PXPlayer player)
@@ -34,10 +34,10 @@ namespace PARADOX_RP.Game.Phone.Content
             return await Task.FromResult(false);
         }
 
-        private void RequestTeamMembers(PXPlayer player)
+        private void RequestTeamInfo(PXPlayer player)
         {
-            AltAsync.Log("RequestTeamMembers");
             if (!player.CanInteract()) return;
+
             List<TeamPhoneApplicationPlayer> _factionMembers = new List<TeamPhoneApplicationPlayer>();
 
             player.Team.Players.ForEach((p) =>
@@ -53,8 +53,11 @@ namespace PARADOX_RP.Game.Phone.Content
                 });
             });
 
+            string TeamName = player.Team.TeamName;
+            bool IsLeader = player.PlayerTeamData.Rank >= 10;
+
             //view callback responseTeamMembers
-            WindowController.Instance.Get<TeamListAppWindow>().ViewCallback(player, "ResponseMembers", new TeamListAppWindowMemberWriter(_factionMembers));
+            WindowController.Instance.Get<TeamListAppWindow>().ViewCallback(player, "ResponseTeamInfo", new TeamListAppWindowWriter(TeamName, _factionMembers, IsLeader));
         }
     }
 }

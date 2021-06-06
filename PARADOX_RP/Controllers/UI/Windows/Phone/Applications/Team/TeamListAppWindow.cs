@@ -12,20 +12,32 @@ namespace PARADOX_RP.UI.Windows.Phone.Applications.Team
         public TeamListAppWindow() : base("TeamListApp") { }
     }
 
-    class TeamListAppWindowMemberWriter : IWritable
+    class TeamListAppWindowWriter : IWritable
     {
+        private string TeamName;
         private List<TeamPhoneApplicationPlayer> Players;
+        private bool IsLeader;
 
-        public TeamListAppWindowMemberWriter(List<TeamPhoneApplicationPlayer> players)
+        public TeamListAppWindowWriter(string teamName, List<TeamPhoneApplicationPlayer> players, bool isLeader)
         {
+            TeamName = teamName;
             Players = players;
+            IsLeader = isLeader;
         }
 
         public void OnWrite(IMValueWriter writer)
         {
+            writer.BeginObject();
+
+            writer.Name("name");
+            writer.Value(TeamName);
+
+            writer.Name("members");
             writer.BeginArray();
             foreach (var player in Players)
             {
+                writer.BeginObject();
+
                 writer.Name("id");
                 writer.Value(player.Id);
 
@@ -34,8 +46,15 @@ namespace PARADOX_RP.UI.Windows.Phone.Applications.Team
 
                 writer.Name("online");
                 writer.Value(player.Online);
+
+                writer.EndObject();
             }
             writer.EndArray();
+
+            writer.Name("isLeader");
+            writer.Value(IsLeader);
+
+            writer.EndObject();
         }
     }
 }

@@ -107,7 +107,7 @@ namespace PARADOX_RP.Controllers.Vehicle
 
         public async Task RemoveVehicle(PXVehicle vehicle)
         {
-            _inventoryController.LoadInventory
+            //_inventoryController.LoadInventory
             await vehicle.RemoveAsync();
         }
     }

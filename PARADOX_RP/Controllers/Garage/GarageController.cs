@@ -24,12 +24,10 @@ namespace PARADOX_RP.Controllers.Garage
 
             await garage.Spawns.ForEach(async spawn =>
             {
-                AltAsync.Log("[GARAGE] Looping " + spawn.Name);
                 PXVehicle vehicle = Pools.Instance.Get<PXVehicle>(PoolType.VEHICLE).FirstOrDefault(veh => veh.Position.Distance(spawn.Spawn_Position) < 5);
                 if (vehicle == null)
                 {
                     _freeSpawn = spawn;
-                    AltAsync.Log("Found");
                     return await Task.FromResult(false);
                 }
 

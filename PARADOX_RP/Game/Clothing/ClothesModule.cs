@@ -35,10 +35,10 @@ namespace PARADOX_RP.Game.Clothing
             });
 
             logger.Console(ConsoleLogType.SUCCESS, "Content", $"Successfully grouped {_shopClothes.Count}x Clothes!");
-            foreach(var c in _shopClothes)
-            {
-                logger.Console(ConsoleLogType.SUCCESS, "LOG", $"{c.Name}");
-            }
+            //foreach(var c in _shopClothes)
+            // {
+            //    logger.Console(ConsoleLogType.SUCCESS, "LOG", $"{c.Name}");
+            //} 
         }
 
 

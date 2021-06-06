@@ -34,7 +34,8 @@ namespace PARADOX_RP
                 var databaseCreator = px.Database.GetService<IDatabaseCreator>() as RelationalDatabaseCreator;
                 try
                 {
-                    databaseCreator.CreateTables();
+                    databaseCreator.EnsureCreated();
+                    //databaseCreator.CreateTables();
                 }
                 catch { }
                 _logger.Console(ConsoleLogType.SUCCESS, "Database", "Successfully created database tables.");

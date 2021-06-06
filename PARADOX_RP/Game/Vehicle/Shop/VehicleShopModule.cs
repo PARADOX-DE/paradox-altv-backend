@@ -23,7 +23,7 @@ using System.Threading.Tasks;
 
 namespace PARADOX_RP.Game.Vehicle.Shop
 {
-    class VehicleShopModule : ModuleBase<VehicleShopModule>, IEventKeyPressed, IEventPlayerConnect
+    class VehicleShopModule : ModuleBase<VehicleShopModule>, IEventKeyPressed, IEventModuleLoad
     {
         private readonly IEventController _eventController;
         private readonly IVehicleController _vehicleController;
@@ -42,18 +42,21 @@ namespace PARADOX_RP.Game.Vehicle.Shop
             eventController.OnClient<PXPlayer, int, string, int>("BuyVehicleShop", BuyVehicleShop);
         }
 
-        public void OnPlayerConnect(PXPlayer player)
+        public void OnModuleLoad()
         {
             _vehicleShops.ForEach((v) =>
             {
-                player.AddBlips(v.Value.Name, v.Value.Position, 225, 0, 1, true);
-                MarkerStreamer.Create(MarkerTypes.MarkerTypeUpsideDownCone, v.Value.Position, new Vector3(1, 1, 1), new Vector3(0, 0, 0), null, new Rgba(37, 165, 202, 125));
-                MarkerStreamer.Create(MarkerTypes.MarkerTypeHorizontalCircleFat, Vector3.Subtract(v.Value.BoughtPosition, new Vector3(0, 0, 0.5f)), new Vector3(1, 1, 1), new Vector3(0, 0, 0), null, new Rgba(37, 165, 202, 125));
-
+                v.Value.Content.ForEach((preview) => AltAsync.CreateVehicleBuilder(preview.VehicleClass.VehicleModel, preview.PreviewPosition, preview.PreviewRotation).PrimaryColor(0).SecondaryColor(0).Build());
                 if (Configuration.Instance.DevMode)
-                    v.Value.Content.ForEach((preview) => AltAsync.CreateVehicleBuilder(preview.VehicleClass.VehicleModel, preview.PreviewPosition, preview.PreviewRotation).PrimaryColor(0).SecondaryColor(0).Build());
+                {
+                    MarkerStreamer.Create(MarkerTypes.MarkerTypeUpsideDownCone, v.Value.Position, new Vector3(1, 1, 1), new Vector3(0, 0, 0), null, new Rgba(37, 165, 202, 125));
+                    MarkerStreamer.Create(MarkerTypes.MarkerTypeHorizontalCircleFat, Vector3.Subtract(v.Value.BoughtPosition, new Vector3(0, 0, 0.5f)), new Vector3(1, 1, 1), new Vector3(0, 0, 0), null, new Rgba(37, 165, 202, 125));
+                }
+
             });
         }
+
+        public void OnPlayerConnect(PXPlayer player) => _vehicleShops.ForEach((v) => player.AddBlips(v.Value.Name, v.Value.Position, 225, 0, 1, true));
 
         public async Task<bool> OnKeyPress(PXPlayer player, KeyEnumeration key)
         {

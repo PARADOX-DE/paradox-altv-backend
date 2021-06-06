@@ -59,21 +59,16 @@ namespace PARADOX_RP.Game.JumpPoints
             if (!player.IsValid()) return await Task.FromResult(false);
             if (!player.CanInteract()) return await Task.FromResult(false);
 
-            Jumppoints dbJumpPoint = _JumpPoints.Values.FirstOrDefault(jp => jp.Position.Distance(player.Position) < 5 || jp.EndPosition.Distance(player.Position) < 5 && jp.Locked == false);
+            Jumppoints dbJumpPoint = _JumpPoints.Values.FirstOrDefault(jp => (jp.Position.Distance(player.Position) < 4 || jp.EndPosition.Distance(player.Position) < 4) && jp.Locked == false);
             if (dbJumpPoint == null) return await Task.FromResult(false);
-
-            if (!dbJumpPoint.Vehicle && dbJumpPoint.Position.Distance(player.Position) > 2) return await Task.FromResult(false);
 
             if (key == KeyEnumeration.E)
             {
                 if (dbJumpPoint.Position.Distance(player.Position) < 5)
-                {
                     await EnterJumpPoint(player, dbJumpPoint);
-                }
                 else
-                {
                     await ExitJumpPoint(player, dbJumpPoint);
-                }
+
             }
             else if (key == KeyEnumeration.L) LockJumpPoint(player, dbJumpPoint);
 
@@ -83,7 +78,7 @@ namespace PARADOX_RP.Game.JumpPoints
         public async Task EnterJumpPoint(PXPlayer player, Jumppoints jp)
         {
             if (jp.Locked) return;
-            if (player.Dimension != jp.Dimension) return;
+            if (await player.GetDimensionAsync() != jp.Dimension) return;
 
             if (await player.IsInVehicleAsync() && jp.Vehicle == true)
             {
@@ -102,9 +97,13 @@ namespace PARADOX_RP.Game.JumpPoints
 
         public async Task ExitJumpPoint(PXPlayer player, Jumppoints jp)
         {
+            Alt.Log("Exiting JumpPoint");
             if (jp.Locked) return;
-            if (player.Dimension != jp.EndDimension) return;
 
+            Alt.Log("Not locked");
+            if (await player.GetDimensionAsync() != jp.EndDimension) return;
+
+            Alt.Log("not in dim");
             if (await player.IsInVehicleAsync() && jp.Vehicle == true)
             {
                 player.Vehicle.Dimension = jp.Dimension;
@@ -114,9 +113,9 @@ namespace PARADOX_RP.Game.JumpPoints
             }
             else if (!await player.IsInVehicleAsync())
             {
-                player.Dimension = jp.Dimension;
-                player.Position = jp.Position;
-                player.Rotation = jp.Rotation;
+                await player.SetDimensionAsync(jp.Dimension);
+                await player.SetPositionAsync(jp.Position);
+                await player.SetRotationAsync(jp.Rotation);
             }
         }
 

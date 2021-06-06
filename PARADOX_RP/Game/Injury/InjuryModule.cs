@@ -62,8 +62,11 @@ namespace PARADOX_RP.Game.Injury
                     PlayerInjuryData injuryData = await px.PlayerInjuryData.FindAsync(player.PlayerInjuryData.Id);
                     injuryData.InjuryTimeLeft = injury.Duration;
                     injuryData.InjuryId = injury.Id;
+                    injuryData.Injury = injury;
 
                     await px.SaveChangesAsync();
+
+                    player.PlayerInjuryData = injuryData;
                 }
 
                 _teamController.SendNotification((int)TeamEnumeration.LSMC, "LSMC", "Es wurde eine verletzte Person gemeldet!", NotificationTypes.SUCCESS);

@@ -26,7 +26,7 @@ namespace PARADOX_RP.Controllers.Weapon
         }
         public async Task AddWeapon(PXPlayer player, WeaponModel weapon)
         {
-            player.GiveWeapon((uint)weapon, 0, true);
+            await player.GiveWeaponAsync((uint)weapon, 0, true);
         }
     }
 }

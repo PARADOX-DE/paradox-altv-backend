@@ -24,6 +24,7 @@ using System.Linq;
 using PARADOX_RP.Controllers.Inventory;
 using PARADOX_RP.Game.Inventory;
 using PARADOX_RP.Core.Events;
+using PARADOX_RP.Controllers.Weapon.Interface;
 
 namespace PARADOX_RP.Game.Administration
 {
@@ -31,10 +32,12 @@ namespace PARADOX_RP.Game.Administration
     {
         private IVehicleController _vehicleController;
         private IInventoryController _inventoryController;
-        public AdministrationModule(IVehicleController vehicleController, IInventoryController inventoryController) : base("Administration")
+        private IWeaponController _weaponController;
+        public AdministrationModule(IVehicleController vehicleController, IInventoryController inventoryController, IWeaponController weaponController) : base("Administration")
         {
             _vehicleController = vehicleController;
             _inventoryController = inventoryController;
+            _weaponController = weaponController;
         }
 
         private readonly List<Clothes> _administrativeOutfit = new List<Clothes>()
@@ -131,7 +134,7 @@ namespace PARADOX_RP.Game.Administration
         {
             if (!PermissionsModule.Instance.HasPermissions(player)) return;
 
-            await player.GiveWeaponAsync((uint)weaponModel, 9999, true);
+            await _weaponController.AddWeapon(player, weaponModel);
         }
 
         [Command("pos")]
@@ -183,17 +186,6 @@ namespace PARADOX_RP.Game.Administration
                 return;
             }
 
-            /*var newItem = new InventoryItemAssignments()
-            {
-                InventoryId = player.Inventory.Id,
-                OriginId = 1,
-                Item = ItemId,
-                Weight = Item.Weight,
-                Slot = _inventoryController.GetNextAvailableSlot(player.Inventory)
-            };
-            */
-
-            //player.Inventory.Items.Add(newItem);
             await _inventoryController.CreateItem(player.Inventory, ItemId, Amount, "Administrativ erstellt von " + player.Username);
             player.SendNotification("Administration", $"Du hast dir 1x {Item.Name} gegeben.", NotificationTypes.SUCCESS);
         }

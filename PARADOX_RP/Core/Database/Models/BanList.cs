@@ -14,12 +14,12 @@ namespace PARADOX_RP.Core.Database.Models
             CreatedAt = createdAt;
         }
 
-        public BanList(int playerId, string description, bool active, DateTime createdAt)
+        public BanList(int playerId, int moderatorId, string description, bool active, DateTime createdAt)
         { 
             // SYSTEM - BAN
             
             PlayerId = playerId;
-            ModeratorId = 1;
+            ModeratorId = moderatorId;
             Description = description;
             Active = active;
             CreatedAt = createdAt;

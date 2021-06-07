@@ -60,7 +60,7 @@ namespace PARADOX_RP.Game.Moderation
                 if (existingBanEntry != null) existingBanEntry.Active = true;
                 else
                 {
-                    BanList banEntry = new BanList(player.SqlId, $"{Description} via {callerName}", true, DateTime.Now);
+                    BanList banEntry = new BanList(player.SqlId, 1, $"{Description} via {callerName}", true, DateTime.Now);
                     await px.BanList.AddAsync(banEntry);
                 }
 

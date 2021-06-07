@@ -52,7 +52,7 @@ namespace PARADOX_RP.Game.Moderation
 
         public async Task BanPlayer(PXPlayer player, string Description = "System", [CallerMemberName] string callerName = null)
         {
-            if (player == null || moderator == null) return;
+            if (player == null) return;
 
             await using (var px = new PXContext())
             {
@@ -60,7 +60,7 @@ namespace PARADOX_RP.Game.Moderation
                 if (existingBanEntry != null) existingBanEntry.Active = true;
                 else
                 {
-                    BanList banEntry = new BanList(player.SqlId, moderator.SqlId, true, DateTime.Now);
+                    BanList banEntry = new BanList(player.SqlId, $"{Description} via {callerName}", true, DateTime.Now);
                     await px.BanList.AddAsync(banEntry);
                 }
 

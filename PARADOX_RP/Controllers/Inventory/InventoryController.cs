@@ -210,7 +210,7 @@ namespace PARADOX_RP.Controllers.Inventory
             }
         }
 
-        public async Task<bool> UseItem(PXInventory inventory, int Slot)
+        public async Task<bool> UseItem(PXPlayer player, PXInventory inventory, int Slot)
         {
             if (!inventory.Items.TryGetValue(Slot, out InventoryItemAssignments Item)) return false;
             if (!InventoryModule.Instance._items.TryGetValue(Item.Item, out Items ItemInfo)) return false;
@@ -219,7 +219,7 @@ namespace PARADOX_RP.Controllers.Inventory
             IItemScript TargetItemScript = InventoryModule.Instance._itemScripts.FirstOrDefault(i => i.ScriptName == ItemInfo.ScriptName);
             if (TargetItemScript == null) return false;
 
-            bool NeedToRemoveItem = await TargetItemScript.UseItem();
+            bool NeedToRemoveItem = await TargetItemScript.UseItem(player);
             if (NeedToRemoveItem)
             {
                 //Remove Item Logic here

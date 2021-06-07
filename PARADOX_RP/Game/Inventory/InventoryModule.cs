@@ -74,7 +74,7 @@ namespace PARADOX_RP.Game.Inventory
             LocalInventoryData localInventoryData = player.LocalInventoryData;
             if (localInventoryData == null) return;
 
-            await _inventoryHandler.UseItem(localInventoryData.PlayerInventory, Slot);
+            await _inventoryHandler.UseItem(player, localInventoryData.PlayerInventory, Slot);
         }
 
         private void MoveInventoryItem(PXPlayer player, int OldSlot, int NewSlot, int Amount, bool ToAdditional)

@@ -7,14 +7,14 @@ using System.Threading.Tasks;
 
 namespace PARADOX_RP.Game.Inventory.Content
 {
-    class VestItemScript : IItemScript
+    class PhoneItemScript : IItemScript
     {
-        public string ScriptName => "vest_itemscript";
+        public string ScriptName => "phone_itemscript";
 
         public async Task<bool> UseItem()
         {
-            AltAsync.Log("Used Item Vest");
-            return true;
+
+            return false;
         }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using PARADOX_RP.Core.Database.Models;
+using PARADOX_RP.Core.Factories;
 using PARADOX_RP.Game.Inventory;
 using PARADOX_RP.Game.Inventory.Interfaces;
 using PARADOX_RP.Game.Inventory.Models;
@@ -20,6 +21,6 @@ namespace PARADOX_RP.Controllers.Inventory
         int GetNextAvailableSlot(PXInventory inventory);
         Task<int> CreateItemSignature(string CallerName, string OriginInformation);
         
-        Task<bool> UseItem(PXInventory inventory, int Slot);
+        Task<bool> UseItem(PXPlayer player, PXInventory inventory, int Slot);
     }
 }

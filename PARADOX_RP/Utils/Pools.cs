@@ -24,11 +24,6 @@ namespace PARADOX_RP.Utils
         private readonly Dictionary<int, PXVehicle> vehiclePool = new Dictionary<int, PXVehicle>();
         private readonly Dictionary<int, List<PXPlayer>> teamPlayerPool = new Dictionary<int, List<PXPlayer>>();
 
-        public Pools()
-        {
-            
-        }
-
         public void Register(int Id, Entity entity)
         {
             switch (entity.Type)

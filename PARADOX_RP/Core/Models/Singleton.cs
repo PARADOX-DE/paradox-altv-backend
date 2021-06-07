@@ -1,10 +1,11 @@
-﻿using System;
+﻿using PARADOX_RP.Core.Interface;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
 namespace PARADOX_RP.Core.Models
 {
-    public class InstanceBase<T>
+    public class InstanceBase<T> : ISingleton
     {
         public static T Instance { get; set; }
     }

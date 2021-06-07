@@ -26,7 +26,7 @@ namespace PARADOX_RP.Utils
 
         public Pools()
         {
-
+            AltAsync.Log("Resolved");
         }
 
         public void Register(int Id, Entity entity)
@@ -68,10 +68,10 @@ namespace PARADOX_RP.Utils
         {
             return poolType switch
             {
-                PoolType.PLAYER => playerPool.Values.ToHashSet() as HashSet<T>,
-                PoolType.VEHICLE => vehiclePool.Values.ToHashSet() as HashSet<T>,
-                PoolType.TEAM_PLAYER => teamPlayerPool[poolId].ToHashSet() as HashSet<T>,
-                _ => playerPool.Values.ToHashSet() as HashSet<T>,
+                PoolType.PLAYER => playerPool?.Values.ToHashSet() as HashSet<T>,
+                PoolType.VEHICLE => vehiclePool?.Values.ToHashSet() as HashSet<T>,
+                PoolType.TEAM_PLAYER => teamPlayerPool[poolId]?.ToHashSet() as HashSet<T>,
+                _ => playerPool?.Values.ToHashSet() as HashSet<T>,
             };
         }
 

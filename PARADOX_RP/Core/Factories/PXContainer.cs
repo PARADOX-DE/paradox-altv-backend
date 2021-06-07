@@ -4,6 +4,7 @@ using Autofac;
 using Microsoft.EntityFrameworkCore;
 using PARADOX_RP.Core.Database;
 using PARADOX_RP.Core.Interface;
+using PARADOX_RP.Core.Models;
 using PARADOX_RP.Core.Module;
 using PARADOX_RP.Game.Inventory.Interfaces;
 using PARADOX_RP.Game.Phone.Interfaces;
@@ -32,6 +33,7 @@ namespace PARADOX_RP.Core.Factories
         private List<Type> _windowTypes = new List<Type>();
         private List<Type> _nativeMenuTypes = new List<Type>();
         private List<Type> _phoneAppTypes = new List<Type>();
+        private List<Type> _singletonTypes = new List<Type>();
 
         internal void RegisterTypes()
         {
@@ -88,6 +90,15 @@ namespace PARADOX_RP.Core.Factories
                 .SingleInstance();
             }
 
+            LogStartup("Loading singletons...");
+            foreach (var singleton in _singletonTypes)
+            {
+                builder.RegisterType(singleton)
+                .AsImplementedInterfaces()
+                .AsSelf()
+                .SingleInstance();
+            }
+
             LogStartup("Loading itemscripts...");
             foreach (var item in _itemTypes)
             {
@@ -118,6 +129,11 @@ namespace PARADOX_RP.Core.Factories
                 _scope.Resolve(type);
             }
 
+            foreach (var type in _singletonTypes)
+            {
+                _scope.Resolve(type);
+            }
+ 
             foreach (var type in _windowTypes)
             {
                 _scope.Resolve(type);
@@ -127,6 +143,7 @@ namespace PARADOX_RP.Core.Factories
             {
                 _scope.Resolve(type);
             }
+
 
             foreach (var type in _phoneAppTypes)
             {
@@ -154,6 +171,10 @@ namespace PARADOX_RP.Core.Factories
                 else if (IsItemType(type))
                 {
                     _itemTypes.Add(type);
+                }
+                else if (IsSingletonType(type))
+                {
+                    _singletonTypes.Add(type);
                 }
                 else if (IsWindowType(type))
                 {
@@ -194,6 +215,16 @@ namespace PARADOX_RP.Core.Factories
                                             type.BaseType != null &&
                                             (type.BaseType == typeof(Window) ||
                                             type.BaseType.IsGenericType) &&
+                                            !type.Name.StartsWith("<");
+        }
+
+        private bool IsSingletonType(Type type)
+        {
+            if (type.Namespace == null) return false;
+            return type.Namespace.StartsWith("PARADOX_RP") &&
+                                            type.BaseType != null &&
+                                            type.IsAssignableTo<ISingleton>() &&
+                                            !type.IsGenericType &&
                                             !type.Name.StartsWith("<");
         }
 

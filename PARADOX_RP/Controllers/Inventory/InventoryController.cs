@@ -59,6 +59,8 @@ namespace PARADOX_RP.Controllers.Inventory
                     TargetId = dbInventory.TargetId
                 };
 
+                /** IF INVENTORY IS VEHICLE ADJUST SLOTS **/
+
                 foreach (InventoryItemAssignments item in dbInventory.Items)
                 {
                     inventory.Items.Add(item.Slot, item);

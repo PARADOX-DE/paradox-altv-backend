@@ -91,6 +91,7 @@ namespace PARADOX_RP.Game.Bank
                 (await px.Players.FindAsync(player.SqlId)).BankMoney = player.BankMoney;
                 await px.SaveChangesAsync();
             }
+            player.SendNotification(_bankName, $"Sie haben erfolgreich {moneyAmount} $ eingezahlt.", NotificationTypes.SUCCESS);
         }
 
         public async void WithdrawMoney(PXPlayer player, int moneyAmount)
@@ -114,6 +115,8 @@ namespace PARADOX_RP.Game.Bank
             }
 
             await player.AddMoney(moneyAmount);
+            player.SendNotification(_bankName, $"Sie haben erfolgreich {moneyAmount} $ ausgezahlt.", NotificationTypes.SUCCESS);
+
         }
         private async void TransferMoney(PXPlayer player, string targetString, int moneyAmount)
         {
@@ -154,6 +157,8 @@ namespace PARADOX_RP.Game.Bank
 
                 await px.SaveChangesAsync();
             }
+            player.SendNotification(_bankName, $"Sie haben erfolgreich {moneyAmount} $ an {targetString} überwiesen.", NotificationTypes.SUCCESS);
+
         }
     }
 }

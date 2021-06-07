@@ -61,13 +61,20 @@ namespace PARADOX_RP.Utils
 
         public HashSet<T> Get<T>(PoolType poolType, int poolId = 0) where T : IEntity
         {
-            return poolType switch
+            try
             {
-                PoolType.PLAYER => playerPool.Values.ToHashSet() as HashSet<T>,
-                PoolType.VEHICLE => vehiclePool.Values.ToHashSet() as HashSet<T>,
-                PoolType.TEAM_PLAYER => teamPlayerPool[poolId] == null ? new List<PXPlayer>().ToHashSet() as HashSet<T> : teamPlayerPool[poolId].ToHashSet() as HashSet<T>,
-                _ => playerPool.Values.ToHashSet() as HashSet<T>,
-            };
+                return poolType switch
+                {
+                    PoolType.PLAYER => playerPool.Values.ToHashSet() as HashSet<T>,
+                    PoolType.VEHICLE => vehiclePool.Values.ToHashSet() as HashSet<T>,
+                    PoolType.TEAM_PLAYER => teamPlayerPool[poolId] == null ? new List<PXPlayer>().ToHashSet() as HashSet<T> : teamPlayerPool[poolId].ToHashSet() as HashSet<T>,
+                    _ => playerPool.Values.ToHashSet() as HashSet<T>,
+                };
+            }
+            catch
+            {
+                return new List<PXPlayer>().ToHashSet() as HashSet<T>;
+            }
         }
 
         public T GetObjectById<T>(PoolType poolType, int objId) where T : IEntity

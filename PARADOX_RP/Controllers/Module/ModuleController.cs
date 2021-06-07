@@ -14,6 +14,7 @@ using PARADOX_RP.Controllers.Login.Interface;
 using PARADOX_RP.Controllers.Event.Interface;
 using PARADOX_RP.Utils.Enums;
 using PARADOX_RP.Core.Events;
+using PARADOX_RP.Controllers.Inventory;
 
 namespace PARADOX_RP.Controllers
 {
@@ -30,6 +31,8 @@ namespace PARADOX_RP.Controllers
         private readonly IEnumerable<IEventPlayerVehicle> _playerVehicleEvents;
         private readonly IEnumerable<IEventColshape> _colshapeEvents;
 
+        private readonly IInventoryController _inventoryController;
+
         public ModuleController(IEnumerable<IModuleBase> modules,
         /*
          * INSERT EVENT ENUMERABLES HERE
@@ -44,7 +47,7 @@ namespace PARADOX_RP.Controllers
         IEnumerable<IEventPlayerVehicle> playerVehicleEvents,
         IEnumerable<IEventColshape> colshapeEvents,
 
-        IEventController eventController, ILoginController loginController, IIntervalController intervalController)
+        IEventController eventController, ILoginController loginController, IIntervalController intervalController, IInventoryController inventoryController)
         {
             _modules = modules;
 
@@ -56,6 +59,8 @@ namespace PARADOX_RP.Controllers
             _playerLoginEvents = playerLoginEvents;
             _playerVehicleEvents = playerVehicleEvents;
             _colshapeEvents = colshapeEvents;
+
+            _inventoryController = inventoryController;
 
             eventController.OnClient<PXPlayer>("Pressed_L", PressedL);
             eventController.OnClient<PXPlayer>("Pressed_I", PressedI);
@@ -206,7 +211,11 @@ namespace PARADOX_RP.Controllers
             PXPlayer pxPlayer = (PXPlayer)player;
 
             if (pxPlayer.LoggedIn)
+            {
+                //Disconnect Logic here, todo: split into another classes
                 Pools.Instance.Remove(pxPlayer.SqlId, pxPlayer);
+                _inventoryController.UnloadInventory(pxPlayer.Inventory.Id);
+            }
 
             await _playerDisconnectEvents.ForEach(e =>
             {

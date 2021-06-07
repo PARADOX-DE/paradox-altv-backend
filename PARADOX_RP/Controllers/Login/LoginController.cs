@@ -84,6 +84,7 @@ namespace PARADOX_RP.Controllers.Login
                                                         .Include(p => p.Team)
                                                         .Include(p => p.PlayerCustomization)
                                                         .Include(p => p.PlayerInjuryData).ThenInclude(p => p.Injury)
+                                                        .Include(p => p.PlayerWeapons)
                                                         .FirstOrDefaultAsync(p => p.Username == userName);
 
                     if (dbPlayer == null) return await Task.FromResult(LoadPlayerResponse.ABORT);

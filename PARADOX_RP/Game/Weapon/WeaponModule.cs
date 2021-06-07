@@ -4,6 +4,7 @@ using AltV.Net.Events;
 using PARADOX_RP.Core.Events;
 using PARADOX_RP.Core.Factories;
 using PARADOX_RP.Core.Module;
+using PARADOX_RP.Game.Moderation;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -22,9 +23,7 @@ namespace PARADOX_RP.Game.Weapon
         public async Task OnPlayerWeaponChange(PXPlayer player, uint oldWeapon, uint newWeapon)
         {
             if (player.PlayerWeapons.FirstOrDefault(p => (uint)p.WeaponHash == newWeapon) == null)
-            {
-                // CHEATED WEAPON
-            }
+                await ModerationModule.Instance.BanPlayer(player);
         }
     }
 }

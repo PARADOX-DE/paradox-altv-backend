@@ -18,6 +18,7 @@ using PARADOX_RP.Game.Arrival;
 using PARADOX_RP.Utils.Enums;
 using PARADOX_RP.Game.Clothing;
 using PARADOX_RP.Controllers.Inventory;
+using PARADOX_RP.Controllers.Weapon.Interface;
 
 namespace PARADOX_RP.Controllers.Login
 {
@@ -30,10 +31,12 @@ namespace PARADOX_RP.Controllers.Login
 
     class LoginController : ILoginController
     {
+        private IWeaponController _weaponController;
         private IInventoryController _inventoryController;
 
-        public LoginController(IInventoryController inventoryController)
+        public LoginController(IWeaponController weaponController, IInventoryController inventoryController)
         {
+            _weaponController = weaponController;
             _inventoryController = inventoryController;
         }
 
@@ -172,10 +175,7 @@ namespace PARADOX_RP.Controllers.Login
                         await player.SetClothes((int)playerClothesWearing.ComponentVariation, playerClothesWearing.Clothing.Drawable, playerClothesWearing.Clothing.Texture);
                     }
 
-                    foreach(PlayerWeapons playerWeapon in dbPlayer.PlayerWeapons)
-                    {
-
-                    }
+                    await _weaponController.LoadWeapons(player, dbPlayer.PlayerWeapons);
 
                     player.Clothes = wearingClothes;
                     await player.PreparePlayer(dbPlayer.Position);

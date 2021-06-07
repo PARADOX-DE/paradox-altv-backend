@@ -18,7 +18,7 @@ namespace PARADOX_RP.Controllers.Weapon
             IEnumerable<PlayerWeapons> _weapons = weapons;
             if (_weapons == null) _weapons = player.PlayerWeapons;
 
-            foreach (var weapon in weapons)
+            foreach (var weapon in _weapons)
             {
                 await player.RemoveAllWeaponsAsync();
                 await player.GiveWeaponAsync((uint)weapon.WeaponHash, weapon.Ammo, false);

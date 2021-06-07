@@ -120,7 +120,7 @@ namespace PARADOX_RP.Core.Factories
         public LocalInventoryData LocalInventoryData { get; set; }
 
         public PlayerCustomization PlayerCustomization { get; set; }
-        public PlayerWeapons PlayerWeapons { get; set; }
+        public IEnumerable<PlayerWeapons> PlayerWeapons { get; set; }
         public PlayerInjuryData PlayerInjuryData { get; set; }
         public PlayerTeamData PlayerTeamData { get; set; }
         public Invitation Invitation { get; set; }

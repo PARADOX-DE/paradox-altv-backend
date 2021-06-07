@@ -149,12 +149,6 @@ namespace PARADOX_RP.Controllers.Login
                     if (player.Inventory == null)
                         player.Inventory = await _inventoryController.CreateInventory(InventoryTypes.PLAYER, player.Id);
 
-
-                    /**/
-                    //player.Clothes = _clothingDictionary;
-
-                    // InventoryModule.Instance.OpenInventory(player);
-
                     if (await ModerationModule.Instance.IsBanned(player))
                     {
                         await player.KickAsync("Du bist gebannt. Für weitere Informationen melde dich im Support!");
@@ -176,6 +170,11 @@ namespace PARADOX_RP.Controllers.Login
                     {
                         wearingClothes[playerClothesWearing.ComponentVariation] = playerClothesWearing.Clothing;
                         await player.SetClothes((int)playerClothesWearing.ComponentVariation, playerClothesWearing.Clothing.Drawable, playerClothesWearing.Clothing.Texture);
+                    }
+
+                    foreach(PlayerWeapons playerWeapon in dbPlayer.PlayerWeapons)
+                    {
+
                     }
 
                     player.Clothes = wearingClothes;

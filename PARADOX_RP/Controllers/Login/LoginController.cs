@@ -77,105 +77,102 @@ namespace PARADOX_RP.Controllers.Login
         {
             try
             {
-                await using (var px = new PXContext())
+                await using var px = new PXContext();
+                Players dbPlayer = await px.Players
+                                                    .Include(p => p.SupportRank).ThenInclude(p => p.PermissionAssignments).ThenInclude(p => p.Permission)
+                                                    .Include(p => p.PlayerClothes).ThenInclude(p => p.Clothing)
+                                                    .Include(p => p.PlayerTeamData)
+                                                    .Include(p => p.Team)
+                                                    .Include(p => p.PlayerCustomization)
+                                                    .Include(p => p.PlayerInjuryData).ThenInclude(p => p.Injury)
+                                                    .Include(p => p.PlayerWeapons)
+                                                    .FirstOrDefaultAsync(p => p.Username == userName);
+
+                if (dbPlayer == null) return await Task.FromResult(LoadPlayerResponse.ABORT);
+                player.LoggedIn = true;
+
+                player.SqlId = dbPlayer.Id;
+                player.Username = dbPlayer.Username;
+                player.SupportRank = dbPlayer.SupportRank;
+                player.Money = dbPlayer.Money;
+                player.BankMoney = dbPlayer.BankMoney;
+                player.Team = dbPlayer.Team;
+
+                /* New-Player Generation */
+
+                if (dbPlayer.PlayerTeamData.FirstOrDefault() == null)
                 {
-                    Players dbPlayer = await px.Players
-                                                        .Include(p => p.SupportRank).ThenInclude(p => p.PermissionAssignments).ThenInclude(p => p.Permission)
-                                                        .Include(p => p.PlayerClothes).ThenInclude(p => p.Clothing)
-                                                        .Include(p => p.PlayerTeamData)
-                                                        .Include(p => p.Team)
-                                                        .Include(p => p.PlayerCustomization)
-                                                        .Include(p => p.PlayerInjuryData).ThenInclude(p => p.Injury)
-                                                        .Include(p => p.PlayerWeapons)
-                                                        .FirstOrDefaultAsync(p => p.Username == userName);
-
-                    if (dbPlayer == null) return await Task.FromResult(LoadPlayerResponse.ABORT);
-                    player.LoggedIn = true;
-
-                    player.SqlId = dbPlayer.Id;
-                    player.Username = dbPlayer.Username;
-                    player.SupportRank = dbPlayer.SupportRank;
-                    player.Money = dbPlayer.Money;
-                    player.BankMoney = dbPlayer.BankMoney;
-                    player.Team = dbPlayer.Team;
-
-                    /* New-Player Generation */
-
-                    if (dbPlayer.PlayerTeamData.FirstOrDefault() == null)
+                    var playerTeamDataInsert = new PlayerTeamData()
                     {
-                        var playerTeamDataInsert = new PlayerTeamData()
-                        {
-                            PlayerId = dbPlayer.Id,
-                            Joined = DateTime.Now,
-                            Rank = 0,
-                            Payday = 0
-                        };
+                        PlayerId = dbPlayer.Id,
+                        Joined = DateTime.Now,
+                        Rank = 0,
+                        Payday = 0
+                    };
 
-                        await px.PlayerTeamData.AddAsync(playerTeamDataInsert);
-                        await px.SaveChangesAsync();
+                    await px.PlayerTeamData.AddAsync(playerTeamDataInsert);
+                    await px.SaveChangesAsync();
 
-                        player.PlayerTeamData = playerTeamDataInsert;
-                    }
-                    else
-                    {
-                        player.PlayerTeamData = dbPlayer.PlayerTeamData.FirstOrDefault();
-                    }
-
-                    // PlayerInjuryData
-                    if (dbPlayer.PlayerInjuryData.FirstOrDefault() == null)
-                    {
-                        var playerInjuryDataInsert = new PlayerInjuryData()
-                        {
-                            PlayerId = dbPlayer.Id,
-                            InjuryId = 1,
-                            InjuryTimeLeft = 0
-                        };
-
-                        await px.PlayerInjuryData.AddAsync(playerInjuryDataInsert);
-                        await px.SaveChangesAsync();
-
-                        player.PlayerInjuryData = playerInjuryDataInsert;
-                    }
-                    else
-                    {
-                        player.PlayerInjuryData = dbPlayer.PlayerInjuryData.FirstOrDefault();
-                    }
-
-                    player.Inventory = await _inventoryController.LoadInventory(InventoryTypes.PLAYER, player.SqlId);
-                    if (player.Inventory == null)
-                        player.Inventory = await _inventoryController.CreateInventory(InventoryTypes.PLAYER, player.Id);
-
-                    if (await ModerationModule.Instance.IsBanned(player))
-                    {
-                        await player.KickAsync("Du bist gebannt. Für weitere Informationen melde dich im Support!");
-                        return await Task.FromResult(LoadPlayerResponse.ABORT);
-                    }
-
-                    Pools.Instance.Register(player.SqlId, player);
-                    await player.EmitAsync("ResponseLoginStatus", "Erfolgreich eingeloggt!");
-
-                    if (dbPlayer.PlayerCustomization.FirstOrDefault() == null)
-                    {
-                        return await Task.FromResult(LoadPlayerResponse.NEW_PLAYER);
-                    }
-
-                    await player?.EmitAsync("ApplyPlayerCharacter", dbPlayer.PlayerCustomization.FirstOrDefault().Customization);
-
-                    Dictionary<ComponentVariation, Clothes> wearingClothes = new Dictionary<ComponentVariation, Clothes>();
-                    foreach (PlayerClothesWearing playerClothesWearing in dbPlayer.PlayerClothes)
-                    {
-                        wearingClothes[playerClothesWearing.ComponentVariation] = playerClothesWearing.Clothing;
-                        await player.SetClothes((int)playerClothesWearing.ComponentVariation, playerClothesWearing.Clothing.Drawable, playerClothesWearing.Clothing.Texture);
-                    }
-
-                    await _weaponController.LoadWeapons(player, dbPlayer.PlayerWeapons);
-
-                    player.Clothes = wearingClothes;
-                    await player.PreparePlayer(dbPlayer.Position);
-
-                    return await Task.FromResult(LoadPlayerResponse.SUCCESS);
-
+                    player.PlayerTeamData = playerTeamDataInsert;
                 }
+                else
+                {
+                    player.PlayerTeamData = dbPlayer.PlayerTeamData.FirstOrDefault();
+                }
+
+                // PlayerInjuryData
+                if (dbPlayer.PlayerInjuryData.FirstOrDefault() == null)
+                {
+                    var playerInjuryDataInsert = new PlayerInjuryData()
+                    {
+                        PlayerId = dbPlayer.Id,
+                        InjuryId = 1,
+                        InjuryTimeLeft = 0
+                    };
+
+                    await px.PlayerInjuryData.AddAsync(playerInjuryDataInsert);
+                    await px.SaveChangesAsync();
+
+                    player.PlayerInjuryData = playerInjuryDataInsert;
+                }
+                else
+                {
+                    player.PlayerInjuryData = dbPlayer.PlayerInjuryData.FirstOrDefault();
+                }
+
+                player.Inventory = await _inventoryController.LoadInventory(InventoryTypes.PLAYER, player.SqlId);
+                if (player.Inventory == null)
+                    player.Inventory = await _inventoryController.CreateInventory(InventoryTypes.PLAYER, player.Id);
+
+                if (await ModerationModule.Instance.IsBanned(player))
+                {
+                    await player.KickAsync("Du bist gebannt. Für weitere Informationen melde dich im Support!");
+                    return await Task.FromResult(LoadPlayerResponse.ABORT);
+                }
+
+                Pools.Instance.Register(player.SqlId, player);
+                await player.EmitAsync("ResponseLoginStatus", "Erfolgreich eingeloggt!");
+
+                if (dbPlayer.PlayerCustomization.FirstOrDefault() == null)
+                {
+                    return await Task.FromResult(LoadPlayerResponse.NEW_PLAYER);
+                }
+
+                await player?.EmitAsync("ApplyPlayerCharacter", dbPlayer.PlayerCustomization.FirstOrDefault().Customization);
+
+                Dictionary<ComponentVariation, Clothes> wearingClothes = new Dictionary<ComponentVariation, Clothes>();
+                foreach (PlayerClothesWearing playerClothesWearing in dbPlayer.PlayerClothes)
+                {
+                    wearingClothes[playerClothesWearing.ComponentVariation] = playerClothesWearing.Clothing;
+                    await player.SetClothes((int)playerClothesWearing.ComponentVariation, playerClothesWearing.Clothing.Drawable, playerClothesWearing.Clothing.Texture);
+                }
+
+                await _weaponController.LoadWeapons(player, dbPlayer.PlayerWeapons);
+
+                player.Clothes = wearingClothes;
+                await player.PreparePlayer(dbPlayer.Position);
+
+                return await Task.FromResult(LoadPlayerResponse.SUCCESS);
             }
             catch (Exception e) { Alt.Log("Failed to load player | " + e.Message); }
             return await Task.FromResult(LoadPlayerResponse.ABORT);

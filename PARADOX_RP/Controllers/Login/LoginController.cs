@@ -57,7 +57,6 @@ namespace PARADOX_RP.Controllers.Login
                 {
                     if (BCrypt.Net.BCrypt.Verify(hashedPassword, dbPlayer.Password))
                     {
-                        if (Configuration.Instance.DevMode) Alt.Log($"[DEVMODE] {dbPlayer.Username} requested Login.");
                         await player.EmitAsync("ResponseLoginStatus", "Anmeldevorgang erfolgreich, lade Daten...");
                         return await Task.FromResult(true);
                     }
@@ -116,12 +115,9 @@ namespace PARADOX_RP.Controllers.Login
                         await px.SaveChangesAsync();
 
                         player.PlayerTeamData = playerTeamDataInsert;
-
-                        Alt.Log("FraktionsData-Objekt generiert.");
                     }
                     else
                     {
-                        Alt.Log("FraktionsData-Objekt existiert bereits.");
                         player.PlayerTeamData = dbPlayer.PlayerTeamData.FirstOrDefault();
                     }
 
@@ -139,12 +135,9 @@ namespace PARADOX_RP.Controllers.Login
                         await px.SaveChangesAsync();
 
                         player.PlayerInjuryData = playerInjuryDataInsert;
-
-                        Alt.Log("Injury-Objekt generiert.");
                     }
                     else
                     {
-                        Alt.Log("Injury-Objekt existiert bereits.");
                         player.PlayerInjuryData = dbPlayer.PlayerInjuryData.FirstOrDefault();
                     }
 

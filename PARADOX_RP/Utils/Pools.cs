@@ -67,7 +67,7 @@ namespace PARADOX_RP.Utils
                 {
                     PoolType.PLAYER => playerPool.Values.ToHashSet() as HashSet<T>,
                     PoolType.VEHICLE => vehiclePool.Values.ToHashSet() as HashSet<T>,
-                    PoolType.TEAM_PLAYER => teamPlayerPool[poolId] == null ? new List<PXPlayer>().ToHashSet() as HashSet<T> : teamPlayerPool[poolId].ToHashSet() as HashSet<T>,
+                    PoolType.TEAM_PLAYER => teamPlayerPool[poolId].ToHashSet() as HashSet<T>,
                     _ => playerPool.Values.ToHashSet() as HashSet<T>,
                 };
             }

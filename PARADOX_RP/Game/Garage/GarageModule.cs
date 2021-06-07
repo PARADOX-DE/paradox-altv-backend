@@ -226,6 +226,8 @@ namespace PARADOX_RP.Game.Garage
                 }
 
                 dbVehicle.Parked = true;
+                dbVehicle.GarageId = dbGarage.Id;
+
                 await px.SaveChangesAsync();
 
                 await _vehicleController.RemoveVehicle(vehicle);

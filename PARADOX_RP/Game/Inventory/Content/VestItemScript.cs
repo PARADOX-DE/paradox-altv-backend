@@ -1,5 +1,7 @@
 ﻿using AltV.Net.Async;
+using PARADOX_RP.Core.Factories;
 using PARADOX_RP.Game.Inventory.Interfaces;
+using PARADOX_RP.Game.Misc.Progressbar.Extensions;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -11,10 +13,20 @@ namespace PARADOX_RP.Game.Inventory.Content
     {
         public string ScriptName => "vest_itemscript";
 
-        public async Task<bool> UseItem()
+        private const int VEST_DURATION = 4 * 1000;
+
+        public async Task<bool> UseItem(PXPlayer player)
         {
-            AltAsync.Log("Used Item Vest");
-            return true;
+            await player.PlayAnimation("anim@heists@narcotics@funding@gang_idle", "gang_chatting_idle01");
+
+            bool finishedProgressbar = await player.RunProgressBar(async () =>
+            {
+                await player.SetArmorAsync(100);
+            }, "Schutzweste", "Du ziehst nun eine Schutzweste...", VEST_DURATION);
+
+            await player.StopAnimation();
+
+            return finishedProgressbar;
         }
     }
 }

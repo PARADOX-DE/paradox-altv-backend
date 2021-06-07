@@ -1,4 +1,5 @@
 ﻿using AltV.Net.Async;
+using PARADOX_RP.Core.Factories;
 using PARADOX_RP.Game.Inventory.Interfaces;
 using System;
 using System.Collections.Generic;
@@ -11,10 +12,15 @@ namespace PARADOX_RP.Game.Inventory.Content
     {
         public string ScriptName => "phone_itemscript";
 
-        public async Task<bool> UseItem()
+        public Task<bool> UseItem(PXPlayer player) 
         {
+            player.HasPhone = !player.HasPhone;
+            if (player.HasPhone)
+                player.SendNotification("Smartphone", "Du hast dein Smartphone angeschalten.", NotificationTypes.SUCCESS);
+            else
+                player.SendNotification("Smartphone", "Du hast dein Smartphone ausgeschalten.", NotificationTypes.SUCCESS);
 
-            return false;
+            return Task.FromResult(false);
         }
     }
 }

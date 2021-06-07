@@ -2,6 +2,7 @@
 using AltV.Net.Async;
 using AltV.Net.Elements.Entities;
 using PARADOX_RP.Core.Factories;
+using PARADOX_RP.Core.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,10 +17,8 @@ namespace PARADOX_RP.Utils
         TEAM_PLAYER
     }
 
-    class Pools
+    class Pools : Singleton<Pools>
     {
-
-        public static Pools Instance { get; } = new Pools();
 
         private readonly Dictionary<int, PXPlayer> playerPool = new Dictionary<int, PXPlayer>();
         private readonly Dictionary<int, PXVehicle> vehiclePool = new Dictionary<int, PXVehicle>();

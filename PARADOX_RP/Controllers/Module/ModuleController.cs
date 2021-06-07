@@ -27,6 +27,7 @@ namespace PARADOX_RP.Controllers
         private readonly IEnumerable<IEventPlayerDeath> _playerDeathEvents;
         private readonly IEnumerable<IEventPlayerConnect> _playerConnectEvents;
         private readonly IEnumerable<IEventPlayerDisconnect> _playerDisconnectEvents;
+        private readonly IEnumerable<IEventPlayerWeaponChange> _playerWeaponChangeEvents;
         private readonly IEnumerable<IEventPlayerLogin> _playerLoginEvents;
         private readonly IEnumerable<IEventPlayerVehicle> _playerVehicleEvents;
         private readonly IEnumerable<IEventColshape> _colshapeEvents;
@@ -43,6 +44,7 @@ namespace PARADOX_RP.Controllers
         IEnumerable<IEventPlayerDeath> playerDeathEvents,
         IEnumerable<IEventPlayerConnect> playerConnectEvents,
         IEnumerable<IEventPlayerDisconnect> playerDisconnectEvents,
+        IEnumerable<IEventPlayerWeaponChange> playerWeaponChangeEvents,
         IEnumerable<IEventPlayerLogin> playerLoginEvents,
         IEnumerable<IEventPlayerVehicle> playerVehicleEvents,
         IEnumerable<IEventColshape> colshapeEvents,
@@ -56,6 +58,7 @@ namespace PARADOX_RP.Controllers
             _playerDeathEvents = playerDeathEvents;
             _playerConnectEvents = playerConnectEvents;
             _playerDisconnectEvents = playerDisconnectEvents;
+            _playerWeaponChangeEvents = playerWeaponChangeEvents;
             _playerLoginEvents = playerLoginEvents;
             _playerVehicleEvents = playerVehicleEvents;
             _colshapeEvents = colshapeEvents;
@@ -72,6 +75,7 @@ namespace PARADOX_RP.Controllers
             AltAsync.OnPlayerDead += OnPlayerDead;
             AltAsync.OnPlayerConnect += PlayerConnectDebug;
             AltAsync.OnPlayerDisconnect += OnPlayerDisconnect;
+            AltAsync.OnPlayerWeaponChange += OnPlayerWeaponChange;
             AltAsync.OnColShape += OnColShape;
             AltAsync.OnPlayerEnterVehicle += OnPlayerEnterVehicle;
             AltAsync.OnPlayerLeaveVehicle += OnPlayerLeaveVehicle;
@@ -86,6 +90,19 @@ namespace PARADOX_RP.Controllers
                     if (e.Enabled)
                         await e.OnEveryMinute();
                 });
+            });
+        }
+
+        private async Task OnPlayerWeaponChange(IPlayer client, uint oldWeapon, uint newWeapon)
+        {
+            PXPlayer player = (PXPlayer)client;
+
+            if (!player.LoggedIn) return;
+
+            await _playerWeaponChangeEvents.ForEach(async e =>
+            {
+                if (e.Enabled)
+                    await e.OnPlayerWeaponChange(player, oldWeapon, newWeapon);
             });
         }
 

@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Newtonsoft.Json;
 using PARADOX_RP.Core.Database;
 using PARADOX_RP.Core.Database.Models;
+using PARADOX_RP.Core.Factories;
 using PARADOX_RP.Game.Inventory;
 using PARADOX_RP.Game.Inventory.Interfaces;
 using PARADOX_RP.Game.Inventory.Models;

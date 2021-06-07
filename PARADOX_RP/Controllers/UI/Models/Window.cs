@@ -21,8 +21,7 @@ namespace PARADOX_RP.UI.Models
             this.Enabled = Enabled;
         }
 
-        public void ViewCallback(PXPlayer player, string EventName, params object[] args) => player.EmitLocked("ViewCallback", WindowName, EventName, args);
-
+        public void ViewCallback(PXPlayer player, string EventName, object windowWriter = null) => player.EmitLocked("ViewCallback", WindowName, EventName, windowWriter);
 
         public void Show(PXPlayer player, object windowObject = null)
         {

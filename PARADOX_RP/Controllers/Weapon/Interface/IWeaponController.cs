@@ -11,8 +11,8 @@ namespace PARADOX_RP.Controllers.Weapon.Interface
 {
     interface IWeaponController
     {
-        Task LoadWeapons(PXPlayer player, IEnumerable<PlayerWeapons> weapons = null);
+        Task LoadWeapons(PXPlayer player, ICollection<PlayerWeapons> weapons = null);
         Task AddWeapon(PXPlayer player, WeaponModel weapon);
-
+        Task<bool> AddAmmo(PXPlayer player, WeaponModel weapon, int ammo);
     }
 }

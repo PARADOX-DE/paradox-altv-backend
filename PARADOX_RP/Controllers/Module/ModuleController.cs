@@ -169,7 +169,7 @@ namespace PARADOX_RP.Controllers
             await _keyPressedEvents.ForEach(async e =>
             {
                 if (e.Enabled)
-                    if (await e.OnKeyPress(player, Utils.Enums.KeyEnumeration.I)) return false;
+                    if (await e.OnKeyPress(player, KeyEnumeration.I)) return false;
 
                 return true;
             });
@@ -182,7 +182,7 @@ namespace PARADOX_RP.Controllers
             await _keyPressedEvents.ForEach(async e =>
             {
                 if (e.Enabled)
-                    if (await e.OnKeyPress(player, Utils.Enums.KeyEnumeration.Y)) return false;
+                    if (await e.OnKeyPress(player, KeyEnumeration.Y)) return false;
 
                 return true;
             });
@@ -208,7 +208,7 @@ namespace PARADOX_RP.Controllers
             await _keyPressedEvents.ForEach(async e =>
             {
                 if (e.Enabled)
-                    if (await e.OnKeyPress(player, Utils.Enums.KeyEnumeration.F9)) return false;
+                    if (await e.OnKeyPress(player, KeyEnumeration.F9)) return false;
 
                 return true;
             });

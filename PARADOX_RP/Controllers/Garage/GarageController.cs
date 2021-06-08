@@ -24,7 +24,7 @@ namespace PARADOX_RP.Controllers.Garage
 
             await garage.Spawns.ForEach(async spawn =>
             {
-                PXVehicle vehicle = Pools.Instance.Get<PXVehicle>(PoolType.VEHICLE).FirstOrDefault(veh => veh.Position.Distance(spawn.Spawn_Position) < 5);
+                PXVehicle vehicle = Pools.Instance.Get<PXVehicle>(PoolType.VEHICLE).FirstOrDefault(veh => veh.Position.Distance(spawn.Spawn_Position) < 3);
                 if (vehicle == null)
                 {
                     _freeSpawn = spawn;

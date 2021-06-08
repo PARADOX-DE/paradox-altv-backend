@@ -56,7 +56,7 @@ namespace PARADOX_RP.Game.GasStation
         {
             _GasStations.ForEach((gs) =>
             {
-                player.AddBlips($"Tankstelle", gs.Value.Position, 361, 81, 1, true);
+                player.AddBlips(gs.Value.Name, gs.Value.Position, 361, 81, 1, true);
             });
         }
 

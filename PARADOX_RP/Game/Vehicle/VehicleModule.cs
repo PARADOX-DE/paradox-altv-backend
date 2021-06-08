@@ -52,6 +52,17 @@ namespace PARADOX_RP.Game.Vehicle
             PXVehicle vehicle = Pools.Instance.Get<PXVehicle>(PoolType.VEHICLE).FirstOrDefault(v => v.SqlId == inventory.TargetId);
             if (vehicle != null)
             {
+                Position vehiclePosition;
+                Position playerPosition;
+
+                lock (vehicle)
+                    vehiclePosition = vehicle.Position;
+
+                lock (player)
+                    playerPosition = player.Position;
+
+                if (vehiclePosition.Distance(playerPosition) > 3) return Task.FromResult<bool?>(false);
+
                 if (Configuration.Instance.DevMode)
                 {
                     AltAsync.Log("Inventory can access: " + vehicle.Inventory.InventoryInfo.InventoryType + " " + vehicle.Inventory.Id);

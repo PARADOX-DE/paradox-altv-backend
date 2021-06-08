@@ -49,12 +49,12 @@ namespace PARADOX_RP.Game.Inventory
             _inventoryHandler = inventoryHandler;
             _inventories = inventories;
             _itemScripts = itemScripts;
-            
+
             LoadDatabaseTable<Items>(pxContext.Items, (i) => _items.Add(i.Id, i));
             LoadDatabaseTable<InventoryInfo>(pxContext.InventoryInfo, (i) => _inventoryInfo.Add((int)i.InventoryType, i));
             //itemScripts.FirstOrDefault(i => i.ScriptName == "vest_itemscript").UseItem();
 
-            eventController.OnClient<PXPlayer, int, int, int, bool>("MoveInventoryItem", MoveInventoryItem);
+            eventController.OnClient<PXPlayer, int, int, int, bool, bool>("MoveInventoryItem", MoveInventoryItem);
             eventController.OnClient<PXPlayer, int>("UseItem", UseItem);
         }
 
@@ -77,10 +77,90 @@ namespace PARADOX_RP.Game.Inventory
             await _inventoryHandler.UseItem(player, localInventoryData.PlayerInventory, Slot);
         }
 
-        private void MoveInventoryItem(PXPlayer player, int OldSlot, int NewSlot, int Amount, bool ToAdditional)
+        private async void MoveInventoryItem(PXPlayer player, int OldSlot, int NewSlot, int Amount, bool ToAdditional, bool FromAdditional)
         {
             LocalInventoryData localInventoryData = player.LocalInventoryData;
             if (localInventoryData == null) return;
+
+            // idk if its good, maybe rework some days 
+
+            if (localInventoryData.AdditionalInventory == null && (ToAdditional || FromAdditional))
+            {
+                // Spieler will in 2. Inventar Item ziehen -> Aber Inventar existiert nicht.
+                return;
+            }
+
+            if (FromAdditional || ToAdditional)
+            {
+                //Spieler will interagieren mit 2. Inventar
+                bool? CanAccess = await CanAccessInventory(localInventoryData.AdditionalInventory, player);
+                if (CanAccess != true)
+                {
+                    // Inventar ist nicht mehr zugreifbar
+                    player.SendNotification("Inventar", "Auf dieses Inventar ist nicht mehr zugreifbar.", NotificationTypes.ERROR);
+                    WindowController.Instance.Get<InventoryWindow>().Hide(player);
+                    return;
+                }
+
+                // second inventory -> second inventory
+                if (FromAdditional && ToAdditional)
+                {
+                    if (localInventoryData.AdditionalInventory.Items.TryGetValue(OldSlot, out InventoryItemAssignments OldSlotItem)) // prüfe ob auf alten Slot das Item verfügbar ist
+                    {
+                        if (OldSlotItem.Amount < 1) return;
+                        if (localInventoryData.AdditionalInventory.Items.TryGetValue(NewSlot, out _)) return; //prüfe ob auf neuen Slot bereits ein Item ist
+
+                        localInventoryData.AdditionalInventory.Items.ChangeKey(OldSlotItem.Slot, NewSlot);
+                        OldSlotItem.Slot = NewSlot;
+                    }
+                }
+
+                // second inventory -> main inventory
+                if (FromAdditional && !ToAdditional)
+                {
+                    if (localInventoryData.AdditionalInventory.Items.TryGetValue(OldSlot, out InventoryItemAssignments OldSlotItem)) // prüfe ob auf alten Slot das Item verfügbar ist
+                    {
+                        if (OldSlotItem.Amount < 1) return;
+                        if (localInventoryData.PlayerInventory.Items.TryGetValue(NewSlot, out _)) return; //prüfe ob auf neuen Slot bereits ein Item ist
+
+                        localInventoryData.AdditionalInventory.Items.Remove(OldSlot);
+
+                        OldSlotItem.Slot = NewSlot;
+                        localInventoryData.PlayerInventory.Items.Add(OldSlotItem.Slot, OldSlotItem);
+                    }
+                }
+
+                // main inventory -> second inventory
+                if (!FromAdditional && ToAdditional)
+                {
+                    if (localInventoryData.PlayerInventory.Items.TryGetValue(OldSlot, out InventoryItemAssignments OldSlotItem)) // prüfe ob auf alten Slot das Item verfügbar ist
+                    {
+                        if (OldSlotItem.Amount < 1) return;
+                        if (localInventoryData.AdditionalInventory.Items.TryGetValue(NewSlot, out _)) return; //prüfe ob auf neuen Slot bereits ein Item ist
+
+                        localInventoryData.PlayerInventory.Items.Remove(OldSlot);
+
+                        OldSlotItem.Slot = NewSlot;
+                        localInventoryData.AdditionalInventory.Items.Add(OldSlotItem.Slot, OldSlotItem);
+                    }
+                }
+            }
+
+            // main inventory -> main inventory
+            if(!FromAdditional && !ToAdditional)
+            {
+                if (localInventoryData.PlayerInventory.Items.TryGetValue(OldSlot, out InventoryItemAssignments OldSlotItem)) // prüfe ob auf alten Slot das Item verfügbar ist
+                {
+                    if (OldSlotItem.Amount < 1) return;
+                    if (localInventoryData.PlayerInventory.Items.TryGetValue(NewSlot, out _)) return; //prüfe ob auf neuen Slot bereits ein Item ist
+
+                    localInventoryData.PlayerInventory.Items.ChangeKey(OldSlotItem.Slot, NewSlot);
+                    OldSlotItem.Slot = NewSlot;
+                }
+            }
+
+            //TODO: animation library
+            await player.PlayAnimation("mp_safehousevagos@", "package_dropoff", 9, 2000);
 
         }
 

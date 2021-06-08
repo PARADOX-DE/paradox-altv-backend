@@ -182,6 +182,8 @@ namespace PARADOX_RP.Controllers.Login
         {
             foreach (PXPlayer player in Pools.Instance.Get<PXPlayer>(PoolType.PLAYER))
             {
+                if (!player.LoggedIn) continue;
+
                 await using (var px = new PXContext())
                 {
                     Players dbPlayer = await px.Players.FindAsync(player.SqlId);

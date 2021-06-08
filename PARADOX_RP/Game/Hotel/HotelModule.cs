@@ -26,7 +26,7 @@ namespace PARADOX_RP.Game.Hotel
         public void OnPlayerConnect(PXPlayer player)
         {
             /* CREATE HOTEL BLIP */
-            player.AddBlips(_hotelName, _blipPosition, 475, 56, 1, true);
+            player.AddBlips(_hotelName, _blipPosition, 181, 0, 1, true);
         }
     }
 }

@@ -52,13 +52,7 @@ namespace PARADOX_RP.Game.GasStation
 
             _eventController.OnClient<PXPlayer, int, string, int>("PayGasStation", PayGasStation);
         }
-        public void OnPlayerConnect(PXPlayer player)
-        {
-            _GasStations.ForEach((gs) =>
-            {
-                player.AddBlips(gs.Value.Name, gs.Value.Position, 361, 81, 1, true);
-            });
-        }
+        public void OnPlayerConnect(PXPlayer player) =>_GasStations.ForEach((gs) => player.AddBlips(gs.Value.Name, gs.Value.Position, 361, 81, 1, true));
 
         public async Task<bool> OnKeyPress(PXPlayer player, KeyEnumeration key)
         {

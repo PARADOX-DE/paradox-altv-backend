@@ -24,6 +24,7 @@ namespace PARADOX_RP.Game.Bank
 {
     class BankModule : ModuleBase<BankModule>, IEventKeyPressed, IEventPlayerConnect, IEventModuleLoad
     {
+        private readonly string _bankName = "N26 Bank";
         private Dictionary<int, BankATMs> _BankATMs = new Dictionary<int, BankATMs>();
 
         public BankModule(PXContext px, IEventController eventController) : base("Bank")
@@ -56,8 +57,6 @@ namespace PARADOX_RP.Game.Bank
             if (Configuration.Instance.DevMode)
                 _BankATMs.ForEach((atm) => MarkerStreamer.Create(MarkerTypes.MarkerTypeDallorSign, Vector3.Add(atm.Value.Position, new Vector3(0, 0, 1)), new Vector3(1, 1, 1), null, null, new Rgba(37, 165, 202, 200)));
         }
-
-        private readonly string _bankName = "N26 Bank";
 
         public Task<bool> OnKeyPress(PXPlayer player, KeyEnumeration key)
         {
@@ -116,8 +115,8 @@ namespace PARADOX_RP.Game.Bank
 
             await player.AddMoney(moneyAmount);
             player.SendNotification(_bankName, $"Sie haben erfolgreich {moneyAmount} $ ausgezahlt.", NotificationTypes.SUCCESS);
-
         }
+
         private async void TransferMoney(PXPlayer player, string targetString, int moneyAmount)
         {
             if (!player.IsValid()) return;
@@ -157,8 +156,8 @@ namespace PARADOX_RP.Game.Bank
 
                 await px.SaveChangesAsync();
             }
-            player.SendNotification(_bankName, $"Sie haben erfolgreich {moneyAmount} $ an {targetString} überwiesen.", NotificationTypes.SUCCESS);
 
+            player.SendNotification(_bankName, $"Sie haben erfolgreich {moneyAmount} $ an {targetString} überwiesen.", NotificationTypes.SUCCESS);
         }
     }
 }

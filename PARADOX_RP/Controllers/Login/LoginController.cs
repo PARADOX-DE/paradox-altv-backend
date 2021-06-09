@@ -142,7 +142,8 @@ namespace PARADOX_RP.Controllers.Login
 
                 player.Inventory = await _inventoryController.LoadInventory(InventoryTypes.PLAYER, player.SqlId);
                 if (player.Inventory == null)
-                    player.Inventory = await _inventoryController.CreateInventory(InventoryTypes.PLAYER, player.Id);
+                    player.Inventory = await _inventoryController.CreateInventory(InventoryTypes.PLAYER, player.SqlId);
+
 
                 if (await ModerationModule.Instance.IsBanned(player))
                 {
@@ -150,7 +151,12 @@ namespace PARADOX_RP.Controllers.Login
                     return await Task.FromResult(LoadPlayerResponse.ABORT);
                 }
 
-                Pools.Instance.Register(player.SqlId, player);
+                try
+                {
+                    Pools.Instance.Register(player.SqlId, player);
+                }
+                catch { Alt.Log("pool"); }
+
                 await player.EmitAsync("ResponseLoginStatus", "Erfolgreich eingeloggt!");
 
                 if (dbPlayer.PlayerCustomization.FirstOrDefault() == null)
@@ -160,12 +166,14 @@ namespace PARADOX_RP.Controllers.Login
 
                 await player?.EmitAsync("ApplyPlayerCharacter", dbPlayer.PlayerCustomization.FirstOrDefault().Customization);
 
+
                 Dictionary<ComponentVariation, Clothes> wearingClothes = new Dictionary<ComponentVariation, Clothes>();
                 foreach (PlayerClothesWearing playerClothesWearing in dbPlayer.PlayerClothes)
                 {
                     wearingClothes[playerClothesWearing.ComponentVariation] = playerClothesWearing.Clothing;
                     await player.SetClothes((int)playerClothesWearing.ComponentVariation, playerClothesWearing.Clothing.Drawable, playerClothesWearing.Clothing.Texture);
                 }
+
 
                 await _weaponController.LoadWeapons(player, dbPlayer.PlayerWeapons);
 
@@ -174,7 +182,7 @@ namespace PARADOX_RP.Controllers.Login
 
                 return await Task.FromResult(LoadPlayerResponse.SUCCESS);
             }
-            catch (Exception e) { Alt.Log("Failed to load player | " + e.Message); }
+            catch (Exception e) { Alt.Log("Failed to load player | " + e.Message); Alt.Log(e.StackTrace); }
             return await Task.FromResult(LoadPlayerResponse.ABORT);
         }
 

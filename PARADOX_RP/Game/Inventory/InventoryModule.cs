@@ -112,6 +112,11 @@ namespace PARADOX_RP.Game.Inventory
 
                         localInventoryData.AdditionalInventory.Items.ChangeKey(OldSlotItem.Slot, NewSlot);
                         OldSlotItem.Slot = NewSlot;
+
+                        await using var px = new PXContext();
+                        var dbItem = await px.InventoryItemAssignments.FindAsync(OldSlotItem.Id);
+                        dbItem.Slot = NewSlot;
+                        await px.SaveChangesAsync();
                     }
                 }
 
@@ -127,6 +132,12 @@ namespace PARADOX_RP.Game.Inventory
 
                         OldSlotItem.Slot = NewSlot;
                         localInventoryData.PlayerInventory.Items.Add(OldSlotItem.Slot, OldSlotItem);
+
+                        await using var px = new PXContext();
+                        var dbItem = await px.InventoryItemAssignments.FindAsync(OldSlotItem.Id);
+                        dbItem.Slot = NewSlot;
+                        dbItem.InventoryId = localInventoryData.PlayerInventory.Id;
+                        await px.SaveChangesAsync();
                     }
                 }
 
@@ -142,6 +153,12 @@ namespace PARADOX_RP.Game.Inventory
 
                         OldSlotItem.Slot = NewSlot;
                         localInventoryData.AdditionalInventory.Items.Add(OldSlotItem.Slot, OldSlotItem);
+
+                        await using var px = new PXContext();
+                        var dbItem = await px.InventoryItemAssignments.FindAsync(OldSlotItem.Id);
+                        dbItem.Slot = NewSlot;
+                        dbItem.InventoryId = localInventoryData.AdditionalInventory.Id;
+                        await px.SaveChangesAsync();
                     }
                 }
             }
@@ -156,6 +173,11 @@ namespace PARADOX_RP.Game.Inventory
 
                     localInventoryData.PlayerInventory.Items.ChangeKey(OldSlotItem.Slot, NewSlot);
                     OldSlotItem.Slot = NewSlot;
+
+                    await using var px = new PXContext();
+                    var dbItem = await px.InventoryItemAssignments.FindAsync(OldSlotItem.Id);
+                    dbItem.Slot = NewSlot;
+                    await px.SaveChangesAsync();
                 }
             }
 

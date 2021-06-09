@@ -42,6 +42,7 @@ namespace PARADOX_RP.Controllers.Inventory
                 if (dbInventory == null)
                 {
                     //TODO: add logger
+                    Alt.Log("inv == null");
                     return null;
                 }
 

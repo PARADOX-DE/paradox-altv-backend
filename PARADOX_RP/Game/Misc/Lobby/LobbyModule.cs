@@ -24,6 +24,5 @@ namespace PARADOX_RP.Game.Lobby
         {
             return lobby.OwnerId;
         }
-
     }
 }

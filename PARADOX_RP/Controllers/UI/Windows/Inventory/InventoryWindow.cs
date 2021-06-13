@@ -56,6 +56,9 @@ namespace PARADOX_RP.UI.Windows.Inventory
                     writer.Name("name");
                     writer.Value(itemInfo.Name);
 
+                    writer.Name("image_name");
+                    writer.Value(itemInfo.ImageName);
+
                     writer.Name("amount");
                     writer.Value(item.Value.Amount);
 

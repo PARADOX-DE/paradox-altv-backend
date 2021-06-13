@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using AltV.Net.Async.Elements.Refs;
+using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 using PARADOX_RP.Controllers.Event.Interface;
 using PARADOX_RP.Controllers.Vehicle.Interface;
@@ -84,19 +85,22 @@ namespace PARADOX_RP.Game.Shop
 
             if (await player.TakeMoney(cartPrice))
             {
-                string CartNotificationString = "";
+                string CartNotificationString = "Sie haben ";
                 shopCart.ForEach((shopItem) =>
                 {
                     ShopItems dbShopItem = dbShop.Items.FirstOrDefault((i) => i.Id == shopItem.id);
                     if (dbShopItem == null) return;
 
-                    CartNotificationString += $"Sie haben {shopItem.amount}x {dbShopItem.Item.Name} gekauft.\\n";
+                    CartNotificationString += $"{shopItem.amount}x {dbShopItem.Item.Name},";
                 });
+                CartNotificationString = CartNotificationString.Remove(CartNotificationString.Length - 1);
+                CartNotificationString += " gekauft.";
+
                 player.SendNotification(ModuleName, CartNotificationString, NotificationTypes.SUCCESS);
             }
             else
             {
-                player.SendNotification(ModuleName, $"Du hast nicht genügend Geld. Benötigt: {cartPrice} $", NotificationTypes.ERROR);
+                player.SendNotification(ModuleName, $"Dir fehlen {cartPrice - player.Money}$ um dir das zu kaufen.", NotificationTypes.ERROR);
             }
         }
 

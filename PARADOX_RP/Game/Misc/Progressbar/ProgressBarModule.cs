@@ -1,4 +1,5 @@
 ﻿using AltV.Net.Async;
+using AltV.Net.Async.Elements.Refs;
 using Newtonsoft.Json;
 using PARADOX_RP.Core.Factories;
 using PARADOX_RP.Core.Module;
@@ -19,12 +20,18 @@ namespace PARADOX_RP.Game.Misc.Progressbar
         public async Task<bool> RunProgressBar(PXPlayer player, Func<Task> action, string title, string message, int duration)
         {
             // WindowManager.Instance.Get<ProgressBarWindow>().Show(player, JsonConvert.SerializeObject(new ProgressBarWindowObject(duration)));
+            using var playerRef = new AsyncPlayerRef(player);
+
+            if (!playerRef.Exists) return false;
+            playerRef.DebugCountUp();
 
             await player.EmitAsync("Progress::Start", title, message, duration);
 
             player.CancellationToken = new CancellationTokenSource();
             bool result = await Task.Delay(duration, player.CancellationToken.Token).ContinueWith(task => !task.IsCanceled);
             if (result && player != null && await player.ExistsAsync()) await action();
+
+            playerRef.DebugCountDown();
 
             return result;
         }

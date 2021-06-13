@@ -28,16 +28,15 @@ namespace PARADOX_RP.Game.Shop
         public ShopModule(PXContext px, IEventController eventController, IVehicleController vehicleController) : base("GasStation")
         {
             _eventController = eventController;
-            _vehicleController = vehicleController; ;
+            _vehicleController = vehicleController;
 
             LoadDatabaseTable(px.Shops.Include(s => s.Items), (Shops sp) =>
             {
                 _shops.Add(sp.Id, sp);
             });
 
-            //_eventController.OnClient<PXPlayer, int, string, int>("PayShop", PayShop);
+            _eventController.OnClient<PXPlayer, int, string, int>("PayShop", PayShop);
         }
-
         public void OnPlayerConnect(PXPlayer player)
         {
             _shops.ForEach((sp) => player.AddBlips(sp.Value.Name, sp.Value.Position, 52, 2, 1, true));
@@ -55,6 +54,11 @@ namespace PARADOX_RP.Game.Shop
             WindowController.Instance.Get<ShopWindow>().Show(player, new ShopWindowWriter(dbShop.Id, dbShop.Items));
 
             return await Task.FromResult(true);
+        }
+
+        private void PayShop(PXPlayer arg1, int arg2, string arg3, int arg4)
+        {
+            throw new NotImplementedException();
         }
 
         public Shops GetShopById(int Id)

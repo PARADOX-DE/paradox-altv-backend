@@ -8,6 +8,7 @@ namespace PARADOX_RP.Core.Database.Models
     {
         public int Id { get; set; }
         public string Name { get; set; }
+        public string ImageName { get; set; }
         public int Weight { get; set; }
         public int StackSize { get; set; }
         public string ScriptName { get; set; }

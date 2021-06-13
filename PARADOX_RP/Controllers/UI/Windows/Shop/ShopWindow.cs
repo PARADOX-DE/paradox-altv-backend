@@ -39,6 +39,8 @@ namespace PARADOX_RP.UI.Windows
                     writer.Value(item.Id);
                     writer.Name("name");
                     writer.Value(item.Item.Name);
+                    writer.Name("name");
+                    writer.Value(item.Item.Name);
                     writer.Name("price");
                     writer.Value(item.Price);
                     writer.EndObject();

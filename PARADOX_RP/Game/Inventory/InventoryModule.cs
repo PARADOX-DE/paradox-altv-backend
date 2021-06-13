@@ -183,7 +183,6 @@ namespace PARADOX_RP.Game.Inventory
 
             //TODO: animation library
             await player.PlayAnimation("mp_safehousevagos@", "package_dropoff", 9, 2000);
-
         }
 
         public async Task<PXInventory> GetAdditionalInventory(PXPlayer player, Position position)

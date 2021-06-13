@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json;
 using PARADOX_RP.Controllers.Event.Interface;
 using PARADOX_RP.Controllers.Vehicle.Interface;
 using PARADOX_RP.Core.Database;
@@ -7,6 +8,7 @@ using PARADOX_RP.Core.Events;
 using PARADOX_RP.Core.Extensions;
 using PARADOX_RP.Core.Factories;
 using PARADOX_RP.Core.Module;
+using PARADOX_RP.Game.Shop.Models;
 using PARADOX_RP.UI;
 using PARADOX_RP.UI.Windows;
 using PARADOX_RP.Utils.Enums;
@@ -25,7 +27,7 @@ namespace PARADOX_RP.Game.Shop
         private readonly IEventController _eventController;
         private readonly IVehicleController _vehicleController;
 
-        public ShopModule(PXContext px, IEventController eventController, IVehicleController vehicleController) : base("GasStation")
+        public ShopModule(PXContext px, IEventController eventController, IVehicleController vehicleController) : base("Shop")
         {
             _eventController = eventController;
             _vehicleController = vehicleController;
@@ -35,7 +37,7 @@ namespace PARADOX_RP.Game.Shop
                 _shops.Add(sp.Id, sp);
             });
 
-            _eventController.OnClient<PXPlayer, int, string, int>("PayShop", PayShop);
+            _eventController.OnClient<PXPlayer, int, string>("PayShop", PayShop);
         }
         public void OnPlayerConnect(PXPlayer player)
         {
@@ -56,9 +58,46 @@ namespace PARADOX_RP.Game.Shop
             return await Task.FromResult(true);
         }
 
-        private void PayShop(PXPlayer arg1, int arg2, string arg3, int arg4)
+        private async void PayShop(PXPlayer player, int shopId, string cartString)
         {
-            throw new NotImplementedException();
+            if (!player.IsValid()) return;
+            if (!player.CanInteract()) return;
+
+            Shops dbShop = _shops.Values.FirstOrDefault(sp => sp.Id == shopId && sp.Position.Distance(player.Position) < 10);
+            if (dbShop == null)
+            {
+                // LOGGER
+                return;
+            }
+
+            List<ShopCartModel> shopCart = JsonConvert.DeserializeObject<List<ShopCartModel>>(cartString);
+            if (shopCart == null) return;
+
+            int cartPrice = 0;
+            shopCart.ForEach((shopItem) =>
+            {
+                ShopItems dbShopItem = dbShop.Items.FirstOrDefault((i) => i.Id == shopItem.id);
+                if (dbShopItem == null) return;
+
+                cartPrice += (dbShopItem.Price * shopItem.amount);
+            });
+
+            if (await player.TakeMoney(cartPrice))
+            {
+                string CartNotificationString = "";
+                shopCart.ForEach((shopItem) =>
+                {
+                    ShopItems dbShopItem = dbShop.Items.FirstOrDefault((i) => i.Id == shopItem.id);
+                    if (dbShopItem == null) return;
+
+                    CartNotificationString += $"Sie haben {shopItem.amount}x {dbShopItem.Item.Name} gekauft.\\n";
+                });
+                player.SendNotification(ModuleName, CartNotificationString, NotificationTypes.SUCCESS);
+            }
+            else
+            {
+                player.SendNotification(ModuleName, $"Du hast nicht genügend Geld. Benötigt: {cartPrice} $", NotificationTypes.ERROR);
+            }
         }
 
         public Shops GetShopById(int Id)

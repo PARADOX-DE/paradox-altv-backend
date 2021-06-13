@@ -1,8 +1,10 @@
 ﻿using AltV.Net.Async;
+using PARADOX_RP.Controllers.UI.Windows.Death;
 using PARADOX_RP.Core.Database;
 using PARADOX_RP.Core.Database.Models;
 using PARADOX_RP.Core.Factories;
 using PARADOX_RP.Game.Misc.Position;
+using PARADOX_RP.UI;
 using System.Threading.Tasks;
 
 namespace PARADOX_RP.Game.Injury.Extensions
@@ -17,6 +19,8 @@ namespace PARADOX_RP.Game.Injury.Extensions
 
             await player.StartEffect(player.PlayerInjuryData.Injury.EffectName, (player.PlayerInjuryData.Injury.Duration * 1000) * 60);
             await player.PlayAnimation(player.PlayerInjuryData.Injury.AnimationDictionary, player.PlayerInjuryData.Injury.AnimationName);
+
+            WindowController.Instance.Get<DeathWindow>().Show(player);
         }
 
         public static async Task<bool> Revive(this PXPlayer player, bool spawnAtCurrentPosition = true, bool keepMoney = true, bool keepInventory = true)
@@ -35,6 +39,7 @@ namespace PARADOX_RP.Game.Injury.Extensions
 
             await player.StopAnimation();
             await player.StopEffect();
+            WindowController.Instance.Get<DeathWindow>().Hide(player);
 
             await using (var px = new PXContext())
             {

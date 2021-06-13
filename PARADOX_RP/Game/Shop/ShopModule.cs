@@ -40,7 +40,7 @@ namespace PARADOX_RP.Game.Shop
 
         public void OnPlayerConnect(PXPlayer player)
         {
-            _shops.ForEach((sp) => player.AddBlips($"Shop", sp.Value.Position, 52, 2, 1, true));
+            _shops.ForEach((sp) => player.AddBlips(sp.Value.Name, sp.Value.Position, 52, 2, 1, true));
         }
 
         public async Task<bool> OnKeyPress(PXPlayer player, KeyEnumeration key)

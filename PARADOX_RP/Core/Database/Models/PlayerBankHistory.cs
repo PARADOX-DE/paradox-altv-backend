@@ -7,7 +7,7 @@ using System.Text;
 namespace PARADOX_RP.Core.Database.Models
 {
     [Table("player_bank_history")]
-    class PlayerBankHistory
+    public class PlayerBankHistory
     {
         public int Id { get; set; }
 

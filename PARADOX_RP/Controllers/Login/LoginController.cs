@@ -86,6 +86,7 @@ namespace PARADOX_RP.Controllers.Login
                                                     .Include(p => p.PlayerCustomization)
                                                     .Include(p => p.PlayerInjuryData).ThenInclude(p => p.Injury)
                                                     .Include(p => p.PlayerWeapons)
+                                                    .Include(p => p.PlayerBankHistory)
                                                     .FirstOrDefaultAsync(p => p.Username == userName);
 
                 if (dbPlayer == null) return await Task.FromResult(LoadPlayerResponse.ABORT);
@@ -97,6 +98,8 @@ namespace PARADOX_RP.Controllers.Login
                 player.Money = dbPlayer.Money;
                 player.BankMoney = dbPlayer.BankMoney;
                 player.Team = dbPlayer.Team;
+
+                player.PlayerBankHistory = dbPlayer.PlayerBankHistory;
 
                 /* New-Player Generation */
 

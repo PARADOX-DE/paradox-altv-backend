@@ -121,6 +121,7 @@ namespace PARADOX_RP.Core.Factories
 
         public PlayerCustomization PlayerCustomization { get; set; }
         public ICollection<PlayerWeapons> PlayerWeapons { get; set; }
+        public ICollection<PlayerBankHistory> PlayerBankHistory { get; set; }
         public PlayerInjuryData PlayerInjuryData { get; set; }
         public PlayerTeamData PlayerTeamData { get; set; }
         public Invitation Invitation { get; set; }

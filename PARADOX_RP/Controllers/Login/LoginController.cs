@@ -185,7 +185,7 @@ namespace PARADOX_RP.Controllers.Login
 
                 return await Task.FromResult(LoadPlayerResponse.SUCCESS);
             }
-            catch (Exception e) { Alt.Log("Failed to load player | " + e.Message); Alt.Log(e.StackTrace); }
+            catch (Exception e) { Alt.Log($"Failed to load player {userName} | {e.Message} {e.StackTrace}"); }
             return await Task.FromResult(LoadPlayerResponse.ABORT);
         }
 

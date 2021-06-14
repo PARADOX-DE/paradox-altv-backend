@@ -16,14 +16,17 @@ namespace PARADOX_RP.Controllers.Bank
         {
             await using(var px = new PXContext())
             {
-                await px.BankHistory.AddAsync(new PlayerBankHistory()
+                var toInsert = new PlayerBankHistory()
                 {
                     PlayerId = player.SqlId,
                     Name = Name,
                     Date = DateTime.Now,
                     Action = Action,
                     Money = Amount
-                });
+                };
+
+                player.PlayerBankHistory.Add(toInsert);
+                await px.BankHistory.AddAsync(toInsert);
 
                 await px.SaveChangesAsync();
             }

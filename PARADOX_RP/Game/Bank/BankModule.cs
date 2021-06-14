@@ -71,7 +71,7 @@ namespace PARADOX_RP.Game.Bank
                 if (targetATM == null) return Task.FromResult(false);
 
 
-                WindowController.Instance.Get<BankWindow>().Show(player, new BankWindowWriter(player.Username, player.Money, player.BankMoney, player.PlayerBankHistory.ToList()));
+                WindowController.Instance.Get<BankWindow>().Show(player, new BankWindowWriter(player.Username, player.Money, player.BankMoney, player.PlayerBankHistory.Take(50).ToList()));
                 return Task.FromResult(true);
             }
 

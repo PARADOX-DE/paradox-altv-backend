@@ -52,7 +52,7 @@ namespace PARADOX_RP.UI.Windows
                 writer.Value(historyItem.Name);
 
                 writer.Name("date");
-                writer.Value(historyItem.Date.ToString());
+                writer.Value(historyItem.Date.ToString("yyyy-MM-ddTHH:mm:ss"));
 
                 writer.Name("act");
                 writer.Value((int)historyItem.Action);

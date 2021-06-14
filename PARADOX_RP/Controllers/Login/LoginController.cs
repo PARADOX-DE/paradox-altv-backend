@@ -90,6 +90,8 @@ namespace PARADOX_RP.Controllers.Login
                                                     .FirstOrDefaultAsync(p => p.Username == userName);
 
                 if (dbPlayer == null) return await Task.FromResult(LoadPlayerResponse.ABORT);
+
+
                 player.LoggedIn = true;
 
                 player.SqlId = dbPlayer.Id;
@@ -143,16 +145,15 @@ namespace PARADOX_RP.Controllers.Login
                     player.PlayerInjuryData = dbPlayer.PlayerInjuryData.FirstOrDefault();
                 }
 
-                player.Inventory = await _inventoryController.LoadInventory(InventoryTypes.PLAYER, player.SqlId);
-                if (player.Inventory == null)
-                    player.Inventory = await _inventoryController.CreateInventory(InventoryTypes.PLAYER, player.SqlId);
-
-
                 if (await ModerationModule.Instance.IsBanned(player))
                 {
                     await player.KickAsync("Du bist gebannt. Für weitere Informationen melde dich im Support!");
                     return await Task.FromResult(LoadPlayerResponse.ABORT);
                 }
+                
+                player.Inventory = await _inventoryController.LoadInventory(InventoryTypes.PLAYER, player.SqlId);
+                if (player.Inventory == null)
+                    player.Inventory = await _inventoryController.CreateInventory(InventoryTypes.PLAYER, player.SqlId);
 
                 try
                 {
@@ -160,28 +161,25 @@ namespace PARADOX_RP.Controllers.Login
                 }
                 catch { Alt.Log("pool"); }
 
-                await player.EmitAsync("ResponseLoginStatus", "Erfolgreich eingeloggt!");
+                await player?.EmitAsync("ResponseLoginStatus", "Erfolgreich eingeloggt!");
 
                 if (dbPlayer.PlayerCustomization.FirstOrDefault() == null)
-                {
                     return await Task.FromResult(LoadPlayerResponse.NEW_PLAYER);
-                }
-
+                
                 await player?.EmitAsync("ApplyPlayerCharacter", dbPlayer.PlayerCustomization.FirstOrDefault().Customization);
-
 
                 Dictionary<ComponentVariation, Clothes> wearingClothes = new Dictionary<ComponentVariation, Clothes>();
                 foreach (PlayerClothesWearing playerClothesWearing in dbPlayer.PlayerClothes)
                 {
                     wearingClothes[playerClothesWearing.ComponentVariation] = playerClothesWearing.Clothing;
-                    await player.SetClothes((int)playerClothesWearing.ComponentVariation, playerClothesWearing.Clothing.Drawable, playerClothesWearing.Clothing.Texture);
+                    await player?.SetClothes((int)playerClothesWearing.ComponentVariation, playerClothesWearing.Clothing.Drawable, playerClothesWearing.Clothing.Texture);
                 }
 
 
                 await _weaponController.LoadWeapons(player, dbPlayer.PlayerWeapons);
 
                 player.Clothes = wearingClothes;
-                await player.PreparePlayer(dbPlayer.Position);
+                await player?.PreparePlayer(dbPlayer.Position);
 
                 return await Task.FromResult(LoadPlayerResponse.SUCCESS);
             }

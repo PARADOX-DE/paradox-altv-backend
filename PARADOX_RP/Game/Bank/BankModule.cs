@@ -71,7 +71,7 @@ namespace PARADOX_RP.Game.Bank
                 if (targetATM == null) return Task.FromResult(false);
 
 
-                WindowController.Instance.Get<BankWindow>().Show(player, new BankWindowWriter(player.Username, player.Money, player.BankMoney, player.));
+                WindowController.Instance.Get<BankWindow>().Show(player, new BankWindowWriter(player.Username, player.Money, player.BankMoney, player.PlayerBankHistory.ToList()));
                 return Task.FromResult(true);
             }
 
@@ -97,7 +97,7 @@ namespace PARADOX_RP.Game.Bank
                 await px.SaveChangesAsync();
             }
             player.SendNotification(_bankName, $"Sie haben erfolgreich {moneyAmount} $ eingezahlt.", NotificationTypes.SUCCESS);
-            
+
             await _bankController.CreateBankHistory(player, "Bargeldeinzahlung", BankActionTypes.DEPOSIT, moneyAmount);
         }
 

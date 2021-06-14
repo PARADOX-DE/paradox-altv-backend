@@ -24,24 +24,22 @@ namespace PARADOX_RP
 
         public override void OnStart()
         {
-            using var autofac = new PXContainer();
-            autofac.RegisterTypes();
-            autofac.ResolveTypes();
-
-            _application = autofac.Resolve<IApplication>();
-            _logger = autofac.Resolve<ILogger>();
-
             using (var px = new PXContext())
             {
                 var databaseCreator = px.Database.GetService<IDatabaseCreator>() as RelationalDatabaseCreator;
                 try
                 {
                     databaseCreator.EnsureCreated();
-                    //databaseCreator.CreateTables();
                 }
                 catch { }
-                _logger.Console(ConsoleLogType.SUCCESS, "Database", "Successfully created database tables.");
             }
+
+            using var autofac = new PXContainer();
+            autofac.RegisterTypes();
+            autofac.ResolveTypes();
+
+            _application = autofac.Resolve<IApplication>();
+            _logger = autofac.Resolve<ILogger>();
 
             /*
              * 

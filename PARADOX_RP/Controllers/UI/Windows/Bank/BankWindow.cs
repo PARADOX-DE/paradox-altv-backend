@@ -17,9 +17,9 @@ namespace PARADOX_RP.UI.Windows
         private string PlayerName;
         private int Wallet;
         private int Bank;
-        private List<BankHistory> History;
+        private List<PlayerBankHistory> History;
 
-        public BankWindowWriter(string playerName, int wallet, int bank, List<BankHistory> history)
+        public BankWindowWriter(string playerName, int wallet, int bank, List<PlayerBankHistory> history)
         {
             PlayerName = playerName;
             Wallet = wallet;
@@ -44,7 +44,7 @@ namespace PARADOX_RP.UI.Windows
             writer.Name("History");
             writer.BeginArray();
 
-            foreach (BankHistory historyItem in History)
+            foreach (PlayerBankHistory historyItem in History)
             {
                 writer.BeginObject();
 

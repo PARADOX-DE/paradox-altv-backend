@@ -70,7 +70,8 @@ namespace PARADOX_RP.Game.Bank
                 BankATMs targetATM = _BankATMs.Values.FirstOrDefault(a => a.Position.Distance(player.Position) < 3);
                 if (targetATM == null) return Task.FromResult(false);
 
-                WindowController.Instance.Get<BankWindow>().Show(player, new BankWindowWriter(player.Username, player.Money, player.BankMoney));
+
+                WindowController.Instance.Get<BankWindow>().Show(player, new BankWindowWriter(player.Username, player.Money, player.BankMoney, player.));
                 return Task.FromResult(true);
             }
 

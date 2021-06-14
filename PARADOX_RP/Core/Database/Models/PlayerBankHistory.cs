@@ -6,8 +6,8 @@ using System.Text;
 
 namespace PARADOX_RP.Core.Database.Models
 {
-    [Table("bank_history")]
-    class BankHistory
+    [Table("player_bank_history")]
+    class PlayerBankHistory
     {
         public int Id { get; set; }
 

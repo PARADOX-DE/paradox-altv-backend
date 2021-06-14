@@ -16,7 +16,7 @@ namespace PARADOX_RP.Controllers.Bank
         {
             await using(var px = new PXContext())
             {
-                await px.BankHistory.AddAsync(new BankHistory()
+                await px.BankHistory.AddAsync(new PlayerBankHistory()
                 {
                     PlayerId = player.SqlId,
                     Name = Name,

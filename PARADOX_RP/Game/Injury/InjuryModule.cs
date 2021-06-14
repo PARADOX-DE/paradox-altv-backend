@@ -129,7 +129,6 @@ namespace PARADOX_RP.Game.Injury
         [Command("revive")]
         public async void CommandRevive(PXPlayer player, string targetString)
         {
-            AltAsync.Log("command");
             if (!player.IsValid()) return;
             if (!PermissionsModule.Instance.HasPermissions(player)) return;
 

@@ -2,6 +2,7 @@
 using AltV.Net.Data;
 using EntityStreamer;
 using Newtonsoft.Json;
+using PARADOX_RP.Controllers.Bank.Interface;
 using PARADOX_RP.Controllers.Event.Interface;
 using PARADOX_RP.Core.Database;
 using PARADOX_RP.Core.Database.Models;
@@ -27,8 +28,12 @@ namespace PARADOX_RP.Game.Bank
         private readonly string _bankName = "N26 Bank";
         private Dictionary<int, BankATMs> _BankATMs = new Dictionary<int, BankATMs>();
 
-        public BankModule(PXContext px, IEventController eventController) : base("Bank")
+        private readonly IBankController _bankController;
+
+        public BankModule(PXContext px, IBankController bankController, IEventController eventController) : base("Bank")
         {
+            _bankController = bankController;
+
             LoadDatabaseTable(px.BankATMs, (BankATMs atm) =>
             {
                 _BankATMs.Add(atm.Id, atm);
@@ -91,6 +96,8 @@ namespace PARADOX_RP.Game.Bank
                 await px.SaveChangesAsync();
             }
             player.SendNotification(_bankName, $"Sie haben erfolgreich {moneyAmount} $ eingezahlt.", NotificationTypes.SUCCESS);
+            
+            await _bankController.CreateBankHistory(player, "Bargeldeinzahlung", BankActionTypes.DEPOSIT, moneyAmount);
         }
 
         public async void WithdrawMoney(PXPlayer player, int moneyAmount)
@@ -115,6 +122,8 @@ namespace PARADOX_RP.Game.Bank
 
             await player.AddMoney(moneyAmount);
             player.SendNotification(_bankName, $"Sie haben erfolgreich {moneyAmount} $ ausgezahlt.", NotificationTypes.SUCCESS);
+
+            await _bankController.CreateBankHistory(player, "Bargeldauszahlung", BankActionTypes.WITHDRAW, moneyAmount);
         }
 
         private async void TransferMoney(PXPlayer player, string targetString, int moneyAmount)
@@ -158,6 +167,7 @@ namespace PARADOX_RP.Game.Bank
             }
 
             player.SendNotification(_bankName, $"Sie haben erfolgreich {moneyAmount} $ an {targetString} überwiesen.", NotificationTypes.SUCCESS);
+            await _bankController.CreateBankHistory(player, targetString, BankActionTypes.TRANSFER, moneyAmount);
         }
     }
 }

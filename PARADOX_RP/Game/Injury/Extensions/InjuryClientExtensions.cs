@@ -36,6 +36,7 @@ namespace PARADOX_RP.Game.Injury.Extensions
 
             player.Injured = false;
             player.InjuryTimeLeft = 0;
+            player.PlayerInjuryData.InjuryTimeLeft = 0;
 
             await player.StopAnimation();
             await player.StopEffect();

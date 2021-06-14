@@ -1,4 +1,5 @@
 ﻿using AltV.Net;
+using PARADOX_RP.Core.Database.Models;
 using PARADOX_RP.UI.Models;
 using System;
 using System.Collections.Generic;
@@ -16,23 +17,54 @@ namespace PARADOX_RP.UI.Windows
         private string PlayerName;
         private int Wallet;
         private int Bank;
+        private List<BankHistory> History;
 
-        public BankWindowWriter(string playerName, int wallet, int bank)
+        public BankWindowWriter(string playerName, int wallet, int bank, List<BankHistory> history)
         {
             PlayerName = playerName;
             Wallet = wallet;
             Bank = bank;
+            History = history;
         }
 
         public void OnWrite(IMValueWriter writer)
         {
             writer.BeginObject();
+
             writer.Name("PlayerName");
             writer.Value(PlayerName);
+
             writer.Name("Wallet");
             writer.Value(Wallet);
+
             writer.Name("Bank");
             writer.Value(Bank);
+
+
+            writer.Name("History");
+            writer.BeginArray();
+
+            foreach (BankHistory historyItem in History)
+            {
+                writer.BeginObject();
+
+                writer.Name("name");
+                writer.Value(historyItem.Name);
+
+                writer.Name("date");
+                writer.Value(historyItem.Date.ToString());
+
+                writer.Name("act");
+                writer.Value((int)historyItem.Action);
+
+                writer.Name("money");
+                writer.Value(historyItem.Money);
+
+                writer.EndObject();
+            }
+
+            writer.EndArray();
+
             writer.EndObject();
         }
     }

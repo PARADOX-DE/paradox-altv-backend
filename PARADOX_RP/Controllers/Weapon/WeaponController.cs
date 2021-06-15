@@ -40,7 +40,7 @@ namespace PARADOX_RP.Controllers.Weapon
                 {
                     PlayerId = player.SqlId,
                     WeaponHash = weapon,
-                    Ammo = 0
+                    Ammo = 1337
                 };
 
                 await px.PlayerWeapons.AddAsync(weaponInsert);
@@ -49,7 +49,7 @@ namespace PARADOX_RP.Controllers.Weapon
                 await px.SaveChangesAsync();
             }
 
-            await player.GiveWeaponAsync((uint)weapon, 0, true);
+            await player.GiveWeaponAsync((uint)weapon, 1337, true);
         }
 
         public async Task<bool> AddAmmo(PXPlayer player, WeaponModel weapon, int ammo)

@@ -1,5 +1,6 @@
 ﻿using AltV.Net;
 using AltV.Net.Async;
+using AltV.Net.Async.Elements.Refs;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Newtonsoft.Json;
@@ -227,7 +228,8 @@ namespace PARADOX_RP.Controllers.Inventory
             if (NeedToRemoveItem)
             {
                 //Remove Item Logic here
-                await RemoveItemBySlotId(inventory, Slot, 1);
+                if (new AsyncPlayerRef(player).Exists)
+                    await RemoveItemBySlotId(inventory, Slot, 1);
             }
 
             return false;

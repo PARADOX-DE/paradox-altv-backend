@@ -1,4 +1,5 @@
 ﻿using AltV.Net.Async;
+using AltV.Net.Async.Elements.Refs;
 using PARADOX_RP.Core.Factories;
 using PARADOX_RP.Game.Inventory.Interfaces;
 using PARADOX_RP.Game.Misc.Progressbar.Extensions;
@@ -24,7 +25,8 @@ namespace PARADOX_RP.Game.Inventory.Content
                 await player.SetArmorAsync(100);
             }, "Schutzweste", "Du ziehst nun eine Schutzweste...", VEST_DURATION);
 
-            await player.StopAnimation();
+            if (new AsyncPlayerRef(player).Exists)
+                await player.StopAnimation();
 
             return finishedProgressbar;
         }

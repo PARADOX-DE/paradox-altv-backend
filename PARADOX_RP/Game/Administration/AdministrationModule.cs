@@ -132,9 +132,13 @@ namespace PARADOX_RP.Game.Administration
         [Command("weapon")]
         public async void CommandWeapon(PXPlayer player, WeaponModel weaponModel)
         {
-            if (!PermissionsModule.Instance.HasPermissions(player)) return;
+            try
+            {
+                if (!PermissionsModule.Instance.HasPermissions(player)) return;
 
-            await _weaponController.AddWeapon(player, weaponModel);
+                await _weaponController.AddWeapon(player, weaponModel);
+            }
+            catch { player.SendNotification(ModuleName, "Waffe nicht gefunden.", NotificationTypes.SUCCESS); }
         }
 
         [Command("pos")]

@@ -19,6 +19,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
+
 namespace PARADOX_RP.Core.Factories
 {
     public enum DimensionTypes
@@ -48,11 +49,35 @@ namespace PARADOX_RP.Core.Factories
 
     public class PXPlayer : Player
     {
+        private int _money { get; set; }
+        private bool _injured;
+        private bool _cuffed;
+        private VoiceRangeEnumeration _voiceRange;
+        private bool _hasPhone;
+
+        internal PXPlayer(IntPtr nativePointer, ushort id) : base(nativePointer, id)
+        {
+            SqlId = -1;
+            LoggedIn = false;
+            Username = "";
+            SupportRank = new SupportRankModel();
+            Team = null;
+            PlayerCustomization = null;
+            PlayerInjuryData = null;
+            PlayerTeamData = null;
+            Invitation = null;
+            DimensionType = DimensionTypes.WORLD;
+            DutyType = DutyTypes.OFFDUTY;
+            InjuryTimeLeft = 0;
+            CancellationToken = null;
+            CurrentNativeMenu = null;
+            Clothes = new Dictionary<ComponentVariation, Clothes>();
+        }
+
         public int SqlId { get; set; }
         public bool LoggedIn { get; set; }
         public string Username { get; set; }
 
-        private int _money { get; set; }
         public int Money
         {
             get => _money;
@@ -66,7 +91,6 @@ namespace PARADOX_RP.Core.Factories
 
         public int BankMoney { get; set; }
 
-        private bool _injured;
         public bool Injured
         {
             get => _injured;
@@ -80,7 +104,6 @@ namespace PARADOX_RP.Core.Factories
         public int InjuryTimeLeft { get; set; }
 
 
-        private bool _cuffed;
         public bool Cuffed
         {
             get => _cuffed;
@@ -91,7 +114,6 @@ namespace PARADOX_RP.Core.Factories
             }
         }
 
-        private VoiceRangeEnumeration _voiceRange;
         public VoiceRangeEnumeration VoiceRange
         {
             get => _voiceRange;
@@ -102,7 +124,6 @@ namespace PARADOX_RP.Core.Factories
             }
         }
 
-        private bool _hasPhone;
         public bool HasPhone
         {
             get => _hasPhone;
@@ -132,25 +153,6 @@ namespace PARADOX_RP.Core.Factories
         public CancellationTokenSource CancellationToken { get; set; }
         public Dictionary<ComponentVariation, Clothes> Clothes { get; set; }
         public MinigameTypes Minigame { get; set; }
-
-        internal PXPlayer(IntPtr nativePointer, ushort id) : base(nativePointer, id)
-        {
-            SqlId = -1;
-            LoggedIn = false;
-            Username = "";
-            SupportRank = new SupportRankModel();
-            Team = null;
-            PlayerCustomization = null;
-            PlayerInjuryData = null;
-            PlayerTeamData = null;
-            Invitation = null;
-            DimensionType = DimensionTypes.WORLD;
-            DutyType = DutyTypes.OFFDUTY;
-            InjuryTimeLeft = 0;
-            CancellationToken = null;
-            CurrentNativeMenu = null;
-            Clothes = new Dictionary<ComponentVariation, Clothes>();
-        }
 
         public async Task<bool> TakeMoney(int moneyAmount)
         {
@@ -187,7 +189,7 @@ namespace PARADOX_RP.Core.Factories
 
         public Task StartEffect(string EffectName, int Duration, bool Looped = false) => this.EmitAsync("StartEffect", EffectName, Duration, Looped);
         public Task StopEffect() => this.EmitAsync("StopEffect");
-        
+
         public void Freeze(bool state)
         {
             this.EmitLocked("Freeze", state);
@@ -202,17 +204,38 @@ namespace PARADOX_RP.Core.Factories
         public Task SetPedIntoVeh(IVehicle vehicle, sbyte seatId) => this.EmitAsync("SetPedIntoVeh", vehicle, (int)seatId);
 
         public Task StopAnimation() => this.EmitAsync("StopAnimation");
-        
+
         public bool IsValid()
         {
+            lock (this)
+            {
+                if (!Exists) return false;
+            }
+
             if (!LoggedIn) return false;
             if (SqlId < 1) return false;
 
             return true;
         }
 
+        public void Kill()
+        {
+            lock (this)
+            {
+                if (!Exists) return;
+
+                if (Health > 0)
+                    Health = 0;
+            }
+        }
+
         public bool CanInteract()
         {
+            lock (this)
+            {
+                if (!Exists) return false;
+            }
+
             if (!LoggedIn) return false;
             if (CancellationToken != null) return false;
             if (Cuffed || Injured) return false;

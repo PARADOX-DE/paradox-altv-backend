@@ -168,7 +168,9 @@ namespace PARADOX_RP.Game.Bank
             }
 
             player.SendNotification(_bankName, $"Sie haben erfolgreich {moneyAmount} $ an {targetString} überwiesen.", NotificationTypes.SUCCESS);
-            await _bankController.CreateBankHistory(player, targetString, BankActionTypes.TRANSFER, moneyAmount);
+            player.SendNotification(_bankName, $"Sie haben eine Überweisung erhalten!", NotificationTypes.SUCCESS);
+            await _bankController.CreateBankHistory(player, target.Username, BankActionTypes.TRANSFER, moneyAmount);
+            await _bankController.CreateBankHistory(target, player.Username, BankActionTypes.TRANSFER, moneyAmount);
         }
     }
 }

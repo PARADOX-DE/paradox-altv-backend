@@ -8,6 +8,7 @@ namespace PARADOX_RP.Utils.Enums
     {
         WITHDRAW,
         DEPOSIT,
-        TRANSFER
+        TRANSFER_SENT,
+        TRANSFER_RECEIVED
     }
 }

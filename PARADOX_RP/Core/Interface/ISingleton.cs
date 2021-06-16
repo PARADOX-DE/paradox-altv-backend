@@ -4,8 +4,5 @@ using System.Text;
 
 namespace PARADOX_RP.Core.Interface
 {
-    public interface ISingleton
-    {
-
-    }
+    public interface ISingleton { }
 }

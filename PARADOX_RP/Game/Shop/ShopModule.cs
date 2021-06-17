@@ -98,7 +98,7 @@ namespace PARADOX_RP.Game.Shop
                 player.SendNotification(ModuleName, "Du hast die Gegenstände in deinem Warenkorb erfolgreich gekauft.", NotificationTypes.SUCCESS);
             }
             else
-                player.SendNotification(ModuleName, $"Dir fehlen {cartPrice - player.Money}$ um dir das zu kaufen.", NotificationTypes.ERROR);
+                player.SendNotification(ModuleName, $"Um deinen Warenkorb zu bezahlen, fehlen dir {cartPrice - player.Money}$.", NotificationTypes.ERROR);
             
         }
 

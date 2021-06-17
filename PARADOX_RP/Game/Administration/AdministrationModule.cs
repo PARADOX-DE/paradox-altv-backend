@@ -25,6 +25,7 @@ using PARADOX_RP.Controllers.Inventory;
 using PARADOX_RP.Game.Inventory;
 using PARADOX_RP.Core.Events;
 using PARADOX_RP.Controllers.Weapon.Interface;
+using PARADOX_RP.Game.Commands.Extensions;
 
 namespace PARADOX_RP.Game.Administration
 {
@@ -186,12 +187,18 @@ namespace PARADOX_RP.Game.Administration
         {
             if (!InventoryModule.Instance._items.TryGetValue(ItemId, out Items Item))
             {
-                player.SendNotification("Administration", $"Item {ItemId} existiert nicht.", NotificationTypes.ERROR);
+                player.SendChatMessage("AddItem", $"Item {ItemId} konnte nicht gefunden werden.", true);
                 return;
             }
 
             await _inventoryController.CreateItem(player.Inventory, ItemId, Amount, "Administrativ erstellt von " + player.Username);
-            player.SendNotification("Administration", $"Du hast dir 1x {Item.Name} gegeben.", NotificationTypes.SUCCESS);
+            player.SendChatMessage("Command", $"Du hast dir 1x {Item.Name} gegeben.");
+        }
+
+        [Command("global")]
+        public void CommandGlobal(PXPlayer player, string Title, string Message, int Duration)
+        {
+            player.SendChatMessage("Global", Title + " " + Message);
         }
     }
 }

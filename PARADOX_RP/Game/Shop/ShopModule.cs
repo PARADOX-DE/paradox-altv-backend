@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 using PARADOX_RP.Controllers.Event.Interface;
+using PARADOX_RP.Controllers.Inventory;
 using PARADOX_RP.Controllers.Vehicle.Interface;
 using PARADOX_RP.Core.Database;
 using PARADOX_RP.Core.Database.Models;
@@ -27,11 +28,13 @@ namespace PARADOX_RP.Game.Shop
 
         private readonly IEventController _eventController;
         private readonly IVehicleController _vehicleController;
+        private readonly IInventoryController _inventoryController;
 
-        public ShopModule(PXContext px, IEventController eventController, IVehicleController vehicleController) : base("Shop")
+        public ShopModule(PXContext px, IEventController eventController, IVehicleController vehicleController, IInventoryController inventoryController) : base("Shop")
         {
             _eventController = eventController;
             _vehicleController = vehicleController;
+            _inventoryController = inventoryController;
 
             LoadDatabaseTable(px.Shops.Include(s => s.Items), (Shops sp) =>
             {
@@ -85,23 +88,18 @@ namespace PARADOX_RP.Game.Shop
 
             if (await player.TakeMoney(cartPrice))
             {
-                string CartNotificationString = "Sie haben ";
                 shopCart.ForEach((shopItem) =>
                 {
                     ShopItems dbShopItem = dbShop.Items.FirstOrDefault((i) => i.Id == shopItem.id);
                     if (dbShopItem == null) return;
 
-                    CartNotificationString += $"{shopItem.amount}x {dbShopItem.Item.Name},";
+                    _inventoryController.CreateItem(player.Inventory, dbShopItem.ItemId, shopItem.amount, $"Shopkauf von {player.Username}");
                 });
-                CartNotificationString = CartNotificationString.Remove(CartNotificationString.Length - 1);
-                CartNotificationString += " gekauft.";
-
-                player.SendNotification(ModuleName, CartNotificationString, NotificationTypes.SUCCESS);
+                player.SendNotification(ModuleName, "Du hast die Gegenstände in deinem Warenkorb erfolgreich gekauft.", NotificationTypes.SUCCESS);
             }
             else
-            {
                 player.SendNotification(ModuleName, $"Dir fehlen {cartPrice - player.Money}$ um dir das zu kaufen.", NotificationTypes.ERROR);
-            }
+            
         }
 
         public Shops GetShopById(int Id)

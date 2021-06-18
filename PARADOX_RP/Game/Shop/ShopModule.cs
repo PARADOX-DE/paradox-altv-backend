@@ -10,6 +10,8 @@ using PARADOX_RP.Core.Events;
 using PARADOX_RP.Core.Extensions;
 using PARADOX_RP.Core.Factories;
 using PARADOX_RP.Core.Module;
+using PARADOX_RP.Game.Commands;
+using PARADOX_RP.Game.Commands.Attributes;
 using PARADOX_RP.Game.Shop.Models;
 using PARADOX_RP.UI;
 using PARADOX_RP.UI.Windows;
@@ -22,7 +24,7 @@ using System.Threading.Tasks;
 
 namespace PARADOX_RP.Game.Shop
 {
-    class ShopModule : ModuleBase<ShopModule>, IEventKeyPressed, IEventPlayerConnect
+    class ShopModule : ModuleBase<ShopModule>, IEventKeyPressed, IEventPlayerConnect, ICommand
     {
         private Dictionary<int, Shops> _shops = new Dictionary<int, Shops>();
 
@@ -106,6 +108,14 @@ namespace PARADOX_RP.Game.Shop
         {
             if (_shops.TryGetValue(Id, out Shops shop)) return shop;
             return null;
+        }
+
+        /* Commands */
+
+        [Command("createshop")]
+        public void CommandCreateShop(PXPlayer player)
+        {
+
         }
     }
 }

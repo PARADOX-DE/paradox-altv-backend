@@ -6,6 +6,7 @@ using PARADOX_RP.Core.Events;
 using PARADOX_RP.Core.Factories;
 using PARADOX_RP.Core.Module;
 using PARADOX_RP.Utils;
+using PARADOX_RP.Utils.Callbacks;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -18,20 +19,22 @@ namespace PARADOX_RP.Game.Misc.AntiCombatLog
 
         public async void OnPlayerDisconnect(PXPlayer player)
         {
-            if (!await player.ExistsAsync()) return;
             if (!player.LoggedIn) return;
 
-            foreach (PXPlayer pxPlayer in Pools.Instance.Get<PXPlayer>(PoolType.PLAYER))
+            await Alt.ForEachPlayers(new AsyncFunctionCallback<IPlayer>(async (basePlayer) =>
             {
-                lock (pxPlayer)
+                if (!(basePlayer is PXPlayer pxPlayer))
                 {
-                    if (!pxPlayer.Exists) continue;
+                    return;
                 }
 
-                if ((await pxPlayer.GetPositionAsync()).Distance((await player.GetPositionAsync())) <= 20)
+                var playerPos = AltV.Net.Data.Position.Zero; pxPlayer.GetPositionLocked(ref playerPos);
+                var targetPos = AltV.Net.Data.Position.Zero; player.GetPositionLocked(ref playerPos);
+
+                if (playerPos.Distance(targetPos) <= 20)
                     if (pxPlayer.DimensionType == DimensionTypes.WORLD)
                         pxPlayer.SendNotification("Offlineflucht", $"Der Spieler {player.Username} hat die Verbindung getrennt", NotificationTypes.SUCCESS);
-            }
+            }));
         }
     }
 }

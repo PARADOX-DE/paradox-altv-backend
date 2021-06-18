@@ -19,6 +19,8 @@ using PARADOX_RP.Utils.Enums;
 using PARADOX_RP.Game.Clothing;
 using PARADOX_RP.Controllers.Inventory;
 using PARADOX_RP.Controllers.Weapon.Interface;
+using AltV.Net.Elements.Entities;
+using PARADOX_RP.Utils.Callbacks;
 
 namespace PARADOX_RP.Controllers.Login
 {
@@ -150,7 +152,7 @@ namespace PARADOX_RP.Controllers.Login
                     await player.KickAsync("Du bist gebannt. Für weitere Informationen melde dich im Support!");
                     return await Task.FromResult(LoadPlayerResponse.ABORT);
                 }
-                
+
                 player.Inventory = await _inventoryController.LoadInventory(InventoryTypes.PLAYER, player.SqlId);
                 if (player.Inventory == null)
                     player.Inventory = await _inventoryController.CreateInventory(InventoryTypes.PLAYER, player.SqlId);
@@ -165,7 +167,7 @@ namespace PARADOX_RP.Controllers.Login
 
                 if (dbPlayer.PlayerCustomization.FirstOrDefault() == null)
                     return await Task.FromResult(LoadPlayerResponse.NEW_PLAYER);
-                
+
                 await player?.EmitAsync("ApplyPlayerCharacter", dbPlayer.PlayerCustomization.FirstOrDefault().Customization);
 
                 Dictionary<ComponentVariation, Clothes> wearingClothes = new Dictionary<ComponentVariation, Clothes>();
@@ -189,25 +191,30 @@ namespace PARADOX_RP.Controllers.Login
 
         public async Task SavePlayers()
         {
-            foreach (PXPlayer player in Pools.Instance.Get<PXPlayer>(PoolType.PLAYER))
-            {
-                if (!player.LoggedIn) continue;
+            await Alt.ForEachPlayers(new AsyncFunctionCallback<IPlayer>(async (basePlayer) =>
+             {
+                 if (!(basePlayer is PXPlayer player))
+                 {
+                     return;
+                 }
 
-                await using (var px = new PXContext())
-                {
-                    Players dbPlayer = await px.Players.FindAsync(player.SqlId);
-                    if (dbPlayer == null) continue;
+                 if (!player.LoggedIn) return;
 
-                    if (player.Dimension == 0)
-                    {
-                        dbPlayer.Position_X = player.Position.X;
-                        dbPlayer.Position_Y = player.Position.Y;
-                        dbPlayer.Position_Z = player.Position.Z;
-                    }
+                 await using (var px = new PXContext())
+                 {
+                     Players dbPlayer = await px.Players.FindAsync(player.SqlId);
+                     if (dbPlayer == null) return;
 
-                    await px.SaveChangesAsync();
-                }
-            }
+                     if (player.Dimension == 0)
+                     {
+                         dbPlayer.Position_X = player.Position.X;
+                         dbPlayer.Position_Y = player.Position.Y;
+                         dbPlayer.Position_Z = player.Position.Z;
+                     }
+
+                     await px.SaveChangesAsync();
+                 }
+             }));
         }
     }
 }

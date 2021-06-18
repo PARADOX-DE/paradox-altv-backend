@@ -225,13 +225,17 @@ namespace PARADOX_RP.Controllers
 
         private async Task OnPlayerDisconnect(IPlayer player, string reason)
         {
+
             PXPlayer pxPlayer = (PXPlayer)player;
 
-            if (pxPlayer.LoggedIn)
+            lock (pxPlayer)
             {
-                //Disconnect Logic here, todo: split into another classes
-                Pools.Instance.Remove(pxPlayer.SqlId, pxPlayer);
-                _inventoryController.UnloadInventory(pxPlayer.Inventory.Id);
+                if (pxPlayer.LoggedIn)
+                {
+                    //Disconnect Logic here, todo: split into another classes
+                    Pools.Instance.Remove(pxPlayer.SqlId, pxPlayer);
+                    _inventoryController.UnloadInventory(pxPlayer.Inventory.Id);
+                }
             }
 
             await _playerDisconnectEvents.ForEach(e =>

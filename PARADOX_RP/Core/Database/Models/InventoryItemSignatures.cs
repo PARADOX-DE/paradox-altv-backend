@@ -11,5 +11,6 @@ namespace PARADOX_RP.Core.Database.Models
         public int Id { get; set; }
         public string Origin { get; set; }
         public string Information { get; set; }
+        public int Amount { get; set; }
     }
 }

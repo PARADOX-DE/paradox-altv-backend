@@ -17,7 +17,7 @@ namespace PARADOX_RP.Game.Misc.Progressbar
     {
         public ProgressBarModule() : base("ProgressBarModule") { }
 
-        public async Task<bool> RunProgressBar(PXPlayer player, Func<Task> action, string title, string message, int duration)
+        public async Task<bool> RunProgressBar(PXPlayer player, Func<Task> action, string title, string message, int duration, bool abortable = true)
         {
             // WindowManager.Instance.Get<ProgressBarWindow>().Show(player, JsonConvert.SerializeObject(new ProgressBarWindowObject(duration)));
 

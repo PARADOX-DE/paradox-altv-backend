@@ -1,4 +1,6 @@
-﻿using PARADOX_RP.Core.Database;
+﻿using AltV.Net.Data;
+using AltV.Net.Async;
+using PARADOX_RP.Core.Database;
 using PARADOX_RP.Core.Database.Models;
 using PARADOX_RP.Core.Events;
 using PARADOX_RP.Core.Factories;
@@ -11,6 +13,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using PARADOX_RP.UI;
+using PARADOX_RP.Controllers.UI.Windows.ClothShop;
 
 namespace PARADOX_RP.Game.Clothing
 {
@@ -39,6 +43,7 @@ namespace PARADOX_RP.Game.Clothing
                     {
                         Id = _autoIncrement,
                         Name = c.Name,
+                        ComponentVariation = (ComponentVariation)c.Component,
                         Variants = new Dictionary<int, Clothes>() { { c.Id, c } },
                         Price = 0,
                         Gender = (Gender)c.Gender
@@ -49,15 +54,19 @@ namespace PARADOX_RP.Game.Clothing
             logger.Console(ConsoleLogType.SUCCESS, "Content", $"Successfully grouped {_shopClothes.Count}x Clothes!");
         }
 
-        public async Task<bool> OnKeyPress(PXPlayer player, KeyEnumeration key)
+        public Task<bool> OnKeyPress(PXPlayer player, KeyEnumeration key)
         {
-            if (key != KeyEnumeration.E) return await Task.FromResult(false);
-            if (!player.IsValid()) return await Task.FromResult(false);
-            if (!player.CanInteract()) return await Task.FromResult(false);
+            if (key != KeyEnumeration.E) return Task.FromResult(false);
+            if (!player.IsValid()) return Task.FromResult(false);
+            if (!player.CanInteract()) return Task.FromResult(false);
 
-            
+            var playerPos = Position.Zero; player.GetPositionLocked(ref playerPos);
+            ClothesShop clothesShop = _clothesShops.Values.FirstOrDefault(g => g.Position.Distance(playerPos) <= 5);
+            if (clothesShop == null) return Task.FromResult(false);
 
-            return false;
+            WindowController.Instance.Get<ClothShopWindow>().Show(player, new ClothShopWindowWriter(_shopClothes.Where(s => s.Gender == 0).ToList()));
+
+            return Task.FromResult(true);
         }
     }
 }

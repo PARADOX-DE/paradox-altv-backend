@@ -26,13 +26,11 @@ namespace PARADOX_RP.UI.Models
         public void Show(PXPlayer player, object windowObject = null)
         {
             if (Configuration.Instance.DevMode)
-            {
                 AltAsync.Log($"[{WindowName}] Show {player.Name}");
-            }
-
+            
             player.CurrentWindow = WindowName;
             player.EmitLocked("Webview::ShowWindow", WindowName, windowObject);
-        }
+        }   
 
         public void Hide(PXPlayer player)
         {

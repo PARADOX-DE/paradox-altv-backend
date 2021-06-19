@@ -19,7 +19,7 @@ namespace PARADOX_RP.Controllers.Inventory
         Task<bool> CreateItem(PXInventory inventory, int ItemId, int Amount, string OriginInformation, [CallerMemberName] string callerName = null);
         Task RemoveItemBySlotId(PXInventory inventory, int ItemId, int Amount);
         int GetNextAvailableSlot(PXInventory inventory);
-        Task<int> CreateItemSignature(string CallerName, string OriginInformation);
+        Task<int> CreateItemSignature(string CallerName, string OriginInformation, int Amount);
         
         Task<bool> UseItem(PXPlayer player, PXInventory inventory, int Slot);
     }

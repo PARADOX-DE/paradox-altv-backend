@@ -96,14 +96,15 @@ namespace PARADOX_RP.Controllers.Inventory
             return 0;
         }
 
-        public async Task<int> CreateItemSignature(string CallerName, string OriginInformation)
+        public async Task<int> CreateItemSignature(string CallerName, string OriginInformation, int Amount)
         {
             await using (var px = new PXContext())
             {
                 EntityEntry<InventoryItemSignatures> itemSignature = await px.InventoryItemSignatures.AddAsync(new InventoryItemSignatures()
                 {
                     Origin = CallerName,
-                    Information = OriginInformation
+                    Information = OriginInformation,
+                    Amount = Amount
                 });
                 await px.SaveChangesAsync();
 
@@ -119,7 +120,7 @@ namespace PARADOX_RP.Controllers.Inventory
             var localItems = inventory.Items.Where(d => (d.Value.Item == ItemId) && (d.Value.Amount < Item.StackSize)).ToDictionary(pair => pair.Key).Values;
             int toBeAdded = Amount;
 
-            int OriginId = await CreateItemSignature(callerName, OriginInformation);
+            int OriginId = await CreateItemSignature(callerName, OriginInformation, Amount);
 
             foreach (var localItem in localItems)
             {

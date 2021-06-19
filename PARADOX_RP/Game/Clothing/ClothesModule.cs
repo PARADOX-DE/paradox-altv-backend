@@ -16,6 +16,9 @@ namespace PARADOX_RP.Game.Clothing
 {
     class ClothesModule : ModuleBase<ClothesModule>, IEventKeyPressed
     {
+        public Dictionary<int, ClothesShop> _clothesShops = new Dictionary<int, ClothesShop>();
+
+        // need to split to database table, just for debug reasons
         public List<ShopClothModel> _shopClothes = new List<ShopClothModel>();
 
         public ClothesModule(PXContext px, ILogger logger) : base("Clothes")
@@ -52,7 +55,7 @@ namespace PARADOX_RP.Game.Clothing
             if (!player.IsValid()) return await Task.FromResult(false);
             if (!player.CanInteract()) return await Task.FromResult(false);
 
-            // Add clothing shops blyat 
+            
 
             return false;
         }

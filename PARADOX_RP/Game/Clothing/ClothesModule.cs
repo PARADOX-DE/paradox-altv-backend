@@ -67,7 +67,7 @@ namespace PARADOX_RP.Game.Clothing
             ClothesShop clothesShop = _clothesShops.Values.FirstOrDefault(g => g.Position.Distance(playerPos) <= 5);
             if (clothesShop == null) return Task.FromResult(false);
 
-            WindowController.Instance.Get<ClothShopWindow>().Show(player, new ClothShopWindowWriter(_shopClothes.Where(s => s.Gender == 0).GroupBy(g => g.ComponentVariation).ToList()));
+            WindowController.Instance.Get<ClothShopWindow>().Show(player, new ClothShopWindowWriter(_shopClothes.Where(s => s.Gender == 0 && s.ComponentVariation == ComponentVariation.TOP).GroupBy(g => g.ComponentVariation).ToList()));
 
             return Task.FromResult(true);
         }

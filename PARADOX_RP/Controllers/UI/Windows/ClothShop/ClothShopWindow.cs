@@ -40,9 +40,28 @@ namespace PARADOX_RP.Controllers.UI.Windows.ClothShop
 
                             writer.Name("variants");
                             writer.BeginArray();
-                
-                                foreach (var Variants in Cloth.Variants)
-                                writer.Value(Variants.Value.Name);
+
+                            foreach (var Variants in Cloth.Variants) { 
+                                writer.BeginObject();
+                                    writer.Name("component");
+                                    writer.Value(Variants.Value.Component);
+
+                                    writer.Name("drawable");
+                                    writer.Value(Variants.Value.Drawable);
+
+                                    writer.Name("texture");
+                                    writer.Value(Variants.Value.Texture);
+
+                                    writer.Name("torso_drawable");
+                                    writer.Value(Variants.Value.TorsoDrawable);
+
+                                    writer.Name("torso_texture");
+                                    writer.Value(Variants.Value.TorsoTexture);
+
+                                    writer.Name("name");
+                                    writer.Value(Variants.Value.Name);
+                                writer.EndObject();
+                            }
 
                             writer.EndArray();
 

@@ -4,6 +4,7 @@ using PARADOX_RP.UI.Models;
 using PARADOX_RP.Utils.Enums;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 namespace PARADOX_RP.Controllers.UI.Windows.ClothShop
@@ -15,38 +16,42 @@ namespace PARADOX_RP.Controllers.UI.Windows.ClothShop
 
     public class ClothShopWindowWriter : IWritable
     {
-        public ClothShopWindowWriter(ICollection<ShopClothModel> clothes)
+        public ClothShopWindowWriter(ICollection<IGrouping<ComponentVariation, ShopClothModel>> clothes)
         {
             Clothes = clothes;
         }
 
-        public ICollection<ShopClothModel> Clothes { get; set; }
+        public ICollection<IGrouping<ComponentVariation, ShopClothModel>> Clothes { get; set; }
 
         public void OnWrite(IMValueWriter writer)
         {
             writer.BeginArray();
 
-            foreach (var Cloth in Clothes)
+            foreach (var Group in Clothes)
             {
                 writer.BeginObject();
-                writer.Name(Enum.GetName(typeof(ComponentVariation), Cloth.ComponentVariation));
-                writer.BeginArray();
-
-                writer.Name("name");
-                writer.Value(Cloth.Name);
-
-                writer.Name("variants");
+                    writer.Name(Enum.GetName(typeof(ComponentVariation), Group.Key));
                     writer.BeginArray();
+                        foreach(var Cloth in Group) { 
+                            writer.BeginObject();
+
+                            writer.Name("name");
+                            writer.Value(Cloth.Name);
+
+                            writer.Name("variants");
+                            writer.BeginArray();
                 
-                    foreach (var Variants in Cloth.Variants)
-                        writer.Value(Variants.Value.Name);
+                                foreach (var Variants in Cloth.Variants)
+                                writer.Value(Variants.Value.Name);
 
+                            writer.EndArray();
+
+                            writer.Name("price");
+                            writer.Value(Cloth.Price);
+
+                            writer.EndObject();
+                        }
                     writer.EndArray();
-
-                writer.Name("price");
-                writer.Value(Cloth.Price);
-
-                writer.EndArray();
 
                 writer.EndObject();
             }

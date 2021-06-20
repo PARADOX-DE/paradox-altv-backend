@@ -15,6 +15,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using PARADOX_RP.UI;
 using PARADOX_RP.Controllers.UI.Windows.ClothShop;
+using System.Diagnostics;
 
 namespace PARADOX_RP.Game.Clothing
 {
@@ -51,6 +52,8 @@ namespace PARADOX_RP.Game.Clothing
                 }
             });
 
+            LoadDatabaseTable(px.ClothesShop, (ClothesShop c) => _clothesShops.Add(c.Id, c));
+
             logger.Console(ConsoleLogType.SUCCESS, "Content", $"Successfully grouped {_shopClothes.Count}x Clothes!");
         }
 
@@ -64,7 +67,7 @@ namespace PARADOX_RP.Game.Clothing
             ClothesShop clothesShop = _clothesShops.Values.FirstOrDefault(g => g.Position.Distance(playerPos) <= 5);
             if (clothesShop == null) return Task.FromResult(false);
 
-            WindowController.Instance.Get<ClothShopWindow>().Show(player, new ClothShopWindowWriter(_shopClothes.Where(s => s.Gender == 0).ToList()));
+            WindowController.Instance.Get<ClothShopWindow>().Show(player, new ClothShopWindowWriter(_shopClothes.Where(s => s.Gender == 0).GroupBy(g => g.ComponentVariation).ToList()));
 
             return Task.FromResult(true);
         }

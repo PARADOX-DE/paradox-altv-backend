@@ -1,5 +1,6 @@
 ﻿using AltV.Net;
 using AltV.Net.Async;
+using AltV.Net.Async.Elements.Refs;
 using AltV.Net.Data;
 using AltV.Net.Elements.Entities;
 using EntityStreamer;
@@ -14,6 +15,7 @@ using PARADOX_RP.Core.Events;
 using PARADOX_RP.Core.Extensions;
 using PARADOX_RP.Core.Factories;
 using PARADOX_RP.Core.Module;
+using PARADOX_RP.Game.Misc.Progressbar.Extensions;
 using PARADOX_RP.Game.Vehicle;
 using PARADOX_RP.UI;
 using PARADOX_RP.UI.Windows;
@@ -28,9 +30,9 @@ using System.Threading.Tasks;
 
 namespace PARADOX_RP.Game.JumpPoint
 {
-    class JumpPointModule : ModuleBase<JumpPointModule>, IEventKeyPressed, IEventModuleLoad
+    public sealed class JumpPointModule : ModuleBase<JumpPointModule>, IEventKeyPressed, IEventModuleLoad
     {
-        private Dictionary<int, JumpPoints> _jumpPoints = new Dictionary<int, JumpPoints>();
+        public Dictionary<int, JumpPoints> _jumpPoints = new Dictionary<int, JumpPoints>();
 
         private readonly IEventController _eventController;
         private readonly ITeamController _teamController;
@@ -103,11 +105,12 @@ namespace PARADOX_RP.Game.JumpPoint
             bool Accessible = false;
 
             if (jumpPoint.Permissions.Count > 0)
-                foreach (var permission in jumpPoint.Permissions) { 
+                foreach (var permission in jumpPoint.Permissions)
+                {
                     if (_teamController.CanAccess(player, permission.Team.Id)) Accessible = true;
                 }
             else Accessible = true;
-            
+
             if (Accessible)
             {
                 if (jumpPoint.LastBreaked.AddMinutes(15) > DateTime.Now)
@@ -125,9 +128,29 @@ namespace PARADOX_RP.Game.JumpPoint
             await Task.CompletedTask;
         }
 
-        public void BreakJumpPoint(PXPlayer player, JumpPoints jumpPoint)
+        private const int JUMPPOINT_BREAK_DURATION = 30 * 1000;
+
+        public async Task<bool> BreakJumpPoint(PXPlayer player, JumpPoints jumpPoint)
         {
-            //Aufbrechen
+            var playerRef = new AsyncPlayerRef(player);
+
+            await player.PlayAnimation("mini@safe_cracking", "dial_turn_fail_2");
+
+            await player.RunProgressBar(() =>
+            {
+                jumpPoint.Locked = false;
+                jumpPoint.LastBreaked = DateTime.Now;
+
+                jumpPoint.Destination.Locked = false;
+                jumpPoint.Destination.LastBreaked = DateTime.Now;
+
+                return Task.CompletedTask;
+            }, "Brecheisen", "Du beginnst nun einen Zugangspunkt aufzubrechen...", JUMPPOINT_BREAK_DURATION);
+
+            if (!playerRef.Exists) return false;
+            await player.StopAnimation();
+
+            return true;
         }
     }
 }

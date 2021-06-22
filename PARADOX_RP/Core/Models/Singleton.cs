@@ -5,12 +5,12 @@ using System.Text;
 
 namespace PARADOX_RP.Core.Models
 {
-    public class InstanceBase<T> : ISingleton
+    public class SingletonBase<T> : ISingleton
     {
         public static T Instance { get; set; }
     }
 
-    public class Singleton<T> : InstanceBase<T> where T : Singleton<T>
+    public class Singleton<T> : SingletonBase<T> where T : Singleton<T>
     {
         public Singleton()
         {

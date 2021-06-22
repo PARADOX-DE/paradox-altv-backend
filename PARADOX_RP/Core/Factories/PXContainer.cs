@@ -1,7 +1,9 @@
 ﻿using AltV.Net;
 using AltV.Net.Async;
 using Autofac;
+using Autofac.Configuration;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using PARADOX_RP.Core.Database;
 using PARADOX_RP.Core.Interface;
 using PARADOX_RP.Core.Models;

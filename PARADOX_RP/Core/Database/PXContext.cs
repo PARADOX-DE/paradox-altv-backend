@@ -12,7 +12,7 @@ using System.Text;
 
 namespace PARADOX_RP.Core.Database
 {
-    internal class PXContext : DbContext
+    public class PXContext : DbContext
     {
 
         public DbSet<Players> Players { get; set; }

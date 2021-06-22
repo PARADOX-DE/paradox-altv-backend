@@ -6,7 +6,7 @@ using System.Text;
 namespace PARADOX_RP.Core.Database.Models
 {
     [Table("server_configuration")]
-    class ServerConfig
+    public class ServerConfig
     {
         public int Id { get; set; }
         public string PluginIdentifier { get; set; }

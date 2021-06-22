@@ -4,7 +4,7 @@ using System.Text;
 
 namespace PARADOX_RP.Core.Database.Models
 {
-    class BanList
+    public class BanList
     {
         public BanList(int playerId, int moderatorId, bool active, DateTime createdAt)
         {

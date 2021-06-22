@@ -1,4 +1,5 @@
-﻿using AltV.Net.Async;
+﻿using AltV.Net;
+using AltV.Net.Async;
 using AltV.Net.Elements.Entities;
 using PARADOX_RP.Controllers.Event;
 using PARADOX_RP.Core.Factories;
@@ -35,7 +36,7 @@ namespace PARADOX_RP.Core.Module
 
                 return items;
             }
-            catch (Exception e) { AltV.Net.Alt.Log(e.Message); }
+            catch (Exception e) { Alt.Log(e.Message); }
 
             return null;
         }

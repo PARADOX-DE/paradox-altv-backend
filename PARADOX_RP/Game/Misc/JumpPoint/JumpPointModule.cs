@@ -102,12 +102,15 @@ namespace PARADOX_RP.Game.JumpPoint
         {
             bool Accessible = false;
 
-            foreach (var permission in jumpPoint.Permissions)
-                if (_teamController.CanAccess(player, permission.Team.Id)) Accessible = true;
-
-            if(Accessible)
+            if (jumpPoint.Permissions.Count > 0)
+                foreach (var permission in jumpPoint.Permissions) { 
+                    if (_teamController.CanAccess(player, permission.Team.Id)) Accessible = true;
+                }
+            else Accessible = true;
+            
+            if (Accessible)
             {
-                if(jumpPoint.LastBreaked.AddMinutes(15) > DateTime.Now)
+                if (jumpPoint.LastBreaked.AddMinutes(15) > DateTime.Now)
                 {
                     player.SendNotification(jumpPoint.Name, "Dieser Zugangspunkt ist momentan beschädigt. Versuche es später erneut!", NotificationTypes.ERROR);
                     return;

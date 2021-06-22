@@ -79,5 +79,13 @@ namespace PARADOX_RP.Controllers.Team
                     team.SendNotification(Message, notificationType);
             });
         }
+
+        public bool CanAccess(PXPlayer player, int TeamId)
+        {
+            if (TeamId == (int)TeamEnumeration.CIVILIAN) return true; // Sollte die angefordete Fraktion zu den Zivilisten gehören.
+            if (player.Team.Id == TeamId) return true;
+
+            return false;
+        }
     }
 }

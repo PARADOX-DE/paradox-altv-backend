@@ -14,7 +14,6 @@ namespace PARADOX_RP.Game.Misc.Position
         MEDICAL_DEPARTMENT
     }
 
-
     class PositionModule : ModuleBase<PositionModule>
     {
         public Dictionary<Positions, AltV.Net.Data.Position> _positions = new Dictionary<Positions, AltV.Net.Data.Position>();

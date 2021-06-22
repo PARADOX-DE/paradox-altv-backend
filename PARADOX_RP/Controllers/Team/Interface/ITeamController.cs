@@ -10,6 +10,7 @@ namespace PARADOX_RP.Controllers.Team.Interface
     public interface ITeamController
     {
         void LoadTeam(Teams team);
+        bool CanAccess(PXPlayer player, int TeamId);
 
         public Task SetPlayerTeam(PXPlayer player, int teamId);
         public void SpawnPlayer(PXPlayer player);

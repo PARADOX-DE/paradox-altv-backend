@@ -10,6 +10,7 @@ using PARADOX_RP.Utils.Callbacks;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace PARADOX_RP.Game.Misc.AntiCombatLog
 {
@@ -34,6 +35,8 @@ namespace PARADOX_RP.Game.Misc.AntiCombatLog
                 if (playerPos.Distance(targetPos) <= 20)
                     if (pxPlayer.DimensionType == DimensionTypes.WORLD)
                         pxPlayer.SendNotification("Offlineflucht", $"Der Spieler {player.Username} hat die Verbindung getrennt", NotificationTypes.SUCCESS);
+
+                await Task.CompletedTask;
             }));
         }
     }

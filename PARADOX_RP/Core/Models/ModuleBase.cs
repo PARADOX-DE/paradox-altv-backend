@@ -19,7 +19,7 @@ namespace PARADOX_RP.Core.Module
 
         public virtual Task OnEveryMinute() { return Task.CompletedTask; }
 
-        public IEnumerable<T> LoadDatabaseTable<T>(IQueryable queryable, Action<T>? action = null) where T : class
+        public IEnumerable<T> LoadDatabaseTable<T>(IQueryable queryable, Action<T> action = null) where T : class
         {
             try
             {
@@ -29,7 +29,7 @@ namespace PARADOX_RP.Core.Module
                 foreach (T item in queryable)
                 {
                     if (item == null) continue;
-                    action?.Invoke(item);
+                    action.Invoke(item);
                     items.Add(item);
                 }
 

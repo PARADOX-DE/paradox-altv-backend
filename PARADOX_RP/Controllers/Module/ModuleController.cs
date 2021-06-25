@@ -108,12 +108,14 @@ namespace PARADOX_RP.Controllers
 
         private Task PlayerConnectDebug(IPlayer player, string reason)
         {
+            Alt.LogFast("");
             Alt.LogFast("=================");
             Alt.LogFast($"LOGIN: {player.Name}");
             Alt.LogFast($"SCID: {player.SocialClubId}");
             Alt.LogFast($"HWID: {player.HardwareIdHash}");
             Alt.LogFast($"HWID2: {player.HardwareIdExHash}");
             Alt.LogFast("=================");
+            Alt.LogFast("");
 
             return Task.FromResult(true);
         }

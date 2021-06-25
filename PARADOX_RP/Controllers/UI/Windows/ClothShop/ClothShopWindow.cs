@@ -16,66 +16,70 @@ namespace PARADOX_RP.Controllers.UI.Windows.ClothShop
 
     public class ClothShopWindowWriter : IWritable
     {
-        public ClothShopWindowWriter(ICollection<IGrouping<ComponentVariation, ShopClothModel>> clothes)
+        public ClothShopWindowWriter(int component, IEnumerable<ShopClothModel> clothes)
         {
+            Component = component;
             Clothes = clothes;
         }
 
-        public ICollection<IGrouping<ComponentVariation, ShopClothModel>> Clothes { get; set; }
+        public int Component { get; set; }
+        public IEnumerable<ShopClothModel> Clothes { get; set; }
 
         public void OnWrite(IMValueWriter writer)
         {
+            writer.BeginObject();
+
+            writer.Name("component");
+            writer.Value(Component);
+
+            writer.Name("clothes");
             writer.BeginArray();
 
-            foreach (var Group in Clothes)
+            foreach (var Cloth in Clothes)
             {
                 writer.BeginObject();
-                    writer.Name(Enum.GetName(typeof(ComponentVariation), Group.Key));
-                    writer.BeginArray();
-                        foreach(var Cloth in Group) { 
-                            writer.BeginObject();
 
-                            writer.Name("name");
-                            writer.Value(Cloth.Name);
+                writer.Name("n");
+                writer.Value(Cloth.Name);
 
-                            writer.Name("variants");
-                            writer.BeginArray();
+                writer.Name("v");
+                writer.BeginArray();
 
-                            foreach (var Variants in Cloth.Variants) { 
-                                writer.BeginObject();
-                                    writer.Name("component");
-                                    writer.Value(Variants.Value.Component);
+                foreach (var Variants in Cloth.Variants)
+                {
+                    writer.BeginObject();
 
-                                    writer.Name("drawable");
-                                    writer.Value(Variants.Value.Drawable);
+                    writer.Name("c");
+                    writer.Value(Variants.Value.Component);
 
-                                    writer.Name("texture");
-                                    writer.Value(Variants.Value.Texture);
+                    writer.Name("d");
+                    writer.Value(Variants.Value.Drawable);
 
-                                    writer.Name("torso_drawable");
-                                    writer.Value(Variants.Value.TorsoDrawable);
+                    writer.Name("t");
+                    writer.Value(Variants.Value.Texture);
 
-                                    writer.Name("torso_texture");
-                                    writer.Value(Variants.Value.TorsoTexture);
+                    writer.Name("t_d");
+                    writer.Value(Variants.Value.TorsoDrawable);
 
-                                    writer.Name("name");
-                                    writer.Value(Variants.Value.Name);
-                                writer.EndObject();
-                            }
+                    writer.Name("t_t");
+                    writer.Value(Variants.Value.TorsoTexture);
 
-                            writer.EndArray();
+                    writer.Name("n");
+                    writer.Value(Variants.Value.Name);
 
-                            writer.Name("price");
-                            writer.Value(Cloth.Price);
+                    writer.EndObject();
+                }
 
-                            writer.EndObject();
-                        }
-                    writer.EndArray();
+                writer.EndArray();
+
+                writer.Name("p");
+                writer.Value(Cloth.Price);
 
                 writer.EndObject();
             }
 
             writer.EndArray();
+            writer.EndObject();
         }
     }
 }

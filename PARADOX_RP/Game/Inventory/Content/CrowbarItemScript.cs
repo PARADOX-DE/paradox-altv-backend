@@ -7,6 +7,8 @@ using System.Linq;
 using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
+using AltV.Net;
+using PARADOX_RP.Core.Extensions;
 
 namespace PARADOX_RP.Game.Inventory.Content
 {

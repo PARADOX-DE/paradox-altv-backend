@@ -16,6 +16,8 @@ using System.Threading.Tasks;
 using PARADOX_RP.UI;
 using PARADOX_RP.Controllers.UI.Windows.ClothShop;
 using System.Diagnostics;
+using PARADOX_RP.Controllers.Event.Interface;
+using PARADOX_RP.Core.Extensions;
 
 namespace PARADOX_RP.Game.Clothing
 {
@@ -26,8 +28,14 @@ namespace PARADOX_RP.Game.Clothing
         // need to split to database table, just for debug reasons
         public List<ShopClothModel> _shopClothes = new List<ShopClothModel>();
 
-        public ClothesModule(PXContext px, ILogger logger) : base("Clothes")
+        private readonly ILogger _logger;
+        private readonly IEventController _eventController;
+
+        public ClothesModule(PXContext px, ILogger logger, IEventController eventController) : base("Clothes")
         {
+            _logger = logger;
+            _eventController = eventController;
+
             int _autoIncrement = 0;
             LoadDatabaseTable(px.Clothes, (Clothes c) =>
             {
@@ -53,8 +61,23 @@ namespace PARADOX_RP.Game.Clothing
             });
 
             LoadDatabaseTable(px.ClothesShop, (ClothesShop c) => _clothesShops.Add(c.Id, c));
+            _eventController.OnClient<PXPlayer, int>("RequestClothByComponent", RequestClothByComponent);
+        }
 
-            logger.Console(ConsoleLogType.SUCCESS, "Content", $"Successfully grouped {_shopClothes.Count}x Clothes!");
+        private void RequestClothByComponent(PXPlayer player, int component)
+        {
+            var stopwatch = Stopwatch.StartNew();
+            if (!player.IsValid()) return;
+            if (!player.CanInteract()) return;
+            if (!WindowController.Instance.Get<ClothShopWindow>().IsVisible(player)) return;
+
+            //need to add gender
+            var clothes = _shopClothes.Where(c => (int)c.ComponentVariation == component && c.Gender == 0 && (c.Variants.Any(v => v.Value.Drawable > 309)));
+            // 516 clothes in only 18ms, noice
+
+            WindowController.Instance.Get<ClothShopWindow>().ViewCallback(player, "ResponseClothByComponent", new ClothShopWindowWriter(component, clothes));
+            stopwatch.Stop();
+            player.SendNotification("Stopwatch", $"ClothShop elapsed in {stopwatch.ElapsedMilliseconds}ms", NotificationTypes.SUCCESS);
         }
 
         public Task<bool> OnKeyPress(PXPlayer player, KeyEnumeration key)
@@ -67,7 +90,7 @@ namespace PARADOX_RP.Game.Clothing
             ClothesShop clothesShop = _clothesShops.Values.FirstOrDefault(g => g.Position.Distance(playerPos) <= 5);
             if (clothesShop == null) return Task.FromResult(false);
 
-            WindowController.Instance.Get<ClothShopWindow>().Show(player, new ClothShopWindowWriter(_shopClothes.Where(s => s.Gender == 0 && s.ComponentVariation == ComponentVariation.TOP).GroupBy(g => g.ComponentVariation).ToList()));
+            WindowController.Instance.Get<ClothShopWindow>().Show(player);
 
             return Task.FromResult(true);
         }

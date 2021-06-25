@@ -17,6 +17,7 @@ using PARADOX_RP.Utils;
 using PARADOX_RP.Utils.Interface;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Reflection;
 using System.Text;
 
@@ -40,6 +41,7 @@ namespace PARADOX_RP.Core.Factories
         internal void RegisterTypes()
         {
             var builder = new ContainerBuilder();
+            var stopwatch = Stopwatch.StartNew();
 
             LogStartup("Loading applications...");
             LoadTypes();
@@ -120,15 +122,22 @@ namespace PARADOX_RP.Core.Factories
                .InstancePerLifetimeScope();
 
             _container = builder.Build();
-            LogStartup("Successfully build server container!");
+            stopwatch.Stop();
+
+            LogStartup($"Successfully build server container in {stopwatch.ElapsedMilliseconds} ms!");
         }
 
         internal void ResolveTypes()
         {
             _scope = _container.BeginLifetimeScope();
+            
             foreach (var type in _moduleTypes)
             {
+                var stopwatch = Stopwatch.StartNew();
                 _scope.Resolve(type);
+                stopwatch.Stop();
+
+                LogStartup($"Module > {type.Name} resolved in {stopwatch.ElapsedMilliseconds} ms");
             }
 
             foreach (var type in _singletonTypes)
@@ -145,7 +154,6 @@ namespace PARADOX_RP.Core.Factories
             {
                 _scope.Resolve(type);
             }
-
 
             foreach (var type in _phoneAppTypes)
             {

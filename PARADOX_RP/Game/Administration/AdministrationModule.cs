@@ -41,14 +41,14 @@ namespace PARADOX_RP.Game.Administration
             _weaponController = weaponController;
         }
 
-        private readonly List<Clothes> _administrativeOutfit = new List<Clothes>()
+        private readonly List<ClothesVariants> _administrativeOutfit = new List<ClothesVariants>()
         {
-            new Clothes() { Component = 1, Drawable = 134, Texture = 3 },
-            new Clothes() { Component = 11, Drawable = 274, Texture = 3 },
-            new Clothes() { Component = 4, Drawable = 106, Texture = 3 },
-            new Clothes() { Component = 8, Drawable = 15, Texture = 3 },
-            new Clothes() { Component = 3, Drawable = 9, Texture = 3 },
-            new Clothes() { Component = 6, Drawable = 83, Texture = 3 }
+            new ClothesVariants() { Component = 1, Drawable = 134, Texture = 3 },
+            new ClothesVariants() { Component = 11, Drawable = 274, Texture = 3 },
+            new ClothesVariants() { Component = 4, Drawable = 106, Texture = 3 },
+            new ClothesVariants() { Component = 8, Drawable = 15, Texture = 3 },
+            new ClothesVariants() { Component = 3, Drawable = 9, Texture = 3 },
+            new ClothesVariants() { Component = 6, Drawable = 83, Texture = 3 }
         };
 
         public async Task<bool> OnKeyPress(PXPlayer player, KeyEnumeration key)

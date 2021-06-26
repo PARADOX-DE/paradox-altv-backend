@@ -5,6 +5,7 @@ using AltV.Net.Elements.Entities;
 using PARADOX_RP.Core.Database;
 using PARADOX_RP.Core.Database.Models;
 using PARADOX_RP.Game.Administration.Models;
+using PARADOX_RP.Game.Char.Models;
 using PARADOX_RP.Game.Commands.Extensions;
 using PARADOX_RP.Game.Inventory.Models;
 using PARADOX_RP.Game.Login;
@@ -49,11 +50,11 @@ namespace PARADOX_RP.Core.Factories
 
     public class PXPlayer : Player
     {
-        private int _money { get; set; }
+        private int _money;
         private bool _injured;
         private bool _cuffed;
-        private VoiceRangeEnumeration _voiceRange;
         private bool _hasPhone;
+        private VoiceRangeEnumeration _voiceRange;
 
         internal PXPlayer(IntPtr nativePointer, ushort id) : base(nativePointer, id)
         {
@@ -62,7 +63,7 @@ namespace PARADOX_RP.Core.Factories
             Username = "";
             SupportRank = new SupportRankModel();
             Team = null;
-            PlayerCustomization = null;
+            Customization = null;
             PlayerInjuryData = null;
             PlayerTeamData = null;
             Invitation = null;
@@ -71,7 +72,7 @@ namespace PARADOX_RP.Core.Factories
             InjuryTimeLeft = 0;
             CancellationToken = null;
             CurrentNativeMenu = null;
-            Clothes = new Dictionary<ComponentVariation, Clothes>();
+            Clothes = new Dictionary<ComponentVariation, ClothesVariants>();
         }
 
         public int SqlId { get; set; }
@@ -102,7 +103,6 @@ namespace PARADOX_RP.Core.Factories
         }
 
         public int InjuryTimeLeft { get; set; }
-
 
         public bool Cuffed
         {
@@ -135,23 +135,26 @@ namespace PARADOX_RP.Core.Factories
         }
 
         public SupportRankModel SupportRank { get; set; }
+        public CharacterCustomizationModel Customization { get; set; }
+
         public Teams Team { get; set; }
 
         public PXInventory Inventory { get; set; }
         public LocalInventoryData LocalInventoryData { get; set; }
 
-        public PlayerCustomization PlayerCustomization { get; set; }
         public ICollection<PlayerWeapons> PlayerWeapons { get; set; }
         public ICollection<PlayerBankHistory> PlayerBankHistory { get; set; }
         public PlayerInjuryData PlayerInjuryData { get; set; }
         public PlayerTeamData PlayerTeamData { get; set; }
         public Invitation Invitation { get; set; }
         public string CurrentWindow { get; set; }
+
+        public CancellationTokenSource CancellationToken { get; set; }
+        public Dictionary<ComponentVariation, ClothesVariants> Clothes { get; set; }
+
         public INativeMenu CurrentNativeMenu { get; set; }
         public DimensionTypes DimensionType { get; set; }
         public DutyTypes DutyType { get; set; }
-        public CancellationTokenSource CancellationToken { get; set; }
-        public Dictionary<ComponentVariation, Clothes> Clothes { get; set; }
         public MinigameTypes Minigame { get; set; }
 
         public async Task<bool> TakeMoney(int moneyAmount)

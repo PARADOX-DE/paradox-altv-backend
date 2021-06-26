@@ -21,6 +21,8 @@ using PARADOX_RP.Controllers.Inventory;
 using PARADOX_RP.Controllers.Weapon.Interface;
 using AltV.Net.Elements.Entities;
 using PARADOX_RP.Utils.Callbacks;
+using Newtonsoft.Json;
+using PARADOX_RP.Game.Char.Models;
 
 namespace PARADOX_RP.Controllers.Login
 {
@@ -169,14 +171,14 @@ namespace PARADOX_RP.Controllers.Login
                     return await Task.FromResult(LoadPlayerResponse.NEW_PLAYER);
 
                 await player?.EmitAsync("ApplyPlayerCharacter", dbPlayer.PlayerCustomization.FirstOrDefault().Customization);
+                player.Customization = JsonConvert.DeserializeObject<CharacterCustomizationModel>(dbPlayer.PlayerCustomization.FirstOrDefault().Customization);
 
-                Dictionary<ComponentVariation, Clothes> wearingClothes = new Dictionary<ComponentVariation, Clothes>();
+                Dictionary<ComponentVariation, ClothesVariants> wearingClothes = new Dictionary<ComponentVariation, ClothesVariants>();
                 foreach (PlayerClothesWearing playerClothesWearing in dbPlayer.PlayerClothes)
                 {
                     wearingClothes[playerClothesWearing.ComponentVariation] = playerClothesWearing.Clothing;
                     await player?.SetClothes((int)playerClothesWearing.ComponentVariation, playerClothesWearing.Clothing.Drawable, playerClothesWearing.Clothing.Texture);
                 }
-
 
                 await _weaponController.LoadWeapons(player, dbPlayer.PlayerWeapons);
 

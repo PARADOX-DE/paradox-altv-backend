@@ -17,6 +17,6 @@ namespace PARADOX_RP.Core.Database.Models
         public int ClothingId { get; set; }
 
         public virtual Players Player { get; set; }
-        public virtual Clothes Clothing { get; set; }
+        public virtual ClothesVariants Clothing { get; set; }
     }
 }

@@ -22,12 +22,12 @@ namespace PARADOX_RP.Game.Arrival
     class ArrivalModule : ModuleBase<ArrivalModule>, IEventPlayerConnect
     {
 
-        public Dictionary<Tuple<Gender, ComponentVariation>, Clothes> _arrivalClothes = null;
+        public Dictionary<Tuple<Gender, ComponentVariation>, ClothesVariants> _arrivalClothes = null;
         public ArrivalModule(PXContext pxContext) : base("Arrival")
         {
-            _arrivalClothes = new Dictionary<Tuple<Gender, ComponentVariation>, Clothes>();
+            _arrivalClothes = new Dictionary<Tuple<Gender, ComponentVariation>, ClothesVariants>();
 
-            pxContext.Clothes.Where(c => c.Name.StartsWith("Einreise")).ForEach((arrivalCloth) =>
+            pxContext.ClothesVariants.Where(c => c.Name.StartsWith("Einreise")).ForEach((arrivalCloth) =>
             {
                 _arrivalClothes.Add(new Tuple<Gender, ComponentVariation>((Gender)arrivalCloth.Gender, (ComponentVariation)arrivalCloth.Component), arrivalCloth);
             });
@@ -47,6 +47,6 @@ namespace PARADOX_RP.Game.Arrival
             await player?.PreparePlayer(ArrivalPosition);
         }
 
-        public Clothes GetArrivalClothing(Gender gender, ComponentVariation componentVariation) => Instance._arrivalClothes.FirstOrDefault(c => c.Value.Gender == (int)gender && c.Value.Component == (int)componentVariation).Value;
+        public ClothesVariants GetArrivalClothing(Gender gender, ComponentVariation componentVariation) => Instance._arrivalClothes.FirstOrDefault(c => c.Value.Gender == gender && c.Value.Component == (int)componentVariation).Value;
     }
 }

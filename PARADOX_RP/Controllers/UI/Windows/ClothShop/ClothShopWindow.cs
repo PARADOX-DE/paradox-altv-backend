@@ -1,5 +1,5 @@
 ﻿using AltV.Net;
-using PARADOX_RP.Game.Clothing.Models;
+using PARADOX_RP.Core.Database.Models;
 using PARADOX_RP.UI.Models;
 using PARADOX_RP.Utils.Enums;
 using System;
@@ -16,14 +16,14 @@ namespace PARADOX_RP.Controllers.UI.Windows.ClothShop
 
     public class ClothShopWindowWriter : IWritable
     {
-        public ClothShopWindowWriter(int component, IEnumerable<ShopClothModel> clothes)
+        public ClothShopWindowWriter(int component, IEnumerable<Clothes> clothes)
         {
             Component = component;
             Clothes = clothes;
         }
 
         public int Component { get; set; }
-        public IEnumerable<ShopClothModel> Clothes { get; set; }
+        public IEnumerable<Clothes> Clothes { get; set; }
 
         public void OnWrite(IMValueWriter writer)
         {
@@ -50,22 +50,22 @@ namespace PARADOX_RP.Controllers.UI.Windows.ClothShop
                     writer.BeginObject();
 
                     writer.Name("c");
-                    writer.Value(Variants.Value.Component);
+                    writer.Value(Variants.Component);
 
                     writer.Name("d");
-                    writer.Value(Variants.Value.Drawable);
+                    writer.Value(Variants.Drawable);
 
                     writer.Name("t");
-                    writer.Value(Variants.Value.Texture);
+                    writer.Value(Variants.Texture);
 
                     writer.Name("t_d");
-                    writer.Value(Variants.Value.TorsoDrawable);
+                    writer.Value(Variants.TorsoDrawable);
 
                     writer.Name("t_t");
-                    writer.Value(Variants.Value.TorsoTexture);
+                    writer.Value(Variants.TorsoTexture);
 
                     writer.Name("n");
-                    writer.Value(Variants.Value.Name);
+                    writer.Value(Variants.Name);
 
                     writer.EndObject();
                 }

@@ -11,7 +11,7 @@ namespace PARADOX_RP.Core.Database.Models
     {
         public ClothesShop()
         {
-            Clothes = new HashSet<MigratedClothes>();
+            Clothes = new HashSet<Clothes>();
         }
 
         public int Id { get; set; }
@@ -22,7 +22,7 @@ namespace PARADOX_RP.Core.Database.Models
         public float Position_Y { get; set; }
         public float Position_Z { get; set; }
 
-        public virtual ICollection<MigratedClothes> Clothes { get; set; }
+        public virtual ICollection<Clothes> Clothes { get; set; }
         public virtual Teams Team { get; set; }
     }
 

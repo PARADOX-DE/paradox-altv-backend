@@ -8,6 +8,7 @@ using PARADOX_RP.Core.Database.Models;
 using PARADOX_RP.Core.Factories;
 using PARADOX_RP.Core.Module;
 using PARADOX_RP.Game.Arrival;
+using PARADOX_RP.Game.Char.Models;
 using PARADOX_RP.UI;
 using PARADOX_RP.UI.Windows;
 using PARADOX_RP.Utils.Enums;
@@ -64,20 +65,12 @@ namespace PARADOX_RP.Game.Char
                         Customization = customizationString
                     };
 
-                    dynamic customization = JsonConvert.DeserializeObject(customizationString);
-                    int SelectedGender = (int)Gender.MALE;
-                    try
-                    {
-                        SelectedGender = customization.gender;
-                    }
-                    catch { }
-
-                    AltAsync.Log(SelectedGender + " ");
+                    CharacterCustomizationModel customization = JsonConvert.DeserializeObject<CharacterCustomizationModel>(customizationString);
 
                     foreach (var arrivalClothing in ArrivalModule.Instance._arrivalClothes)
                     {
                         //TODO: do the same for females 
-                        if (arrivalClothing.Value.Gender == SelectedGender)
+                        if ((int)arrivalClothing.Value.Gender == customization.Gender)
                         {
                             PlayerClothesWearing alreadyExistingCloth = await px.PlayerClothesWearing.FirstOrDefaultAsync(i => (i.PlayerId == player.SqlId) && i.ComponentVariation == arrivalClothing.Key.Item2);
                             if (alreadyExistingCloth != null)

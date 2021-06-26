@@ -60,6 +60,43 @@ namespace PARADOX_RP.Game.Clothing
                 }
             });
 
+            foreach (var cloth in _shopClothes)
+            {
+                var toInsertCloth = new MigratedClothes()
+                {
+                    Name = cloth.Name,
+                    Price = cloth.Price,
+
+                    Gender = cloth.Gender,
+                    ComponentVariation = cloth.ComponentVariation,
+                    ClothesShopId = 1,
+                };
+
+                px.MigratedClothes.AddAsync(toInsertCloth);
+                px.SaveChanges();
+
+                cloth.Variants.ForEach((v) => {
+                    var toInsertClothVariant = new MigratedClothesVariants()
+                    {
+                        Name = v.Value.Name,
+
+                        Component = v.Value.Component,
+                        Drawable = v.Value.Drawable,
+                        Texture = v.Value.Texture,
+
+                        TorsoComponent = v.Value.TorsoComponent,
+                        TorsoDrawable = v.Value.TorsoDrawable,
+                        TorsoTexture = v.Value.TorsoTexture,
+
+                        Gender = (Gender)v.Value.Gender,
+                        ClothId = toInsertCloth.Id
+                    };
+
+                    px.MigratedClothesVariants.Add(toInsertClothVariant);
+                    px.SaveChanges();
+                });
+            }
+
             LoadDatabaseTable(px.ClothesShop, (ClothesShop c) => _clothesShops.Add(c.Id, c));
             _eventController.OnClient<PXPlayer, int>("RequestClothByComponent", RequestClothByComponent);
         }

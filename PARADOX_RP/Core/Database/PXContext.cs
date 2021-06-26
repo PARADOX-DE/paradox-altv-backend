@@ -28,8 +28,11 @@ namespace PARADOX_RP.Core.Database
         public DbSet<ArrivalQuestions> ArrivalQuestions { get; set; }
         public DbSet<PlayerBankHistory> BankHistory { get; set; }
         public DbSet<BankATMs> BankATMs { get; set; }
+
         public DbSet<Clothes> Clothes { get; set; }
         public DbSet<ClothesShop> ClothesShop { get; set; }
+        public DbSet<MigratedClothes> MigratedClothes { get; set; }
+        public DbSet<MigratedClothesVariants> MigratedClothesVariants { get; set; }
 
         public DbSet<Shops> Shops { get; set; }
         public DbSet<ShopItems> ShopItems { get; set; }

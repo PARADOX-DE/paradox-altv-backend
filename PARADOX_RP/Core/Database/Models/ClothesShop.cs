@@ -9,6 +9,10 @@ namespace PARADOX_RP.Core.Database.Models
     [Table("clothes_shop")]
     public partial class ClothesShop
     {
+        public ClothesShop()
+        {
+            Clothes = new HashSet<MigratedClothes>();
+        }
 
         public int Id { get; set; }
         public string Name { get; set; }
@@ -18,6 +22,7 @@ namespace PARADOX_RP.Core.Database.Models
         public float Position_Y { get; set; }
         public float Position_Z { get; set; }
 
+        public virtual ICollection<MigratedClothes> Clothes { get; set; }
         public virtual Teams Team { get; set; }
     }
 

@@ -26,7 +26,8 @@ namespace PARADOX_RP.Core.Factories
     public enum DimensionTypes
     {
         WORLD,
-        TEAMHOUSE
+        TEAMHOUSE,
+        CRYPTOROOM
     }
 
     public enum NotificationTypes

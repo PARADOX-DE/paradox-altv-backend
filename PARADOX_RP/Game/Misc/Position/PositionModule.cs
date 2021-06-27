@@ -11,12 +11,14 @@ namespace PARADOX_RP.Game.Misc.Position
     public enum Positions
     {
         NULL_POINT,
-        MEDICAL_DEPARTMENT
+        MEDICAL_DEPARTMENT,
+        CRYPTO_ROOM
     }
 
-    class PositionModule : ModuleBase<PositionModule>
+    public class PositionModule : ModuleBase<PositionModule>
     {
         public Dictionary<Positions, AltV.Net.Data.Position> _positions = new Dictionary<Positions, AltV.Net.Data.Position>();
+
         public PositionModule(PXContext pxContext) : base("Position")
         {
             LoadDatabaseTable<PositionList>(pxContext.PositionList, (pos) =>

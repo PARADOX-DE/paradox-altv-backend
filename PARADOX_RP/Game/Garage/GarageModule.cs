@@ -87,7 +87,7 @@ namespace PARADOX_RP.Game.Garage
                 if (player.Team.Id != dbGarage.TeamId)
                 {
                     if (Configuration.Instance.DevMode)
-                        player.SendNotification("Garage", "Du bist nicht in der zugehörigen Fraktion.", NotificationTypes.SUCCESS);
+                        player.SendNotification("Garage", "Du gehörst nicht zu der zugehörigen Fraktion.", NotificationTypes.SUCCESS);
 
                     return await Task.FromResult(true);
                 }

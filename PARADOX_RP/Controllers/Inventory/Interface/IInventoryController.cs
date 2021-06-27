@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace PARADOX_RP.Controllers.Inventory
 {
-    interface IInventoryController
+    public interface IInventoryController
     {
         Task<PXInventory> LoadInventory(InventoryTypes type, int Id);
         void UnloadInventory(int InventoryId);

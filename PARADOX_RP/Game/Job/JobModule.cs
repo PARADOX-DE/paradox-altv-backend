@@ -5,9 +5,9 @@ using System.Text;
 
 namespace PARADOX_RP.Game.Farming
 {
-    class FarmingModule : ModuleBase<FarmingModule>
+    class JobModule : ModuleBase<JobModule>
     {
-        public FarmingModule() : base("Farming")
+        public JobModule() : base("Farming")
         {
 
         }

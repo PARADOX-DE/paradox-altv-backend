@@ -33,6 +33,10 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <Folder Include="Game\Crypto\Content\" />
+	  <Folder Include="Game\Job\Content\" />
+	  <Folder Include="Game\Job\Interfaces\" />
+	  <Folder Include="Game\Job\Models\" />
 	  <Folder Include="Game\Misc\Mission\" />
 	</ItemGroup>
 </Project>

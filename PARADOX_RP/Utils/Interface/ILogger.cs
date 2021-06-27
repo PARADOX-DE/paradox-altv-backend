@@ -4,7 +4,7 @@ using System.Text;
 
 namespace PARADOX_RP.Utils.Interface
 {
-    interface ILogger
+    public interface ILogger
     {
         void Console(ConsoleLogType type, string Category, string Log);
     }

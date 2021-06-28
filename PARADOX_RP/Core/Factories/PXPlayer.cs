@@ -135,6 +135,21 @@ namespace PARADOX_RP.Core.Factories
             }
         }
 
+        public int DimensionLocked
+        {
+            get
+            {
+                lock (this)
+                {
+                    if (Exists)
+                    {
+                        return Dimension;
+                    }
+                }
+                return 0;
+            }
+        }
+
         public SupportRankModel SupportRank { get; set; }
         public CharacterCustomizationModel Customization { get; set; }
 

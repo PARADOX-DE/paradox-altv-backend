@@ -1,4 +1,5 @@
 ﻿using AltV.Net.Data;
+using PARADOX_RP.Game.Inventory.Models;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -22,6 +23,7 @@ namespace PARADOX_RP.Core.Database.Models
     public partial class CryptoRooms
     {
         public Position Position => new Position(Position_X, Position_Y, Position_Z);
-        public bool Locked { get; set; } = false;
+        public bool Locked  = false;
+        public PXInventory Inventory = null;
     }
 }

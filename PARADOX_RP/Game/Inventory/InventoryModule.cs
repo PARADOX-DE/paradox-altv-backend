@@ -28,8 +28,8 @@ namespace PARADOX_RP.Game.Inventory
     {
         PLAYER,
         VEHICLE,
+        CRYPTOROOM,
         TEAMHOUSE,
-        STORAGEROOM,
         LOCKER,
         EVENT
     }

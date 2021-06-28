@@ -9,6 +9,7 @@ using PARADOX_RP.Core.Events;
 using PARADOX_RP.Core.Factories;
 using PARADOX_RP.Core.Module;
 using PARADOX_RP.Game.Crypto.Extensions;
+using PARADOX_RP.Game.Inventory;
 using PARADOX_RP.Game.Inventory.Interfaces;
 using PARADOX_RP.Game.Inventory.Models;
 using PARADOX_RP.Game.Misc.Position;
@@ -45,10 +46,15 @@ namespace PARADOX_RP.Game.Crypto
         public void OnModuleLoad()
         {
             // Load CryptoRooms
-            LoadDatabaseTable(_pxContext.CryptoRooms, (CryptoRooms cryptoRoom) =>
+            LoadDatabaseTable(_pxContext.CryptoRooms, async (CryptoRooms cryptoRoom) =>
             {
                 _cryptoRooms.Add(cryptoRoom.Id, cryptoRoom);
                 MarkerStreamer.Create(MarkerTypes.MarkerTypeNumber0, cryptoRoom.Position, new Vector3(1, 1, 1), null, null, new Rgba(37, 165, 202, 200));
+
+                cryptoRoom.Inventory = await _inventoryController.LoadInventory(InventoryTypes.CRYPTOROOM, cryptoRoom.Id);
+                if (cryptoRoom.Inventory == null) cryptoRoom.Inventory = await _inventoryController.CreateInventory(InventoryTypes.CRYPTOROOM, cryptoRoom.Id);
+
+                _logger.Console(Utils.ConsoleLogType.SUCCESS, "Inventory", $"Created CryptoRoom Inventory {cryptoRoom.Inventory.Id}");
             });
         }
 
@@ -94,12 +100,36 @@ namespace PARADOX_RP.Game.Crypto
 
         public Task<PXInventory> OnInventoryOpen(PXPlayer player, Position position)
         {
-            throw new NotImplementedException();
+            if (player.DimensionType == DimensionTypes.CRYPTOROOM)
+            {
+                if (_cryptoRooms.TryGetValue(player.DimensionLocked, out CryptoRooms cryptoRoom))
+                {
+                    return Task.FromResult(cryptoRoom.Inventory);
+                }
+            }
+
+            return Task.FromResult<PXInventory>(null);
         }
 
         public Task<bool?> CanAccessInventory(PXPlayer player, PXInventory inventory)
         {
-            throw new NotImplementedException();
+            if (inventory.InventoryInfo.InventoryType != InventoryTypes.CRYPTOROOM) return Task.FromResult<bool?>(null);
+
+            if (player.DimensionType == DimensionTypes.CRYPTOROOM)
+            {
+                CryptoRooms cryptoRoom = _cryptoRooms.FirstOrDefault((c) => c.Value.Inventory.Id == inventory.Id).Value;
+                if (cryptoRoom != null)
+                {
+                    if (_cryptoRooms.TryGetValue(player.DimensionLocked, out CryptoRooms cryptoRooms))
+                    {
+                        //TODO: access logic later here
+                        return Task.FromResult<bool?>(true);
+                    }
+
+                    return Task.FromResult<bool?>(false);
+                }
+            }
+            return Task.FromResult<bool?>(null);
         }
     }
 }

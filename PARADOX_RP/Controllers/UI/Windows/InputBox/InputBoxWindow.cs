@@ -8,7 +8,7 @@ namespace PARADOX_RP.UI.Windows
 {
     class InputBoxWindow : Window
     {
-        public InputBoxWindow() : base("Confirmation") { }
+        public InputBoxWindow() : base("InputBox") { }
     }
 
     class InputBoxWindowWriter : IWritable

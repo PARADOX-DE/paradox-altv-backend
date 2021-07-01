@@ -9,6 +9,7 @@ using PARADOX_RP.Core.Factories;
 using PARADOX_RP.Core.Module;
 using PARADOX_RP.Game.Arrival;
 using PARADOX_RP.Game.Char.Models;
+using PARADOX_RP.Game.Moderation;
 using PARADOX_RP.UI;
 using PARADOX_RP.UI.Windows;
 using PARADOX_RP.Utils.Enums;
@@ -69,7 +70,12 @@ namespace PARADOX_RP.Game.Char
 
                     foreach (var arrivalClothing in ArrivalModule.Instance._arrivalClothes)
                     {
-                        //TODO: do the same for females 
+                        //TODO: do the same for shemales skrr return;
+                        if(customization.Gender == (int)Gender.FEMALE)
+                        {
+                            ModerationModule.Instance.BanPlayer(player, "Du darfst hier nicht spielen!! Sieht das aus wie eine Küche?!");
+                        }
+
                         if ((int)arrivalClothing.Value.Gender == customization.Gender)
                         {
                             PlayerClothesWearing alreadyExistingCloth = await px.PlayerClothesWearing.FirstOrDefaultAsync(i => (i.PlayerId == player.SqlId) && i.ComponentVariation == arrivalClothing.Key.Item2);

@@ -149,7 +149,7 @@ namespace PARADOX_RP.Core.Factories
                 return 0;
             }
         }
-
+        
         public SupportRankModel SupportRank { get; set; }
         public CharacterCustomizationModel Customization { get; set; }
 
@@ -172,6 +172,7 @@ namespace PARADOX_RP.Core.Factories
         public DimensionTypes DimensionType { get; set; }
         public DutyTypes DutyType { get; set; }
         public MinigameTypes Minigame { get; set; }
+        public Position LastWorldPosition { get; set; }
 
         public async Task<bool> TakeMoney(int moneyAmount)
         {

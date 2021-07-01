@@ -13,6 +13,8 @@ using PARADOX_RP.Game.Inventory;
 using PARADOX_RP.Game.Inventory.Interfaces;
 using PARADOX_RP.Game.Inventory.Models;
 using PARADOX_RP.Game.Misc.Position;
+using PARADOX_RP.UI;
+using PARADOX_RP.UI.Windows;
 using PARADOX_RP.Utils.Enums;
 using PARADOX_RP.Utils.Interface;
 using System;
@@ -41,6 +43,8 @@ namespace PARADOX_RP.Game.Crypto
             _eventController = eventController;
             _positionModule = positionModule;
             _inventoryController = inventoryController;
+
+            _eventController.OnClient<PXPlayer, string>("SubmitCryptoRoomPIN", SubmitCryptoRoomPIN);
         }
 
         public void OnModuleLoad()
@@ -53,8 +57,6 @@ namespace PARADOX_RP.Game.Crypto
 
                 cryptoRoom.Inventory = await _inventoryController.LoadInventory(InventoryTypes.CRYPTOROOM, cryptoRoom.Id);
                 if (cryptoRoom.Inventory == null) cryptoRoom.Inventory = await _inventoryController.CreateInventory(InventoryTypes.CRYPTOROOM, cryptoRoom.Id);
-
-                _logger.Console(Utils.ConsoleLogType.SUCCESS, "Inventory", $"Created CryptoRoom Inventory {cryptoRoom.Inventory.Id}");
             });
         }
 
@@ -78,24 +80,59 @@ namespace PARADOX_RP.Game.Crypto
                 // TODO: enter and leave room
                 var playerPos = Position.Zero; player.GetPositionLocked(ref playerPos);
 
-                CryptoRooms cryptoRoom = _cryptoRooms.FirstOrDefault((c) => c.Value.Position.Distance(playerPos) < 3).Value;
-                if (cryptoRoom == null) return false;
+                if (player.DimensionType == DimensionTypes.CRYPTOROOM)
 
-                await EnterCryptoRoom(player, cryptoRoom);
+                    return false;
+
+                else
+                {
+                    CryptoRooms cryptoRoom = _cryptoRooms.FirstOrDefault((c) => c.Value.Position.Distance(playerPos) < 3).Value;
+                    if (cryptoRoom == null) return false;
+
+                    WindowController.Instance.Get<InputBoxWindow>().Show(player, new InputBoxWindowWriter("Crypto-Room", "Um diesen Raum zu betreten, benötigst du einen 4-stelligen PIN.", "PIN", "Eintreten", "SubmitCryptoRoomPIN"));
+                    return true;
+                }
             }
 
             return false;
         }
 
+        private async void SubmitCryptoRoomPIN(PXPlayer player, string password)
+        {
+            if (!player.CanInteract()) return;
+            if (int.TryParse(password, out int pin))
+            {
+                var playerPos = Position.Zero; player.GetPositionLocked(ref playerPos);
+
+                CryptoRooms cryptoRoom = _cryptoRooms.FirstOrDefault((c) => c.Value.Position.Distance(playerPos) < 3).Value;
+                if (cryptoRoom == null) return;
+
+                await EnterCryptoRoom(player, cryptoRoom);
+            }
+        }
+
         public async Task EnterCryptoRoom(PXPlayer player, CryptoRooms cryptoRoom)
         {
             if (cryptoRoom == null || cryptoRoom.Locked) return;
+            var playerPos = Position.Zero; player.GetPositionLocked(ref playerPos);
 
             player.Dimension = cryptoRoom.Id; // CryptoRoom Id
             player.DimensionType = DimensionTypes.CRYPTOROOM;
+            player.LastWorldPosition = playerPos;
+
             player.LoadCryptoRoom(cryptoRoom.Servers);
 
             await player.SetPositionAsync(_positionModule.Get(Positions.CRYPTO_ROOM));
+        }
+
+        public async Task LeaveCryptoRoom(PXPlayer player, CryptoRooms cryptoRoom)
+        {
+            if (cryptoRoom == null || cryptoRoom.Locked) return;
+            
+            player.Dimension = 0; // CryptoRoom Id
+            player.DimensionType = DimensionTypes.WORLD;
+            
+            await player.SetPositionAsync(player.LastWorldPosition);
         }
 
         public Task<PXInventory> OnInventoryOpen(PXPlayer player, Position position)
@@ -121,10 +158,7 @@ namespace PARADOX_RP.Game.Crypto
                 if (cryptoRoom != null)
                 {
                     if (_cryptoRooms.TryGetValue(player.DimensionLocked, out CryptoRooms cryptoRooms))
-                    {
-                        //TODO: access logic later here
                         return Task.FromResult<bool?>(true);
-                    }
 
                     return Task.FromResult<bool?>(false);
                 }

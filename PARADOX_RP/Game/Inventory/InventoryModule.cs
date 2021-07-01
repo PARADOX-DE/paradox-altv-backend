@@ -164,7 +164,7 @@ namespace PARADOX_RP.Game.Inventory
             }
 
             // main inventory -> main inventory
-            if(!FromAdditional && !ToAdditional)
+            if (!FromAdditional && !ToAdditional)
             {
                 if (localInventoryData.PlayerInventory.Items.TryGetValue(OldSlot, out InventoryItemAssignments OldSlotItem)) // prüfe ob auf alten Slot das Item verfügbar ist
                 {
@@ -236,6 +236,21 @@ namespace PARADOX_RP.Game.Inventory
             });
 
             return accessible;
+        }
+
+        public int GetUsedWeight(PXInventory inventory)
+        {
+            int usedWeight = 0;
+            foreach (var item in inventory.Items.Values)
+                if (_items.TryGetValue(item.Item, out Items itemData))
+                    usedWeight += item.Amount * itemData.Weight;
+
+            return usedWeight;
+        }
+
+        public int GetFreeWeight(PXInventory inventory)
+        {
+            return inventory.InventoryInfo.MaxWeight - GetUsedWeight(inventory);
         }
     }
 }

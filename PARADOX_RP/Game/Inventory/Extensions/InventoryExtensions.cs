@@ -13,5 +13,11 @@ namespace PARADOX_RP.Game.Inventory.Extensions
         public static bool HasItem(this PXInventory inventory, int ItemId) => InventoryModule.Instance.HasItem(inventory, ItemId);
 
         public static Task<bool?> CanAccess(this PXInventory inventory, PXPlayer player) => InventoryModule.Instance.CanAccessInventory(inventory, player);
+       
+        public static int GetUsedWeight(this PXInventory inventory) => InventoryModule.Instance.GetUsedWeight(inventory);
+        
+        public static int GetFreeWeight(this PXInventory inventory) => InventoryModule.Instance.GetFreeWeight(inventory);
+
+        public static bool CanAddItem(this PXInventory inventory, int itemId, int amount = 1) => InventoryModule.Instance.CanAddItem(inventory, itemId, amount);
     }
 }

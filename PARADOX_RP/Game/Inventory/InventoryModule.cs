@@ -252,5 +252,34 @@ namespace PARADOX_RP.Game.Inventory
         {
             return inventory.InventoryInfo.MaxWeight - GetUsedWeight(inventory);
         }
+
+        public bool CanAddItem(PXInventory inventory, int itemId, int amount = 1)
+        {
+            if (!_items.TryGetValue(itemId, out Items itemData)) return false;
+
+            var localItems = inventory.Items.Values.Where(d => d.Item == itemId);
+
+            int toBeAdded = amount;
+
+            foreach (var localItem in localItems)
+            {
+                toBeAdded -= itemData.StackSize - localItem.Amount;
+
+                if (toBeAdded <= 0) break;
+            }
+
+            if (toBeAdded > 0)
+            {
+                int freeSlots = inventory.InventoryInfo.MaxSlots - inventory.Items.Count;
+                if (freeSlots <= 0) return false;
+
+                if (freeSlots < toBeAdded / itemData.StackSize)
+                {
+                    return false;
+                }
+            }
+
+            return itemData.Weight * amount <= GetFreeWeight(inventory);
+        }
     }
 }

@@ -238,6 +238,21 @@ namespace PARADOX_RP.Game.Inventory
             return accessible;
         }
 
+        public bool VerifyItem(PXInventory inventory, int itemObjectId)
+        {
+            var targetItem = inventory.Items.FirstOrDefault(i => i.Value.Id == itemObjectId);
+            if (targetItem.Value == null) return false;
+
+            if (targetItem.Key < 0 || targetItem.Key > inventory.InventoryInfo.MaxSlots) return false;
+
+            InventoryItemSignatures targetSignature = targetItem.Value.Origin;
+            if (targetSignature == null) return false;
+
+            if (targetSignature.Amount < targetItem.Value.Amount) return false;
+
+            return true;  
+        }
+
         public int GetUsedWeight(PXInventory inventory)
         {
             int usedWeight = 0;

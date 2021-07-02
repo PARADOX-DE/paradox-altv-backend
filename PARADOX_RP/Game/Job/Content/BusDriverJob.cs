@@ -1,4 +1,5 @@
 ﻿using AltV.Net.Data;
+using EntityStreamer;
 using PARADOX_RP.Core.Factories;
 using PARADOX_RP.Game.Job.Interfaces;
 using System;
@@ -20,11 +21,12 @@ namespace PARADOX_RP.Game.Job.Content
         public Position Position => new Position(0, 0, 0);
 
 
-        private Dictionary<BusDriverPositionTypes, Position> positions = new Dictionary<BusDriverPositionTypes, Position>();
+        private readonly Dictionary<BusDriverPositionTypes, Position> _positions;
         
         public BusDriverJob()
         {
-
+            _positions = new Dictionary<BusDriverPositionTypes, Position>();
+            
         }
 
         public bool HasJobRequirement(PXPlayer player)

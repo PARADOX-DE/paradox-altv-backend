@@ -19,13 +19,11 @@ namespace PARADOX_RP.Game.Vehicle.Radio
             AltAsync.OnClient<PXPlayer>("ToggleVehicleRadio", ToggleVehicleRadio);
         }
 
-        private async void ToggleVehicleRadio(PXPlayer player)
+        private void ToggleVehicleRadio(PXPlayer player)
         {
             PXVehicle vehicle = (PXVehicle)player.Vehicle;
             if (!vehicle.IsValid() || vehicle.Driver.Id != player.Id) return;
 
-            await vehicle.SetMetaDataAsync("RadioChangedDate", DateTime.Now);
-            await vehicle.SetStreamSyncedMetaDataAsync("HasRadio", !vehicle.HasRadio);
             vehicle.HasRadio = !vehicle.HasRadio;
         }
     }

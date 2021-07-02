@@ -21,6 +21,18 @@ namespace PARADOX_RP.Game.Interaction
             _eventController = eventController;
 
             _eventController.OnClient<PXPlayer, PXVehicle>("LockVehicle", LockVehicle);
+            _eventController.OnClient<PXPlayer, PXVehicle>("StartVehicleEngine", StartVehicleEngine);
+        }
+
+        public void StartVehicleEngine(PXPlayer player, PXVehicle target)
+        {
+            if (!player.CanInteract() || !player.IsValid()) return;
+            if (target == null) return;
+
+            if (target.OwnerId != player.SqlId) return;
+            target.Engine = !target.Engine;
+
+            player.SendNotification("Fahrzeug", target.Engine ? "Motor gestartet." : "Motor gestoppt.", NotificationTypes.SUCCESS);
         }
 
         public void LockVehicle(PXPlayer player, PXVehicle target)

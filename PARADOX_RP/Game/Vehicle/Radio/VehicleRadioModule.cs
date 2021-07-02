@@ -12,60 +12,21 @@ using System.Threading.Tasks;
 
 namespace PARADOX_RP.Game.Vehicle.Radio
 {
-    class VehicleRadioModule : ModuleBase<VehicleRadioModule>, IEventPlayerVehicle
+    class VehicleRadioModule : ModuleBase<VehicleRadioModule>
     {
         public VehicleRadioModule() : base("VehicleRadio")
         {
-            AltAsync.OnClient<PXPlayer>("EnableVehicleRadio", EnableVehicleRadio);
-            AltAsync.OnClient<PXPlayer>("DisableVehicleRadio", DisableVehicleRadio);
+            AltAsync.OnClient<PXPlayer>("ToggleVehicleRadio", ToggleVehicleRadio);
         }
 
-        private async void DisableVehicleRadio(PXPlayer player)
+        private async void ToggleVehicleRadio(PXPlayer player)
         {
-            if (player.Seat != Convert.ToByte(VehicleSeats.DRIVER) && player.Seat != Convert.ToByte(VehicleSeats.CODRIVER)) return;
-
             PXVehicle vehicle = (PXVehicle)player.Vehicle;
-            if (!vehicle.IsValid()) return;
+            if (!vehicle.IsValid() || vehicle.Driver.Id != player.Id) return;
 
-            if (vehicle.HasRadio)
-            {
-                await player.EmitAsync("DisableVehicleRadio");
-            }
-        }
-
-        private async void EnableVehicleRadio(PXPlayer player)
-        {
-            if (player.Seat != Convert.ToByte(VehicleSeats.DRIVER) && player.Seat != Convert.ToByte(VehicleSeats.CODRIVER)) return;
-
-            PXVehicle vehicle = (PXVehicle)player.Vehicle;
-            if (!vehicle.IsValid()) return;
-
-            if (vehicle.HasRadio)
-            {
-                await player.EmitAsync("EnableVehicleRadio", Configuration.Instance.VehicleRadioURL);
-            }
-        }
-
-        public async Task OnPlayerEnterVehicle(IVehicle v, IPlayer p, byte seat)
-        {
-            PXVehicle vehicle = (PXVehicle)v;
-            if (!vehicle.IsValid()) return;
-
-            if (vehicle.HasRadio)
-            {
-                await p.EmitAsync("EnableVehicleRadio", Configuration.Instance.VehicleRadioURL);
-            }
-        }
-
-        public async Task OnPlayerLeaveVehicle(IVehicle v, IPlayer p, byte seat)
-        {
-            PXVehicle vehicle = (PXVehicle)v;
-            if (!vehicle.IsValid()) return;
-
-            if (vehicle.HasRadio)
-            {
-                await p.EmitAsync("DisableVehicleRadio");
-            }
+            await vehicle.SetMetaDataAsync("RadioChangedDate", DateTime.Now);
+            await vehicle.SetStreamSyncedMetaDataAsync("HasRadio", !vehicle.HasRadio);
+            vehicle.HasRadio = !vehicle.HasRadio;
         }
     }
 }

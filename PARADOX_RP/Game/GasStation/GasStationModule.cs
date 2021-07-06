@@ -27,10 +27,10 @@ using System.Threading.Tasks;
 
 namespace PARADOX_RP.Game.GasStation
 {
-    class GasStationModule : ModuleBase<GasStationModule>, IEventKeyPressed, IEventPlayerConnect
+    class GasStationModule : Module<GasStationModule>, IEventKeyPressed, IEventPlayerConnect
     {
-        private Dictionary<int, GasStations> _GasStations = new Dictionary<int, GasStations>();
-        private Dictionary<int, GasStationPetrols> _GasStationPetrols = new Dictionary<int, GasStationPetrols>();
+        private Dictionary<int, GasStations> _gasStations = new Dictionary<int, GasStations>();
+        private Dictionary<int, GasStationPetrols> _gasStationPetrols = new Dictionary<int, GasStationPetrols>();
 
         private readonly IEventController _eventController;
         private readonly IVehicleController _vehicleController;
@@ -42,17 +42,17 @@ namespace PARADOX_RP.Game.GasStation
 
             LoadDatabaseTable(px.GasStations, (GasStations gs) =>
             {
-                _GasStations.Add(gs.Id, gs);
+                _gasStations.Add(gs.Id, gs);
             });
 
             LoadDatabaseTable(px.GasStationPetrols, (GasStationPetrols gsp) =>
             {
-                _GasStationPetrols.Add(gsp.Id, gsp);
+                _gasStationPetrols.Add(gsp.Id, gsp);
             });
 
             _eventController.OnClient<PXPlayer, int, string, int>("PayGasStation", PayGasStation);
         }
-        public void OnPlayerConnect(PXPlayer player) =>_GasStations.ForEach((gs) => player.AddBlips(gs.Value.Name, gs.Value.Position, 361, 81, 1, true));
+        public void OnPlayerConnect(PXPlayer player) =>_gasStations.ForEach((gs) => player.AddBlips(gs.Value.Name, gs.Value.Position, 361, 81, 1, true));
 
         public async Task<bool> OnKeyPress(PXPlayer player, KeyEnumeration key)
         {
@@ -60,18 +60,16 @@ namespace PARADOX_RP.Game.GasStation
             if (!player.IsValid()) return await Task.FromResult(false);
             if (!player.CanInteract()) return await Task.FromResult(false);
 
-            GasStationPetrols dbPetrolStation = _GasStationPetrols.Values.FirstOrDefault(gsp => gsp.Position.Distance(player.Position) < 3);
+            GasStationPetrols dbPetrolStation = _gasStationPetrols.Values.FirstOrDefault(gsp => gsp.Position.Distance(player.Position) < 3);
             if (dbPetrolStation == null) return await Task.FromResult(false);
 
-            if (!_GasStations.TryGetValue(dbPetrolStation.GasStationId, out GasStations dbGasStation)) return await Task.FromResult(false);
+            if (!_gasStations.TryGetValue(dbPetrolStation.GasStationId, out GasStations dbGasStation)) return await Task.FromResult(false);
 
             PXVehicle nearestVehicle = Pools.Instance.Get<PXVehicle>(PoolType.VEHICLE).FirstOrDefault(v => v.Position.Distance(player.Position) < 5);
             if (nearestVehicle == null) return await Task.FromResult(true);
 
             VehicleClass vehicleClass = VehicleModule.Instance._vehicleClass.FirstOrDefault(v => v.Value.VehicleModel == nearestVehicle.VehicleModel).Value;
             if (vehicleClass == null) return await Task.FromResult(true);
-
-            if (dbGasStation.OwnerId == -1) dbGasStation.TankVolume = 999999;
 
             if (dbGasStation.TankVolume <= 0)
             {
@@ -94,7 +92,7 @@ namespace PARADOX_RP.Game.GasStation
 
             if (!WindowController.Instance.Get<GasStationWindow>().IsVisible(player)) return;
 
-            if (!_GasStations.TryGetValue(GasStationId, out GasStations dbGasStation)) return;
+            if (!_gasStations.TryGetValue(GasStationId, out GasStations dbGasStation)) return;
 
             PXVehicle nearestVehicle = Pools.Instance.Get<PXVehicle>(PoolType.VEHICLE).FirstOrDefault(v => v.Position.Distance(player.Position) < 5);
             if (nearestVehicle == null) return;
@@ -140,7 +138,7 @@ namespace PARADOX_RP.Game.GasStation
             if (Volume > dbGasStation.TankVolume)
             {
                 Volume = dbGasStation.TankVolume;
-                player.SendNotification("Tankstelle", $"Die Tankstelle hat nicht genug Inhalt um Vollständig zu tanken daher wird die Füllmenge auf {Volume} reduziert.", NotificationTypes.ERROR);
+                player.SendNotification("Tankstelle", $"Die Tankstelle hat nicht genug Inhalt um vollständig zu tanken daher wird die Füllmenge auf {Volume} reduziert.", NotificationTypes.ERROR);
             }
 
             if((nearestVehicle.Fuel + Volume) > vehicleClass.MaxFuel)
@@ -160,11 +158,7 @@ namespace PARADOX_RP.Game.GasStation
             }
 
             nearestVehicle.Fuel += Volume;
-            if (FuelType == FuelTypes.ELECTRO)
-                player.SendNotification("Tankstelle", $"Du hast dein Fahrzeug erfolgreich für {Volume * price}$ aufgeladen.", NotificationTypes.SUCCESS);
-            else
-                player.SendNotification("Tankstelle", $"Du hast dein Fahrzeug erfolgreich für {Volume * price}$ getankt.", NotificationTypes.SUCCESS);
-            
+            player.SendNotification("Tankstelle", $"Du hast dein Fahrzeug erfolgreich für {Volume * price}$ {(FuelType == FuelTypes.ELECTRO ? "aufgeladen" : "getankt")}.", NotificationTypes.SUCCESS);
         }
     }
 }

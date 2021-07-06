@@ -42,11 +42,11 @@ namespace PARADOX_RP.Core.Module
         }
     }
 
-    public abstract class ModuleBase<T> : ModuleBase where T : ModuleBase<T>
+    public abstract class Module<T> : ModuleBase where T : Module<T>
     {
         public static T Instance { get; set; }
 
-        public ModuleBase(string ModuleName, bool Enabled = true)
+        public Module(string ModuleName, bool Enabled = true)
         {
             this.ModuleName = ModuleName;
             this.Enabled = Enabled;

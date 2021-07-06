@@ -10,7 +10,7 @@ using AltV.Net.Async;
 
 namespace PARADOX_RP.Game.Administration
 {
-    class PermissionsModule : ModuleBase<PermissionsModule>
+    class PermissionsModule : Module<PermissionsModule>
     {
         public PermissionsModule() : base("Permissions") { }
 

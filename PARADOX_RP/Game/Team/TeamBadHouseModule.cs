@@ -5,7 +5,7 @@ using System.Text;
 
 namespace PARADOX_RP.Game.Team
 {
-    class TeamBadHouseModule : ModuleBase<TeamBadHouseModule>
+    class TeamBadHouseModule : Module<TeamBadHouseModule>
     {
         public TeamBadHouseModule() : base("TeamBadHouse")
         {

@@ -31,7 +31,7 @@ using PARADOX_RP.Core.Events;
 
 namespace PARADOX_RP.Game.Login
 {
-    class LoginModule : ModuleBase<LoginModule>, IEventModuleLoad, IEventPlayerConnect
+    class LoginModule : Module<LoginModule>, IEventModuleLoad, IEventPlayerConnect
     {
         private readonly IEventController _eventController;
         private readonly ILoginController _loginHandler;

@@ -15,7 +15,7 @@ namespace PARADOX_RP.Game.Misc.Position
         CRYPTO_ROOM
     }
 
-    public class PositionModule : ModuleBase<PositionModule>
+    public class PositionModule : Module<PositionModule>
     {
         public Dictionary<Positions, AltV.Net.Data.Position> _positions = new Dictionary<Positions, AltV.Net.Data.Position>();
 

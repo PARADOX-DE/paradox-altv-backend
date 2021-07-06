@@ -29,7 +29,7 @@ using PARADOX_RP.Game.Commands.Extensions;
 
 namespace PARADOX_RP.Game.Administration
 {
-    class AdministrationModule : ModuleBase<AdministrationModule>, ICommand, IEventKeyPressed
+    class AdministrationModule : Module<AdministrationModule>, ICommand, IEventKeyPressed
     {
         private IVehicleController _vehicleController;
         private IInventoryController _inventoryController;

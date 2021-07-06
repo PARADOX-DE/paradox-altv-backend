@@ -30,7 +30,7 @@ using System.Threading.Tasks;
 
 namespace PARADOX_RP.Game.JumpPoint
 {
-    public sealed class JumpPointModule : ModuleBase<JumpPointModule>, IEventKeyPressed, IEventModuleLoad
+    public sealed class JumpPointModule : Module<JumpPointModule>, IEventKeyPressed, IEventModuleLoad
     {
         public Dictionary<int, JumpPoints> _jumpPoints = new Dictionary<int, JumpPoints>();
 

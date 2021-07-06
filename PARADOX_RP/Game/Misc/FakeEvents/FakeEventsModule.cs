@@ -9,7 +9,7 @@ using System.Text;
 
 namespace PARADOX_RP.Game.Misc.FakeEvents
 {
-    class FakeEventsModule : ModuleBase<FakeEventsModule>
+    class FakeEventsModule : Module<FakeEventsModule>
     {
         private List<string> _fakeEvents = new List<string>()
         {

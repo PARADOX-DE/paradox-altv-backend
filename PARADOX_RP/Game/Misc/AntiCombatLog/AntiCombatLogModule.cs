@@ -14,7 +14,7 @@ using System.Threading.Tasks;
 
 namespace PARADOX_RP.Game.Misc.AntiCombatLog
 {
-    class AntiCombatLogModule : ModuleBase<AntiCombatLogModule>, IEventPlayerDisconnect
+    class AntiCombatLogModule : Module<AntiCombatLogModule>, IEventPlayerDisconnect
     {
         public AntiCombatLogModule() : base("AntiCombatLog") { }
 

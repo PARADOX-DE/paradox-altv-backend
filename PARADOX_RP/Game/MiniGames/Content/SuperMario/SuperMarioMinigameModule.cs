@@ -17,7 +17,7 @@ using System.Threading.Tasks;
 
 namespace PARADOX_RP.Game.MiniGames.Content.SuperMario
 {
-    class SuperMarioMinigameModule : ModuleBase<SuperMarioMinigameModule>, IMinigame, IEventKeyPressed, IEventColshape
+    class SuperMarioMinigameModule : Module<SuperMarioMinigameModule>, IMinigame, IEventKeyPressed, IEventColshape
     {
         private Position _spawnPoint = new Position(3755.6572f, -798.4879f, 47.696655f);
 

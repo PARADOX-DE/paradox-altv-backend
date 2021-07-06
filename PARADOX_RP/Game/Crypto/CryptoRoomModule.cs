@@ -26,7 +26,7 @@ using System.Threading.Tasks;
 
 namespace PARADOX_RP.Game.Crypto
 {
-    public class CryptoRoomModule : ModuleBase<CryptoRoomModule>, IEventModuleLoad, IEventKeyPressed, IInventoriable
+    public class CryptoRoomModule : Module<CryptoRoomModule>, IEventModuleLoad, IEventKeyPressed, IInventoriable
     {
         private readonly PXContext _pxContext;
         private readonly ILogger _logger;
@@ -81,9 +81,15 @@ namespace PARADOX_RP.Game.Crypto
                 var playerPos = Position.Zero; player.GetPositionLocked(ref playerPos);
 
                 if (player.DimensionType == DimensionTypes.CRYPTOROOM)
+                {
+                    if (_cryptoRooms.TryGetValue(player.DimensionLocked, out CryptoRooms cryptoRoom))
+                    {
+                        await LeaveCryptoRoom(player, cryptoRoom);
+                        return true;
+                    }
 
                     return false;
-
+                }
                 else
                 {
                     CryptoRooms cryptoRoom = _cryptoRooms.FirstOrDefault((c) => c.Value.Position.Distance(playerPos) < 3).Value;
@@ -128,10 +134,10 @@ namespace PARADOX_RP.Game.Crypto
         public async Task LeaveCryptoRoom(PXPlayer player, CryptoRooms cryptoRoom)
         {
             if (cryptoRoom == null || cryptoRoom.Locked) return;
-            
+
             player.Dimension = 0; // CryptoRoom Id
             player.DimensionType = DimensionTypes.WORLD;
-            
+
             await player.SetPositionAsync(player.LastWorldPosition);
         }
 

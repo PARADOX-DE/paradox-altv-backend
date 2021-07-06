@@ -1,6 +1,7 @@
 ﻿using AltV.Net.Data;
 using EntityStreamer;
 using PARADOX_RP.Core.Factories;
+using PARADOX_RP.Core.Models;
 using PARADOX_RP.Game.Job.Interfaces;
 using System;
 using System.Collections.Generic;
@@ -15,7 +16,7 @@ namespace PARADOX_RP.Game.Job.Content
         BUS_STOP
     }
 
-    public sealed class BusDriverJob : IJob
+    public sealed class BusDriverJob : Singleton<BusDriverJob>, IJob
     {
         public string Name => "BusDriver";
         public Position Position => new Position(0, 0, 0);

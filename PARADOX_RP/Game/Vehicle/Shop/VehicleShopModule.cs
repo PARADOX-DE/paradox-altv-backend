@@ -23,7 +23,7 @@ using System.Threading.Tasks;
 
 namespace PARADOX_RP.Game.Vehicle.Shop
 {
-    class VehicleShopModule : ModuleBase<VehicleShopModule>, IEventKeyPressed, IEventModuleLoad, IEventPlayerConnect
+    class VehicleShopModule : Module<VehicleShopModule>, IEventKeyPressed, IEventModuleLoad, IEventPlayerConnect
     {
         private readonly IEventController _eventController;
         private readonly IVehicleController _vehicleController;

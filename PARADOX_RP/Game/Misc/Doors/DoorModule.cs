@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace PARADOX_RP.Game.Misc.Doors
 {
-    class DoorModule : ModuleBase<DoorModule>, IEventKeyPressed, IEventModuleLoad
+    class DoorModule : Module<DoorModule>, IEventKeyPressed, IEventModuleLoad
     {
         public DoorModule() : base("Door") { }
 

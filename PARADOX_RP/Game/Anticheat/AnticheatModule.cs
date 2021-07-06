@@ -7,7 +7,7 @@ using System.Text;
 
 namespace PARADOX_RP.Game.Anticheat
 {
-    class AnticheatModule : ModuleBase<AnticheatModule>
+    class AnticheatModule : Module<AnticheatModule>
     {
         public AnticheatModule(IEventController eventController) : base("Anticheat")
         {

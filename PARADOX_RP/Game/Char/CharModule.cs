@@ -26,7 +26,7 @@ namespace PARADOX_RP.Game.Char
         EDIT
     }
 
-    class CharModule : ModuleBase<CharModule>
+    class CharModule : Module<CharModule>
     {
 
         public CharModule(IEventController eventController) : base("Char")
@@ -71,10 +71,6 @@ namespace PARADOX_RP.Game.Char
                     foreach (var arrivalClothing in ArrivalModule.Instance._arrivalClothes)
                     {
                         //TODO: do the same for shemales skrr return;
-                        if(customization.Gender == (int)Gender.FEMALE)
-                        {
-                            ModerationModule.Instance.BanPlayer(player, "Du darfst hier nicht spielen!! Sieht das aus wie eine Küche?!");
-                        }
 
                         if ((int)arrivalClothing.Value.Gender == customization.Gender)
                         {

@@ -14,7 +14,7 @@ using System.Text;
 
 namespace PARADOX_RP.Game.Phone
 {
-    class PhoneModule : ModuleBase<PhoneModule>
+    class PhoneModule : Module<PhoneModule>
     {
         private IEnumerable<PhoneApplicationModel> _phoneApplications;
         public PhoneModule(PXContext pxContext, IEventController eventController, IEnumerable<IPhoneApplication> phoneApplications) : base("Phone")

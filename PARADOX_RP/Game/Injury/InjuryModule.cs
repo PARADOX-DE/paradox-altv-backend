@@ -30,7 +30,7 @@ namespace PARADOX_RP.Game.Injury
         SHOT
     }
 
-    class InjuryModule : ModuleBase<InjuryModule>, ICommand, IEventPlayerDeath
+    class InjuryModule : Module<InjuryModule>, ICommand, IEventPlayerDeath
     {
         private IEventController _eventController;
         private ITeamController _teamController;

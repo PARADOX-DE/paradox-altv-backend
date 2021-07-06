@@ -16,7 +16,7 @@ using System.Threading.Tasks;
 
 namespace PARADOX_RP.Game.Easteregg
 {
-    class EasterEggModule : ModuleBase<EasterEggModule>, IEventKeyPressed, IEventPlayerConnect
+    class EasterEggModule : Module<EasterEggModule>, IEventKeyPressed, IEventPlayerConnect
     {
         private Dictionary<int, Eastereggs> _easterEggs = new Dictionary<int, Eastereggs>();
         public EasterEggModule(PXContext pxContext) : base("EasterEgg")

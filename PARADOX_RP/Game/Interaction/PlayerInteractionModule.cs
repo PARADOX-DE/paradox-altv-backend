@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace PARADOX_RP.Game.Interaction
 {
-    class PlayerInteractionModule : ModuleBase<PlayerInteractionModule>, IEventKeyPressed
+    class PlayerInteractionModule : Module<PlayerInteractionModule>, IEventKeyPressed
     {
         private IEventController _eventController;
 

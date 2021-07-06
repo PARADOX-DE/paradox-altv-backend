@@ -18,7 +18,7 @@ using System.Threading.Tasks;
 
 namespace PARADOX_RP.Game.Vehicle
 {
-    class VehicleModule : ModuleBase<VehicleModule>, IInventoriable
+    class VehicleModule : Module<VehicleModule>, IInventoriable
     {
         public readonly Dictionary<int, VehicleClass> _vehicleClass = new Dictionary<int, VehicleClass>();
         public VehicleModule(PXContext pxContext) : base("Vehicle")

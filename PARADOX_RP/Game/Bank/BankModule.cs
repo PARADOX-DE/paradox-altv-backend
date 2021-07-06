@@ -23,7 +23,7 @@ using System.Threading.Tasks;
 
 namespace PARADOX_RP.Game.Bank
 {
-    class BankModule : ModuleBase<BankModule>, IEventKeyPressed, IEventPlayerConnect, IEventModuleLoad
+    class BankModule : Module<BankModule>, IEventKeyPressed, IEventPlayerConnect, IEventModuleLoad
     {
         private readonly string _bankName = "N26 Bank";
         private Dictionary<int, BankATMs> _BankATMs = new Dictionary<int, BankATMs>();

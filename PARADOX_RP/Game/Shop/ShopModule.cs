@@ -24,7 +24,7 @@ using System.Threading.Tasks;
 
 namespace PARADOX_RP.Game.Shop
 {
-    class ShopModule : ModuleBase<ShopModule>, IEventKeyPressed, IEventPlayerConnect, ICommand
+    class ShopModule : Module<ShopModule>, IEventKeyPressed, IEventPlayerConnect, ICommand
     {
         private Dictionary<int, Shops> _shops = new Dictionary<int, Shops>();
 

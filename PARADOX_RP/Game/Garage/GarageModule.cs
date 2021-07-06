@@ -26,7 +26,7 @@ using System.Threading.Tasks;
 
 namespace PARADOX_RP.Game.Garage
 {
-    class GarageModule : ModuleBase<GarageModule>, IEventKeyPressed, IEventPlayerConnect, IEventModuleLoad
+    class GarageModule : Module<GarageModule>, IEventKeyPressed, IEventPlayerConnect, IEventModuleLoad
     {
         private readonly IEventController _eventController;
         private readonly IVehicleController _vehicleController;

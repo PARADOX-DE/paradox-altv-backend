@@ -15,7 +15,7 @@ using System.Threading.Tasks;
 
 namespace PARADOX_RP.Game.Weapon
 {
-    class WeaponModule : ModuleBase<WeaponModule>, IEventPlayerWeaponChange
+    class WeaponModule : Module<WeaponModule>, IEventPlayerWeaponChange
     {
         private readonly ILogger _logger;
         public WeaponModule(ILogger logger) : base("Weapon")

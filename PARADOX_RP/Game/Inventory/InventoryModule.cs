@@ -34,7 +34,7 @@ namespace PARADOX_RP.Game.Inventory
         EVENT
     }
 
-    class InventoryModule : ModuleBase<InventoryModule>, IEventKeyPressed
+    class InventoryModule : Module<InventoryModule>, IEventKeyPressed
     {
         private IInventoryController _inventoryHandler;
 
@@ -105,16 +105,16 @@ namespace PARADOX_RP.Game.Inventory
                 // second inventory -> second inventory
                 if (FromAdditional && ToAdditional)
                 {
-                    if (localInventoryData.AdditionalInventory.Items.TryGetValue(OldSlot, out InventoryItemAssignments OldSlotItem)) // prüfe ob auf alten Slot das Item verfügbar ist
+                    if (localInventoryData.AdditionalInventory.Items.TryGetValue(OldSlot, out InventoryItemAssignments oldSlotItem)) // prüfe ob auf alten Slot das Item verfügbar ist
                     {
-                        if (OldSlotItem.Amount < 1) return;
+                        if (oldSlotItem.Amount < 1) return;
                         if (localInventoryData.AdditionalInventory.Items.TryGetValue(NewSlot, out _)) return; //prüfe ob auf neuen Slot bereits ein Item ist
 
-                        localInventoryData.AdditionalInventory.Items.ChangeKey(OldSlotItem.Slot, NewSlot);
-                        OldSlotItem.Slot = NewSlot;
+                        localInventoryData.AdditionalInventory.Items.ChangeKey(oldSlotItem.Slot, NewSlot);
+                        oldSlotItem.Slot = NewSlot;
 
                         await using var px = new PXContext();
-                        var dbItem = await px.InventoryItemAssignments.FindAsync(OldSlotItem.Id);
+                        var dbItem = await px.InventoryItemAssignments.FindAsync(oldSlotItem.Id);
                         dbItem.Slot = NewSlot;
                         await px.SaveChangesAsync();
                     }
@@ -123,18 +123,18 @@ namespace PARADOX_RP.Game.Inventory
                 // second inventory -> main inventory
                 if (FromAdditional && !ToAdditional)
                 {
-                    if (localInventoryData.AdditionalInventory.Items.TryGetValue(OldSlot, out InventoryItemAssignments OldSlotItem)) // prüfe ob auf alten Slot das Item verfügbar ist
+                    if (localInventoryData.AdditionalInventory.Items.TryGetValue(OldSlot, out InventoryItemAssignments oldSlotItem)) // prüfe ob auf alten Slot das Item verfügbar ist
                     {
-                        if (OldSlotItem.Amount < 1) return;
+                        if (oldSlotItem.Amount < 1) return;
                         if (localInventoryData.PlayerInventory.Items.TryGetValue(NewSlot, out _)) return; //prüfe ob auf neuen Slot bereits ein Item ist
 
                         localInventoryData.AdditionalInventory.Items.Remove(OldSlot);
 
-                        OldSlotItem.Slot = NewSlot;
-                        localInventoryData.PlayerInventory.Items.Add(OldSlotItem.Slot, OldSlotItem);
+                        oldSlotItem.Slot = NewSlot;
+                        localInventoryData.PlayerInventory.Items.Add(oldSlotItem.Slot, oldSlotItem);
 
                         await using var px = new PXContext();
-                        var dbItem = await px.InventoryItemAssignments.FindAsync(OldSlotItem.Id);
+                        var dbItem = await px.InventoryItemAssignments.FindAsync(oldSlotItem.Id);
                         dbItem.Slot = NewSlot;
                         dbItem.InventoryId = localInventoryData.PlayerInventory.Id;
                         await px.SaveChangesAsync();
@@ -144,18 +144,18 @@ namespace PARADOX_RP.Game.Inventory
                 // main inventory -> second inventory
                 if (!FromAdditional && ToAdditional)
                 {
-                    if (localInventoryData.PlayerInventory.Items.TryGetValue(OldSlot, out InventoryItemAssignments OldSlotItem)) // prüfe ob auf alten Slot das Item verfügbar ist
+                    if (localInventoryData.PlayerInventory.Items.TryGetValue(OldSlot, out InventoryItemAssignments oldSlotItem)) // prüfe ob auf alten Slot das Item verfügbar ist
                     {
-                        if (OldSlotItem.Amount < 1) return;
+                        if (oldSlotItem.Amount < 1) return;
                         if (localInventoryData.AdditionalInventory.Items.TryGetValue(NewSlot, out _)) return; //prüfe ob auf neuen Slot bereits ein Item ist
 
                         localInventoryData.PlayerInventory.Items.Remove(OldSlot);
 
-                        OldSlotItem.Slot = NewSlot;
-                        localInventoryData.AdditionalInventory.Items.Add(OldSlotItem.Slot, OldSlotItem);
+                        oldSlotItem.Slot = NewSlot;
+                        localInventoryData.AdditionalInventory.Items.Add(oldSlotItem.Slot, oldSlotItem);
 
                         await using var px = new PXContext();
-                        var dbItem = await px.InventoryItemAssignments.FindAsync(OldSlotItem.Id);
+                        var dbItem = await px.InventoryItemAssignments.FindAsync(oldSlotItem.Id);
                         dbItem.Slot = NewSlot;
                         dbItem.InventoryId = localInventoryData.AdditionalInventory.Id;
                         await px.SaveChangesAsync();
@@ -166,16 +166,16 @@ namespace PARADOX_RP.Game.Inventory
             // main inventory -> main inventory
             if (!FromAdditional && !ToAdditional)
             {
-                if (localInventoryData.PlayerInventory.Items.TryGetValue(OldSlot, out InventoryItemAssignments OldSlotItem)) // prüfe ob auf alten Slot das Item verfügbar ist
+                if (localInventoryData.PlayerInventory.Items.TryGetValue(OldSlot, out InventoryItemAssignments oldSlotItem)) // prüfe ob auf alten Slot das Item verfügbar ist
                 {
-                    if (OldSlotItem.Amount < 1) return;
+                    if (oldSlotItem.Amount < 1) return;
                     if (localInventoryData.PlayerInventory.Items.TryGetValue(NewSlot, out _)) return; //prüfe ob auf neuen Slot bereits ein Item ist
 
-                    localInventoryData.PlayerInventory.Items.ChangeKey(OldSlotItem.Slot, NewSlot);
-                    OldSlotItem.Slot = NewSlot;
+                    localInventoryData.PlayerInventory.Items.ChangeKey(oldSlotItem.Slot, NewSlot);
+                    oldSlotItem.Slot = NewSlot;
 
                     await using var px = new PXContext();
-                    var dbItem = await px.InventoryItemAssignments.FindAsync(OldSlotItem.Id);
+                    var dbItem = await px.InventoryItemAssignments.FindAsync(oldSlotItem.Id);
                     dbItem.Slot = NewSlot;
                     await px.SaveChangesAsync();
                 }

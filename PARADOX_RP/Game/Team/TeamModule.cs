@@ -35,7 +35,7 @@ namespace PARADOX_RP.Game.Team
         LSMC
     }
 
-    class TeamModule : ModuleBase<TeamModule>, ICommand, IEventModuleLoad
+    class TeamModule : Module<TeamModule>, ICommand, IEventModuleLoad
     {
         public Dictionary<int, Teams> TeamList = new Dictionary<int, Teams>();
         private readonly IEventController _eventController;

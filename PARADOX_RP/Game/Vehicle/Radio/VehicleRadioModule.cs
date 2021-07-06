@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace PARADOX_RP.Game.Vehicle.Radio
 {
-    class VehicleRadioModule : ModuleBase<VehicleRadioModule>, IEventPlayerVehicle
+    class VehicleRadioModule : Module<VehicleRadioModule>, IEventPlayerVehicle
     {
         public VehicleRadioModule() : base("VehicleRadio")
         {

@@ -13,7 +13,7 @@ using System.Threading.Tasks;
 
 namespace PARADOX_RP.Game.Misc.Progressbar
 {
-    class ProgressBarModule : ModuleBase<ProgressBarModule>
+    class ProgressBarModule : Module<ProgressBarModule>
     {
         public ProgressBarModule() : base("ProgressBarModule") { }
 

@@ -19,7 +19,7 @@ using System.Threading.Tasks;
 
 namespace PARADOX_RP.Game.Arrival
 {
-    class ArrivalModule : ModuleBase<ArrivalModule>, IEventPlayerConnect
+    class ArrivalModule : Module<ArrivalModule>, IEventPlayerConnect
     {
 
         public Dictionary<Tuple<Gender, ComponentVariation>, ClothesVariants> _arrivalClothes = null;

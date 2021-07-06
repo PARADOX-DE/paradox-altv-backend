@@ -21,7 +21,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace PARADOX_RP.Game.Clothing
 {
-    class ClothesModule : ModuleBase<ClothesModule>, IEventKeyPressed
+    class ClothesModule : Module<ClothesModule>, IEventKeyPressed
     {
         private readonly ILogger _logger;
         private readonly IEventController _eventController;

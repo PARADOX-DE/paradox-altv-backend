@@ -24,7 +24,7 @@ using PARADOX_RP.Controllers.Event.Interface;
 
 namespace PARADOX_RP.Game.Commands
 {
-    class ChatModule : ModuleBase<ChatModule>
+    class ChatModule : Module<ChatModule>
     {
 
         public ChatModule(IEnumerable<ICommand> commands, IEventController eventController) : base("Chat")

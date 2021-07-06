@@ -213,7 +213,7 @@ namespace PARADOX_RP.Core.Factories
             if (type.Namespace == null) return false;
             return type.Namespace.StartsWith("PARADOX_RP.Game") &&
                                             type.BaseType != null &&
-                                            (type.BaseType == typeof(ModuleBase) ||
+                                            (type.BaseType == typeof(Module.ModuleBase) ||
                                             type.BaseType.IsGenericType) &&
                                             !type.Name.StartsWith("<");
         }

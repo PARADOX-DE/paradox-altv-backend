@@ -9,7 +9,7 @@ using System.Text;
 
 namespace PARADOX_RP.Game.NativeMenu
 {
-    public class NativeMenuModule : ModuleBase<NativeMenuModule>
+    public class NativeMenuModule : Module<NativeMenuModule>
     {
         private IEnumerable<INativeMenu> _nativeMenus;
         private IEventController _eventController;

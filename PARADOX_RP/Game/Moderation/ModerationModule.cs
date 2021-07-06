@@ -13,7 +13,7 @@ using System.Threading.Tasks;
 
 namespace PARADOX_RP.Game.Moderation
 {
-    class ModerationModule : ModuleBase<ModerationModule>
+    class ModerationModule : Module<ModerationModule>
     {
         public ModerationModule() : base("Moderation") { }
 

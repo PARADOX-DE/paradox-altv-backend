@@ -8,7 +8,7 @@ using System.Linq;
 
 namespace PARADOX_RP.Game.MiniGames
 {
-    class MinigameModule : ModuleBase<MinigameModule>
+    class MinigameModule : Module<MinigameModule>
     {
         private readonly IEnumerable<IMinigame> _minigames;
         public MinigameModule(IEnumerable<IMinigame> minigames) : base("Minigame")

@@ -8,7 +8,7 @@ using System.Text;
 
 namespace PARADOX_RP.Game.Hotel
 {
-    class HotelModule : ModuleBase<HotelModule>, IEventModuleLoad, IEventPlayerConnect
+    class HotelModule : Module<HotelModule>, IEventModuleLoad, IEventPlayerConnect
     {
         public readonly string _hotelName = "Crastenburg Hotel";
         public readonly Position _blipPosition = new Position(-1237.5428f, -189.53406f, 41.61389f);

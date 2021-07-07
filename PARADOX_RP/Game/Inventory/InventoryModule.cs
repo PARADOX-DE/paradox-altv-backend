@@ -128,7 +128,7 @@ namespace PARADOX_RP.Game.Inventory
                     return;
                 }
 
-                if ((targetMoveInventoryFreeWeight + targetItem.Weight) >= targetMoveInventory.InventoryInfo.MaxWeight)
+                if ((targetMoveInventoryFreeWeight + targetItem.Weight) <= 0)
                 {
                     // Kein Platz für das Item
                     player.SendNotification("Inventar", "Du hast nicht genügend Platz.", NotificationTypes.ERROR);

@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace PARADOX_RP.Controllers.Garage.Interface
 {
-    interface IGarageController
+    public interface IGarageController
     {
         public Task<GarageWindowWriter> RequestGarageVehicles(PXPlayer player, Garages garage);
         public Task<GarageSpawns> GetFreeGarageSpawn(Garages garage);

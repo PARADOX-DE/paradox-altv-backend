@@ -102,7 +102,7 @@ namespace PARADOX_RP.Game.Inventory
                 }
             }
 
-            RunInventoryTransaction(localInventoryData.PlayerInventory, localInventoryData.AdditionalInventory, async () =>
+            RunInventoryTransaction(localInventoryData, async () =>
             {
                 PXInventory fromInventory = FromAdditional ? localInventoryData.AdditionalInventory : localInventoryData.PlayerInventory;
                 //var fromInventoryFreeWeight = GetFreeWeight(fromInventory);
@@ -299,27 +299,20 @@ namespace PARADOX_RP.Game.Inventory
             return itemData.Weight * amount <= GetFreeWeight(inventory);
         }
 
-        private async void RunInventoryTransaction(PXInventory inventory, Func<Task> transaction)
+        private async void RunInventoryTransaction(LocalInventoryData inventoryData, Func<Task> transaction)
         {
-            while (inventory.Locked) await Task.Delay(10);
+            if (inventoryData.PlayerInventory.Locked) return;
+            if (inventoryData.AdditionalInventory != null && inventoryData.AdditionalInventory.Locked) return;
 
-            inventory.Locked = true;
+            inventoryData.PlayerInventory.Locked = true;
+            if (inventoryData.AdditionalInventory != null)
+                inventoryData.AdditionalInventory.Locked = true;
 
             await transaction();
 
-            inventory.Locked = false;
-        }
-
-        private async void RunInventoryTransaction(PXInventory inventory, PXInventory additionalInventory, Func<Task> transaction)
-        {
-            if(inventory.Locked || additionalInventory.Locked) return;
-            inventory.Locked = true;
-            additionalInventory.Locked = true;
-
-            await transaction();
-
-            additionalInventory.Locked = false;
-            inventory.Locked = false;
+            if (inventoryData.AdditionalInventory != null)
+                inventoryData.AdditionalInventory.Locked = false;
+            inventoryData.PlayerInventory.Locked = false;
         }
     }
 }

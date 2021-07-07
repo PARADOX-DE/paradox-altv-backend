@@ -26,7 +26,7 @@ using System.Threading.Tasks;
 
 namespace PARADOX_RP.Game.Garage
 {
-    class GarageModule : Module<GarageModule>, IEventKeyPressed, IEventPlayerConnect, IEventModuleLoad
+    public sealed class GarageModule : Module<GarageModule>, IEventKeyPressed, IEventPlayerConnect, IEventModuleLoad
     {
         private readonly IEventController _eventController;
         private readonly IVehicleController _vehicleController;
@@ -43,10 +43,7 @@ namespace PARADOX_RP.Game.Garage
             pxContext.Vehicles.ForEach((v) => v.Parked = true);
             pxContext.SaveChanges();
 
-            LoadDatabaseTable(pxContext.Garages.Include(v => v.Vehicles).Include(v => v.Spawns), (Garages garage) =>
-            {
-                _garages.Add(garage.Id, garage);
-            });
+            LoadDatabaseTable(pxContext.Garages.Include(v => v.Vehicles).Include(v => v.Spawns), (Garages garage) => _garages.Add(garage.Id, garage));
 
             _eventController.OnClient<PXPlayer, int, int>("GarageParkOut", GarageParkOut);
             _eventController.OnClient<PXPlayer, int, int>("GarageParkIn", GarageParkIn);
@@ -54,11 +51,7 @@ namespace PARADOX_RP.Game.Garage
 
         public void OnPlayerConnect(PXPlayer player)
         {
-            _garages.ForEach((g) =>
-            {
-                player.AddBlips(g.Value.Name, g.Value.Position, 524, 0, 1, true);
-
-            });
+            _garages.ForEach((g) => player.AddBlips(g.Value.Name, g.Value.Position, 524, 0, 1, true));
         }
 
         public void OnModuleLoad()

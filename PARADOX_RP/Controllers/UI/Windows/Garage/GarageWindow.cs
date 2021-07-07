@@ -12,7 +12,7 @@ namespace PARADOX_RP.UI.Windows
         public GarageWindow() : base("Garage") { }
     }
 
-    class GarageWindowVehicle
+    public class GarageWindowVehicle
     {
         public GarageWindowVehicle(int id, string model, float fuel, float maxfuel)
         {
@@ -28,7 +28,7 @@ namespace PARADOX_RP.UI.Windows
         public float MaxFuel { get; set; }
     }
 
-    class GarageWindowWriter : IWritable
+    public class GarageWindowWriter : IWritable
     {
         public GarageWindowWriter(int id, string garageName, List<GarageWindowVehicle> vehicles, GarageWindowVehicle nearestVehicle)
         {

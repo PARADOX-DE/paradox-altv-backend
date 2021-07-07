@@ -12,9 +12,9 @@ using System.Threading.Tasks;
 
 namespace PARADOX_RP.Game.Interaction
 {
-    class VehicleInteractionModule : Module<VehicleInteractionModule>
+    public sealed class VehicleInteractionModule : Module<VehicleInteractionModule>
     {
-        private IEventController _eventController;
+        private readonly IEventController _eventController;
 
         public VehicleInteractionModule(IEventController eventController) : base("VehicleInteraction")
         {

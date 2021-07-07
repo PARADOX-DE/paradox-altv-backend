@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace PARADOX_RP.Controllers.Vehicle.Interface
 {
-    interface IVehicleController
+    public interface IVehicleController
     {
         Task<PXVehicle> CreateVehicle(Vehicles dbVehicle);
         Task RemoveVehicle(PXVehicle vehicle);

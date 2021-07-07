@@ -1,4 +1,5 @@
 ﻿using PARADOX_RP.Controllers.Event.Interface;
+using PARADOX_RP.Controllers.Team.Interface;
 using PARADOX_RP.Core.Module;
 using System;
 using System.Collections.Generic;
@@ -9,11 +10,12 @@ namespace PARADOX_RP.Game.Team
     public sealed class TeamBadHouseModule : Module<TeamBadHouseModule>
     {
         private readonly IEventController _eventController;
-        private readonly I _eventController;
+        private readonly ITeamController _teamController;
 
-        public TeamBadHouseModule() : base("TeamBadHouse")
+        public TeamBadHouseModule(IEventController eventController, ITeamController teamController) : base("TeamBadHouse")
         {
-
+            _eventController = eventController;
+            _teamController = teamController;
         }
     }
 }

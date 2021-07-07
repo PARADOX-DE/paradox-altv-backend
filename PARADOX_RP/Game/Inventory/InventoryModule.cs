@@ -102,85 +102,87 @@ namespace PARADOX_RP.Game.Inventory
                 }
             }
 
-            PXInventory fromInventory = FromAdditional ? localInventoryData.AdditionalInventory : localInventoryData.PlayerInventory;
-            //var fromInventoryFreeWeight = GetFreeWeight(fromInventory);
-            if (!fromInventory.Items.TryGetValue(oldSlot, out InventoryItemAssignments targetItem))
+            RunInventoryTransaction(localInventoryData.PlayerInventory, localInventoryData.AdditionalInventory, async () =>
             {
-                // Item welches verschoben wird existiert nicht
-                WindowController.Instance.Get<InventoryWindow>().Hide(player);
-                return;
-            }
-
-            PXInventory targetMoveInventory = ToAdditional ? localInventoryData.AdditionalInventory : localInventoryData.PlayerInventory;
-            var targetMoveInventoryFreeWeight = GetFreeWeight(targetMoveInventory);
-            if (targetMoveInventory.Items.TryGetValue(newSlot, out _))
-            {
-                // Auf dem Slot liegt bereits ein Item
-                WindowController.Instance.Get<InventoryWindow>().Hide(player);
-                return;
-            }
-
-            if (targetItem.Amount < Amount || targetItem.Amount < 1)
-            {
-                // Spieler verschiebt mehr als vorhanden. / Invalid item
-                return;
-            }
-
-            if ((targetMoveInventoryFreeWeight + targetItem.Weight) >= targetMoveInventory.InventoryInfo.MaxWeight)
-            {
-                // Kein Platz für das Item
-                player.SendNotification("Inventar", "Du hast nicht genügend Platz.", NotificationTypes.ERROR);
-                WindowController.Instance.Get<InventoryWindow>().Hide(player);
-                return;
-            }
-
-            if (targetItem.Amount == Amount)
-            {
-                // Volle Anzahl wird verschoben
-                fromInventory.Items.Remove(oldSlot);
-                targetItem.Slot = newSlot;
-
-                targetMoveInventory.Items.Add(newSlot, targetItem);
-
-                await using var px = new PXContext();
-                var dbTargetItem = await px.InventoryItemAssignments.FindAsync(targetItem.Id);
-                if (dbTargetItem == null) return;
-
-                dbTargetItem.Slot = newSlot;
-                dbTargetItem.InventoryId = targetMoveInventory.Id;
-                await px.SaveChangesAsync();
-            }
-            else
-            {
-                targetItem.Amount -= Amount;
-                if (_items.TryGetValue(targetItem.Item, out Items targetItemInfo))
+                PXInventory fromInventory = FromAdditional ? localInventoryData.AdditionalInventory : localInventoryData.PlayerInventory;
+                //var fromInventoryFreeWeight = GetFreeWeight(fromInventory);
+                if (!fromInventory.Items.TryGetValue(oldSlot, out InventoryItemAssignments targetItem))
                 {
-                    if (targetItem.Amount < 1 || targetItem.Amount > targetItemInfo.StackSize)
-                    {
-                        // Item invalid, log
-                        return;
-                    }
+                    // Item welches verschoben wird existiert nicht
+                    WindowController.Instance.Get<InventoryWindow>().Hide(player);
+                    return;
+                }
 
-                    var newItem = new InventoryItemAssignments()
-                    {
-                        InventoryId = targetMoveInventory.Id,
-                        OriginId = targetItem.OriginId,
-                        Item = targetItem.Item,
-                        Weight = targetItem.Weight,
-                        Amount = Amount,
-                        Slot = newSlot
-                    };
+                PXInventory targetMoveInventory = ToAdditional ? localInventoryData.AdditionalInventory : localInventoryData.PlayerInventory;
+                var targetMoveInventoryFreeWeight = GetFreeWeight(targetMoveInventory);
+                if (targetMoveInventory.Items.TryGetValue(newSlot, out _))
+                {
+                    // Auf dem Slot liegt bereits ein Item
+                    WindowController.Instance.Get<InventoryWindow>().Hide(player);
+                    return;
+                }
 
-                    targetMoveInventory.Items.Add(newSlot, newItem);
+                if (targetItem.Amount < Amount || targetItem.Amount < 1)
+                {
+                    // Spieler verschiebt mehr als vorhanden. / Invalid item
+                    return;
+                }
 
-                    await using (var px = new PXContext())
+                if ((targetMoveInventoryFreeWeight + targetItem.Weight) >= targetMoveInventory.InventoryInfo.MaxWeight)
+                {
+                    // Kein Platz für das Item
+                    player.SendNotification("Inventar", "Du hast nicht genügend Platz.", NotificationTypes.ERROR);
+                    WindowController.Instance.Get<InventoryWindow>().Hide(player);
+                    return;
+                }
+
+                if (targetItem.Amount == Amount)
+                {
+                    // Volle Anzahl wird verschoben
+                    fromInventory.Items.Remove(oldSlot);
+                    targetItem.Slot = newSlot;
+
+                    targetMoveInventory.Items.Add(newSlot, targetItem);
+
+                    await using var px = new PXContext();
+                    var dbTargetItem = await px.InventoryItemAssignments.FindAsync(targetItem.Id);
+                    if (dbTargetItem == null) return;
+
+                    dbTargetItem.Slot = newSlot;
+                    dbTargetItem.InventoryId = targetMoveInventory.Id;
+                    await px.SaveChangesAsync();
+                }
+                else
+                {
+                    targetItem.Amount -= Amount;
+                    if (_items.TryGetValue(targetItem.Item, out Items targetItemInfo))
                     {
-                        await px.InventoryItemAssignments.AddAsync(newItem);
-                        await px.SaveChangesAsync();
+                        if (targetItem.Amount < 1 || targetItem.Amount > targetItemInfo.StackSize)
+                        {
+                            // Item invalid, log
+                            return;
+                        }
+
+                        var newItem = new InventoryItemAssignments()
+                        {
+                            InventoryId = targetMoveInventory.Id,
+                            OriginId = targetItem.OriginId,
+                            Item = targetItem.Item,
+                            Weight = targetItem.Weight,
+                            Amount = Amount,
+                            Slot = newSlot
+                        };
+
+                        targetMoveInventory.Items.Add(newSlot, newItem);
+
+                        await using (var px = new PXContext())
+                        {
+                            await px.InventoryItemAssignments.AddAsync(newItem);
+                            await px.SaveChangesAsync();
+                        }
                     }
                 }
-            }
-
+            });
             //TODO: animation library
             await player.PlayAnimation("mp_safehousevagos@", "package_dropoff", 9, 2000);
         }
@@ -295,6 +297,29 @@ namespace PARADOX_RP.Game.Inventory
             }
 
             return itemData.Weight * amount <= GetFreeWeight(inventory);
+        }
+
+        private async void RunInventoryTransaction(PXInventory inventory, Func<Task> transaction)
+        {
+            while (inventory.Locked) await Task.Delay(10);
+
+            inventory.Locked = true;
+
+            await transaction();
+
+            inventory.Locked = false;
+        }
+
+        private async void RunInventoryTransaction(PXInventory inventory, PXInventory additionalInventory, Func<Task> transaction)
+        {
+            if(inventory.Locked || additionalInventory.Locked) return;
+            inventory.Locked = true;
+            additionalInventory.Locked = true;
+
+            await transaction();
+
+            additionalInventory.Locked = false;
+            inventory.Locked = false;
         }
     }
 }

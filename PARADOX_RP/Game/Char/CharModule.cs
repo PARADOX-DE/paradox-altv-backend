@@ -26,11 +26,13 @@ namespace PARADOX_RP.Game.Char
         EDIT
     }
 
-    class CharModule : Module<CharModule>
+    public sealed class CharModule : Module<CharModule>
     {
+        private readonly IEventController _eventController;
 
         public CharModule(IEventController eventController) : base("Char")
         {
+            _eventController = eventController;
 
             eventController.OnClient<PXPlayer, string, string, string, string>("SavePlayerCharacter", SavePlayerCharacter);
             eventController.OnClient<PXPlayer, uint>("SetModel", SetModel);

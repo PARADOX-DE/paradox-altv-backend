@@ -4,6 +4,7 @@ using PARADOX_RP.Controllers.Team.Interface;
 using PARADOX_RP.Core.Database;
 using PARADOX_RP.Core.Database.Models;
 using PARADOX_RP.Core.Events;
+using PARADOX_RP.Core.Events.Intervals;
 using PARADOX_RP.Core.Factories;
 using PARADOX_RP.Core.Module;
 using PARADOX_RP.Game.Administration;
@@ -30,13 +31,12 @@ namespace PARADOX_RP.Game.Injury
         SHOT
     }
 
-    class InjuryModule : Module<InjuryModule>, ICommand, IEventPlayerDeath
+    public sealed class InjuryModule : Module<InjuryModule>, ICommand, IEventPlayerDeath, IEventIntervalMinute
     {
-        private IEventController _eventController;
-        private ITeamController _teamController;
+        private readonly IEventController _eventController;
+        private readonly ITeamController _teamController;
 
-        //TODO: add dbInjury Model
-        private readonly Dictionary<uint, Injuries> _injuries = new Dictionary<uint, Injuries>();
+        private Dictionary<uint, Injuries> _injuries = new Dictionary<uint, Injuries>();
 
         public InjuryModule(PXContext pxContext, IEventController eventController, ITeamController teamController) : base("Injury")
         {
@@ -92,7 +92,7 @@ namespace PARADOX_RP.Game.Injury
             }
         }
 
-        public override async Task OnEveryMinute()
+        public async Task OnEveryMinute()
         {
             foreach (PXPlayer player in Pools.Instance.Get<PXPlayer>(PoolType.PLAYER).Where(p => p.InjuryTimeLeft >= 1))
             {
@@ -107,16 +107,14 @@ namespace PARADOX_RP.Game.Injury
 
                     if (player.InjuryTimeLeft % 5 == 0)
                     {
-                        await using (var px = new PXContext())
-                        {
-                            var injuryData = await px.PlayerInjuryData.FindAsync(player.PlayerInjuryData.Id);
-                            if (injuryData == null) continue;
+                        await using var px = new PXContext();
+                        var injuryData = await px.PlayerInjuryData.FindAsync(player.PlayerInjuryData.Id);
+                        if (injuryData == null) continue;
 
-                            injuryData.InjuryTimeLeft = player.InjuryTimeLeft;
-                            player.PlayerInjuryData.InjuryTimeLeft = player.InjuryTimeLeft;
+                        injuryData.InjuryTimeLeft = player.InjuryTimeLeft;
+                        player.PlayerInjuryData.InjuryTimeLeft = player.InjuryTimeLeft;
 
-                            await px.SaveChangesAsync();
-                        }
+                        await px.SaveChangesAsync();
                     }
 
                     await player.PlayAnimation(player.PlayerInjuryData.Injury.AnimationDictionary, player.PlayerInjuryData.Injury.AnimationName);
@@ -151,7 +149,6 @@ namespace PARADOX_RP.Game.Injury
             }
 
             if (target == null || !target.IsValid()) return;
-
             await target.Revive(true, true, true);
         }
     }

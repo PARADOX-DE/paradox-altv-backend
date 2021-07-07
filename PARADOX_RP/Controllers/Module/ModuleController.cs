@@ -15,6 +15,7 @@ using PARADOX_RP.Controllers.Event.Interface;
 using PARADOX_RP.Utils.Enums;
 using PARADOX_RP.Core.Events;
 using PARADOX_RP.Controllers.Inventory;
+using PARADOX_RP.Core.Events.Intervals;
 
 namespace PARADOX_RP.Controllers
 {
@@ -31,6 +32,8 @@ namespace PARADOX_RP.Controllers
         private readonly IEnumerable<IEventPlayerLogin> _playerLoginEvents;
         private readonly IEnumerable<IEventPlayerVehicle> _playerVehicleEvents;
         private readonly IEnumerable<IEventColshape> _colshapeEvents;
+
+        private readonly IEnumerable<IEventIntervalMinute> _intervalMinute;
 
         private readonly IInventoryController _inventoryController;
 
@@ -49,6 +52,8 @@ namespace PARADOX_RP.Controllers
         IEnumerable<IEventPlayerVehicle> playerVehicleEvents,
         IEnumerable<IEventColshape> colshapeEvents,
 
+        IEnumerable<IEventIntervalMinute> intervalMinute,
+
         IEventController eventController, ILoginController loginController, IIntervalController intervalController, IInventoryController inventoryController)
         {
             _modules = modules;
@@ -62,6 +67,8 @@ namespace PARADOX_RP.Controllers
             _playerLoginEvents = playerLoginEvents;
             _playerVehicleEvents = playerVehicleEvents;
             _colshapeEvents = colshapeEvents;
+
+            _intervalMinute = intervalMinute;
 
             _inventoryController = inventoryController;
 
@@ -85,11 +92,7 @@ namespace PARADOX_RP.Controllers
             {
                 await loginController.SavePlayers();
 
-                await _modules.ForEach(async e =>
-                {
-                    if (e.Enabled)
-                        await e.OnEveryMinute();
-                });
+                await _intervalMinute.ForEach(async e => await e.OnEveryMinute());
             });
         }
 

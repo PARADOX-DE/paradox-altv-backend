@@ -48,6 +48,8 @@ namespace PARADOX_RP.Game.Injury
 
         public async void OnPlayerDeath(PXPlayer player, PXPlayer killer, DeathReasons deathReason, uint weapon)
         {
+            if (!player.IsValid()) return;
+
             if (player.Dimension != 0 || player.DimensionType != DimensionTypes.WORLD)
             {
                 // Falls der Spieler in einem Interior u.ä. ist:
@@ -62,7 +64,6 @@ namespace PARADOX_RP.Game.Injury
             }
 
             if (Configuration.Instance.DevMode) AltAsync.Log($"[DEATH] {player.Username} // REASON: {Enum.GetName(typeof(DeathReasons), deathReason)} // Weapon: {weapon}");
-            if (!player.IsValid()) return;
 
             if (_injuries.TryGetValue(weapon, out Injuries injury))
             {

@@ -29,7 +29,7 @@ namespace PARADOX_RP.Game.Misc.Progressbar
             player.CancellationToken = new CancellationTokenSource();
             bool result = await Task.Delay(duration, player.CancellationToken.Token).ContinueWith(task => !task.IsCanceled);
 
-            if (result && player != null && await player.ExistsAsync()) await action();
+            if (result && player != null && player.IsValid()) await action();
 
             return result;
         }

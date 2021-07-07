@@ -15,9 +15,10 @@ using System.Threading.Tasks;
 
 namespace PARADOX_RP.Game.Weapon
 {
-    class WeaponModule : Module<WeaponModule>, IEventPlayerWeaponChange
+    public sealed class WeaponModule : Module<WeaponModule>, IEventPlayerWeaponChange
     {
         private readonly ILogger _logger;
+
         public WeaponModule(ILogger logger) : base("Weapon")
         {
             _logger = logger;
@@ -36,7 +37,6 @@ namespace PARADOX_RP.Game.Weapon
             }
 
             _logger.Console(ConsoleLogType.SUCCESS, "Weapon", player.PlayerWeapons.FirstOrDefault(p => (uint)p.WeaponHash == newWeapon) == null ? "Hat keine Waffe in DB" : "Hat Waffe in DB");
-
         }
     }
 }

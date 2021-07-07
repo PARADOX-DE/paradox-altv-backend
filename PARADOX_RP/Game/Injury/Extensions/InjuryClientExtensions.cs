@@ -23,10 +23,9 @@ namespace PARADOX_RP.Game.Injury.Extensions
             WindowController.Instance.Get<DeathWindow>().Show(player);
         }
 
-        public static async Task<bool> Revive(this PXPlayer player, bool spawnAtCurrentPosition = true, bool keepMoney = true, bool keepInventory = true)
+        public static async Task Revive(this PXPlayer player, bool spawnAtCurrentPosition = true, bool keepMoney = true, bool keepInventory = true)
         {
-            if (!await player.ExistsAsync()) return await Task.FromResult(false);
-            if (!player.IsValid()) return await Task.FromResult(false);
+            if (!player.IsValid()) return;
 
             if (spawnAtCurrentPosition) await player.SpawnAsync(player.Position);
             else await player.SpawnAsync(PositionModule.Instance.Get(Positions.MEDICAL_DEPARTMENT));
@@ -45,12 +44,12 @@ namespace PARADOX_RP.Game.Injury.Extensions
             await using (var px = new PXContext())
             {
                 PlayerInjuryData dbPlayerInjury = await px.PlayerInjuryData.FindAsync(player.PlayerInjuryData.Id);
-                if (dbPlayerInjury == null) return await Task.FromResult(false);
+                if (dbPlayerInjury == null) return;
 
                 if (!keepMoney)
                 {
                     Players dbPlayer = await px.Players.FindAsync(player.SqlId);
-                    if (dbPlayer == null) return await Task.FromResult(false);
+                    if (dbPlayer == null) return;
 
                     dbPlayer.Money = player.Money;
                 }
@@ -60,8 +59,6 @@ namespace PARADOX_RP.Game.Injury.Extensions
 
                 await px.SaveChangesAsync();
             }
-
-            return await Task.FromResult(true);
         }
     }
 }

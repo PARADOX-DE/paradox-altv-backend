@@ -235,6 +235,5 @@ namespace PARADOX_RP.Controllers.Inventory
 
             return false;
         }
-
     }
 }

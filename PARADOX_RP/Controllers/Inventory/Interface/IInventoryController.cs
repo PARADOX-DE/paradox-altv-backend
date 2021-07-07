@@ -17,7 +17,7 @@ namespace PARADOX_RP.Controllers.Inventory
         void UnloadInventory(int InventoryId);
         Task<PXInventory> CreateInventory(InventoryTypes type, int Id);
         Task<bool> CreateItem(PXInventory inventory, int ItemId, int Amount, string OriginInformation, [CallerMemberName] string callerName = null);
-        Task RemoveItemBySlotId(PXInventory inventory, int ItemId, int Amount);
+        Task RemoveItemBySlotId(PXInventory inventory, int SlotId, int Amount);
         int GetNextAvailableSlot(PXInventory inventory);
         Task<int> CreateItemSignature(string CallerName, string OriginInformation, int Amount);
         

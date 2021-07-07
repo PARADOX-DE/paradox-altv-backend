@@ -56,7 +56,9 @@ namespace PARADOX_RP.Game.Inventory
 
             eventController.OnClient<PXPlayer, int, int, int, bool, bool>("MoveInventoryItem", MoveInventoryItem);
             eventController.OnClient<PXPlayer, int>("UseItem", UseItem);
+            eventController.OnClient<PXPlayer, int, int>("DropItem", DropItem);
         }
+
 
         public async Task<bool> OnKeyPress(PXPlayer player, KeyEnumeration key)
         {
@@ -102,7 +104,7 @@ namespace PARADOX_RP.Game.Inventory
                 }
             }
 
-            RunInventoryTransaction(localInventoryData, async () =>
+            await RunInventoryTransaction(player, localInventoryData, async () =>
             {
                 PXInventory fromInventory = FromAdditional ? localInventoryData.AdditionalInventory : localInventoryData.PlayerInventory;
                 //var fromInventoryFreeWeight = GetFreeWeight(fromInventory);
@@ -183,8 +185,23 @@ namespace PARADOX_RP.Game.Inventory
                     }
                 }
             });
-            //TODO: animation library
-            await player.PlayAnimation("mp_safehousevagos@", "package_dropoff", 9, 2000);
+        }
+
+        private async void DropItem(PXPlayer player, int Slot, int Amount)
+        {
+            if (!player.IsValid()) return;
+
+            LocalInventoryData localInventory = player.LocalInventoryData;
+            if (localInventory == null) return;
+
+            await RunInventoryTransaction(player, localInventory, async () =>
+            {
+                if (localInventory.PlayerInventory.Items.TryGetValue(Slot, out InventoryItemAssignments targetItem))
+                {
+                    if (targetItem.Amount < Amount) return;
+                    await _inventoryHandler.RemoveItemBySlotId(localInventory.PlayerInventory, Slot, Amount);
+                }
+            });
         }
 
         public async Task<PXInventory> GetAdditionalInventory(PXPlayer player, Position position)
@@ -299,7 +316,7 @@ namespace PARADOX_RP.Game.Inventory
             return itemData.Weight * amount <= GetFreeWeight(inventory);
         }
 
-        private async void RunInventoryTransaction(LocalInventoryData inventoryData, Func<Task> transaction)
+        private async Task RunInventoryTransaction(PXPlayer player, LocalInventoryData inventoryData, Func<Task> transaction)
         {
             if (inventoryData.PlayerInventory.Locked) return;
             if (inventoryData.AdditionalInventory != null && inventoryData.AdditionalInventory.Locked) return;
@@ -313,6 +330,8 @@ namespace PARADOX_RP.Game.Inventory
             if (inventoryData.AdditionalInventory != null)
                 inventoryData.AdditionalInventory.Locked = false;
             inventoryData.PlayerInventory.Locked = false;
+
+            await player.PlayAnimation("mp_safehousevagos@", "package_dropoff", 9, 2000);
         }
     }
 }

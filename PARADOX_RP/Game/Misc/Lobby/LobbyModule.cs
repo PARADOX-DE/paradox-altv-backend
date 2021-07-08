@@ -6,7 +6,7 @@ using System.Text;
 
 namespace PARADOX_RP.Game.Lobby
 {
-    class LobbyModule : Module<LobbyModule>
+    public sealed class LobbyModule : Module<LobbyModule>
     {
         public Dictionary<int, LobbyModel> _lobbys = new Dictionary<int, LobbyModel>();
         public LobbyModule() : base("Lobby") { }

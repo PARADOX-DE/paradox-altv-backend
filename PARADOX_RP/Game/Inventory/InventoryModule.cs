@@ -227,7 +227,6 @@ namespace PARADOX_RP.Game.Inventory
             if (inventory == null) return;
 
             PXInventory additionalInventory = await GetAdditionalInventory(player, player.Position);
-
             player.LocalInventoryData = new LocalInventoryData(player.Inventory, additionalInventory);
 
             WindowController.Instance.Get<InventoryWindow>().Show(player, new InventoryWindowWriter(player.Inventory, additionalInventory));

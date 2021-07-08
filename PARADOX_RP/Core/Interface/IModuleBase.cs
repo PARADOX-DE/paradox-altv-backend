@@ -12,10 +12,5 @@ namespace PARADOX_RP.Core.Module
     {
         bool Enabled { get; set; }
         string ModuleName { get; set; }
-
-
-        Task OnEveryMinute();
-
-
     }
 }

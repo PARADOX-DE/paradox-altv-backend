@@ -45,6 +45,7 @@ namespace PARADOX_RP.Core.Database
         public DbSet<GarageSpawns> GarageSpawns { get; set; }
         public DbSet<GasStations> GasStations { get; set; }
         public DbSet<GasStationPetrols> GasStationPetrols { get; set; }
+        public DbSet<Interiors> Interiors { get; set; }
         public DbSet<Injuries> Injuries { get; set; }
         public DbSet<Items> Items { get; set; }
         public DbSet<Eastereggs> Eastereggs { get; set; }
@@ -54,6 +55,12 @@ namespace PARADOX_RP.Core.Database
 
         public DbSet<JumpPoints> JumpPoints { get; set; }
         public DbSet<JumpPointPermissions> JumpPointPermissions { get; set; }
+
+        public DbSet<PaintballRanks> PaintballRanks { get; set; }
+        public DbSet<PaintballMaps> PaintballMaps { get; set; }
+        public DbSet<PaintballMapsFlags> PaintballMapsFlags { get; set; }
+        public DbSet<PaintballMapsSpawns> PaintballMapsSpawns { get; set; }
+        public DbSet<PaintballStats> PaintballStats { get; set; }
 
         public DbSet<Inventories> Inventories { get; set; }
         public DbSet<InventoryInfo> InventoryInfo { get; set; }

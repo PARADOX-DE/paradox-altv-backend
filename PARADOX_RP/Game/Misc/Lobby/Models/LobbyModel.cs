@@ -4,7 +4,6 @@ using System.Text;
 
 namespace PARADOX_RP.Game.Lobby
 {
-
     public enum LobbyStatus
     {
         WAITING,
@@ -12,7 +11,7 @@ namespace PARADOX_RP.Game.Lobby
         END
     }
 
-    class LobbyModel
+    public class LobbyModel
     {
         public int OwnerId { get; set; }
         public string Owner { get; set; }

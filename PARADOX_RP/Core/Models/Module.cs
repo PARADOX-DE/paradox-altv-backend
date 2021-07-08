@@ -18,8 +18,6 @@ namespace PARADOX_RP.Core.Module
         public bool Enabled { get; set; }
         public string ModuleName { get; set; }
 
-        public virtual Task OnEveryMinute() { return Task.CompletedTask; }
-
         public IEnumerable<T> LoadDatabaseTable<T>(IQueryable queryable, Action<T> action = null) where T : class
         {
             try

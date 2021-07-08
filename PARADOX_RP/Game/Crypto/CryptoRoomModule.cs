@@ -31,10 +31,12 @@ namespace PARADOX_RP.Game.Crypto
         private readonly PXContext _pxContext;
         private readonly ILogger _logger;
         private readonly IEventController _eventController;
-        private readonly PositionModule _positionModule;
         private readonly IInventoryController _inventoryController;
+        private readonly PositionModule _positionModule;
 
         public Dictionary<int, CryptoRooms> _cryptoRooms = new Dictionary<int, CryptoRooms>();
+
+        private const int _cryptoRoomInteriorId = 1;
 
         public CryptoRoomModule(PXContext pxContext, ILogger logger, IEventController eventController, PositionModule positionModule, IInventoryController inventoryController) : base("CryptoRoom")
         {

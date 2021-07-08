@@ -12,7 +12,8 @@ namespace PARADOX_RP.Game.Misc.Position
     {
         NULL_POINT,
         MEDICAL_DEPARTMENT,
-        CRYPTO_ROOM
+        CRYPTO_ROOM,
+        PAINTBALL_ROUND_END
     }
 
     public class PositionModule : Module<PositionModule>

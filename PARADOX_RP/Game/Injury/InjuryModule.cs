@@ -1,4 +1,5 @@
-﻿using AltV.Net.Async;
+﻿using AltV.Net;
+using AltV.Net.Async;
 using AltV.Net.Async.Elements.Refs;
 using PARADOX_RP.Controllers.Event.Interface;
 using PARADOX_RP.Controllers.Team.Interface;
@@ -41,7 +42,7 @@ namespace PARADOX_RP.Game.Injury
         private readonly IEnumerable<ISpecialInjury> _specialInjuries;
         private readonly ITeamController _teamController;
 
-        private Dictionary<uint, Injuries> _injuries = new Dictionary<uint, Injuries>();
+        private readonly Dictionary<uint, Injuries> _injuries = new Dictionary<uint, Injuries>();
 
         public InjuryModule(PXContext pxContext, IEnumerable<ISpecialInjury> specialInjuries, ITeamController teamController) : base("Injury")
         {
@@ -57,19 +58,7 @@ namespace PARADOX_RP.Game.Injury
         {
             if (!player.IsValid()) return;
 
-            if ((player.Dimension != 0 || player.DimensionType != DimensionTypes.WORLD) && player.Minigame == MinigameTypes.NONE)
-            {
-                // Falls der Spieler in einem Interior u.ä. ist:
-                await AltAsync.Do(() =>
-                {
-                    if (player.LastWorldPosition == null) player.LastWorldPosition = player.Position;
-
-                    player.DimensionType = DimensionTypes.WORLD;
-                    player.Dimension = 0;
-                    player.Spawn(player.LastWorldPosition, 0);
-                });
-            }
-            else
+            if (player.Dimension != 0 || player.DimensionType != DimensionTypes.WORLD)
             {
                 // Special Injury (z.B: für Minigames)
                 ISpecialInjury specialInjury = null;
@@ -88,6 +77,16 @@ namespace PARADOX_RP.Game.Injury
                     await specialInjury.ApplyInjury(player);
                     return;
                 }
+
+                // Falls der Spieler in einem Interior u.ä. ist:
+                await AltAsync.Do(() =>
+                {
+                    if (player.LastWorldPosition == null) player.LastWorldPosition = player.Position;
+
+                    player.DimensionType = DimensionTypes.WORLD;
+                    player.Dimension = 0;
+                    player.Spawn(player.LastWorldPosition, 0);
+                });
             }
 
             if (Configuration.Instance.DevMode) AltAsync.Log($"[DEATH] {player.Username} // REASON: {Enum.GetName(typeof(DeathReasons), deathReason)} // Weapon: {weapon}");

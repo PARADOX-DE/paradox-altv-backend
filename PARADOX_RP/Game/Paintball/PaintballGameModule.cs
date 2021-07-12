@@ -100,7 +100,7 @@ namespace PARADOX_RP.Game.Paintball
 
         public void FinishGame(PaintballGameMap paintballMap, PaintballGamePlayer winner)
         {
-            IOrderedEnumerable<PaintballGamePlayer> orderedScoreboard = paintballMap.Players.Values.OrderBy(p => p.Kills)
+            IOrderedEnumerable<PaintballGamePlayer> sortedScoreboard = paintballMap.Players.Values.OrderBy(p => p.Kills)
                                                                                          .ThenBy(p => p.Killstreak)
                                                                                          .ThenBy(p => p.Deaths);
 

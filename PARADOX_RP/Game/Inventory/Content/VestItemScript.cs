@@ -23,6 +23,8 @@ namespace PARADOX_RP.Game.Inventory.Content
             bool finishedProgressbar = await player.RunProgressBar(async () =>
             {
                 await player.SetArmorAsync(100);
+                await player.SetClothes(9, 15, 2);
+
             }, "Schutzweste", "Du ziehst nun eine Schutzweste...", VEST_DURATION);
 
             if (new AsyncPlayerRef(player).Exists)

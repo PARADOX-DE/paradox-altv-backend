@@ -61,7 +61,8 @@ namespace PARADOX_RP.Core.Database
         public DbSet<PaintballMapsFlags> PaintballMapsFlags { get; set; }
         public DbSet<PaintballMapsSpawns> PaintballMapsSpawns { get; set; }
         public DbSet<PaintballStats> PaintballStats { get; set; }
-
+        public DbSet<PaintballSettings> PaintballSettings { get; set; }
+        
         public DbSet<Inventories> Inventories { get; set; }
         public DbSet<InventoryInfo> InventoryInfo { get; set; }
         public DbSet<InventoryItemAssignments> InventoryItemAssignments { get; set; }

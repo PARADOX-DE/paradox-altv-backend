@@ -21,13 +21,19 @@ namespace PARADOX_RP.Core.Database.Models
         public int Id { get; set; }
         public string Name { get; set; }
 
-        private float PreviewPosition_X { get; set; }
-        private float PreviewPosition_Y { get; set; }
-        private float PreviewPosition_Z { get; set; }
+        public float Position_X { get; set; }
+        public float Position_Y { get; set; }
+        public float Position_Z { get; set; }
 
-        private float QueuePosition_X { get; set; }
-        private float QueuePosition_Y { get; set; }
-        private float QueuePosition_Z { get; set; }
+        public float Radius { get; set; }
+
+        public float PreviewPosition_X { get; set; }
+        public float PreviewPosition_Y { get; set; }
+        public float PreviewPosition_Z { get; set; }
+
+        public float QueuePosition_X { get; set; }
+        public float QueuePosition_Y { get; set; }
+        public float QueuePosition_Z { get; set; }
 
         public virtual ICollection<PaintballMapsFlags> Flags { get; set; }
         public virtual ICollection<PaintballMapsSpawns> Spawns { get; set; }
@@ -35,6 +41,7 @@ namespace PARADOX_RP.Core.Database.Models
 
     public partial class PaintballMaps
     {
+        public Position Position => new Position(Position_X, Position_Y, Position_Z);
         public Position PreviewPosition => new Position(PreviewPosition_X, PreviewPosition_Y, PreviewPosition_Z);
         public Position QueuePosition => new Position(QueuePosition_X, QueuePosition_Y, QueuePosition_Z);
     }

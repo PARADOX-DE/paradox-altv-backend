@@ -19,7 +19,7 @@ using System.Threading.Tasks;
 
 namespace PARADOX_RP.Controllers.Inventory
 {
-    class InventoryController : IInventoryController
+    public class InventoryController : IInventoryController
     {
         private readonly Dictionary<int, PXInventory> _inventories = new Dictionary<int, PXInventory>();
 
@@ -43,14 +43,12 @@ namespace PARADOX_RP.Controllers.Inventory
                 if (dbInventory == null)
                 {
                     //TODO: add logger
-                    Alt.Log("inv == null");
                     return null;
                 }
 
                 if (!InventoryModule.Instance._inventoryInfo.TryGetValue((int)dbInventory.Type, out InventoryInfo inventoryInfo))
                 {
                     //Inventory got no valid type
-                    Alt.Log("No Valid InventoryType");
                     return null;
                 }
 

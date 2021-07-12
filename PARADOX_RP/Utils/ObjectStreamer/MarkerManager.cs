@@ -44,6 +44,7 @@ namespace EntityStreamer
         MarkerTypeHorizontalBars = 30,
         MarkerTypeWolfHead = 31,
         MarkerTypeCarSymbol = 36,
+        MarkerTypeRectangle = 43,
     }
 
     /// <summary>

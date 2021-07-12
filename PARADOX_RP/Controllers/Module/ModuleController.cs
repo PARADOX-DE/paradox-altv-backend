@@ -136,6 +136,8 @@ namespace PARADOX_RP.Controllers
                 _ => DeathReasons.WORLD
             };
 
+            if (deathReason == DeathReasons.PLAYER) killer = (PXPlayer)killerEntity;
+
             await _playerDeathEvents.ForEach(e =>
              {
                  if (e.Enabled)

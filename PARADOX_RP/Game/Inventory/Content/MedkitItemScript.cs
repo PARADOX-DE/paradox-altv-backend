@@ -24,7 +24,7 @@ namespace PARADOX_RP.Game.Inventory.Content
 
             bool finishedProgressbar = await player.RunProgressBar(async () =>
             {
-                await player.SetHealthAsync(100);
+                await player.SetHealthAsync(player.MaxHealth);
             }, "Verbandskasten", "Du versorgst nun deine Wunden.", MEDKIT_DURATION);
 
             if (new AsyncPlayerRef(player).Exists)

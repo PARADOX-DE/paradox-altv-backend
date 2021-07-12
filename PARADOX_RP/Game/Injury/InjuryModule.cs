@@ -1,17 +1,22 @@
 ﻿using AltV.Net.Async;
+using AltV.Net.Async.Elements.Refs;
 using PARADOX_RP.Controllers.Event.Interface;
 using PARADOX_RP.Controllers.Team.Interface;
 using PARADOX_RP.Core.Database;
 using PARADOX_RP.Core.Database.Models;
 using PARADOX_RP.Core.Events;
 using PARADOX_RP.Core.Events.Intervals;
+using PARADOX_RP.Core.Extensions;
 using PARADOX_RP.Core.Factories;
 using PARADOX_RP.Core.Module;
 using PARADOX_RP.Game.Administration;
 using PARADOX_RP.Game.Commands;
 using PARADOX_RP.Game.Commands.Attributes;
 using PARADOX_RP.Game.Injury.Extensions;
+using PARADOX_RP.Game.Injury.Interfaces;
+using PARADOX_RP.Game.MiniGames.Models;
 using PARADOX_RP.Game.Misc.Position;
+using PARADOX_RP.Game.Paintball;
 using PARADOX_RP.Game.Team;
 using PARADOX_RP.Utils;
 using PARADOX_RP.Utils.Enums;
@@ -33,15 +38,17 @@ namespace PARADOX_RP.Game.Injury
 
     public sealed class InjuryModule : Module<InjuryModule>, ICommand, IEventPlayerDeath, IEventIntervalMinute
     {
-        private readonly IEventController _eventController;
+        private readonly IEnumerable<ISpecialInjury> _specialInjuries;
         private readonly ITeamController _teamController;
 
         private Dictionary<uint, Injuries> _injuries = new Dictionary<uint, Injuries>();
 
-        public InjuryModule(PXContext pxContext, IEventController eventController, ITeamController teamController) : base("Injury")
+        public InjuryModule(PXContext pxContext, IEnumerable<ISpecialInjury> specialInjuries, ITeamController teamController) : base("Injury")
         {
-            _eventController = eventController;
+            _specialInjuries = specialInjuries;
             _teamController = teamController;
+
+            _specialInjuries.ForEach((i) => { AltAsync.Log(i.GetType().FullName); });
 
             LoadDatabaseTable<Injuries>(pxContext.Injuries, (injury) => _injuries.Add(injury.Weapon, injury));
         }
@@ -50,7 +57,7 @@ namespace PARADOX_RP.Game.Injury
         {
             if (!player.IsValid()) return;
 
-            if (player.Dimension != 0 || player.DimensionType != DimensionTypes.WORLD)
+            if ((player.Dimension != 0 || player.DimensionType != DimensionTypes.WORLD) && player.Minigame == MinigameTypes.NONE)
             {
                 // Falls der Spieler in einem Interior u.ä. ist:
                 await AltAsync.Do(() =>
@@ -61,6 +68,26 @@ namespace PARADOX_RP.Game.Injury
                     player.Dimension = 0;
                     player.Spawn(player.LastWorldPosition, 0);
                 });
+            }
+            else
+            {
+                // Special Injury (z.B: für Minigames)
+                ISpecialInjury specialInjury = null;
+                foreach (var i in _specialInjuries)
+                {
+                    bool hasSpecialInjury = await i.HasSpecialInjury(player);
+                    if (hasSpecialInjury)
+                    {
+                        specialInjury = i;
+                        break;
+                    }
+                }
+
+                if (specialInjury != null)
+                {
+                    await specialInjury.ApplyInjury(player);
+                    return;
+                }
             }
 
             if (Configuration.Instance.DevMode) AltAsync.Log($"[DEATH] {player.Username} // REASON: {Enum.GetName(typeof(DeathReasons), deathReason)} // Weapon: {weapon}");
@@ -96,9 +123,6 @@ namespace PARADOX_RP.Game.Injury
         {
             foreach (PXPlayer player in Pools.Instance.Get<PXPlayer>(PoolType.PLAYER).Where(p => p.InjuryTimeLeft >= 1))
             {
-                if (Configuration.Instance.DevMode)
-                    AltAsync.Log($"Minute-Tick | InjuryTimeLeft: {player.InjuryTimeLeft}");
-
                 if (player.PlayerInjuryData == null) continue;
 
                 if (player.InjuryTimeLeft > 1)

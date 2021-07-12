@@ -34,7 +34,7 @@ namespace PARADOX_RP.Game.Inventory
         EVENT
     }
 
-    class InventoryModule : Module<InventoryModule>, IEventKeyPressed
+    public sealed class InventoryModule : Module<InventoryModule>, IEventKeyPressed
     {
         private IInventoryController _inventoryHandler;
 

@@ -27,7 +27,8 @@ namespace PARADOX_RP.Core.Factories
     {
         WORLD,
         TEAMHOUSE,
-        CRYPTOROOM
+        CRYPTOROOM,
+        PAINTBALL
     }
 
     public enum NotificationTypes

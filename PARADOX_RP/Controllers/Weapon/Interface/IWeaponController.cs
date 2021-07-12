@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace PARADOX_RP.Controllers.Weapon.Interface
 {
-    interface IWeaponController
+    public interface IWeaponController
     {
         Task LoadWeapons(PXPlayer player, ICollection<PlayerWeapons> weapons = null);
         Task AddWeapon(PXPlayer player, WeaponModel weapon);

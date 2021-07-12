@@ -19,17 +19,16 @@ namespace PARADOX_RP.Game.Inventory.Content
 
         public async Task<bool> UseItem(PXPlayer player)
         {
+            await player.PlayAnimation("amb@world_human_drinking@coffee@male@idle_a", "idle_a");
 
-         await player.PlayAnimation("amb@world_human_drinking@coffee@male@idle_a", "idle_a");
-
-
-         player.SendNotification("Kaffee", "Du hast einen leckeren Kaffee getrunken!", NotificationTypes.SUCCESS);
-           
-
-         if (new AsyncPlayerRef(player).Exists)
+            await Task.Delay(10000);
+            if (new AsyncPlayerRef(player).Exists)
+            {
                 await player.StopAnimation();
+                player.SendNotification("Kaffee", "Du hast einen leckeren Kaffee getrunken!", NotificationTypes.SUCCESS);
+            }
 
-         return await Task.FromResult(true);
+            return await Task.FromResult(true);
         }
     }
 }

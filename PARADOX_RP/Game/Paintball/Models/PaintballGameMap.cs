@@ -13,7 +13,8 @@ namespace PARADOX_RP.Game.Paintball.Models
     {
         public PaintballMaps Data { get; set; }
         public LobbyStatus LobbyStatus { get; set; } = LobbyStatus.WAITING;
-        public List<PXPlayer> Players { get; set; } = new List<PXPlayer>();
+
+        public Dictionary<int, PaintballGamePlayer> Players { get; set; } = new Dictionary<int, PaintballGamePlayer>(); // <= int = SqlId
 
         public List<IColShape> ColShapes { get; set; } = new List<IColShape>();
         public List<Marker> Markers { get; set; } = new List<Marker>();
@@ -21,6 +22,14 @@ namespace PARADOX_RP.Game.Paintball.Models
         public PaintballGameMap(PaintballMaps data)
         {
             Data = data;
+        }
+
+        public PaintballGamePlayer GetPlayerById(int SqlId)
+        {
+            if (Players.TryGetValue(SqlId, out PaintballGamePlayer player))
+                return player;
+
+            return null;
         }
     }
 }

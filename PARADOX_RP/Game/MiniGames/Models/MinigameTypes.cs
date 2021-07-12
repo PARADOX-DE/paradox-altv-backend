@@ -7,6 +7,7 @@ namespace PARADOX_RP.Game.MiniGames.Models
     public enum MinigameTypes
     {
         NONE,
-        SUPERMARIO
+        SUPERMARIO,
+        PAINTBALL
     }
 }

@@ -30,13 +30,6 @@ namespace PARADOX_RP.Game.Weapon
 
             if (player.PlayerWeapons.FirstOrDefault(p => (uint)p.WeaponHash == newWeapon) == null)
                 await ModerationModule.Instance.BanPlayer(player);
-
-            foreach (var weapon in player.PlayerWeapons)
-            {
-                _logger.Console(ConsoleLogType.SUCCESS, "Weapon", $"Waffe: {weapon.WeaponHash} {weapon.Ammo}");
-            }
-
-            _logger.Console(ConsoleLogType.SUCCESS, "Weapon", player.PlayerWeapons.FirstOrDefault(p => (uint)p.WeaponHash == newWeapon) == null ? "Hat keine Waffe in DB" : "Hat Waffe in DB");
         }
     }
 }

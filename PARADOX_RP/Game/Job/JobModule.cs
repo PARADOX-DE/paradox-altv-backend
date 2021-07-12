@@ -17,7 +17,7 @@ namespace PARADOX_RP.Game.Farming
         private readonly IEnumerable<IJob> _jobs;
         private readonly IInventoryController _inventoryController;
 
-        public JobModule(PXContext pxContext, IEnumerable<IJob> jobs, IInventoryController inventoryController) : base("Farming")
+        public JobModule(PXContext pxContext, IEnumerable<IJob> jobs, IInventoryController inventoryController) : base("Job")
         {
             _pxContext = pxContext;
             _jobs = jobs;
@@ -26,11 +26,7 @@ namespace PARADOX_RP.Game.Farming
 
         public void OnModuleLoad()
         {
-            _jobs.ForEach((j) =>
-            {
-                AltAsync.Log(j.GetType().Name);
-                AltAsync.Log(j.GetType().FullName);
-            });
+
         }
     }
 }

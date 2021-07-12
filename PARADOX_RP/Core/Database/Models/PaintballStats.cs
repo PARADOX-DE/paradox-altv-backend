@@ -1,4 +1,5 @@
-﻿using System;
+﻿using PARADOX_RP.Game.Paintball;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Text;
@@ -8,6 +9,13 @@ namespace PARADOX_RP.Core.Database.Models
     [Table("paintball_stats")]
     public class PaintballStats
     {
+        public PaintballStats(int playerId)
+        {
+            PlayerId = playerId;
+            LeaguePoints = 1000;
+            RankId = (int)PaintballRankTypes.BRONZE;
+        }
+
         public int Id { get; set; }
         public int PlayerId { get; set; }
 

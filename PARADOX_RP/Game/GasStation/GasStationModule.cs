@@ -27,7 +27,7 @@ using System.Threading.Tasks;
 
 namespace PARADOX_RP.Game.GasStation
 {
-    class GasStationModule : Module<GasStationModule>, IEventKeyPressed, IEventPlayerConnect
+    public sealed class GasStationModule : Module<GasStationModule>, IEventKeyPressed, IEventPlayerConnect
     {
         private Dictionary<int, GasStations> _gasStations = new Dictionary<int, GasStations>();
         private Dictionary<int, GasStationPetrols> _gasStationPetrols = new Dictionary<int, GasStationPetrols>();
@@ -40,15 +40,8 @@ namespace PARADOX_RP.Game.GasStation
             _eventController = eventController;
             _vehicleController = vehicleController;
 
-            LoadDatabaseTable(px.GasStations, (GasStations gs) =>
-            {
-                _gasStations.Add(gs.Id, gs);
-            });
-
-            LoadDatabaseTable(px.GasStationPetrols, (GasStationPetrols gsp) =>
-            {
-                _gasStationPetrols.Add(gsp.Id, gsp);
-            });
+            LoadDatabaseTable(px.GasStations, (GasStations gs) => _gasStations.Add(gs.Id, gs));
+            LoadDatabaseTable(px.GasStationPetrols, (GasStationPetrols gsp) => _gasStationPetrols.Add(gsp.Id, gsp));
 
             _eventController.OnClient<PXPlayer, int, string, int>("PayGasStation", PayGasStation);
         }
